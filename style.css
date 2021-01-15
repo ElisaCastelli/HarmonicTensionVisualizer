@@ -1,0 +1,163 @@
+/* import vari stili */
+@import url('https://fonts.googleapis.com/css2?family=Syne+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@1,100&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&display=swap');
+/* fine import */
+
+#pagina {
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:120%;
+  background:#909090;
+}
+#title_container{
+    position: fixed;
+    font-weight:semi-bold;
+    font-size: xx-large;
+    font-family: 'East Sea Dokdo', monospace;
+    /* options : Fraunces */
+    /* options : HachiMaruPop */
+    /* options : East+Sea+Dokdo */
+    color:black;
+    width:50%;
+    text-align:center;
+    top:0;
+    margin-left:25%;
+    /*border:1px solid black;*/
+}
+#input_block{
+  width:98%;
+  position:absolute;
+  left:1%;
+  top:15%;
+  height:35%;
+  border:1px solid black;
+}
+#output_block{
+  width:98%;
+  position:absolute;
+  top:52%;
+  left:1%;
+  height:40%;
+  border:1px solid black;
+}
+#bottom_panel{
+  width:100%;
+  position:absolute;
+  top:94%;
+  height:1%;
+  border:0px solid black;
+  cursor:pointer;
+}
+#linea{
+  position:relative;
+  widht:100%;
+  height:1%;
+  border:1px solid black;
+}
+.bottom_bar{
+  position:relative;
+  background-color:#909090;
+  display:inline-block;
+  width:33%;
+  bottom:20%;
+  text-align:center;
+  font-family: 'East Sea Dokdo', monospace;
+  font-weight:semi-bold;
+  font-size: x-large;
+}
+#volume_range{
+  position:fixed;
+  right:2%;
+  top:2%;
+}
+#volume{
+   font-family: 'East Sea Dokdo', monospace;
+  font-weight:semi-bold;
+  font-size: x-large;
+}
+.white{
+  background: #fff;
+}
+.black{
+  background: #000;
+  color:white;
+}
+
+/*TABLE*/
+
+.table-scroll {
+	position:relative;
+	max-width:100%;
+	max-height:100%;
+	margin:auto;
+	overflow:auto;
+	border:1px solid #000;
+}
+.table-wrap {
+	width:100%;
+	overflow-y:auto;
+	height:100%;
+}
+.table-scroll table {
+	width:100%;
+	height:100%;
+	margin:auto;
+	border-collapse:separate;
+	border-spacing:0;
+}
+.table-scroll th, .table-scroll td {
+	padding:4px 25px;
+	border:1px solid #000;
+	/*white-space:nowrap;*/
+	/*vertical-align:top;*/
+}
+.clone {
+	position:absolute;
+	top:0;
+	left:0;
+	pointer-events:none;
+}
+.black_background{
+  background:#a9a9a9;
+}
+.white_background{
+  cursor:pointer;
+}
+.leftstop{
+  position: sticky;
+  left: 0;
+}
+.topstop{
+	position: -webkit-sticky;
+	position: sticky;
+  top: 0;
+}
+
+.cellButton{
+  background-color: Transparent;
+    /*background-repeat:no-repeat;*/
+  height:20px;
+  width:70px;
+  border: none;
+  cursor:pointer;
+  /*overflow: hidden;*/   
+}
+
+.pressButton{
+  background-color: #e28d8f;
+}
+
+/*BAR*/
+.scrollingBar{
+	position:relative;
+	background:red;
+	height:100%;
+	width:10px;
+	left:104px;
+	top:-100%;
+}
+
