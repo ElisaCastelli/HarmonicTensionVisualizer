@@ -27,7 +27,7 @@
 //	}
 //}
 
-// patterns for accepted chord
+// patterns for accepted chords
 const note_notation = /^[A-G][#b]?$/;
 const type_notation = /^(min|dim|aug|maj7|min7|7|halfdim|dim7)?$/;
 
