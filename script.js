@@ -1,6 +1,6 @@
 // MODEL 
-numOctaves = 4;
-maxColumns = 100;
+numOctaves = 3;
+maxColumns = 30;
 const key_color = [{
         pitch: "C",
         color: "white",
@@ -67,23 +67,25 @@ function scroll() {
     const pianoContainer = document.getElementById("output_block");
     let speed = 1;
     let direction = 1;
-    let boxLeftPos = bar.offsetLeft,
-        boxRightPos = boxLeftPos + bar.offsetWidth;
-
-    if (boxRightPos < pianoContainer.offsetWidth / half_length) {
-        bar.style.left = (boxLeftPos + speed * direction) + 'px';
-    } else if (buttonModel) {
+    let barLeftPos = bar.offsetLeft,
+        barRightPos = barLeftPos + bar.offsetWidth;
+    if (barRightPos < pianoContainer.offsetWidth / half_length) {
+        bar.style.left = (barLeftPos + speed * direction) + 'px';
+    } else {
         tableAutoscroll();
-
     }
-
-
 }
 
-function addNote(column) {
+function addNote(column, numCell) {
     column.classList.toggle("red_background");
-    // manca segnare nella matrice che la casella è "piena"
+    if (column.classList.contains("red_background")) {
+        model[numCell] = true;
+    } else {
+        model[numCell] = false;
+    }
 }
+
+
 
 // VIEW
 
@@ -112,7 +114,8 @@ function createRow(scaleNumber, noteNumber) {
         column.classList.add("white");
         const button = document.createElement("button");
         button.classList.add("cellButton");
-        button.onclick = function() { addNote(column); };
+        let numCell = scaleNumber * 12 + noteNumber;
+        button.onclick = function() { addNote(column, numCell); };
         column.appendChild(button);
         row.appendChild(column);
         if (noteNumber == 1 || noteNumber == 3 || noteNumber == 6 || noteNumber == 8 || noteNumber == 10) {
@@ -120,73 +123,81 @@ function createRow(scaleNumber, noteNumber) {
         } else {
             column.classList.add('white_background');
         }
+        return row;
     }
-    return row;
-}
 
-function createHeader() {
-    const table_head = document.createElement("thead");
-    const row = document.createElement("tr");
-    row.classList.add("topstop");
-    for (let columnNumber = 0; columnNumber < maxColumns; columnNumber++) {
-        const cell = document.createElement("th");
-        row.appendChild(cell);
+    function createHeader() {
+        const table_head = document.createElement("thead");
+        const row = document.createElement("tr");
+        row.classList.add("topstop");
+        for (let columnNumber = 0; columnNumber < maxColumns; columnNumber++) {
+            const cell = document.createElement("th");
+            row.appendChild(cell);
+        }
+        table_head.appendChild(row);
+        return table_head;
     }
-    table_head.appendChild(row);
-    return table_head;
-}
 
-function createTable() {
-    const main_table = document.createElement("table");
-    main_table.setAttribute("id", "table");
-    main_table.classList.add("table-wrap");
-    table_head = createHeader();
-    const table_body = document.createElement("tbody");
-    //per ogni nota creo una riga della tabella e la carico nella tabella
-    for (let rowNumber = numOctaves * key_color.length - 1; rowNumber >= 0; rowNumber--) {
-        scaleNumber = Math.floor(rowNumber / key_color.length);
-        noteNumber = rowNumber - (key_color.length * scaleNumber);
-        row = createRow(scaleNumber, noteNumber);
-        table_body.appendChild(row);
+    function createTable() {
+        const main_table = document.createElement("table");
+        main_table.setAttribute("id", "table");
+        main_table.classList.add("table-wrap");
+        table_head = createHeader();
+        const table_body = document.createElement("tbody");
+        //per ogni nota creo una riga della tabella e la carico nella tabella
+        for (let rowNumber = numOctaves * key_color.length - 1; rowNumber >= 0; rowNumber--) {
+            scaleNumber = Math.floor(rowNumber / key_color.length);
+            noteNumber = rowNumber - (key_color.length * scaleNumber);
+            row = createRow(scaleNumber, noteNumber);
+            table_body.appendChild(row);
+        }
+        main_table.appendChild(table_head);
+        main_table.appendChild(table_body);
+        return main_table;
     }
-    main_table.appendChild(table_head);
-    main_table.appendChild(table_body);
-    return main_table;
-}
 
-function createPianoRoll() {
-    const pianoRollTable = document.createElement("div");
-    pianoRollTable.classList.add("table-scroll");
-    pianoRollTable.setAttribute("id", "table-scroll");
-    main_table = createTable();
-    pianoRollTable.appendChild(main_table);
-    return pianoRollTable;
-}
+    function createPianoRoll() {
+        const pianoRollTable = document.createElement("div");
+        pianoRollTable.classList.add("table-scroll");
+        pianoRollTable.setAttribute("id", "table-scroll");
+        main_table = createTable();
+        pianoRollTable.appendChild(main_table);
+        return pianoRollTable;
+    }
 
-function createBar() {
-    const bar = document.createElement("div");
-    bar.setAttribute("id", "scrollingBar");
-    bar.classList.add("scrollingBar");
-    return bar;
-}
+    function createBar() {
+        const bar = document.createElement("div");
+        bar.setAttribute("id", "scrollingBar");
+        bar.classList.add("scrollingBar");
+        return bar;
+    }
 
-function firstRender() {
-    const pianoContainer = document.getElementById("output_block");
-    pianoRollTable = createPianoRoll();
-    pianoContainer.appendChild(pianoRollTable);
-    bar = createBar();
-    pianoContainer.appendChild(bar);
-    playButton.onclick = function() {
-        if (!modelButton) {
-            var myVar = setInterval(scroll, 10);
+    function firstRender() {
+        const pianoContainer = document.getElementById("output_block");
+        pianoRollTable = createPianoRoll();
+        pianoContainer.appendChild(pianoRollTable);
+        bar = createBar();
+        pianoContainer.appendChild(bar);
+        playButton.onclick = function() {
             if (!modelButton) {
-                modelButton = !modelButton;
-            }
-        };
+                modelButton = true;
+                var scrollInterval = setInterval(scroll, 10);
+                stopButton.onclick = function() {
+                    modelButton = false;
+                    clearInterval(scrollInterval);
+                    rewindButton.onclick = function() {
+                        bar.style.left = '103px';
+                    }
+                }
+            };
+        }
+
+
+
     }
-    stopButton.onclick = function() {
-        modelButton = !modelButton;
-    }
+
+
+    firstRender();
 
 }
 firstRender();

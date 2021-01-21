@@ -90,6 +90,72 @@
     font-size: x-large;
 }
 
+.scrollButton {
+    position: fixed;
+    top: 10%;
+    font-family: 'East Sea Dokdo', monospace;
+    font-weight: semi-bold;
+    font-size: x-large;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: darkred;
+    cursor: pointer;
+    width: 5%;
+    text-align: center;
+}
+
+#playButton {
+    right: 16%;
+}
+
+#stopButton {
+    right: 9%;
+}
+
+#rewindButton {
+    right: 2%;
+}
+
+.white {
+    background: #fff;
+}
+
+.black {
+    background: #000;
+    color: white;
+}
+
+#linea {
+    position: relative;
+    width: 100%;
+    height: 1%;
+    border: 1px solid black;
+}
+
+.bottom_bar {
+    position: relative;
+    background-color: #909090;
+    display: inline-block;
+    width: 33%;
+    bottom: 20%;
+    text-align: center;
+    font-family: 'East Sea Dokdo', monospace;
+    font-weight: semi-bold;
+    font-size: x-large;
+}
+
+#volume_range {
+    position: fixed;
+    right: 2%;
+    top: 2%;
+}
+
+#volume {
+    font-family: 'East Sea Dokdo', monospace;
+    font-weight: semi-bold;
+    font-size: x-large;
+}
+
 #playButton {
     position: fixed;
     right: 24%;
@@ -197,12 +263,10 @@
 
 .cellButton {
     background-color: Transparent;
-    /*background-repeat:no-repeat;*/
     height: 20px;
     width: 80px;
     border: none;
     cursor: pointer;
-    /*overflow: hidden;*/
 }
 
 .pressButton {
@@ -211,6 +275,16 @@
 
 
 /*BAR*/
+
+.scrollingBar {
+    position: relative;
+    background: red;
+    height: 100%;
+    width: 5px;
+    left: 103px;
+    top: -100.5%;
+    box-shadow: 0 0 5px #FF0000;
+}
 
 .scrollingBar {
     position: relative;
