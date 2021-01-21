@@ -79,6 +79,37 @@
   font-weight:semi-bold;
   font-size: x-large;
 }
+#playButton{
+   position:fixed;
+  right:24%;
+  top:2%;
+   font-family: 'East Sea Dokdo', monospace;
+  font-weight:semi-bold;
+  font-size: x-large;
+  border:1px solid black;
+  border-radius:5px;
+  background-color:darkred;
+  cursor:pointer;
+  width:5%;
+  text-align:center;  
+  
+}
+
+#stopButton{
+  position:fixed;
+  right:17%;
+  top:2%;
+  font-family: 'East Sea Dokdo', monospace;
+  font-weight:semi-bold;
+  font-size: x-large;
+  border:1px solid black;
+  border-radius:5px;
+  background-color:darkred;
+  cursor:pointer;
+  width:5%;
+  text-align:center; 
+}
+
 .white{
   background: #fff;
 }
@@ -95,6 +126,7 @@
 	max-height:100%;
 	margin:auto;
 	overflow:auto;
+  overflow-x:scroll;
 	border:1px solid #000;
 }
 .table-wrap {
@@ -109,11 +141,10 @@
 	border-collapse:separate;
 	border-spacing:0;
 }
-.table-scroll th, .table-scroll td {
-	padding:4px 25px;
+.table-scroll th, .table-scroll td{
+	height:20px;
+  width:80px;
 	border:1px solid #000;
-	/*white-space:nowrap;*/
-	/*vertical-align:top;*/
 }
 .clone {
 	position:absolute;
@@ -127,8 +158,13 @@
 .white_background{
   cursor:pointer;
 }
+.red_background{
+  background-color: #e28d8f;
+}
 .leftstop{
   position: sticky;
+  height:20px;
+  width:100px;
   left: 0;
 }
 .topstop{
@@ -137,11 +173,12 @@
   top: 0;
 }
 
+
 .cellButton{
   background-color: Transparent;
     /*background-repeat:no-repeat;*/
   height:20px;
-  width:70px;
+  width:80px;
   border: none;
   cursor:pointer;
   /*overflow: hidden;*/   
@@ -156,8 +193,9 @@
 	position:relative;
 	background:red;
 	height:100%;
-	width:10px;
-	left:104px;
-	top:-100%;
+	width:5px;
+	left:103px;
+	top:-100.5%;
+   box-shadow: 0 0 5px #FF0000;
 }
 

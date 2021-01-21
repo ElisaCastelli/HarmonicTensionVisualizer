@@ -52,21 +52,37 @@ const key_color =  [
     }
 ];
 
+numcell=numOctaves*maxColumns;
+model = Array(numcell).fill(false);
+modelButton=false;
+half_length=2;
+
 // CONTROLLER
+function tableAutoscroll(){
+  const tableScroll = document.getElementById("table-scroll");
+  tableScroll.scrollLeft+=1.5;
+}
 
 function scroll() {
   const bar = document.getElementById("scrollingBar");
   const pianoContainer = document.getElementById("output_block");
-  var speed = 1;
-  var direction=1;
-  var boxLeftPos = bar.offsetLeft, boxRightPos = boxLeftPos + bar.offsetWidth;
-  if (boxRightPos < pianoContainer.offsetWidth) {
-     bar.style.left = (boxLeftPos + speed * direction) + 'px';  
-  }
-} 
-
-function addNote(event){
+  let speed = 1;
+  let direction=1;
+  let boxLeftPos = bar.offsetLeft, boxRightPos = boxLeftPos + bar.offsetWidth;
   
+    if (boxRightPos < pianoContainer.offsetWidth/half_length) {
+     bar.style.left = (boxLeftPos + speed * direction) + 'px';  
+  }else if(buttonModel){
+    tableAutoscroll();
+    
+  }
+  
+  
+}
+
+function addNote(column){
+  column.classList.toggle("red_background");
+  // manca segnare nella matrice che la casella è "piena"
 }
 
 // VIEW
@@ -76,14 +92,18 @@ function createFixedColumn(scaleNumber, noteNumber){
   fixedColumn.classList.add("leftstop");
   color = key_color[noteNumber].color;
   fixedColumn.classList.add(color);
-  label = key_color[noteNumber].pitch+" "+scaleNumber;
-  var t = document.createTextNode(label);
-  fixedColumn.append(t);
+  const labelDiv = document.createElement("div");
+  labelDiv.classList.add("leftstop");
+  label = key_color[noteNumber].pitch+scaleNumber;
+  let t = document.createTextNode(label);
+  labelDiv.append(t);
+  fixedColumn.append(labelDiv);
   return fixedColumn;
 }
 
 function createRow(scaleNumber, noteNumber){
   const row = document.createElement("tr");
+  
   // per ogni riga aggiungo la prima colonna che rimarrà fissa e poi tutte le altre
   fixedColumn= createFixedColumn(scaleNumber, noteNumber);
   row.appendChild(fixedColumn);
@@ -92,10 +112,7 @@ function createRow(scaleNumber, noteNumber){
     column.classList.add("white");
     const button = document.createElement("button");
     button.classList.add("cellButton");
-    button.onclick = function(){ addNote(event);};
-    //  da togliere, è solo per vedere i button colorati
-    button.classList.add("pressButton");
-    //
+    button.onclick = function(){ addNote(column);};
     column.appendChild(button);
     row.appendChild(column);
       if(noteNumber==1 || noteNumber==3 || noteNumber==6 || noteNumber==8 || noteNumber==10)
@@ -105,7 +122,6 @@ function createRow(scaleNumber, noteNumber){
     else {
       column.classList.add('white_background');
     }
-    
   }
   return row;
 }
@@ -116,28 +132,20 @@ function createHeader(){
 	row.classList.add("topstop");
 	for(let columnNumber=0; columnNumber<maxColumns;columnNumber++){
 		const cell = document.createElement("th");
-		if(columnNumber==0){
-			const playButton = document.createElement("button");
-			var t = document.createTextNode("PLAY");
-  		playButton.append(t);
-      playButton.setAttribute("id", "playButton");
-      playButton.onclick = function(){ var myVar = setInterval(scroll, 10);};
-			cell.appendChild(playButton);
-		}
-		
 		row.appendChild(cell);
 	}
-	
 	table_head.appendChild(row);
 	return table_head;
 }
 
 function createTable(){
   const main_table = document.createElement("table");
+  main_table.setAttribute("id", "table");
+  main_table.classList.add("table-wrap");
 	table_head = createHeader();
 	const table_body =document.createElement("tbody");
   //per ogni nota creo una riga della tabella e la carico nella tabella
-  for(let rowNumber=0;rowNumber<numOctaves*key_color.length;rowNumber++){
+  for(let rowNumber=numOctaves*key_color.length-1;rowNumber>=0;rowNumber--){
     scaleNumber = Math.floor(rowNumber/key_color.length);
     noteNumber = rowNumber - (key_color.length * scaleNumber);
     row= createRow(scaleNumber, noteNumber);
@@ -152,11 +160,8 @@ function createPianoRoll(){
 	const pianoRollTable = document.createElement("div");
   pianoRollTable.classList.add("table-scroll");
 	pianoRollTable.setAttribute("id", "table-scroll");
-  const table_wrap =document.createElement("div");
-  table_wrap.classList.add("table-wrap");
 	main_table = createTable();
-	table_wrap.appendChild(main_table);
-  pianoRollTable.appendChild(table_wrap);
+	pianoRollTable.appendChild(main_table);
 	return pianoRollTable;
 }
 
@@ -173,6 +178,19 @@ function firstRender(){
 	pianoContainer.appendChild(pianoRollTable);
 	bar = createBar();
 	pianoContainer.appendChild(bar);
+  playButton.onclick = function(){ 
+    if(!modelButton){
+    var myVar=setInterval(scroll, 10);
+     if(!modelButton)
+       {
+         modelButton=!modelButton;
+       }
+    };    
+  }
+  stopButton.onclick=function(){
+  modelButton=!modelButton;
+  }
+  
 }
 firstRender();
 
