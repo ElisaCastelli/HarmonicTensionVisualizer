@@ -185,13 +185,14 @@ function firstRender() {
             stopButton.onclick = function() {
                 modelButton = false;
                 clearInterval(scrollInterval);
-                rewindButton.onclick = function() {
-                    bar.style.left = '103px';
-                }
+                
             }
         };
     }
-
+    rewindButton.onclick = function() {
+    	tableBackscroll();
+        bar.style.left = '103px';
+    }
 
 
 }
