@@ -1,6 +1,6 @@
 // MODEL 
 numOctaves=3;
-maxColumns=100;
+maxColumns=30;
 const key_color =  [
     {
       pitch: "C",
@@ -68,22 +68,24 @@ function scroll() {
   const pianoContainer = document.getElementById("output_block");
   let speed = 1;
   let direction=1;
-  let boxLeftPos = bar.offsetLeft, boxRightPos = boxLeftPos + bar.offsetWidth;
-  
-    if (boxRightPos < pianoContainer.offsetWidth/half_length) {
-     bar.style.left = (boxLeftPos + speed * direction) + 'px';  
-  }else if(buttonModel){
+  let barLeftPos = bar.offsetLeft, barRightPos = barLeftPos + bar.offsetWidth;
+    if (barRightPos < pianoContainer.offsetWidth/half_length) {
+     bar.style.left = (barLeftPos + speed * direction) + 'px'; 
+  }else{
     tableAutoscroll();
-    
   }
-  
-  
 }
 
-function addNote(column){
+function addNote(column, numCell){
   column.classList.toggle("red_background");
-  // manca segnare nella matrice che la casella è "piena"
+  if(column.classList.contains("red_background")){
+	    model[numCell]=true;
+	  }else{
+	    model[numCell]=false;
+	  }
 }
+
+
 
 // VIEW
 
@@ -112,7 +114,8 @@ function createRow(scaleNumber, noteNumber){
     column.classList.add("white");
     const button = document.createElement("button");
     button.classList.add("cellButton");
-    button.onclick = function(){ addNote(column);};
+    let numCell = scaleNumber*12+noteNumber;
+    button.onclick = function(){ addNote(column, numCell);};
     column.appendChild(button);
     row.appendChild(column);
       if(noteNumber==1 || noteNumber==3 || noteNumber==6 || noteNumber==8 || noteNumber==10)
@@ -179,18 +182,23 @@ function firstRender(){
 	bar = createBar();
 	pianoContainer.appendChild(bar);
   playButton.onclick = function(){ 
-    if(!modelButton){
-    var myVar=setInterval(scroll, 10);
-     if(!modelButton)
-       {
-         modelButton=!modelButton;
-       }
-    };    
-  }
-  stopButton.onclick=function(){
-  modelButton=!modelButton;
-  }
+  if(!modelButton){
+      modelButton = true;
+      var scrollInterval=setInterval(scroll, 10); 
+      stopButton.onclick=function(){
+        modelButton=false;
+        clearInterval(scrollInterval);
+        rewindButton.onclick=function(){
+          bar.style.left='103px';
+        }
+      }
+  }; 
+}
+
+
   
 }
+
+
 firstRender();
 

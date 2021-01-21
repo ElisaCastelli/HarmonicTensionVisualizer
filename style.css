@@ -79,26 +79,10 @@
   font-weight:semi-bold;
   font-size: x-large;
 }
-#playButton{
-   position:fixed;
-  right:24%;
-  top:2%;
-   font-family: 'East Sea Dokdo', monospace;
-  font-weight:semi-bold;
-  font-size: x-large;
-  border:1px solid black;
-  border-radius:5px;
-  background-color:darkred;
-  cursor:pointer;
-  width:5%;
-  text-align:center;  
-  
-}
 
-#stopButton{
+.scrollButton{
   position:fixed;
-  right:17%;
-  top:2%;
+  top:10%;
   font-family: 'East Sea Dokdo', monospace;
   font-weight:semi-bold;
   font-size: x-large;
@@ -108,6 +92,17 @@
   cursor:pointer;
   width:5%;
   text-align:center; 
+}
+#playButton{
+  right:16%;
+}
+
+#stopButton{
+  right:9%;
+ }
+
+#rewindButton{
+  right:2%;
 }
 
 .white{
@@ -176,12 +171,10 @@
 
 .cellButton{
   background-color: Transparent;
-    /*background-repeat:no-repeat;*/
   height:20px;
   width:80px;
   border: none;
   cursor:pointer;
-  /*overflow: hidden;*/   
 }
 
 .pressButton{
@@ -196,6 +189,6 @@
 	width:5px;
 	left:103px;
 	top:-100.5%;
-   box-shadow: 0 0 5px #FF0000;
+  box-shadow: 0 0 5px #FF0000;
 }
 
