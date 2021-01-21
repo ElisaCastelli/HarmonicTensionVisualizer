@@ -63,6 +63,11 @@ function tableAutoscroll(){
   tableScroll.scrollLeft+=1.5;
 }
 
+function tableBackscroll(){
+	  const tableScroll = document.getElementById("table-scroll");
+	  tableScroll.scrollLeft=0;
+}
+
 function scroll() {
   const bar = document.getElementById("scrollingBar");
   const pianoContainer = document.getElementById("output_block");
@@ -177,26 +182,26 @@ function createBar(){
 
 function firstRender(){
 	const pianoContainer = document.getElementById("output_block");
-  pianoRollTable=createPianoRoll();
+	pianoRollTable=createPianoRoll();
 	pianoContainer.appendChild(pianoRollTable);
 	bar = createBar();
 	pianoContainer.appendChild(bar);
-  playButton.onclick = function(){ 
-  if(!modelButton){
-      modelButton = true;
-      var scrollInterval=setInterval(scroll, 10); 
-      stopButton.onclick=function(){
-        modelButton=false;
-        clearInterval(scrollInterval);
-        rewindButton.onclick=function(){
-          bar.style.left='103px';
-        }
-      }
-  }; 
-}
+	playButton.onclick = function(){ 
+		if(!modelButton){
+			modelButton = true;
+			var scrollInterval=setInterval(scroll, 10); 
+			stopButton.onclick=function(){
+				modelButton=false;
+				clearInterval(scrollInterval);
+				
+			}
+		}; 
+	}
+  rewindButton.onclick=function(){
+      tableBackscroll();
+      bar.style.left='103px';
+  }
 
-
-  
 }
 
 
