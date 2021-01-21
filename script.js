@@ -78,14 +78,8 @@ function scroll() {
 
 function addNote(column, numCell) {
     column.classList.toggle("red_background");
-    if (column.classList.contains("red_background")) {
-        model[numCell] = true;
-    } else {
-        model[numCell] = false;
-    }
+    // manca di segnare nella matrice che la casella è "piena"
 }
-
-
 
 // VIEW
 
@@ -123,81 +117,79 @@ function createRow(scaleNumber, noteNumber) {
         } else {
             column.classList.add('white_background');
         }
-        return row;
     }
+    return row;
+}
 
-    function createHeader() {
-        const table_head = document.createElement("thead");
-        const row = document.createElement("tr");
-        row.classList.add("topstop");
-        for (let columnNumber = 0; columnNumber < maxColumns; columnNumber++) {
-            const cell = document.createElement("th");
-            row.appendChild(cell);
-        }
-        table_head.appendChild(row);
-        return table_head;
+function createHeader() {
+    const table_head = document.createElement("thead");
+    const row = document.createElement("tr");
+    row.classList.add("topstop");
+    for (let columnNumber = 0; columnNumber < maxColumns; columnNumber++) {
+        const cell = document.createElement("th");
+        row.appendChild(cell);
     }
+    table_head.appendChild(row);
+    return table_head;
+}
 
-    function createTable() {
-        const main_table = document.createElement("table");
-        main_table.setAttribute("id", "table");
-        main_table.classList.add("table-wrap");
-        table_head = createHeader();
-        const table_body = document.createElement("tbody");
-        //per ogni nota creo una riga della tabella e la carico nella tabella
-        for (let rowNumber = numOctaves * key_color.length - 1; rowNumber >= 0; rowNumber--) {
-            scaleNumber = Math.floor(rowNumber / key_color.length);
-            noteNumber = rowNumber - (key_color.length * scaleNumber);
-            row = createRow(scaleNumber, noteNumber);
-            table_body.appendChild(row);
-        }
-        main_table.appendChild(table_head);
-        main_table.appendChild(table_body);
-        return main_table;
+function createTable() {
+    const main_table = document.createElement("table");
+    main_table.setAttribute("id", "table");
+    main_table.classList.add("table-wrap");
+    table_head = createHeader();
+    const table_body = document.createElement("tbody");
+    //per ogni nota creo una riga della tabella e la carico nella tabella
+    for (let rowNumber = numOctaves * key_color.length - 1; rowNumber >= 0; rowNumber--) {
+        scaleNumber = Math.floor(rowNumber / key_color.length);
+        noteNumber = rowNumber - (key_color.length * scaleNumber);
+        row = createRow(scaleNumber, noteNumber);
+        table_body.appendChild(row);
     }
+    main_table.appendChild(table_head);
+    main_table.appendChild(table_body);
+    return main_table;
+}
 
-    function createPianoRoll() {
-        const pianoRollTable = document.createElement("div");
-        pianoRollTable.classList.add("table-scroll");
-        pianoRollTable.setAttribute("id", "table-scroll");
-        main_table = createTable();
-        pianoRollTable.appendChild(main_table);
-        return pianoRollTable;
-    }
+function createPianoRoll() {
+    const pianoRollTable = document.createElement("div");
+    pianoRollTable.classList.add("table-scroll");
+    pianoRollTable.setAttribute("id", "table-scroll");
+    main_table = createTable();
+    pianoRollTable.appendChild(main_table);
+    return pianoRollTable;
+}
 
-    function createBar() {
-        const bar = document.createElement("div");
-        bar.setAttribute("id", "scrollingBar");
-        bar.classList.add("scrollingBar");
-        return bar;
-    }
+function createBar() {
+    const bar = document.createElement("div");
+    bar.setAttribute("id", "scrollingBar");
+    bar.classList.add("scrollingBar");
+    return bar;
+}
 
-    function firstRender() {
-        const pianoContainer = document.getElementById("output_block");
-        pianoRollTable = createPianoRoll();
-        pianoContainer.appendChild(pianoRollTable);
-        bar = createBar();
-        pianoContainer.appendChild(bar);
-        playButton.onclick = function() {
-            if (!modelButton) {
-                modelButton = true;
-                var scrollInterval = setInterval(scroll, 10);
-                stopButton.onclick = function() {
-                    modelButton = false;
-                    clearInterval(scrollInterval);
-                    rewindButton.onclick = function() {
-                        bar.style.left = '103px';
-                    }
+function firstRender() {
+    const pianoContainer = document.getElementById("output_block");
+    pianoRollTable = createPianoRoll();
+    pianoContainer.appendChild(pianoRollTable);
+    bar = createBar();
+    pianoContainer.appendChild(bar);
+    playButton.onclick = function() {
+        if (!modelButton) {
+            modelButton = true;
+            var scrollInterval = setInterval(scroll, 10);
+            stopButton.onclick = function() {
+                modelButton = false;
+                clearInterval(scrollInterval);
+                rewindButton.onclick = function() {
+                    bar.style.left = '103px';
                 }
-            };
-        }
-
-
-
+            }
+        };
     }
 
 
-    firstRender();
 
 }
+
+
 firstRender();
