@@ -36,8 +36,8 @@ const degrees = ["I", "II", "III", "IV", "V", "VI", "VII"];
 // object containing notes at corresponding index, used for extracting value
 const allnotes = {
 	norm: ["C", "", "D", "", "E", "F", "", "G", "", "A", "", "B"],
-	flat: ["", "C#", "", "D#", "", "", "F#", "", "G#", "", "A#", ""],
-	sharp: ["", "Db", "", "Eb", "", "", "Gb", "", "Ab", "", "Bb", ""]
+	sharp: ["", "C#", "", "D#", "", "", "F#", "", "G#", "", "A#", ""],
+	flat: ["", "Db", "", "Eb", "", "", "Gb", "", "Ab", "", "Bb", ""]
 };
 
 
@@ -185,7 +185,48 @@ try {
 let accepted_keys = findKey(progression);
 console.log('\n ACCEPTED KEYS:\n', accepted_keys);
 
+// Costruzione dell'accordo
 
+const type = [
+    {
+        name: "Maj7",
+        shape: [4,7,11]
+    },
+    {
+        name: "Min7",
+        shape: [3,7,10]
+    },
+    {
+        name: "7",
+        shape: [4,7,10]
+    },
+    {
+        name: "Half_Diminished",
+        shape: [3,6,10]
+    },
+    {
+        name: "Diminished",
+        shape: [3,6,9]
+    }
+]
+
+const Allnotes1D = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+
+// Tonic è l'indice della nota con C0 = 0 , C1 = 12 ...
+function chord_builder (tonic , type){
+    let Chord = [tonic % 12]
+    for (i=0 ; i<3 ; i++) {
+        Chord.push((type[i] + tonic % 12) % 12)
+    }
+    ChordNotes = []
+    for (i=0 ; i<4 ; i++) {
+        ChordNotes.push(Allnotes1D[Chord[i]])
+    }
+    return ChordNotes
+}
+
+// Prova con un C1 min7
+console.log (chord_builder(12,type[1].shape))
 
 
 
