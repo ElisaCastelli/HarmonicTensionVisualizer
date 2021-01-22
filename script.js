@@ -62,6 +62,11 @@ function tableAutoscroll() {
     tableScroll.scrollLeft += 1.5;
 }
 
+function tableBackscroll(){
+	  const tableScroll = document.getElementById("table-scroll");
+	  tableScroll.scrollLeft=0;
+}
+
 function scroll() {
     const bar = document.getElementById("scrollingBar");
     const pianoContainer = document.getElementById("output_block");
@@ -180,13 +185,14 @@ function firstRender() {
             stopButton.onclick = function() {
                 modelButton = false;
                 clearInterval(scrollInterval);
-                rewindButton.onclick = function() {
-                    bar.style.left = '103px';
-                }
+                
             }
         };
     }
-
+    rewindButton.onclick = function() {
+    	tableBackscroll();
+        bar.style.left = '103px';
+    }
 
 
 }
