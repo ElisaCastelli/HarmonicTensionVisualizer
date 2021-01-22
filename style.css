@@ -161,6 +161,15 @@
         color: rgb(250, 183, 53);
     }
     
+    #FolderIcon {
+        left: 94%;
+        top: 25px;
+        position: fixed;
+        border-left: #a9a9a9;
+        text-align: center;
+        color: rgb(182, 0, 0);
+    }
+    
     .white {
         background: grey;
     }
