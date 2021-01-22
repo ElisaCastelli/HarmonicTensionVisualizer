@@ -112,7 +112,7 @@
         text-align: center;
         position: fixed;
         top: 25px;
-        color: red;
+        color: rgb(41, 215, 148);
         border-left: black;
     }
     
@@ -121,7 +121,7 @@
         top: 25px;
         position: fixed;
         text-align: center;
-        color: red;
+        color: rgb(116, 211, 243);
         border-left: #a9a9a9;
     }
     
@@ -131,7 +131,7 @@
         position: fixed;
         border-left: #a9a9a9;
         text-align: center;
-        color: red;
+        color: rgb(83, 110, 161);
     }
     
     #volumeDownButton {
@@ -140,7 +140,7 @@
         position: fixed;
         border-left: #a9a9a9;
         text-align: center;
-        color: red;
+        color: rgb(83, 110, 161);
     }
     
     #volumeUpButton {
@@ -149,7 +149,7 @@
         position: fixed;
         border-left: #a9a9a9;
         text-align: center;
-        color: red;
+        color: rgb(83, 110, 161);
     }
     
     #resetNotes {
@@ -158,7 +158,7 @@
         position: fixed;
         border-left: #a9a9a9;
         text-align: center;
-        color: red;
+        color: rgb(250, 183, 53);
     }
     
     .white {
