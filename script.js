@@ -92,7 +92,6 @@ function scroll() {
 
 function addNote(column, numCell) {
 
-    model[numcell * column] = !model[numCell * column];
     column.classList.toggle("red_background");
     // manca di segnare nella matrice che la casella è "piena"
 }
@@ -114,6 +113,8 @@ function createFixedColumn(scaleNumber, noteNumber) {
 }
 
 function createRow(scaleNumber, noteNumber) {
+
+
     const row = document.createElement("tr");
 
     // per ogni riga aggiungo la prima colonna che rimarrà fissa e poi tutte le altre
