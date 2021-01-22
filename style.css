@@ -1,226 +1,258 @@
-/* import vari stili */
-
-@import url('https://fonts.googleapis.com/css2?family=Syne+Mono&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@1,100&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital@1&display=swap');
-
-/* fine import */
-
-#pagina {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 120%;
-    background: #3a3a3a;
-}
-
-#title_container {
-    position: fixed;
-    font-weight: semi-bold;
-    font-size: xx-large;
-    font-family: 'Roboto', sans-serif;
-    /* options : Fraunces */
-    /* options : HachiMaruPop */
-    /* options : East+Sea+Dokdo */
-    color: black;
-    width: 50%;
-    text-align: center;
-    top: 20px;
-    margin-left: 25%;
-    /*border:1px solid black;*/
-}
-
-#input_block {
-    width: 98%;
-    position: absolute;
-    left: 1%;
-    top: 15%;
-    height: 35%;
-    border: 1px solid black;
-}
-
-#output_block {
-    width: 98%;
-    position: absolute;
-    top: 52%;
-    left: 1%;
-    height: 40%;
-    border: 1px solid black;
-}
-
-#bottom_panel {
-    width: 100%;
-    position: absolute;
-    top: 94%;
-    height: 1%;
-    border: 0px solid black;
-    cursor: pointer;
-}
-
-#linea {
-    position: relative;
-    width: 100%;
-    height: 1%;
-    border: 1px solid black;
-}
-
-.bottom_bar {
-    position: relative;
-    background-color: #909090;
-    display: inline-block;
-    width: 33%;
-    bottom: 20%;
-    text-align: center;
-    font-family: 'Roboto', sans-serif;
-    font-weight: semi-bold;
-    font-size: x-large;
-}
-
-#volume_range {
-    position: fixed;
-    right: 1%;
-    top: 25px;
-    ;
-}
-
-#volume {
-    font-family: 'Roboto', sans-serif;
-    font-weight: semi-bold;
-    font-size: x-large;
-}
-
-.scrollButton {
-    position: fixed;
-    top: 0;
-    font-family: 'Roboto', sans-serif;
-    font-weight: semi-bold;
-    font-size: x-large;
-    border: 1px solid black;
-    border-radius: 5px;
-    background-color: #000;
-    cursor: pointer;
-    width: 5%;
-    text-align: center;
-    color: red;
-}
-
-#playButton {
-    right: 26%;
-    position: fixed;
-    top: 25px;
-}
-
-#stopButton {
-    right: 20%;
-    position: fixed;
-    top: 25px;
-}
-
-#rewindButton {
-    right: 14%;
-    top: 25px;
-    position: fixed;
-}
-
-.white {
-    background: grey;
-}
-
-.black {
-    background: #000;
-    color: white;
-}
-
-
-/*TABLE*/
-
-.table-scroll {
-    position: relative;
-    max-width: 100%;
-    max-height: 100%;
-    margin: auto;
-    overflow: auto;
-    overflow-x: scroll;
-    border: 1px solid #000;
-}
-
-.table-wrap {
-    width: 100%;
-    overflow-y: auto;
-    height: 100%;
-}
-
-.table-scroll table {
-    width: 100%;
-    height: 100%;
-    margin: auto;
-    border-collapse: separate;
-    border-spacing: 0;
-}
-
-.table-scroll th,
-.table-scroll td {
-    height: 20px;
-    width: 80px;
-    border: 1px solid #000;
-}
-
-.clone {
-    position: absolute;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-}
-
-.black_background {
-    background: #a9a9a9;
-}
-
-.white_background {
-    cursor: pointer;
-}
-
-.red_background {
-    background-color: #FF0000;
-}
-
-.leftstop {
-    position: sticky;
-    height: 20px;
-    width: 100px;
-    left: 0;
-}
-
-.topstop {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
-}
-
-.cellButton {
-    background-color: Transparent;
-    height: 20px;
-    width: 80px;
-    border: none;
-    cursor: pointer;
-}
-
-.pressButton {
-    background-color: #e92f32;
-}
-
-
-/*BAR*/
-
-.scrollingBar {
-    position: relative;
-    background: red;
-    height: 96.5%;
-    width: 5px;
-    left: 103px;
-    top: -100.5%;
-    box-shadow: 0 0 5px #FF0000;
-}
+    /* import vari stili */
+    
+    @import url('https://fonts.googleapis.com/css2?family=Syne+Mono&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@1,100&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:ital@1&display=swap');
+    /* fine import */
+    
+    #pagina {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 120%;
+        background: #3a3a3a;
+    }
+    
+    #title_container {
+        position: fixed;
+        font-weight: semi-bold;
+        font-size: xx-large;
+        font-family: 'Roboto', sans-serif;
+        /* options : Fraunces */
+        /* options : HachiMaruPop */
+        /* options : East+Sea+Dokdo */
+        color: rgb(255, 255, 255);
+        width: 50%;
+        text-align: left;
+        top: 24px;
+        margin-left: 5%;
+        /*border:1px solid black;*/
+    }
+    
+    #input_block {
+        width: 98%;
+        position: absolute;
+        left: 1%;
+        top: 15%;
+        height: 35%;
+        border: 1px solid black;
+    }
+    
+    #output_block {
+        width: 98%;
+        position: absolute;
+        top: 52%;
+        left: 1%;
+        height: 40%;
+        border: 1px solid black;
+    }
+    
+    #bottom_panel {
+        width: 100%;
+        position: absolute;
+        top: 94%;
+        height: 1%;
+        border: 0px solid black;
+        cursor: pointer;
+    }
+    
+    #linea {
+        position: relative;
+        width: 100%;
+        height: 1%;
+        border: 1px solid black;
+    }
+    
+    .bottom_bar {
+        position: relative;
+        background-color: #909090;
+        display: inline-block;
+        width: 33%;
+        bottom: 20%;
+        text-align: center;
+        font-family: 'Roboto', sans-serif;
+        font-weight: semi-bold;
+        font-size: x-large;
+    }
+    
+    #volume_range {
+        position: fixed;
+        right: 1%;
+        top: 25px;
+        ;
+    }
+    
+    .scrollButton {
+        position: fixed;
+        top: 0;
+        font-family: 'Roboto', sans-serif;
+        font-weight: semi-bold;
+        font-size: x-large;
+        border: 1px solid grey;
+        border-radius: 3px;
+        background-color: #000;
+        cursor: pointer;
+        width: 5%;
+        text-align: center;
+    }
+    
+    #playButton {
+        left: 35%;
+        text-align: center;
+        position: fixed;
+        top: 25px;
+        color: red;
+    }
+    
+    #stopButton {
+        left: 40%;
+        text-align: center;
+        position: fixed;
+        top: 25px;
+        color: red;
+        border-left: black;
+    }
+    
+    #rewindButton {
+        left: 45%;
+        top: 25px;
+        position: fixed;
+        text-align: center;
+        color: red;
+        border-left: #a9a9a9;
+    }
+    
+    #muteButton {
+        left: 49%;
+        top: 25px;
+        position: fixed;
+        border-left: #a9a9a9;
+        text-align: center;
+        color: red;
+    }
+    
+    #volumeDownButton {
+        left: 54%;
+        top: 25px;
+        position: fixed;
+        border-left: #a9a9a9;
+        text-align: center;
+        color: red;
+    }
+    
+    #volumeUpButton {
+        left: 59%;
+        top: 25px;
+        position: fixed;
+        border-left: #a9a9a9;
+        text-align: center;
+        color: red;
+    }
+    
+    #resetNotes {
+        left: 64%;
+        top: 25px;
+        position: fixed;
+        border-left: #a9a9a9;
+        text-align: center;
+        color: red;
+    }
+    
+    .white {
+        background: grey;
+    }
+    
+    .black {
+        background: #000;
+        color: white;
+    }
+    /*TABLE*/
+    
+    .table-scroll {
+        position: relative;
+        max-width: 100%;
+        max-height: 100%;
+        margin: auto;
+        overflow: auto;
+        overflow-x: scroll;
+        border: 1px solid #000;
+    }
+    
+    .table-wrap {
+        width: 100%;
+        overflow-y: auto;
+        height: 100%;
+    }
+    
+    .table-scroll table {
+        width: 100%;
+        height: 100%;
+        margin: auto;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    
+    .table-scroll th,
+    .table-scroll td {
+        height: 20px;
+        width: 80px;
+        border: 1px solid #000;
+    }
+    
+    .clone {
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+    }
+    
+    .black_background {
+        background: #a9a9a9;
+    }
+    
+    .white_background {
+        cursor: pointer;
+    }
+    
+    .red_background {
+        background-color: #FF0000;
+    }
+    
+    .leftstop {
+        position: sticky;
+        height: 20px;
+        width: 100px;
+        left: 0;
+    }
+    
+    .topstop {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+    }
+    
+    .cellButton {
+        background-color: Transparent;
+        height: 20px;
+        width: 80px;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .pressButton {
+        background-color: #e92f32;
+    }
+    /*BAR*/
+    
+    .scrollingBar {
+        position: relative;
+        background: red;
+        height: 96.5%;
+        width: 5px;
+        left: 103px;
+        top: -100.5%;
+        box-shadow: 0 0 5px #FF0000;
+    }
