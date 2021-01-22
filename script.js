@@ -51,6 +51,15 @@ const key_color = [{
     }
 ];
 
+// costruttore nota
+function nota() {
+    this.ottava = "";
+    this.nome = "";
+    this.colonna = "";
+    this.getNota = function() {};
+    this.getColonna = function() {};
+}
+
 numcell = numOctaves * maxColumns;
 model = Array(numcell).fill(false);
 modelButton = false;
@@ -62,9 +71,9 @@ function tableAutoscroll() {
     tableScroll.scrollLeft += 1.5;
 }
 
-function tableBackscroll(){
-	  const tableScroll = document.getElementById("table-scroll");
-	  tableScroll.scrollLeft=0;
+function tableBackscroll() {
+    const tableScroll = document.getElementById("table-scroll");
+    tableScroll.scrollLeft = 0;
 }
 
 function scroll() {
@@ -82,6 +91,8 @@ function scroll() {
 }
 
 function addNote(column, numCell) {
+
+    model[numcell * column] = !model[numCell * column];
     column.classList.toggle("red_background");
     // manca di segnare nella matrice che la casella è "piena"
 }
@@ -185,12 +196,12 @@ function firstRender() {
             stopButton.onclick = function() {
                 modelButton = false;
                 clearInterval(scrollInterval);
-                
+
             }
         };
     }
     rewindButton.onclick = function() {
-    	tableBackscroll();
+        tableBackscroll();
         bar.style.left = '103px';
     }
 
