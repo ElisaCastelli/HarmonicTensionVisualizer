@@ -176,8 +176,8 @@
             }
             
             #BoxOctave {
-                left: 80%;
-                top: 25px;
+                left: 81%;
+                top: 30px;
                 position: fixed;
                 text-align: top;
                 width: max-content;
@@ -286,6 +286,7 @@
                 width: 50px;
                 position: fixed;
                 top: 31px;
+                left: 82%;
             }
             
             #send {
@@ -293,7 +294,7 @@
                 position: fixed;
                 top: 31px;
                 left: 85.5%;
-                background-color: brown;
+                background-color: red;
                 cursor: pointer;
                 border-radius: 3px;
             }
@@ -303,4 +304,10 @@
                 position: fixed;
                 top: 55px;
                 left: 82.5%;
+            }
+            
+            #octaves {
+                position: fixed;
+                left: 80.5%;
+                top: 29px;
             }
