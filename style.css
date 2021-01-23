@@ -29,6 +29,7 @@
                 text-align: left;
                 top: 24px;
                 margin-left: 5%;
+                cursor: pointer;
                 /*border:1px solid black;*/
             }
             
@@ -288,7 +289,7 @@
             #valore {
                 width: 40px;
                 position: relative;
-                background: : transparent;
+                background: transparent;
                 left: 5px;
             }
             

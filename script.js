@@ -252,7 +252,6 @@ function firstRender() {
             stopButton.onclick = function() {
                 modelButton = false;
                 clearInterval(scrollInterval);
-
             }
         };
     }
@@ -279,8 +278,6 @@ function action() {
     }
 }
 
-// send.onclick = action
-
 function refresh() {
     const pianoContainer = document.getElementById("output_block");
     while (pianoContainer.lastChild) {
@@ -297,3 +294,14 @@ firstRender();
     const testo = document.createTextNode("Invalid value!");
     position.appendChild(testo);
 }*/
+title_container.onclick = function() {
+    window.location.reload(false);
+}
+
+resetNotes.onclick = function() {
+    const columns = document.getElementsByClassName("white");
+    for (let index = 0; index < columns.length; index++) {
+        columns[index].classList.remove("red_background");
+
+    }
+}
