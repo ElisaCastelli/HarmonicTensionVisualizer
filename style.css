@@ -176,12 +176,14 @@
             }
             
             #BoxOctave {
-                left: 85%;
-                top: 30px;
+                left: 80%;
+                top: 25px;
                 position: fixed;
-                text-align: center;
+                text-align: top;
                 width: max-content;
                 color: white;
+                background-color: transparent;
+                border: transparent;
             }
             
             .white {
@@ -278,4 +280,26 @@
                 left: 103px;
                 top: -100.5%;
                 box-shadow: 0 0 5px #FF0000;
+            }
+            
+            #valore {
+                width: 50px;
+                position: fixed;
+                top: 31px;
+            }
+            
+            #send {
+                width: 50px;
+                position: fixed;
+                top: 31px;
+                left: 85.5%;
+                background-color: brown;
+                cursor: pointer;
+                border-radius: 3px;
+            }
+            
+            #error-text {
+                color: red;
+                position: fixed;
+                top: 30px;
             }

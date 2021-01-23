@@ -1,6 +1,8 @@
 // MODEL 
-numOctaves = 3;
+numOctaves = 4;
 maxColumns = 30;
+MIN_value = 1;
+MAX_value = 7;
 const key_color = [{
         pitch: "C",
         color: "white",
@@ -60,7 +62,9 @@ function nota() {
     this.getColonna = function() {};
 }
 
+// array completo
 numcell = numOctaves * maxColumns;
+pianoRoll = nota(numcell);
 model = Array(numcell).fill(false);
 modelButton = false;
 half_length = 2;
@@ -209,5 +213,24 @@ function firstRender() {
 
 }
 
+function action() {
+    value = Number(document.getElementById("valore").value);
+    if (value < MIN_value | value > MAX_value) {
+        alert("errore");
+    } else {
+        numOctaves = value;
+        refresh();
+        firstRender();
+    }
+}
+
+send.onclick = action
+
+function refresh() {
+    const pianoContainer = document.getElementById("output_block");
+    while (pianoContainer.lastChild) {
+        pianoContainer.removeChild(pianoContainer.lastChild);
+    }
+}
 
 firstRender();
