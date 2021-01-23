@@ -176,6 +176,26 @@ function createHeader() {
           select.appendChild(option5);
           cell.appendChild(select);
         }
+        else{
+          const icon = document.createElement("i");
+          icon.setAttribute("class","fas fa-pen");
+          icon.setAttribute("id","octaveButton");
+          const boxOctave= document.createElement("div");
+          boxOctave.setAttribute("id","BoxOctave");
+          const input = document.createElement("input");
+          input.setAttribute("id","valore");
+          input.setAttribute("type","number");
+          input.setAttribute("min","2");
+          input.setAttribute("max","7");
+          boxOctave.appendChild(input);
+          const sendButton = document.createElement("button");
+          sendButton.setAttribute("id", "send");
+          sendButton.appendChild(icon);
+          sendButton.onclick = action;
+          boxOctave.appendChild(sendButton);
+          cell.appendChild(boxOctave);
+          //cell.appendChild(icon);
+        }
         row.appendChild(cell);
     }
     table_head.appendChild(row);
@@ -255,7 +275,8 @@ function action() {
         firstRender();
     }
 }
-send.onclick = action
+
+// send.onclick = action
 
 function refresh() {
     const pianoContainer = document.getElementById("output_block");
@@ -266,10 +287,10 @@ function refresh() {
 
 firstRender();
 
-function aggiuntaLabelErrore() {
+/*function aggiuntaLabelErrore() {
     const errore = document.createElement("div");
     errore.setAttribute("id", "errore");
     position = document.getElementById("errore");
     const testo = document.createTextNode("Invalid value!");
     position.appendChild(testo);
-}
+}*/

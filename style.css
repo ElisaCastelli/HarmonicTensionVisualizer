@@ -175,11 +175,14 @@
                 width: max-content;
             }
 
+            #octaveButton{
+              position:relative;
+              left:0px;
+              color: red;
+            }
+
             #BoxOctave {
-                left: 81%;
-                top: 30px;
-                position: fixed;
-                text-align: top;
+                position: relative;
                 width: max-content;
                 color: white;
                 background-color: transparent;
@@ -283,18 +286,17 @@
             }
 
             #valore {
-                width: 50px;
-                position: fixed;
-                top: 31px;
-                left: 82%;
+                width: 40px;
+                position: relative;
+                background: :transparent;
+                left:5px;
             }
 
             #send {
-                width: 50px;
-                position: fixed;
-                top: 31px;
-                left: 85.5%;
-                background-color: red;
+                width: 40px;
+                position: relative;
+                background-color: transparent;
+                border:none;
                 cursor: pointer;
                 border-radius: 3px;
             }
@@ -306,9 +308,8 @@
                 left: 82.5%;
             }
             #octaves {
-                position: fixed;
-                left: 80.5%;
-                top: 29px;
+                position: relative;
+
             }
 
             /*select*/
