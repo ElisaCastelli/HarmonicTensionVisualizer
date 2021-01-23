@@ -1,12 +1,12 @@
             /* import vari stili */
-
+            
             @import url('https://fonts.googleapis.com/css2?family=Syne+Mono&display=swap');
             @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@1,100&display=swap');
             @import url('https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&display=swap');
             @import url('https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&display=swap');
             @import url('https://fonts.googleapis.com/css2?family=Roboto:ital@1&display=swap');
             /* fine import */
-
+            
             #pagina {
                 position: absolute;
                 left: 0;
@@ -15,7 +15,7 @@
                 height: 120%;
                 background: #3a3a3a;
             }
-
+            
             #title_container {
                 position: fixed;
                 font-weight: semi-bold;
@@ -31,7 +31,7 @@
                 margin-left: 5%;
                 /*border:1px solid black;*/
             }
-
+            
             #input_block {
                 width: 98%;
                 position: absolute;
@@ -40,7 +40,7 @@
                 height: 35%;
                 border: 1px solid black;
             }
-
+            
             #output_block {
                 width: 98%;
                 position: absolute;
@@ -49,7 +49,7 @@
                 height: 40%;
                 border: 1px solid black;
             }
-
+            
             #bottom_panel {
                 width: 100%;
                 position: absolute;
@@ -58,14 +58,14 @@
                 border: 0px solid black;
                 cursor: pointer;
             }
-
+            
             #linea {
                 position: relative;
                 width: 100%;
                 height: 1%;
                 color: black;
             }
-
+            
             .bottom_bar {
                 position: relative;
                 display: inline-block;
@@ -76,14 +76,14 @@
                 font-weight: semi-bold;
                 font-size: x-large;
             }
-
+            
             #volume_range {
                 position: fixed;
                 right: 1%;
                 top: 25px;
                 ;
             }
-
+            
             .scrollButton {
                 position: fixed;
                 top: 0;
@@ -97,7 +97,7 @@
                 width: 5%;
                 text-align: center;
             }
-
+            
             #playButton {
                 left: 35%;
                 text-align: center;
@@ -105,7 +105,7 @@
                 top: 25px;
                 color: red;
             }
-
+            
             #stopButton {
                 left: 40%;
                 text-align: center;
@@ -114,7 +114,7 @@
                 color: red;
                 border-left: black;
             }
-
+            
             #rewindButton {
                 left: 45%;
                 top: 25px;
@@ -123,7 +123,7 @@
                 color: red;
                 border-left: #a9a9a9;
             }
-
+            
             #muteButton {
                 left: 49%;
                 top: 25px;
@@ -132,7 +132,7 @@
                 text-align: center;
                 color: rgb(83, 110, 161);
             }
-
+            
             #volumeDownButton {
                 left: 54%;
                 top: 25px;
@@ -141,7 +141,7 @@
                 text-align: center;
                 color: rgb(83, 110, 161);
             }
-
+            
             #volumeUpButton {
                 left: 59%;
                 top: 25px;
@@ -150,7 +150,7 @@
                 text-align: center;
                 color: rgb(83, 110, 161);
             }
-
+            
             #resetNotes {
                 left: 64%;
                 top: 25px;
@@ -159,7 +159,7 @@
                 text-align: center;
                 color: rgb(60, 60, 243);
             }
-
+            
             #FolderIcon {
                 left: 94%;
                 top: 25px;
@@ -167,20 +167,20 @@
                 text-align: center;
                 color: rgb(250, 183, 53);
             }
-
+            
             #numeroOttave {
                 position: relative;
                 top: 0;
                 text-align: center;
                 width: max-content;
             }
-
-            #octaveButton{
-              position:relative;
-              left:0px;
-              color: red;
+            
+            #octaveButton {
+                position: relative;
+                left: 0px;
+                color: green;
             }
-
+            
             #BoxOctave {
                 position: relative;
                 width: max-content;
@@ -188,17 +188,17 @@
                 background-color: transparent;
                 border: transparent;
             }
-
+            
             .white {
                 background: grey;
             }
-
+            
             .black {
                 background: #000;
                 color: white;
             }
             /*TABLE*/
-
+            
             .table-scroll {
                 position: relative;
                 max-width: 100%;
@@ -208,13 +208,13 @@
                 overflow-x: scroll;
                 border: 1px solid #000;
             }
-
+            
             .table-wrap {
                 width: 100%;
                 overflow-y: auto;
                 height: 100%;
             }
-
+            
             .table-scroll table {
                 width: 100%;
                 height: 100%;
@@ -222,46 +222,46 @@
                 border-collapse: separate;
                 border-spacing: 0;
             }
-
+            
             .table-scroll th,
             .table-scroll td {
                 height: 20px;
                 width: 80px;
                 border: 1px solid #000;
             }
-
+            
             .clone {
                 position: absolute;
                 top: 0;
                 left: 0;
                 pointer-events: none;
             }
-
+            
             .black_background {
                 background: #a9a9a9;
             }
-
+            
             .white_background {
                 cursor: pointer;
             }
-
+            
             .red_background {
                 background-color: #FF0000;
             }
-
+            
             .leftstop {
                 position: sticky;
                 height: 20px;
                 width: 100px;
                 left: 0;
             }
-
+            
             .topstop {
                 position: -webkit-sticky;
                 position: sticky;
                 top: 0;
             }
-
+            
             .cellButton {
                 background-color: Transparent;
                 height: 20px;
@@ -269,12 +269,12 @@
                 border: none;
                 cursor: pointer;
             }
-
+            
             .pressButton {
                 background-color: #e92f32;
             }
             /*BAR*/
-
+            
             .scrollingBar {
                 position: relative;
                 background: red;
@@ -284,54 +284,53 @@
                 top: -100.5%;
                 box-shadow: 0 0 5px #FF0000;
             }
-
+            
             #valore {
                 width: 40px;
                 position: relative;
-                background: :transparent;
-                left:5px;
+                background: : transparent;
+                left: 5px;
             }
-
+            
             #send {
                 width: 40px;
                 position: relative;
                 background-color: transparent;
-                border:none;
+                border: none;
                 cursor: pointer;
                 border-radius: 3px;
             }
-
+            
             #errore {
                 color: red;
                 position: fixed;
                 top: 55px;
                 left: 82.5%;
             }
+            
             #octaves {
                 position: relative;
-
             }
-
             /*select*/
+            
             select {
-              -webkit-appearance: none;
-              -moz-appearance: none;
-              border-radius:2px;
-              margin:auto;
-            	color: #EC6F66;
-            	width: 100px;
-            	height: 20px;
-            	cursor: pointer;
-            	background: white;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                border-radius: 2px;
+                margin: auto;
+                color: #EC6F66;
+                width: 100px;
+                height: 20px;
+                cursor: pointer;
+                background: white;
             }
-
+            
             select:hover {
-              -webkit-appearance: none;
-              -moz-appearance: none;
-            	background-color: #EC6F66;
-            	color: white;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                background-color: #EC6F66;
+                color: white;
             }
-
             /*select option {
               -webkit-appearance: none;
               -moz-appearance: none;
