@@ -133,6 +133,7 @@ function createRow(scaleNumber, noteNumber) {
         button.onclick = function() { addNote(column, numCell); };
         column.appendChild(button);
         row.appendChild(column);
+        // alternanza sfondi per righe piano roll (nero e bianco)
         if (noteNumber == 1 || noteNumber == 3 || noteNumber == 6 || noteNumber == 8 || noteNumber == 10) {
             column.classList.add('black_background');
         } else {
@@ -148,8 +149,10 @@ function createHeader() {
     row.classList.add("topstop");
     for (let columnNumber = 0; columnNumber <= maxColumns; columnNumber++) {
         const cell = document.createElement("th");
+        // creazione prima riga di chord type
         if (columnNumber != 0) {
             const select = document.createElement("select");
+            select.classList.add("selected");
             const option0 = document.createElement("option");
             option0.text = "Chord type";
             option0.setAttribute("value", "default");
@@ -175,7 +178,9 @@ function createHeader() {
             select.appendChild(option4);
             select.appendChild(option5);
             cell.appendChild(select);
+
         } else {
+            // inserimento casella scelta numero ottave per piano roll
             const icon = document.createElement("i");
             icon.setAttribute("class", "fas fa-check");
             icon.setAttribute("id", "octaveButton");

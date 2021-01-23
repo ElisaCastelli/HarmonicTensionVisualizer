@@ -346,3 +346,8 @@
             	background-color: #EC6F66;
               color: white;
             }*/
+            
+            .selected {
+                color: rgb(6, 243, 112);
+                background-color: black;
+            }
