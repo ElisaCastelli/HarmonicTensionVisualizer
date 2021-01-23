@@ -314,27 +314,36 @@
 
             /*select*/
             select {
-            	margin: 0 auto;
+              -webkit-appearance: none;
+              -moz-appearance: none;
+              border-radius:2px;
+              margin:auto;
             	color: #EC6F66;
             	width: 100px;
-            	padding: 15px;
-            	height: 25px;
+            	height: 20px;
             	cursor: pointer;
             	background: white;
-
             }
 
             select:hover {
+              -webkit-appearance: none;
+              -moz-appearance: none;
             	background-color: #EC6F66;
             	color: white;
             }
 
-            select option {
-            	background-color: #EC6F66;
+            /*select option {
+              -webkit-appearance: none;
+              -moz-appearance: none;
+              border-radius: 2px;
+            	background-color: #EC6F64;
             	color: white;
             	cursor: pointer;
             }
 
             select option:hover {
-            	color: #EC6F66;
-            }
+              -webkit-appearance: none;
+              -moz-appearance: none;
+            	background-color: #EC6F66;
+              color: white;
+            }*/

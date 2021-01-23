@@ -194,7 +194,6 @@ function createHeader() {
           sendButton.onclick = action;
           boxOctave.appendChild(sendButton);
           cell.appendChild(boxOctave);
-          //cell.appendChild(icon);
         }
         row.appendChild(cell);
     }
