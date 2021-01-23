@@ -1,4 +1,4 @@
-// MODEL 
+// MODEL
 numOctaves = 4;
 maxColumns = 30;
 MIN_value = 2;
@@ -146,8 +146,36 @@ function createHeader() {
     const table_head = document.createElement("thead");
     const row = document.createElement("tr");
     row.classList.add("topstop");
-    for (let columnNumber = 0; columnNumber < maxColumns; columnNumber++) {
+    for (let columnNumber = 0; columnNumber <= maxColumns; columnNumber++) {
         const cell = document.createElement("th");
+        if(columnNumber!=0){
+          const select = document.createElement("select");
+          const option0 = document.createElement("option");
+          option0.text="Chord type";
+          option0.setAttribute("value", "default");
+          const option1 = document.createElement("option");
+          option1.text="Maj7";
+          option1.setAttribute("value", "Maj7");
+          const option2 = document.createElement("option");
+          option2.text="Min7";
+          option2.setAttribute("value", "Min7");
+          const option3 = document.createElement("option");
+          option3.text="7";
+          option3.setAttribute("value", "7");
+          const option4 = document.createElement("option");
+          option4.text="Half Diminished";
+          option4.setAttribute("value", "Half Diminished");
+          const option5 = document.createElement("option");
+          option5.text="Diminished";
+          option4.setAttribute("value", "Diminished");
+          select.appendChild(option0);
+          select.appendChild(option1);
+          select.appendChild(option2);
+          select.appendChild(option3);
+          select.appendChild(option4);
+          select.appendChild(option5);
+          cell.appendChild(select);
+        }
         row.appendChild(cell);
     }
     table_head.appendChild(row);
