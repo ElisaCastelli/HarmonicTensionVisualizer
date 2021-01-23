@@ -1,7 +1,7 @@
 // MODEL 
 numOctaves = 4;
 maxColumns = 30;
-MIN_value = 1;
+MIN_value = 2;
 MAX_value = 7;
 const key_color = [{
         pitch: "C",
@@ -216,14 +216,17 @@ function firstRender() {
 function action() {
     value = Number(document.getElementById("valore").value);
     if (value < MIN_value | value > MAX_value) {
-        alert("errore");
+        aggiuntaLabelErrore();
     } else {
+        const ErrorMess = document.getElementById("errore");
+        if (ErrorMess) {
+            ErrorMess.remove();
+        }
         numOctaves = value;
         refresh();
         firstRender();
     }
 }
-
 send.onclick = action
 
 function refresh() {
@@ -234,3 +237,11 @@ function refresh() {
 }
 
 firstRender();
+
+function aggiuntaLabelErrore() {
+    const errore = document.createElement("div");
+    errore.setAttribute("id", "errore");
+    position = document.getElementById("errore");
+    const testo = document.createTextNode("Invalid value!");
+    position.appendChild(testo);
+}

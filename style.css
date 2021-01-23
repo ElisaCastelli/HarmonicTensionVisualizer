@@ -298,8 +298,9 @@
                 border-radius: 3px;
             }
             
-            #error-text {
+            #errore {
                 color: red;
                 position: fixed;
-                top: 30px;
+                top: 55px;
+                left: 82.5%;
             }
