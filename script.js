@@ -305,3 +305,15 @@ resetNotes.onclick = function() {
 
     }
 }
+
+readme.onclick = function() {
+    window.open("readme.html");
+}
+
+credits.onclick = function() {
+    window.open("credits.html");
+}
+
+contact_us.onclick = function() {
+    window.open("contact_us.html");
+}
