@@ -97,6 +97,7 @@
                 cursor: pointer;
                 width: 5%;
                 text-align: center;
+                z-index: 100;
             }
 
             #playButton {
