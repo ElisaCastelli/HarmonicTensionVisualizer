@@ -9,7 +9,6 @@ numcell = numOctaves * 12 * maxColumns;
 pianoRoll = nota(numcell);
 let matrice = Array();
 modelButton = false;
-half_length = 2;
 
 const key_color = [{
         pitch: "C",
@@ -91,11 +90,6 @@ function unselectAllMatrix(){
   }
 }
 
-function tableAutoscroll() {
-    const tableScroll = document.getElementById("table-scroll");
-    tableScroll.scrollLeft += 1.5;
-}
-
 function tableBackscroll() {
     const tableScroll = document.getElementById("table-scroll");
     tableScroll.scrollLeft = 0;
@@ -104,14 +98,18 @@ function tableBackscroll() {
 function scroll() {
     const bar = document.getElementById("scrollingBar");
     const pianoContainer = document.getElementById("output_block");
+    const tableScroll = document.getElementById("table-scroll");
     let speed = 1;
     let direction = 1;
     let barLeftPos = bar.offsetLeft,
         barRightPos = barLeftPos + bar.offsetWidth;
-    if (barRightPos < pianoContainer.offsetWidth / half_length) {
+    let containerWidth = pianoContainer.offsetWidth;
+    if (barRightPos < containerWidth/2) {
         bar.style.left = (barLeftPos + speed * direction) + 'px';
-    } else {
-        tableAutoscroll();
+    } else if(tableScroll.scrollWidth-tableScroll.scrollLeft>containerWidth){
+        tableScroll.scrollLeft += 1.5;
+    }else if(barRightPos < tableScroll.offsetWidth){
+        bar.style.left = (barLeftPos + speed * direction) + 'px';
     }
 }
 
@@ -323,7 +321,6 @@ function generaMatrice() {
     let indice = numcell;
     for (let indiceColonna = maxColumns - 1; indiceColonna >= 0; indiceColonna--) {
         for (let indiceRiga = (numOctaves * 12) - 1; indiceRiga >= 0; indiceRiga--) {
-
             numeroNota = indiceRiga % 12;
             let tmpNota = new nota();
             tmpNota.riga = indiceRiga;
