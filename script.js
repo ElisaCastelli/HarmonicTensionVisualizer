@@ -1,8 +1,16 @@
 // MODEL
 numOctaves = 4;
-maxColumns = 30;
+maxColumns = 20;
 MIN_value = 2;
 MAX_value = 7;
+
+// array completo
+numcell = numOctaves * 12 * maxColumns;
+pianoRoll = nota(numcell);
+let matrice = Array();
+modelButton = false;
+half_length = 2;
+
 const key_color = [{
         pitch: "C",
         color: "white",
@@ -58,16 +66,23 @@ function nota() {
     this.ottava = "";
     this.nome = "";
     this.colonna = "";
-    this.getNota = function() {};
-    this.getColonna = function() {};
+    this.riga = "";
+    this.selezionato = false; // booleano per definire se è selezionato o meno (nota attiva o disattiva)
+    this.id = this.riga + this.colonna; // concatenare indice riga e indice colonna
+    this.selezionabile = false;
+    this.getNota = function() { return this.nome; };
+    this.getColonna = function() { return this.colonna; };
+    this.getRiga = function() { return this.riga };
+    this.getOttava = function() { return this.ottava; }
+    this.getId = function() {
+        return this.id;
+    }
+    this.selezionato = function() {
+        return this.selezionato;
+    }
+    this.selezionabile = function() { return this.selezionabile; }
+    this.getFrequenza = function() {};
 }
-
-// array completo
-numcell = numOctaves * maxColumns;
-pianoRoll = nota(numcell);
-model = Array(numcell).fill(false);
-modelButton = false;
-half_length = 2;
 
 // CONTROLLER
 function tableAutoscroll() {
@@ -260,6 +275,8 @@ function firstRender() {
         bar.style.left = '103px';
     }
 
+    // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
+    generaMatrice();
 
 }
 
@@ -278,6 +295,7 @@ function action() {
     }
 }
 
+// cancella tutto il contenuto del piano roll
 function refresh() {
     const pianoContainer = document.getElementById("output_block");
     while (pianoContainer.lastChild) {
@@ -286,6 +304,33 @@ function refresh() {
 }
 
 firstRender();
+
+function generaMatrice() {
+    let numeroOttava = 0;
+    let numeroNota = 0;
+    let indice = numcell;
+    for (let indiceColonna = maxColumns - 1; indiceColonna >= 0; indiceColonna--) {
+        for (let indiceRiga = (numOctaves * 12) - 1; indiceRiga >= 0; indiceRiga--) {
+
+            numeroNota = indiceRiga % 12;
+            let tmpNota = new nota();
+            tmpNota.riga = indiceRiga;
+            tmpNota.colonna = indiceColonna;
+            tmpNota.nome = key_color[numeroNota].pitch;
+            numeroOttava = indiceRiga - numeroNota;
+            numeroOttava = numeroOttava / 12;
+            tmpNota.ottava = numeroOttava;
+            tmpNota.id = String(indice);
+            indice--;
+            tmpNota.selezionabile = false;
+            tmpNota.selezionato = false;
+            matrice.push(tmpNota);
+        }
+
+    }
+}
+
+// metodi onclick
 
 /*function aggiuntaLabelErrore() {
     const errore = document.createElement("div");
