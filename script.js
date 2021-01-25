@@ -77,14 +77,20 @@ function nota() {
     this.getId = function() {
         return this.id;
     }
-    this.selezionato = function() {
+    this.isSelezionato = function() {
         return this.selezionato;
     }
-    this.selezionabile = function() { return this.selezionabile; }
+    this.isSelezionabile = function() { return this.selezionabile; }
     this.getFrequenza = function() {};
 }
 
 // CONTROLLER
+function unselectAllMatrix(){
+  for(index = 0; index< matrice.length;index++){
+    matrice[index].selezionato= false;
+  }
+}
+
 function tableAutoscroll() {
     const tableScroll = document.getElementById("table-scroll");
     tableScroll.scrollLeft += 1.5;
@@ -109,10 +115,15 @@ function scroll() {
     }
 }
 
-function addNote(column, numCell) {
-
-    column.classList.toggle("red_background");
+function addNote(cell, idCell) {
+    cell.classList.toggle("red_background");
     // manca di segnare nella matrice che la casella è "piena"
+    matrixIndex = numOctaves*12*maxColumns - idCell;
+    if(matrice[matrixIndex].isSelezionato()==false){
+      matrice[matrixIndex].selezionato=true;
+    }else{
+      matrice[matrixIndex].selezionato=false;
+    }
 }
 
 // VIEW
@@ -132,27 +143,26 @@ function createFixedColumn(scaleNumber, noteNumber) {
 }
 
 function createRow(scaleNumber, noteNumber) {
-
-
     const row = document.createElement("tr");
-
+    let rowNumber = numOctaves*12-(scaleNumber*12+noteNumber)-1;
     // per ogni riga aggiungo la prima colonna che rimarrà fissa e poi tutte le altre
     fixedColumn = createFixedColumn(scaleNumber, noteNumber);
     row.appendChild(fixedColumn);
-    for (let columnNumber = 0; columnNumber < maxColumns; columnNumber++) {
-        const column = document.createElement("td");
-        column.classList.add("white");
+    for (let columnNumber = 0; columnNumber <maxColumns ; columnNumber++) {
+        const cell = document.createElement("td");
+        cell.classList.add("white");
         const button = document.createElement("button");
         button.classList.add("cellButton");
-        let numCell = scaleNumber * 12 + noteNumber;
-        button.onclick = function() { addNote(column, numCell); };
-        column.appendChild(button);
-        row.appendChild(column);
+        let idCell = numcell-rowNumber-(columnNumber*numOctaves*12);
+        button.onclick = function() { addNote(cell, idCell); };
+        cell.appendChild(button);
+        cell.setAttribute("id",idCell);
+        row.appendChild(cell);
         // alternanza sfondi per righe piano roll (nero e bianco)
         if (noteNumber == 1 || noteNumber == 3 || noteNumber == 6 || noteNumber == 8 || noteNumber == 10) {
-            column.classList.add('black_background');
+            cell.classList.add('black_background');
         } else {
-            column.classList.add('white_background');
+            cell.classList.add('white_background');
         }
     }
     return row;
@@ -167,7 +177,6 @@ function createHeader() {
         // creazione prima riga di chord type
         if (columnNumber != 0) {
             const select = document.createElement("select");
-            select.classList.add("selected");
             const option0 = document.createElement("option");
             option0.text = "Chord type";
             option0.setAttribute("value", "default");
@@ -210,7 +219,7 @@ function createHeader() {
             const sendButton = document.createElement("button");
             sendButton.setAttribute("id", "send");
             sendButton.appendChild(icon);
-            sendButton.onclick = action;
+            sendButton.onclick = changeNumOctave;
             boxOctave.appendChild(sendButton);
             cell.appendChild(boxOctave);
         }
@@ -280,10 +289,11 @@ function firstRender() {
 
 }
 
-function action() {
+//sistemare il messaggio di errore si può togliere
+function changeNumOctave() {
     value = Number(document.getElementById("valore").value);
     if (value < MIN_value | value > MAX_value) {
-        aggiuntaLabelErrore();
+
     } else {
         const ErrorMess = document.getElementById("errore");
         if (ErrorMess) {
@@ -297,13 +307,15 @@ function action() {
 
 // cancella tutto il contenuto del piano roll
 function refresh() {
+  numcell = numOctaves*12*maxColumns;
+  matrice=[];
     const pianoContainer = document.getElementById("output_block");
     while (pianoContainer.lastChild) {
         pianoContainer.removeChild(pianoContainer.lastChild);
     }
 }
 
-firstRender();
+
 
 function generaMatrice() {
     let numeroOttava = 0;
@@ -332,13 +344,6 @@ function generaMatrice() {
 
 // metodi onclick
 
-/*function aggiuntaLabelErrore() {
-    const errore = document.createElement("div");
-    errore.setAttribute("id", "errore");
-    position = document.getElementById("errore");
-    const testo = document.createTextNode("Invalid value!");
-    position.appendChild(testo);
-}*/
 title_container.onclick = function() {
     window.location.reload(false);
 }
@@ -347,7 +352,7 @@ resetNotes.onclick = function() {
     const columns = document.getElementsByClassName("white");
     for (let index = 0; index < columns.length; index++) {
         columns[index].classList.remove("red_background");
-
+        unselectAllMatrix();
     }
 }
 
@@ -362,3 +367,5 @@ credits.onclick = function() {
 contact_us.onclick = function() {
     window.open("contact_us.html");
 }
+
+firstRender();
