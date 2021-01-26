@@ -317,6 +317,8 @@ function createHeader() {
             select.appendChild(option5);
             select.addEventListener("change", function(event) {
                 let chordType = this.value;
+                clickableColumn(columnNumber);
+                removeColor(columnNumber);
                 chordTypeSelected(columnNumber, chordType);
             }, false);
             cell.appendChild(select);
