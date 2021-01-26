@@ -1,2 +1,0 @@
-let tension = 0
-
