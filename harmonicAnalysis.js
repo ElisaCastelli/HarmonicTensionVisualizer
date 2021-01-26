@@ -95,12 +95,29 @@ Chord.prototype.toString = function(){
 	return this.note.concat(this.type);
 }
 
+function getScaleIndex(scale_name){
+	for (var i = 0; i < scales.length; i++) {
+		if (scales[i].name == scale_name) {
+			return i;
+		}
+	}
+}
+
+function getDegree(chord, key){
+	let curr_interval = chord.getTonicInterval(new Chord(key.tonic));
+	let chord_deg_index = scales[getScaleIndex(key.scale)].intervals.indexOf(curr_interval);
+	return degrees[chord_deg_index];
+}
+
+
+
 //first attempt to find the key
 //for each chord in the progression, 
 //	consider it tonic and check if other chords are compatible
 //	if everything is ok, I found the tonic
 
 //for every chord in the progression
+
 
 function findKey(progression){
 	
@@ -117,7 +134,7 @@ function findKey(progression){
 	// BONUS
 	// In the future, when introducing chord substitutions, 
 	// each accepted key will gain or lose points according to different parameters (number of substitutions, kind of substitutions, ...)
-	
+	let tempKey = {};
 	
 	// for every possible tonic in the progression
 	for (let tonic_index = 0; tonic_index < progression.length; tonic_index++) {
@@ -165,8 +182,13 @@ function findKey(progression){
 				}
 			}
 			//
-			if (key_accepted)
-				accepted_keys.push(tonic.note.concat(scales[scale].name));
+			if (key_accepted){
+				tempKey = {
+					tonic: tonic.note,
+					scale: scales[scale].name
+				};
+				accepted_keys.push(tempKey);
+			}
 		}
 	}
 	
@@ -174,6 +196,7 @@ function findKey(progression){
 }
 
 // needs to distinguish between triad and quadriad
+// maybe quadriads add a +1 to tension?? maybe it's not that simple
 const majScaleChordFunction = [{
 	name: "tonic",
 	degrees: ["I", "III", "VI"],
@@ -215,6 +238,19 @@ const progPatterns = [{
 }, {
 }];
 
+function evaluateTension(progression){
+	accepted_keys = findKey(progression);
+	key = accepted_keys[0];	// for now just take the first option, which usually is the correct one
+	tension_progression = [];
+	
+	
+	for (var i = 0; i < progression.length; i++) {
+		for (var i = 0; i < array.length; i++) {
+			
+		}
+	}
+}
+
 // test progression, try the chords you like
 const progression = [];
 try {
@@ -229,6 +265,7 @@ try {
 let accepted_keys = findKey(progression);
 console.log('\n ACCEPTED KEYS:\n', accepted_keys);
 
-
+console.log(getDegree(new Chord('Bb'), accepted_keys[0]));
+//console.log(scales["name: major"]);
 
 
