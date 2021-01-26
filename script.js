@@ -60,6 +60,36 @@ const key_color = [{
     }
 ];
 
+const type = [
+    {
+        name: "Maj7",
+        shape: [4,7,11]
+    },
+    {
+        name: "Min7",
+        shape: [3,7,10]
+    },
+    {
+        name: "7",
+        shape: [4,7,10]
+    },
+    {
+        name: "Half Diminished",
+        shape: [3,6,10]
+    },
+    {
+        name: "Diminished",
+        shape: [3,6,9]
+    }
+]
+
+const allNotes1D = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+
+
+// Import  
+
+// import {type , allNotes1D , chordBuilder} from './chordBuilder.js';    // non riesco a farlo funzionare
+
 // costruttore nota
 function nota() {
     this.ottava = "";
@@ -120,14 +150,28 @@ function printChord(noteArray,octaveNoteSelected){
   }
 }
 
+function chordBuilder (indiceMatrice , shape){
+    let tonic = indiceMatrice % 12
+    let Chord = [tonic]
+    for (i=0 ; i<3 ; i++) {
+        Chord.push((shape[i] + tonic) % 12)
+    }
+    ChordNotes = []
+    for (i=0 ; i<4 ; i++) {
+        ChordNotes.push(allNotes1D[Chord[i]])
+    }
+    return ChordNotes
+}
+
 function chordTypeSelected(columnNumber, chordType){
   noteSelected = matrice.filter(x => (x.getColonna() == columnNumber && x.isSelezionato() == true));
   if(noteSelected!= null){
     noteName = noteSelected.getNota();
+    noteNumber = allNotes1D.indexOf(noteName)
     octaveNoteSelected = noteSelected.getOttava();
-    //import codice hakim chiama funzione che restituisce array di note
-
-    //printChord(noteArray, octaveNoteSelected);
+    shape  = type[type.findIndex(x => x.name ===chordType)]
+    noteArray = chordBuilder( noteNumber , shape)
+    printChord(noteArray, octaveNoteSelected);
   }
 }
 
