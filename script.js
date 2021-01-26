@@ -83,12 +83,56 @@ function nota() {
     this.getFrequenza = function() {};
 }
 
-// CONTROLLER
 function unselectAllMatrix(){
   for(index = 0; index< matrice.length;index++){
     matrice[index].selezionato= false;
   }
 }
+
+function getColonnaById(idCell){
+  selectedNote = matrice.find(getId()==idCell);
+}
+
+function unclickableColumn(numCol){
+  columnCell = matrice.filter(x => (x.getColonna() == numCol && x.isSelezionato()==false));
+  for(index=0; index<columnCell.length;index++){
+    idCell = columnCell[index].getId();
+    cell = document.getElementById(idCell);
+    cell.classList.add("disabled");
+  }
+}
+
+function clickableColumn(numCol){
+  columnCell = matrice.filter(x => x.getColonna() == numCol);
+  for(index=0; index<columnCell.length;index++){
+    idCell = columnCell[index].getId();
+    cell = document.getElementById(idCell);
+    cell.classList.remove("disabled");
+  }
+}
+
+function printChord(noteArray,octaveNoteSelected){
+  for(index = 0; index<noteArray.length;index++){
+    noteToPrint = matrice.find(x =>(x.getNota() == noteArray[index] && x.getOttava() == octaveNoteSelected));
+    idCell = noteToPrint.getId();
+    cell = document.getElementById(idCell);
+    cell.classList.add("red_background");
+  }
+}
+
+function chordTypeSelected(columnNumber, chordType){
+  noteSelected = matrice.filter(x => (x.getColonna() == columnNumber && x.isSelezionato() == true));
+  if(noteSelected!= null){
+    noteName = noteSelected.getNota();
+    octaveNoteSelected = noteSelected.getOttava();
+    //import codice hakim chiama funzione che restituisce array di note
+
+    //printChord(noteArray, octaveNoteSelected);
+  }
+}
+
+// CONTROLLER
+
 
 function tableBackscroll() {
     const tableScroll = document.getElementById("table-scroll");
@@ -119,8 +163,12 @@ function addNote(cell, idCell) {
     matrixIndex = numOctaves*12*maxColumns - idCell;
     if(matrice[matrixIndex].isSelezionato()==false){
       matrice[matrixIndex].selezionato=true;
+      //blocca click su tutta la colonna
+      unclickableColumn(matrice[matrixIndex].getColonna());
     }else{
       matrice[matrixIndex].selezionato=false;
+      // rimetti click su tutta la getColonna
+      clickableColumn(matrice[matrixIndex].getColonna());
     }
 }
 
@@ -170,10 +218,10 @@ function createHeader() {
     const table_head = document.createElement("thead");
     const row = document.createElement("tr");
     row.classList.add("topstop");
-    for (let columnNumber = 0; columnNumber <= maxColumns; columnNumber++) {
+    for (let columnNumber = maxColumns-1; columnNumber >=0; columnNumber--) {
         const cell = document.createElement("th");
         // creazione prima riga di chord type
-        if (columnNumber != 0) {
+        if (columnNumber != maxColumns-1) {
             const select = document.createElement("select");
             const option0 = document.createElement("option");
             option0.text = "Chord type";
@@ -199,6 +247,10 @@ function createHeader() {
             select.appendChild(option3);
             select.appendChild(option4);
             select.appendChild(option5);
+            select.addEventListener("change", function(event) {
+                let chordType= this.value;
+                chordTypeSelected(columnNumber, chordType );
+            }, false);
             cell.appendChild(select);
 
         } else {
@@ -261,58 +313,6 @@ function createBar() {
     return bar;
 }
 
-function firstRender() {
-    const pianoContainer = document.getElementById("output_block");
-    pianoRollTable = createPianoRoll();
-    pianoContainer.appendChild(pianoRollTable);
-    bar = createBar();
-    pianoContainer.appendChild(bar);
-    playButton.onclick = function() {
-        if (!modelButton) {
-            modelButton = true;
-            var scrollInterval = setInterval(scroll, 10);
-            stopButton.onclick = function() {
-                modelButton = false;
-                clearInterval(scrollInterval);
-            }
-        };
-    }
-    rewindButton.onclick = function() {
-        tableBackscroll();
-        bar.style.left = '103px';
-    }
-
-    // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
-    generaMatrice();
-
-}
-
-//sistemare il messaggio di errore si può togliere
-function changeNumOctave() {
-    value = Number(document.getElementById("valore").value);
-    if (value < MIN_value | value > MAX_value) {
-
-    } else {
-        const ErrorMess = document.getElementById("errore");
-        if (ErrorMess) {
-            ErrorMess.remove();
-        }
-        numOctaves = value;
-        refresh();
-        firstRender();
-    }
-}
-
-// cancella tutto il contenuto del piano roll
-function refresh() {
-  numcell = numOctaves*12*maxColumns;
-  matrice=[];
-    const pianoContainer = document.getElementById("output_block");
-    while (pianoContainer.lastChild) {
-        pianoContainer.removeChild(pianoContainer.lastChild);
-    }
-}
-
 
 
 function generaMatrice() {
@@ -363,6 +363,58 @@ credits.onclick = function() {
 
 contact_us.onclick = function() {
     window.open("contact_us.html");
+}
+
+//sistemare il messaggio di errore si può togliere
+function changeNumOctave() {
+    value = Number(document.getElementById("valore").value);
+    if (value < MIN_value | value > MAX_value) {
+
+    } else {
+        const ErrorMess = document.getElementById("errore");
+        if (ErrorMess) {
+            ErrorMess.remove();
+        }
+        numOctaves = value;
+        refresh();
+        firstRender();
+    }
+}
+
+// cancella tutto il contenuto del piano roll
+function refresh() {
+  numcell = numOctaves*12*maxColumns;
+  matrice=[];
+    const pianoContainer = document.getElementById("output_block");
+    while (pianoContainer.lastChild) {
+        pianoContainer.removeChild(pianoContainer.lastChild);
+    }
+}
+
+function firstRender() {
+    const pianoContainer = document.getElementById("output_block");
+    pianoRollTable = createPianoRoll();
+    pianoContainer.appendChild(pianoRollTable);
+    bar = createBar();
+    pianoContainer.appendChild(bar);
+    playButton.onclick = function() {
+        if (!modelButton) {
+            modelButton = true;
+            var scrollInterval = setInterval(scroll, 10);
+            stopButton.onclick = function() {
+                modelButton = false;
+                clearInterval(scrollInterval);
+            }
+        };
+    }
+    rewindButton.onclick = function() {
+        tableBackscroll();
+        bar.style.left = '103px';
+    }
+
+    // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
+    generaMatrice();
+
 }
 
 firstRender();
