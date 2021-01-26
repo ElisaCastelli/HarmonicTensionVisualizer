@@ -264,6 +264,8 @@
                 top: 0;
             }
 
+            /*Button table cells*/
+            
             .cellButton {
                 background-color: Transparent;
                 height: 20px;
@@ -274,6 +276,10 @@
 
             .pressButton {
                 background-color: #e92f32;
+            }
+
+            .disabled{
+              pointer-events: none;
             }
             /*BAR*/
 
@@ -301,13 +307,6 @@
                 border: none;
                 cursor: pointer;
                 border-radius: 3px;
-            }
-
-            #errore {
-                color: red;
-                position: fixed;
-                top: 55px;
-                left: 82.5%;
             }
 
             #octaves {
