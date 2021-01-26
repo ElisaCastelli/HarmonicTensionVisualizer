@@ -475,7 +475,6 @@ function playNote() {
         if (matrice[index].selezionato) {
             let nomeNota = matrice[index].getNota();
             let octave = matrice[index].getOttava();
-
             vettoreNote.push(nomeNota + octave);
             console.log("Suono la nota:" + nomeNota + octave);
             synth.triggerAttackRelease(vettoreNote, 0.5);
