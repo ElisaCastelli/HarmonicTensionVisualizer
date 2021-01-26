@@ -165,11 +165,12 @@ function chordBuilder (indiceMatrice , shape){
 
 function chordTypeSelected(columnNumber, chordType){
   noteSelected = matrice.filter(x => (x.getColonna() == columnNumber && x.isSelezionato() == true));
+  noteSelected = noteSelected[0]
   if(noteSelected!= null){
     noteName = noteSelected.getNota();
     noteNumber = allNotes1D.indexOf(noteName)
     octaveNoteSelected = noteSelected.getOttava();
-    shape  = type[type.findIndex(x => x.name ===chordType)]
+    shape  = type[type.findIndex(x => x.name ==chordType)].shape
     noteArray = chordBuilder( noteNumber , shape)
     printChord(noteArray, octaveNoteSelected);
   }
@@ -294,7 +295,7 @@ function createHeader() {
             select.addEventListener("change", function(event) {
                 let chordType= this.value;
                 chordTypeSelected(columnNumber, chordType );
-            }, false);
+            }, false);  
             cell.appendChild(select);
 
         } else {
