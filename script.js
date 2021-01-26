@@ -86,7 +86,7 @@ const type = [
 const allNotes1D = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 
 
-// Import  
+// Import
 
 // import {type , allNotes1D , chordBuilder} from './chordBuilder.js';    // non riesco a farlo funzionare
 
@@ -165,13 +165,13 @@ function chordBuilder (indiceMatrice , shape){
 
 function chordTypeSelected(columnNumber, chordType){
   noteSelected = matrice.filter(x => (x.getColonna() == columnNumber && x.isSelezionato() == true));
-  noteSelected = noteSelected[0]
+  noteSelected = noteSelected[0];
   if(noteSelected!= null){
     noteName = noteSelected.getNota();
-    noteNumber = allNotes1D.indexOf(noteName)
+    noteNumber = allNotes1D.indexOf(noteName);
     octaveNoteSelected = noteSelected.getOttava();
-    shape  = type[type.findIndex(x => x.name ==chordType)].shape
-    noteArray = chordBuilder( noteNumber , shape)
+    shape  = type[type.findIndex(x => x.name ==chordType)].shape;
+    noteArray = chordBuilder( noteNumber , shape);
     printChord(noteArray, octaveNoteSelected);
   }
 }
@@ -263,10 +263,10 @@ function createHeader() {
     const table_head = document.createElement("thead");
     const row = document.createElement("tr");
     row.classList.add("topstop");
-    for (let columnNumber = maxColumns-1; columnNumber >=0; columnNumber--) {
+    for (let columnNumber = maxColumns; columnNumber >=0; columnNumber--) {
         const cell = document.createElement("th");
         // creazione prima riga di chord type
-        if (columnNumber != maxColumns-1) {
+        if (columnNumber != maxColumns) {
             const select = document.createElement("select");
             const option0 = document.createElement("option");
             option0.text = "Chord type";
@@ -295,7 +295,7 @@ function createHeader() {
             select.addEventListener("change", function(event) {
                 let chordType= this.value;
                 chordTypeSelected(columnNumber, chordType );
-            }, false);  
+            }, false);
             cell.appendChild(select);
 
         } else {
