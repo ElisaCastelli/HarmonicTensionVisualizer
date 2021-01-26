@@ -37,7 +37,8 @@ const degrees = ["I", "II", "III", "IV", "V", "VI", "VII"];
 const allnotes = {
 	norm: ["C", "", "D", "", "E", "F", "", "G", "", "A", "", "B"],
 	sharp: ["", "C#", "", "D#", "", "", "F#", "", "G#", "", "A#", ""],
-	flat: ["", "Db", "", "Eb", "", "", "Gb", "", "Ab", "", "Bb", ""]
+	flat: ["", "Db", "", "Eb", "", "", "Gb", "", "Ab", "", "Bb", ""],
+	letters: ["C", "D", "E", "F", "G", "A", "B"]
 };
 
 
@@ -105,7 +106,19 @@ function getScaleIndex(scale_name){
 
 function getDegree(chord, key){
 	let curr_interval = chord.getTonicInterval(new Chord(key.tonic));
+	//console.log(curr_interval);
 	let chord_deg_index = scales[getScaleIndex(key.scale)].intervals.indexOf(curr_interval);
+	if (chord_deg_index < 0){
+		chord_letter = chord.note.charAt(0);
+		tonic_letter = key.tonic.charAt(0);
+		let temp_degree = allnotes.letters.indexOf(chord_letter) - allnotes.letters.indexOf(tonic_letter);
+		let temp_interval = scales[getScaleIndex(key.scale)].intervals[temp_degree];
+		if (temp_interval + 1 == curr_interval)
+			return degrees[temp_degree].concat("#");
+		else
+			return degrees[temp_degree].concat("b");
+	}
+	//console.log(chord_deg_index);
 	return degrees[chord_deg_index];
 }
 
@@ -239,16 +252,16 @@ const progPatterns = [{
 }];
 
 function evaluateTension(progression){
-	accepted_keys = findKey(progression);
+	let accepted_keys = findKey(progression);
 	key = accepted_keys[0];	// for now just take the first option, which usually is the correct one
-	tension_progression = [];
+	let degrees_progression = [];
+	let tension_progression = [];
 	
 	
 	for (var i = 0; i < progression.length; i++) {
-		for (var i = 0; i < array.length; i++) {
-			
-		}
+		degrees_progression.push(getDegree(progression[i], key));
 	}
+	return degrees_progression;
 }
 
 // test progression, try the chords you like
@@ -262,10 +275,8 @@ try {
 	console.error(e);
 }
 
-let accepted_keys = findKey(progression);
-console.log('\n ACCEPTED KEYS:\n', accepted_keys);
+console.log('\n ACCEPTED KEYS:\n', findKey(progression));
 
-console.log(getDegree(new Chord('Bb'), accepted_keys[0]));
-//console.log(scales["name: major"]);
+console.log("Progression degrees:\n", evaluateTension(progression));
 
 
