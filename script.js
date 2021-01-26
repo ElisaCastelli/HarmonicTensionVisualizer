@@ -120,13 +120,15 @@ function nota() {
 
 function unselectAllMatrix() {
     for (index = 0; index < matrice.length; index++) {
+      if(matrice[index].isSelezionato() == true){
         matrice[index].selezionato = false;
+      }
+      idCell = matrice[index].getId();
+      cell = document.getElementById(idCell);
+      cell.classList.remove("disabled");
     }
 }
 
-function getColonnaById(idCell) {
-    selectedNote = matrice.find(getId() == idCell);
-}
 
 function unclickableColumn(numCol) {
     columnCell = matrice.filter(x => (x.getColonna() == numCol && x.isSelezionato() == false));
@@ -143,7 +145,20 @@ function clickableColumn(numCol) {
         idCell = columnCell[index].getId();
         cell = document.getElementById(idCell);
         cell.classList.remove("disabled");
+        indexMatrix = matrice.findIndex(x => (x.getId()==columnCell[index].getId()));
+        if(matrice[indexMatrix].isSelezionato()){
+          selezionato = false;
+        }
     }
+}
+
+function removeColor(numColumn){
+  columnCell = matrice.filter(x => x.getColonna() == numColumn);
+  for (index = 0; index < columnCell.length; index++) {
+      idCell = columnCell[index].getId();
+      cell = document.getElementById(idCell);
+      cell.classList.remove("red_background");
+  }
 }
 
 function printChord(noteArray, octaveNoteSelected, columnNumber) {
@@ -151,6 +166,8 @@ function printChord(noteArray, octaveNoteSelected, columnNumber) {
         noteToPrint = matrice.find(x => (x.getNota() == noteArray[index] && x.getOttava() == octaveNoteSelected && x.getColonna() == columnNumber));
         idCell = noteToPrint.getId();
         cell = document.getElementById(idCell);
+        indexCell = matrice.findIndex(x => x.getId() == idCell);
+        matrice[indexCell].selezionato = true;
         cell.classList.add("red_background");
     }
 }
@@ -219,6 +236,7 @@ function addNote(cell, idCell) {
         matrice[matrixIndex].selezionato = false;
         // rimetti click su tutta la getColonna
         clickableColumn(matrice[matrixIndex].getColonna());
+        removeColor(matrice[matrixIndex].getColonna());
     }
 }
 
