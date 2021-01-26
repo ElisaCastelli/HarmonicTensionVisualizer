@@ -1,8 +1,14 @@
+// import tone
+// import * as Tone from 'tone'
+
 // MODEL
 numOctaves = 4;
 maxColumns = 20;
 MIN_value = 2;
 MAX_value = 7;
+
+// creazione synthetizer
+const synth = new Tone.PolySynth().toMaster();
 
 // array completo
 numcell = numOctaves * 12 * maxColumns;
@@ -60,26 +66,25 @@ const key_color = [{
     }
 ];
 
-const type = [
-    {
+const type = [{
         name: "Maj7",
-        shape: [4,7,11]
+        shape: [4, 7, 11]
     },
     {
         name: "Min7",
-        shape: [3,7,10]
+        shape: [3, 7, 10]
     },
     {
         name: "7",
-        shape: [4,7,10]
+        shape: [4, 7, 10]
     },
     {
         name: "Half Diminished",
-        shape: [3,6,10]
+        shape: [3, 6, 10]
     },
     {
         name: "Diminished",
-        shape: [3,6,9]
+        shape: [3, 6, 9]
     }
 ]
 
@@ -113,67 +118,67 @@ function nota() {
     this.getFrequenza = function() {};
 }
 
-function unselectAllMatrix(){
-  for(index = 0; index< matrice.length;index++){
-    matrice[index].selezionato= false;
-  }
+function unselectAllMatrix() {
+    for (index = 0; index < matrice.length; index++) {
+        matrice[index].selezionato = false;
+    }
 }
 
-function getColonnaById(idCell){
-  selectedNote = matrice.find(getId()==idCell);
+function getColonnaById(idCell) {
+    selectedNote = matrice.find(getId() == idCell);
 }
 
-function unclickableColumn(numCol){
-  columnCell = matrice.filter(x => (x.getColonna() == numCol && x.isSelezionato()==false));
-  for(index=0; index<columnCell.length;index++){
-    idCell = columnCell[index].getId();
-    cell = document.getElementById(idCell);
-    cell.classList.add("disabled");
-  }
+function unclickableColumn(numCol) {
+    columnCell = matrice.filter(x => (x.getColonna() == numCol && x.isSelezionato() == false));
+    for (index = 0; index < columnCell.length; index++) {
+        idCell = columnCell[index].getId();
+        cell = document.getElementById(idCell);
+        cell.classList.add("disabled");
+    }
 }
 
-function clickableColumn(numCol){
-  columnCell = matrice.filter(x => x.getColonna() == numCol);
-  for(index=0; index<columnCell.length;index++){
-    idCell = columnCell[index].getId();
-    cell = document.getElementById(idCell);
-    cell.classList.remove("disabled");
-  }
+function clickableColumn(numCol) {
+    columnCell = matrice.filter(x => x.getColonna() == numCol);
+    for (index = 0; index < columnCell.length; index++) {
+        idCell = columnCell[index].getId();
+        cell = document.getElementById(idCell);
+        cell.classList.remove("disabled");
+    }
 }
 
-function printChord(noteArray,octaveNoteSelected, columnNumber){
-  for(index = 0; index<noteArray.length;index++){
-    noteToPrint = matrice.find(x =>(x.getNota() == noteArray[index] && x.getOttava() == octaveNoteSelected && x.getColonna() == columnNumber));
-    idCell = noteToPrint.getId();
-    cell = document.getElementById(idCell);
-    cell.classList.add("red_background");
-  }
+function printChord(noteArray, octaveNoteSelected, columnNumber) {
+    for (index = 0; index < noteArray.length; index++) {
+        noteToPrint = matrice.find(x => (x.getNota() == noteArray[index] && x.getOttava() == octaveNoteSelected && x.getColonna() == columnNumber));
+        idCell = noteToPrint.getId();
+        cell = document.getElementById(idCell);
+        cell.classList.add("red_background");
+    }
 }
 
-function chordBuilder (indiceMatrice , shape){
+function chordBuilder(indiceMatrice, shape) {
     let tonic = indiceMatrice % 12
     let Chord = [tonic]
-    for (i=0 ; i<3 ; i++) {
+    for (i = 0; i < 3; i++) {
         Chord.push((shape[i] + tonic) % 12)
     }
     ChordNotes = []
-    for (i=0 ; i<4 ; i++) {
+    for (i = 0; i < 4; i++) {
         ChordNotes.push(allNotes1D[Chord[i]])
     }
     return ChordNotes
 }
 
-function chordTypeSelected(columnNumber, chordType){
-  noteSelected = matrice.filter(x => (x.getColonna() == columnNumber && x.isSelezionato() == true));
-  noteSelected = noteSelected[0];
-  if(noteSelected!= null){
-    noteName = noteSelected.getNota();
-    noteNumber = allNotes1D.indexOf(noteName);
-    octaveNoteSelected = noteSelected.getOttava();
-    shape  = type[type.findIndex(x => x.name ==chordType)].shape;
-    noteArray = chordBuilder( noteNumber , shape);
-    printChord(noteArray, octaveNoteSelected, columnNumber);
-  }
+function chordTypeSelected(columnNumber, chordType) {
+    noteSelected = matrice.filter(x => (x.getColonna() == columnNumber && x.isSelezionato() == true));
+    noteSelected = noteSelected[0];
+    if (noteSelected != null) {
+        noteName = noteSelected.getNota();
+        noteNumber = allNotes1D.indexOf(noteName);
+        octaveNoteSelected = noteSelected.getOttava();
+        shape = type[type.findIndex(x => x.name == chordType)].shape;
+        noteArray = chordBuilder(noteNumber, shape);
+        printChord(noteArray, octaveNoteSelected, columnNumber);
+    }
 }
 
 // CONTROLLER
@@ -193,11 +198,11 @@ function scroll() {
     let barLeftPos = bar.offsetLeft,
         barRightPos = barLeftPos + bar.offsetWidth;
     let containerWidth = pianoContainer.offsetWidth;
-    if (barRightPos < containerWidth/2) {
+    if (barRightPos < containerWidth / 2) {
         bar.style.left = (barLeftPos + speed * direction) + 'px';
-    } else if(tableScroll.scrollWidth-tableScroll.scrollLeft>containerWidth){
+    } else if (tableScroll.scrollWidth - tableScroll.scrollLeft > containerWidth) {
         tableScroll.scrollLeft += 1.5;
-    }else if(barRightPos < tableScroll.offsetWidth){
+    } else if (barRightPos < tableScroll.offsetWidth) {
         bar.style.left = (barLeftPos + speed * direction) + 'px';
     }
 }
@@ -205,15 +210,15 @@ function scroll() {
 function addNote(cell, idCell) {
     cell.classList.toggle("red_background");
     // manca di segnare nella matrice che la casella è "piena"
-    matrixIndex = numOctaves*12*maxColumns - idCell;
-    if(matrice[matrixIndex].isSelezionato()==false){
-      matrice[matrixIndex].selezionato=true;
-      //blocca click su tutta la colonna
-      unclickableColumn(matrice[matrixIndex].getColonna());
-    }else{
-      matrice[matrixIndex].selezionato=false;
-      // rimetti click su tutta la getColonna
-      clickableColumn(matrice[matrixIndex].getColonna());
+    matrixIndex = numOctaves * 12 * maxColumns - idCell;
+    if (matrice[matrixIndex].isSelezionato() == false) {
+        matrice[matrixIndex].selezionato = true;
+        //blocca click su tutta la colonna
+        unclickableColumn(matrice[matrixIndex].getColonna());
+    } else {
+        matrice[matrixIndex].selezionato = false;
+        // rimetti click su tutta la getColonna
+        clickableColumn(matrice[matrixIndex].getColonna());
     }
 }
 
@@ -235,19 +240,19 @@ function createFixedColumn(scaleNumber, noteNumber) {
 
 function createRow(scaleNumber, noteNumber) {
     const row = document.createElement("tr");
-    let rowNumber = numOctaves*12-(scaleNumber*12+noteNumber)-1;
+    let rowNumber = numOctaves * 12 - (scaleNumber * 12 + noteNumber) - 1;
     // per ogni riga aggiungo la prima colonna che rimarrà fissa e poi tutte le altre
     fixedColumn = createFixedColumn(scaleNumber, noteNumber);
     row.appendChild(fixedColumn);
-    for (let columnNumber = 0; columnNumber <maxColumns ; columnNumber++) {
+    for (let columnNumber = 0; columnNumber < maxColumns; columnNumber++) {
         const cell = document.createElement("td");
         cell.classList.add("white");
         const button = document.createElement("button");
         button.classList.add("cellButton");
-        let idCell = numcell-rowNumber-(columnNumber*numOctaves*12);
+        let idCell = numcell - rowNumber - (columnNumber * numOctaves * 12);
         button.onclick = function() { addNote(cell, idCell); };
         cell.appendChild(button);
-        cell.setAttribute("id",idCell);
+        cell.setAttribute("id", idCell);
         row.appendChild(cell);
         // alternanza sfondi per righe piano roll (nero e bianco)
         if (noteNumber == 1 || noteNumber == 3 || noteNumber == 6 || noteNumber == 8 || noteNumber == 10) {
@@ -263,7 +268,7 @@ function createHeader() {
     const table_head = document.createElement("thead");
     const row = document.createElement("tr");
     row.classList.add("topstop");
-    for (let columnNumber = maxColumns; columnNumber >=0; columnNumber--) {
+    for (let columnNumber = maxColumns; columnNumber >= 0; columnNumber--) {
         const cell = document.createElement("th");
         // creazione prima riga di chord type
         if (columnNumber != maxColumns) {
@@ -293,8 +298,8 @@ function createHeader() {
             select.appendChild(option4);
             select.appendChild(option5);
             select.addEventListener("change", function(event) {
-                let chordType= this.value;
-                chordTypeSelected(columnNumber, chordType );
+                let chordType = this.value;
+                chordTypeSelected(columnNumber, chordType);
             }, false);
             cell.appendChild(select);
 
@@ -428,8 +433,8 @@ function changeNumOctave() {
 
 // cancella tutto il contenuto del piano roll
 function refresh() {
-  numcell = numOctaves*12*maxColumns;
-  matrice=[];
+    numcell = numOctaves * 12 * maxColumns;
+    matrice = [];
     const pianoContainer = document.getElementById("output_block");
     while (pianoContainer.lastChild) {
         pianoContainer.removeChild(pianoContainer.lastChild);
@@ -443,6 +448,7 @@ function firstRender() {
     bar = createBar();
     pianoContainer.appendChild(bar);
     playButton.onclick = function() {
+        playNote();
         if (!modelButton) {
             modelButton = true;
             var scrollInterval = setInterval(scroll, 10);
@@ -459,7 +465,24 @@ function firstRender() {
 
     // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
     generaMatrice();
-
 }
 
 firstRender();
+
+function playNote() {
+    for (let index = 0; index < matrice.length; index++) {
+        let vettoreNote = new Array();
+        if (matrice[index].selezionato) {
+            let nomeNota = matrice[index].getNota();
+            let octave = matrice[index].getOttava();
+
+            vettoreNote.push(nomeNota + octave);
+            console.log("Suono la nota:" + nomeNota + octave);
+            synth.triggerAttackRelease(vettoreNote, 0.5);
+            //setInterval(3000);
+
+        }
+
+    }
+
+}
