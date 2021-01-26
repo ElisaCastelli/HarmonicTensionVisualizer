@@ -141,9 +141,9 @@ function clickableColumn(numCol){
   }
 }
 
-function printChord(noteArray,octaveNoteSelected){
+function printChord(noteArray,octaveNoteSelected, columnNumber){
   for(index = 0; index<noteArray.length;index++){
-    noteToPrint = matrice.find(x =>(x.getNota() == noteArray[index] && x.getOttava() == octaveNoteSelected));
+    noteToPrint = matrice.find(x =>(x.getNota() == noteArray[index] && x.getOttava() == octaveNoteSelected && x.getColonna() == columnNumber));
     idCell = noteToPrint.getId();
     cell = document.getElementById(idCell);
     cell.classList.add("red_background");
@@ -172,7 +172,7 @@ function chordTypeSelected(columnNumber, chordType){
     octaveNoteSelected = noteSelected.getOttava();
     shape  = type[type.findIndex(x => x.name ==chordType)].shape;
     noteArray = chordBuilder( noteNumber , shape);
-    printChord(noteArray, octaveNoteSelected);
+    printChord(noteArray, octaveNoteSelected, columnNumber);
   }
 }
 
