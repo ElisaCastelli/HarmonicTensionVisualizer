@@ -105,6 +105,10 @@ function getScaleIndex(scale_name){
 }
 
 function getDegree(chord, key){
+	if (key == null) {
+		throw "no key was given";
+		return 0;
+	}
 	let curr_interval = chord.getTonicInterval(new Chord(key.tonic));
 	//console.log(curr_interval);
 	let chord_deg_index = scales[getScaleIndex(key.scale)].intervals.indexOf(curr_interval);
@@ -139,13 +143,11 @@ function findKey(progression){
 	// variable for storing every interval between a chord and the current tonic
 	let curr_interval;
 	
-	// flag that becomes false when a tested chord is not part of the current key,
-	let key_accepted;
+	// counter that increases when a tested chord is part of the current key, decreases when a tested chord is not part of the key
+	let key_points;
 	// if it remains true for every iteration of the inner for, then the current key is a possible solution
 	// and it is added to the accepted keys.
 	let accepted_keys = [];
-	// BONUS
-	// In the future, when introducing chord substitutions, 
 	// each accepted key will gain or lose points according to different parameters (number of substitutions, kind of substitutions, ...)
 	let tempKey = {};
 	
@@ -158,8 +160,8 @@ function findKey(progression){
 		for (let scale = 0; scale < scales.length; scale++) {
 			
 			//console.log('\ncurrent scale: ', tonic.note, scales[scale].name);
-			// reset the flag
-			key_accepted = true;
+			// reset the counter
+			key_points = 0;
 			
 			// check that the chord is inside the scale "tonic.note scales[scale]"
 			for (let chord = 0; chord < progression.length; chord++) {
@@ -174,37 +176,36 @@ function findKey(progression){
 					// because array indexing starts from 0, while chord degrees start from 1)
 					chord_deg_index = scales[scale].intervals.indexOf(curr_interval);
 					chord_degree = degrees[chord_deg_index];
+					
+					let x = getDegree(progression[chord], {tonic: tonic.note, scale: scales[scale].name,});
 					// check if the type of the chord is equal to the triad or quadriad of the current scale
 					triad_check = scales[scale].triads[chord_deg_index] == progression[chord].type;
 					quadriad_check = scales[scale].quadriads[chord_deg_index] == progression[chord].type;
-					
 					// if at least one condition is true, the chord is part of the scale
 					if (triad_check || quadriad_check){
 						//console.log(progression[chord].toString(), 'is', chord_degree, 'degree');
+						key_points++;
 					}
 					else {
 						//console.log(progression[chord].toString(), 'is NOT part of the scale');
-						key_accepted = false;
+						key_points--;
 						// break // for later optimization
 					}
-				}
-				else {
+				} else {
 					//console.log(progression[chord].toString(), 'is NOT part of the scale');
-					key_accepted = false;
+					key_points--;
 					// break // for later optimization
 				}
 			}
-			//
-			if (key_accepted){
-				tempKey = {
-					tonic: tonic.note,
-					scale: scales[scale].name
-				};
-				accepted_keys.push(tempKey);
-			}
+			tempKey = {
+				tonic: tonic.note,
+				scale: scales[scale].name,
+				points: key_points
+			};
+			accepted_keys.push(tempKey);
 		}
 	}
-	
+	accepted_keys.sort((a, b) => (a.points > b.points) ? -1 : 1);
 	return accepted_keys;
 }
 
@@ -253,6 +254,9 @@ const progPatterns = [{
 
 function evaluateTension(progression){
 	let accepted_keys = findKey(progression);
+	if (accepted_keys.length == 0) {
+		throw "no key was given";
+	}
 	key = accepted_keys[0];	// for now just take the first option, which usually is the correct one
 	let degrees_progression = [];
 	let tension_progression = [];
@@ -267,16 +271,20 @@ function evaluateTension(progression){
 // test progression, try the chords you like
 const progression = [];
 try {
-	progression.push(new Chord('Bb'));
-	progression.push(new Chord('F'));
+	progression.push(new Chord('D', '7'));
+	progression.push(new Chord('G'));
 	progression.push(new Chord('C'));
-	progression.push(new Chord('G', 'min'));
+	progression.push(new Chord('A', 'min7'));
+	progression.push(new Chord('D', 'min7'));
 } catch (e) {
 	console.error(e);
 }
 
 console.log('\n ACCEPTED KEYS:\n', findKey(progression));
-
-console.log("Progression degrees:\n", evaluateTension(progression));
+try {
+	console.log("Progression degrees:\n", evaluateTension(progression));
+} catch (e) {
+	console.error(e);
+}
 
 
