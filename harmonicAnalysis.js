@@ -155,7 +155,6 @@ function findKey(progression){
 		// for every scale known by the program
 		for (let scale = 0; scale < scales.length; scale++) {
 			
-			//console.log('\ncurrent scale: ', tonic.note, scales[scale].name);
 			// reset the counter
 			tempKey = {
 				tonic: tonic.note,
@@ -233,29 +232,28 @@ const majScaleChordFunction = [{
 
 const progPatterns = [{
 	name: "dominant resolution",
-	progression: ["V", "I"],
+	degrees: ["V", "I"],
 	triads: ["", ""],
 	quadriads: ["7", "maj7"],
 	tension: [5, 1]
 }, {
-	name: "II-V movement",
-	progression: ["II", "V"],
-	triads: ['min', ""],
-	quadriads: ["min7", "7"],
-	tension: [2, 5]
-}, {
 	name: "II-V-I resolution",
-	progression: ["II", "V", "I"],
+	degrees: ["II", "V", "I"],
 	triads: ['min', "", ""],
 	quadriads: ["min7", "7", "maj7"],
 	tension: [2, 5, 1]
 }, {
+	name: "II-V movement",
+	degrees: ["II", "V"],
+	triads: ['min', ""],
+	quadriads: ["min7", "7"],
+	tension: [2, 5]
+}, {
 	name: "V of V",
-	progression: ["V", "I"],
+	degrees: ["V", "I"],
 	triads: [],
 	quadriads: ["7", "7"],
 	tension: [5, 5]
-}, {
 }];
 
 function evaluateTension(progression){
@@ -263,27 +261,68 @@ function evaluateTension(progression){
 	if (accepted_keys.length == 0) {
 		throw "no key was given";
 	}
-	key = accepted_keys[0];	// for now just take the first option, which usually is the correct one
+	key = accepted_keys[0];	// take the first option, which should the correct one
 	let degrees_progression = [];
-	let tension_progression = [];
+	let tension_progression = new Array(progression.length);
+	tension_progression.fill(1);
 	
+	let deg_chord = {};
 	
-	for (var i = 0; i < progression.length; i++) {
-		degrees_progression.push(getDegree(progression[i], key));
+	// DEGREE PROGRESSION
+	for (let i = 0; i < progression.length; i++) {
+
+		deg_chord = {
+			degree: getDegree(progression[i], key),
+			type: progression[i].type
+		};
+		// check if the degree type is different from its scale
+//		triad_check = scales[0].triads[degrees.indexOf(deg_chord.degree)] == progression[i].type;
+//		quadriad_check = scales[0].quadriads[degrees.indexOf(deg_chord.degree)] == progression[i].type;
+//		if (! (triad_check || quadriad_check)) {
+//			deg_chord.type = progression[i].type;
+//		}
+		degrees_progression.push(deg_chord);
 	}
-	return degrees_progression;
+	
+	// TENSION PROGRESSION
+	for (let i = 0; i < degrees_progression.length; i++) {	
+		let found_pattern;
+		let pattern;
+		for (let p = 0; p < progPatterns.length; p++) {
+			pattern = degrees_progression.slice(i, i + progPatterns[p].degrees.length);
+			console.log("patt",pattern, i, i + progPatterns[p].degrees.length);
+			found_pattern = true;
+			for (let j = 0; j < pattern.length; j++) {
+				if (pattern[j].degree == progPatterns[p].degrees[j] && 
+						(pattern[j].type == progPatterns[p].triads[j] || 
+						pattern[j].type == progPatterns[p].quadriads[j])) {
+				}
+				else {
+					found_pattern = false;
+					break;
+				}
+				
+			}
+			console.log(found_pattern)
+			if (found_pattern) {
+				console.log("found pattern:", progPatterns[p].name);
+				Array.prototype.splice.apply(tension_progression, [i, progPatterns[p].tension.length].concat(progPatterns[p].tension));
+				break;
+			}
+		}
+		
+	}
+	return [degrees_progression, tension_progression];
 }
 
 // test progression, try the chords you like
 const progression = [];
 try {
-	progression.push(new Chord('E', 'min'));
-	progression.push(new Chord('G'));
-	progression.push(new Chord('A', 'min7'));
 	progression.push(new Chord('C'));
-	progression.push(new Chord('D'));
-	progression.push(new Chord('B', '7'));
-	progression.push(new Chord('E', 'min7'));
+	progression.push(new Chord('A', 'min'));
+	progression.push(new Chord('D', 'min'));
+	progression.push(new Chord('G'));
+	progression.push(new Chord('C'));
 } catch (e) {
 	console.error(e);
 }
