@@ -285,12 +285,12 @@ function evaluateTension(progression){
 	}
 	
 	// TENSION PROGRESSION
+	progPatterns.sort((a, b) => (a.tension.length > b.tension.length) ? -1 : 1);
 	for (let i = 0; i < degrees_progression.length; i++) {	
 		let found_pattern;
 		let pattern;
 		for (let p = 0; p < progPatterns.length; p++) {
 			pattern = degrees_progression.slice(i, i + progPatterns[p].degrees.length);
-			console.log("patt",pattern, i, i + progPatterns[p].degrees.length);
 			found_pattern = true;
 			for (let j = 0; j < pattern.length; j++) {
 				if (pattern[j].degree == progPatterns[p].degrees[j] && 
@@ -303,10 +303,10 @@ function evaluateTension(progression){
 				}
 				
 			}
-			console.log(found_pattern)
 			if (found_pattern) {
 				console.log("found pattern:", progPatterns[p].name);
 				Array.prototype.splice.apply(tension_progression, [i, progPatterns[p].tension.length].concat(progPatterns[p].tension));
+				i += progPatterns[p].tension.length;
 				break;
 			}
 		}
@@ -329,7 +329,7 @@ try {
 
 console.log('\n ACCEPTED KEYS:\n', findKey(progression));
 try {
-	console.log("Progression degrees:\n", evaluateTension(progression));
+	console.log("Progression degrees and tension array:\n", evaluateTension(progression));
 } catch (e) {
 	console.error(e);
 }
