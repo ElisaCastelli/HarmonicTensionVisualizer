@@ -143,12 +143,8 @@ function findKey(progression){
 	// variable for storing every interval between a chord and the current tonic
 	let curr_interval;
 	
-	// counter that increases when a tested chord is part of the current key, decreases when a tested chord is not part of the key
-	let key_points;
-	// if it remains true for every iteration of the inner for, then the current key is a possible solution
-	// and it is added to the accepted keys.
-	let accepted_keys = [];
 	// each accepted key will gain or lose points according to different parameters (number of substitutions, kind of substitutions, ...)
+	let accepted_keys = [];
 	let tempKey = {};
 	
 	// for every possible tonic in the progression
@@ -161,8 +157,11 @@ function findKey(progression){
 			
 			//console.log('\ncurrent scale: ', tonic.note, scales[scale].name);
 			// reset the counter
-			key_points = 0;
-			
+			tempKey = {
+				tonic: tonic.note,
+				scale: scales[scale].name,
+				points: 0
+			};
 			// check that the chord is inside the scale "tonic.note scales[scale]"
 			for (let chord = 0; chord < progression.length; chord++) {
 				// evaluate interval with current tonic hypothesis
@@ -177,32 +176,39 @@ function findKey(progression){
 					chord_deg_index = scales[scale].intervals.indexOf(curr_interval);
 					chord_degree = degrees[chord_deg_index];
 					
-					let x = getDegree(progression[chord], {tonic: tonic.note, scale: scales[scale].name,});
 					// check if the type of the chord is equal to the triad or quadriad of the current scale
 					triad_check = scales[scale].triads[chord_deg_index] == progression[chord].type;
 					quadriad_check = scales[scale].quadriads[chord_deg_index] == progression[chord].type;
-					// if at least one condition is true, the chord is part of the scale
-					if (triad_check || quadriad_check){
+					
+					// point assignment
+					if (chord_degree == "I" && (triad_check || quadriad_check)) {
+						tempKey.points+=2;
+					} 
+					else if (triad_check || quadriad_check){
 						//console.log(progression[chord].toString(), 'is', chord_degree, 'degree');
-						key_points++;
+						tempKey.points++;
 					}
 					else {
 						//console.log(progression[chord].toString(), 'is NOT part of the scale');
-						key_points--;
+						tempKey.points--;
 						// break // for later optimization
 					}
 				} else {
 					//console.log(progression[chord].toString(), 'is NOT part of the scale');
-					key_points--;
+					tempKey.points--;
 					// break // for later optimization
 				}
 			}
-			tempKey = {
-				tonic: tonic.note,
-				scale: scales[scale].name,
-				points: key_points
-			};
+			
 			accepted_keys.push(tempKey);
+			
+			for (let i = 0; i < accepted_keys.length - 1; i++) {
+				if (tempKey.tonic == accepted_keys[i].tonic && tempKey.scale == accepted_keys[i].scale){
+					accepted_keys[i].points += tempKey.points;
+					accepted_keys.pop();
+					break;
+				}
+			}
 		}
 	}
 	accepted_keys.sort((a, b) => (a.points > b.points) ? -1 : 1);
@@ -271,11 +277,13 @@ function evaluateTension(progression){
 // test progression, try the chords you like
 const progression = [];
 try {
-	progression.push(new Chord('D', '7'));
+	progression.push(new Chord('E', 'min'));
 	progression.push(new Chord('G'));
-	progression.push(new Chord('C'));
 	progression.push(new Chord('A', 'min7'));
-	progression.push(new Chord('D', 'min7'));
+	progression.push(new Chord('C'));
+	progression.push(new Chord('D'));
+	progression.push(new Chord('B', '7'));
+	progression.push(new Chord('E', 'min7'));
 } catch (e) {
 	console.error(e);
 }
