@@ -241,13 +241,13 @@ const progPatterns = [{
 	degrees: ["II", "V", "I"],
 	triads: ['min', "", ""],
 	quadriads: ["min7", "7", "maj7"],
-	tension: [2, 5, 1]
+	tension: [3, 6, 1]	// se arrivo da un 2, il 5 è potenziato di tensione
 }, {
 	name: "II-V movement",
 	degrees: ["II", "V"],
 	triads: ['min', ""],
 	quadriads: ["min7", "7"],
-	tension: [2, 5]
+	tension: [3, 5]
 }, {
 	name: "V of V",
 	degrees: ["V", "I"],
@@ -318,11 +318,11 @@ function evaluateTension(progression){
 // test progression, try the chords you like
 const progression = [];
 try {
+	progression.push(new Chord('A', 'min7'));
 	progression.push(new Chord('C'));
+	progression.push(new Chord('D'));
+	progression.push(new Chord('F'));
 	progression.push(new Chord('A', 'min'));
-	progression.push(new Chord('D', 'min'));
-	progression.push(new Chord('G'));
-	progression.push(new Chord('C'));
 } catch (e) {
 	console.error(e);
 }
@@ -333,5 +333,14 @@ try {
 } catch (e) {
 	console.error(e);
 }
+
+// Harmony analysis
+// - quadriadi + tese di triadi
+// - raggruppare pattern per scala?
+// - majScaleChordFunction solo controllo per scala maggiore
+// - harmony analysis cambia pattern/sostituzioni considerate in base a a scala
+// - pattern cambiano tensione in base a triade o quadriade (II V I triade è meno teso della corrispondente quadriade)
+// - cerca sostituzioni e interscambi modali
+// - se arrivo da un 2, il 5 è potenziato di tensione
 
 
