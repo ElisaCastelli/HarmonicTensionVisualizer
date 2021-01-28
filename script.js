@@ -103,7 +103,7 @@ function nota() {
     this.riga = "";
     this.selezionato = false; // booleano per definire se è selezionato o meno (nota attiva o disattiva)
     this.id = this.riga + this.colonna; // concatenare indice riga e indice colonna
-    this.selezionabile = false;
+    this.root = false;
     this.getNota = function() { return this.nome; };
     this.getColonna = function() { return this.colonna; };
     this.getRiga = function() { return this.riga };
@@ -114,7 +114,7 @@ function nota() {
     this.isSelezionato = function() {
         return this.selezionato;
     }
-    this.isSelezionabile = function() { return this.selezionabile; }
+    this.isRoot = function() { return this.root; }
     this.getFrequenza = function() {};
 }
 
@@ -122,6 +122,9 @@ function unselectAllMatrix() {
     for (index = 0; index < matrice.length; index++) {
       if(matrice[index].isSelezionato() == true){
         matrice[index].selezionato = false;
+      }
+      if(matrice[index].isRoot()){
+        matrice[index].root = false;
       }
       idCell = matrice[index].getId();
       cell = document.getElementById(idCell);
@@ -148,6 +151,9 @@ function clickableColumn(numCol) {
         indexMatrix = matrice.findIndex(x => (x.getId()==columnCell[index].getId()));
         if(matrice[indexMatrix].isSelezionato()){
           selezionato = false;
+        }
+        if(matrice[indexMatrix].isRoot()){
+          root = false;
         }
     }
 }
@@ -186,7 +192,7 @@ function chordBuilder(indiceMatrice, shape) {
 }
 
 function chordTypeSelected(columnNumber, chordType) {
-    noteSelected = matrice.filter(x => (x.getColonna() == columnNumber && x.isSelezionato() == true));
+    noteSelected = matrice.filter(x => (x.getColonna() == columnNumber && x.isSelezionato() == true && x.isRoot() == true));
     noteSelected = noteSelected[0];
     if (noteSelected != null) {
         noteName = noteSelected.getNota();
@@ -230,10 +236,12 @@ function addNote(cell, idCell) {
     matrixIndex = numOctaves * 12 * maxColumns - idCell;
     if (matrice[matrixIndex].isSelezionato() == false) {
         matrice[matrixIndex].selezionato = true;
+        matrice[matrixIndex].root = true;
         //blocca click su tutta la colonna
         unclickableColumn(matrice[matrixIndex].getColonna());
     } else {
         matrice[matrixIndex].selezionato = false;
+        matrice[matrixIndex].root = false;
         // rimetti click su tutta la getColonna
         clickableColumn(matrice[matrixIndex].getColonna());
         removeColor(matrice[matrixIndex].getColonna());
