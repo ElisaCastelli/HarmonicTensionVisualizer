@@ -8,8 +8,8 @@ MIN_value = 2;
 MAX_value = 7;
 
 // creazione synthetizer
-const synth = new Tone.PolySynth().toMaster();
-
+let synth = new Tone.PolySynth().toMaster();
+let Columnplayed = maxColumns - 1;
 // array completo
 numcell = numOctaves * 12 * maxColumns;
 pianoRoll = nota(numcell);
@@ -120,15 +120,15 @@ function nota() {
 
 function unselectAllMatrix() {
     for (index = 0; index < matrice.length; index++) {
-      if(matrice[index].isSelezionato() == true){
-        matrice[index].selezionato = false;
-      }
-      if(matrice[index].isRoot()){
-        matrice[index].root = false;
-      }
-      idCell = matrice[index].getId();
-      cell = document.getElementById(idCell);
-      cell.classList.remove("disabled");
+        if (matrice[index].isSelezionato() == true) {
+            matrice[index].selezionato = false;
+        }
+        if (matrice[index].isRoot()) {
+            matrice[index].root = false;
+        }
+        idCell = matrice[index].getId();
+        cell = document.getElementById(idCell);
+        cell.classList.remove("disabled");
     }
 }
 
@@ -148,23 +148,23 @@ function clickableColumn(numCol) {
         idCell = columnCell[index].getId();
         cell = document.getElementById(idCell);
         cell.classList.remove("disabled");
-        indexMatrix = matrice.findIndex(x => (x.getId()==columnCell[index].getId()));
-        if(matrice[indexMatrix].isSelezionato()){
-          selezionato = false;
+        indexMatrix = matrice.findIndex(x => (x.getId() == columnCell[index].getId()));
+        if (matrice[indexMatrix].isSelezionato()) {
+            selezionato = false;
         }
-        if(matrice[indexMatrix].isRoot()){
-          root = false;
+        if (matrice[indexMatrix].isRoot()) {
+            root = false;
         }
     }
 }
 
-function removeColor(numColumn){
-  columnCell = matrice.filter(x => x.getColonna() == numColumn);
-  for (index = 0; index < columnCell.length; index++) {
-      idCell = columnCell[index].getId();
-      cell = document.getElementById(idCell);
-      cell.classList.remove("red_background");
-  }
+function removeColor(numColumn) {
+    columnCell = matrice.filter(x => x.getColonna() == numColumn);
+    for (index = 0; index < columnCell.length; index++) {
+        idCell = columnCell[index].getId();
+        cell = document.getElementById(idCell);
+        cell.classList.remove("red_background");
+    }
 }
 
 function printChord(noteArray, octaveNoteSelected, columnNumber) {
@@ -476,10 +476,10 @@ function firstRender() {
     bar = createBar();
     pianoContainer.appendChild(bar);
     playButton.onclick = function() {
-        playNote();
+        play();
         if (!modelButton) {
             modelButton = true;
-            var scrollInterval = setInterval(scroll, 10);
+            var scrollInterval = setInterval(play_scroll, 1000);
             stopButton.onclick = function() {
                 modelButton = false;
                 clearInterval(scrollInterval);
@@ -497,19 +497,33 @@ function firstRender() {
 
 firstRender();
 
-function playNote() {
-    for (let index = 0; index < matrice.length; index++) {
-        let vettoreNote = new Array();
-        if (matrice[index].selezionato) {
-            let nomeNota = matrice[index].getNota();
-            let octave = matrice[index].getOttava();
+function play(inizio_colonna) {
+    let noteSelected = new Array();
+    let vettoreNote = new Array();
+    noteSelected = matrice.filter(x => (x.getColonna() == inizio_colonna && x.isSelezionato() == true));
+    if (noteSelected != null) {
+        for (let index = 0; index < noteSelected.length; index++) {
+            let nomeNota = noteSelected[index].getNota();
+            let octave = noteSelected[index].getOttava();
             vettoreNote.push(nomeNota + octave);
-            console.log("Suono la nota:" + nomeNota + octave);
-            synth.triggerAttackRelease(vettoreNote, 0.5);
-            //setInterval(3000);
-
         }
-
+        console.log(vettoreNote);
+        synth.triggerAttackRelease(vettoreNote, 0.8);
     }
+    synth = new Tone.PolySynth().toMaster();
+    vettoreNote = new Array();
+}
 
+function noncliccabile() {
+    matrice.forEach(element => {
+        idCell = element.getId();
+        cell = document.getElementById(idCell);
+        cell.classList.add("disabled");
+    });
+}
+
+function play_scroll() {
+    play(Columnplayed);
+    scroll()
+    Columnplayed--;
 }
