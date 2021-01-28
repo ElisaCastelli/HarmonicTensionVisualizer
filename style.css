@@ -265,7 +265,7 @@
             }
 
             /*Button table cells*/
-            
+
             .cellButton {
                 background-color: Transparent;
                 height: 20px;
@@ -292,6 +292,44 @@
                 top: -100.5%;
                 box-shadow: 0 0 5px #FF0000;
             }
+            .animationBarScrollStart{
+              animation: mymoveBarStart;
+              animation-duration: 5s;
+              animation-fill-mode: forwards;
+              animation-timing-function: linear;
+            }
+
+            @keyframes mymoveBarStart {
+              to {left: 706px;}
+            }
+
+            .animationBarScrollEnd{
+              animation: mymoveBarEnd;
+              animation-duration: 5s ;
+              animation-delay: : 10s;
+              animation-fill-mode: forwards;
+              animation-timing-function: linear;
+            }
+
+            @keyframes mymoveBarEnd {
+              to {left: 1412px;}
+            }
+
+            .animationTableScroll{
+              animation: mymoveTable 8s linear;
+              animation-delay: : 10s;
+              animation-fill-mode: forwards;
+
+            }
+
+            @keyframes mymoveTable {
+              100%{-webkit-transform: translateX(-30%);}
+            }
+
+            .animationPaused{
+              animation-play-state: paused;
+            }
+
 
             #valore {
                 width: 40px;

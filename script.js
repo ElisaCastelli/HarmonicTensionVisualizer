@@ -118,6 +118,30 @@ function nota() {
     this.getFrequenza = function() {};
 }
 
+function generaMatrice() {
+    let numeroOttava = 0;
+    let numeroNota = 0;
+    let indice = numcell;
+    for (let indiceColonna = maxColumns - 1; indiceColonna >= 0; indiceColonna--) {
+        for (let indiceRiga = (numOctaves * 12) - 1; indiceRiga >= 0; indiceRiga--) {
+            numeroNota = indiceRiga % 12;
+            let tmpNota = new nota();
+            tmpNota.riga = indiceRiga;
+            tmpNota.colonna = indiceColonna;
+            tmpNota.nome = key_color[numeroNota].pitch;
+            numeroOttava = indiceRiga - numeroNota;
+            numeroOttava = numeroOttava / 12;
+            tmpNota.ottava = numeroOttava;
+            tmpNota.id = String(indice);
+            indice--;
+            tmpNota.selezionabile = false;
+            tmpNota.selezionato = false;
+            matrice.push(tmpNota);
+        }
+
+    }
+}
+
 function unselectAllMatrix() {
     for (index = 0; index < matrice.length; index++) {
         if (matrice[index].isSelezionato() == true) {
@@ -131,7 +155,6 @@ function unselectAllMatrix() {
         cell.classList.remove("disabled");
     }
 }
-
 
 function unclickableColumn(numCol) {
     columnCell = matrice.filter(x => (x.getColonna() == numCol && x.isSelezionato() == false));
@@ -208,26 +231,43 @@ function chordTypeSelected(columnNumber, chordType) {
 
 
 function tableBackscroll() {
-    const tableScroll = document.getElementById("table-scroll");
-    tableScroll.scrollLeft = 0;
+    const table = document.getElementById("table");
+    table.classList.remove("animationTableScroll");
+    table.scrollLeft = 0;
+}
+
+function tablePause(){
+  const table = document.getElementById("table");
+  table.classList.add("animationPaused");
 }
 
 function scroll() {
     const bar = document.getElementById("scrollingBar");
     const pianoContainer = document.getElementById("output_block");
     const tableScroll = document.getElementById("table-scroll");
-    let speed = 1;
-    let direction = 1;
+    const table = document.getElementById("table");
+    /*let speed = 80;
+    let direction = 1;*/
+
     let barLeftPos = bar.offsetLeft,
         barRightPos = barLeftPos + bar.offsetWidth;
     let containerWidth = pianoContainer.offsetWidth;
-    if (barRightPos < containerWidth / 2) {
+    bar.classList.remove("animationPaused");
+    bar.classList.add("animationBarScrollStart");
+    //table.classList.remove("animationPaused");
+    //table.classList.add("animationTableScroll");
+    //bar.classList.add("animationBarScrollEnd");
+
+
+    /*if (barRightPos < containerWidth / 2) {
         bar.style.left = (barLeftPos + speed * direction) + 'px';
-    } else if (tableScroll.scrollWidth - tableScroll.scrollLeft > containerWidth) {
+
+    }else if (tableScroll.scrollWidth - tableScroll.scrollLeft > containerWidth) {
         tableScroll.scrollLeft += 1.5;
     } else if (barRightPos < tableScroll.offsetWidth) {
         bar.style.left = (barLeftPos + speed * direction) + 'px';
-    }
+        bar.classList.add("animationBarScrollEnd");
+    }*/
 }
 
 function addNote(cell, idCell) {
@@ -327,7 +367,9 @@ function createHeader() {
                 let chordType = this.value;
                 clickableColumn(columnNumber);
                 removeColor(columnNumber);
-                chordTypeSelected(columnNumber, chordType);
+                if(chordType!="default"){
+                  chordTypeSelected(columnNumber, chordType);
+                }
             }, false);
             cell.appendChild(select);
 
@@ -393,29 +435,6 @@ function createBar() {
 
 
 
-function generaMatrice() {
-    let numeroOttava = 0;
-    let numeroNota = 0;
-    let indice = numcell;
-    for (let indiceColonna = maxColumns - 1; indiceColonna >= 0; indiceColonna--) {
-        for (let indiceRiga = (numOctaves * 12) - 1; indiceRiga >= 0; indiceRiga--) {
-            numeroNota = indiceRiga % 12;
-            let tmpNota = new nota();
-            tmpNota.riga = indiceRiga;
-            tmpNota.colonna = indiceColonna;
-            tmpNota.nome = key_color[numeroNota].pitch;
-            numeroOttava = indiceRiga - numeroNota;
-            numeroOttava = numeroOttava / 12;
-            tmpNota.ottava = numeroOttava;
-            tmpNota.id = String(indice);
-            indice--;
-            tmpNota.selezionabile = false;
-            tmpNota.selezionato = false;
-            matrice.push(tmpNota);
-        }
-
-    }
-}
 
 // metodi onclick
 
@@ -429,6 +448,7 @@ resetNotes.onclick = function() {
         columns[index].classList.remove("red_background");
         unselectAllMatrix();
     }
+    Columnplayed= maxColumns-1;
 }
 
 readme.onclick = function() {
@@ -476,19 +496,26 @@ function firstRender() {
     bar = createBar();
     pianoContainer.appendChild(bar);
     playButton.onclick = function() {
-        play();
         if (!modelButton) {
+          //noncliccabile();
             modelButton = true;
-            var scrollInterval = setInterval(play_scroll, 1000);
+            play();
+            scroll();
+            var scrollInterval = setInterval(play, 800);
             stopButton.onclick = function() {
                 modelButton = false;
+                bar.classList.add("animationPaused");
+                tablePause();
                 clearInterval(scrollInterval);
             }
         };
     }
     rewindButton.onclick = function() {
         tableBackscroll();
-        bar.style.left = '103px';
+        bar.classList.remove("animationBarScrollStart");
+        bar.classList.remove("animationBarScrollEnd");
+        bar.classList.add("scrollingBar");
+        Columnplayed = maxColumns-1;
     }
 
     // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
@@ -497,10 +524,10 @@ function firstRender() {
 
 firstRender();
 
-function play(inizio_colonna) {
+function play() {
     let noteSelected = new Array();
     let vettoreNote = new Array();
-    noteSelected = matrice.filter(x => (x.getColonna() == inizio_colonna && x.isSelezionato() == true));
+    noteSelected = matrice.filter(x => (x.getColonna() == Columnplayed && x.isSelezionato() == true));
     if (noteSelected != null) {
         for (let index = 0; index < noteSelected.length; index++) {
             let nomeNota = noteSelected[index].getNota();
@@ -508,10 +535,11 @@ function play(inizio_colonna) {
             vettoreNote.push(nomeNota + octave);
         }
         console.log(vettoreNote);
-        synth.triggerAttackRelease(vettoreNote, 0.8);
+        synth.triggerAttackRelease(vettoreNote, 0.7);
     }
     synth = new Tone.PolySynth().toMaster();
-    vettoreNote = new Array();
+    vettoreNote = [];
+    Columnplayed--;
 }
 
 function noncliccabile() {
@@ -520,10 +548,4 @@ function noncliccabile() {
         cell = document.getElementById(idCell);
         cell.classList.add("disabled");
     });
-}
-
-function play_scroll() {
-    play(Columnplayed);
-    scroll()
-    Columnplayed--;
 }
