@@ -8,18 +8,46 @@ MIN_value = 2;
 MAX_value = 7;
 
 // creazione synthetizer
-let synth = new Tone.PolySynth().set({
-			"volume" : -7,
-			"oscillator" : {
-				"type" : "sine6"
-			},
-			"envelope" : {
-				"attack" :  0.015,
-				"decay" :  0.25,
-				"sustain" :  0.08,
-				"release" :  0.5,
-			},
-		}).toMaster();
+let synth = new Tone.PolySynth(4, Tone.AMSynth).set({
+    "volume": 0,
+    "detune": 1200,
+    "oscillator": {
+        "type": "sine"
+    },
+    "envelope": {
+        "attack": 0.015,
+        "decay": 0.15,
+        "sustain": 0.02,
+        "release": 0.15,
+    },
+}).toMaster();
+let synthB = new Tone.PolySynth(4, Tone.AMSynth).set({
+    "volume": 2,
+    "detune": 1200,
+    "oscillator": {
+        "type": "sine6"
+    },
+    "envelope": {
+        "attack": 0.015,
+        "decay": 0.15,
+        "sustain": 0.02,
+        "release": 0.15,
+    },
+}).toMaster();
+let synthC = new Tone.PolySynth(4, Tone.AMSynth).set({
+    "volume": -7,
+    "detune": 0,
+    "oscillator": {
+        "type": "sine2"
+    },
+    "envelope": {
+        "attack": 0.015,
+        "decay": 0.15,
+        "sustain": 0.02,
+        "release": 0.15,
+    },
+}).toMaster();
+
 let Columnplayed = maxColumns - 1;
 // array completo
 numcell = numOctaves * 12 * maxColumns;
@@ -242,20 +270,19 @@ function chordTypeSelected(columnNumber, chordType) {
 
 // CONTROLLER
 
-
 function tableBackscroll() {
-    const table = document.getElementById("table");
+    const table = document.getElementById("table-scroll");
     table.classList.remove("animationTableScroll");
     table.scrollLeft = 0;
 }
 
 function tablePause(){
-  const table = document.getElementById("table");
+  const table = document.getElementById("table-scroll");
   table.classList.add("animationPaused");
 }
 
 function scrollTable(){
-  const bar = document.getElementById("scrollingBar");
+  const table = document.getElementById("table-scroll");
   if(modelButton){
     table.classList.remove("animationPaused");
     table.classList.add("animationTableScroll");
@@ -273,13 +300,11 @@ function scroll() {
     const bar = document.getElementById("scrollingBar");
     const pianoContainer = document.getElementById("output_block");
     const tableScroll = document.getElementById("table-scroll");
-    const table = document.getElementById("table");
 
     bar.classList.remove("animationPaused");
     bar.classList.add("animationBarScrollStart");
     timeTableScroll = setTimeout(scrollTable, 5000);
-    timeBarScroll = setTimeout(scrollEndBar, 13000);
-
+    timeBarScroll = setTimeout(scrollEndBar, 11000);
 }
 
 function addNote(cell, idCell) {
@@ -302,17 +327,44 @@ function addNote(cell, idCell) {
 
 // VIEW
 
-function createFixedColumn(scaleNumber, noteNumber) {
-    const fixedColumn = document.createElement("th");
-    fixedColumn.classList.add("leftstop");
-    color = key_color[noteNumber].color;
-    fixedColumn.classList.add(color);
-    const labelDiv = document.createElement("div");
-    labelDiv.classList.add("leftstop");
-    label = key_color[noteNumber].pitch + scaleNumber;
-    let t = document.createTextNode(label);
-    labelDiv.append(t);
-    fixedColumn.append(labelDiv);
+function createFixedColumn() {
+  const fixedColumn = document.createElement("th");
+  for (let rowNumber = numOctaves * key_color.length; rowNumber >= 0; rowNumber--) {
+    const row = document.createElement("tr");
+    row.classList.add("fixedColumnCell");
+    if(rowNumber == numOctaves * key_color.length){
+        const icon = document.createElement("i");
+        icon.setAttribute("class", "fas fa-check");
+        icon.setAttribute("id", "octaveButton");
+        const boxOctave = document.createElement("div");
+        boxOctave.setAttribute("id", "BoxOctave");
+        const input = document.createElement("input");
+        input.setAttribute("id", "valore");
+        input.setAttribute("type", "number");
+        input.setAttribute("min", "2");
+        input.setAttribute("max", "7");
+        boxOctave.appendChild(input);
+        const sendButton = document.createElement("button");
+        sendButton.setAttribute("id", "send");
+        sendButton.appendChild(icon);
+        sendButton.onclick = changeNumOctave;
+        boxOctave.appendChild(sendButton);
+        row.appendChild(boxOctave);
+    }else{
+        scaleNumber = Math.floor(rowNumber / key_color.length);
+        noteNumber = rowNumber - (key_color.length * scaleNumber);
+        color = key_color[noteNumber].color;
+        row.classList.add(color);
+        const labelDiv = document.createElement("div");
+        labelDiv.classList.add("leftstop");
+        label = key_color[noteNumber].pitch + scaleNumber;
+        let t = document.createTextNode(label);
+        labelDiv.append(t);
+        row.append(labelDiv);
+        row.classList.add("leftstop");
+    }
+      fixedColumn.appendChild(row);
+    }
     return fixedColumn;
 }
 
@@ -320,8 +372,8 @@ function createRow(scaleNumber, noteNumber) {
     const row = document.createElement("tr");
     let rowNumber = numOctaves * 12 - (scaleNumber * 12 + noteNumber) - 1;
     // per ogni riga aggiungo la prima colonna che rimarrà fissa e poi tutte le altre
-    fixedColumn = createFixedColumn(scaleNumber, noteNumber);
-    row.appendChild(fixedColumn);
+    //fixedColumn = createFixedColumn(scaleNumber, noteNumber);
+    //row.appendChild(fixedColumn);
     for (let columnNumber = 0; columnNumber < maxColumns; columnNumber++) {
         const cell = document.createElement("td");
         cell.classList.add("white");
@@ -346,7 +398,7 @@ function createHeader() {
     const table_head = document.createElement("thead");
     const row = document.createElement("tr");
     row.classList.add("topstop");
-    for (let columnNumber = maxColumns; columnNumber >= 0; columnNumber--) {
+    for (let columnNumber = maxColumns-1; columnNumber >= 0; columnNumber--) {
         const cell = document.createElement("th");
         // creazione prima riga di chord type
         if (columnNumber != maxColumns) {
@@ -414,7 +466,18 @@ function createHeader() {
 function createTable() {
     const main_table = document.createElement("table");
     main_table.setAttribute("id", "table");
-    main_table.classList.add("table-wrap");
+    main_row = document.createElement("tr");
+    td_sx = document.createElement("td");
+    table_sx = document.createElement("table");
+    fixedC = createFixedColumn();
+    table_sx.appendChild(fixedC);
+    td_sx.appendChild(table_sx);
+    td_sx.classList.add("leftstop");
+    main_row.appendChild(td_sx);
+    td_dx = document.createElement("td");
+    const table_dx = document.createElement("table");
+    //table_dx.classList.add("table-wrap");
+    table_dx.setAttribute("id", "table-scroll");
     table_head = createHeader();
     const table_body = document.createElement("tbody");
     //per ogni nota creo una riga della tabella e la carico nella tabella
@@ -424,15 +487,19 @@ function createTable() {
         row = createRow(scaleNumber, noteNumber);
         table_body.appendChild(row);
     }
-    main_table.appendChild(table_head);
-    main_table.appendChild(table_body);
+    table_dx.appendChild(table_head);
+    table_dx.appendChild(table_body);
+    td_dx.appendChild(table_dx);
+    main_row.appendChild(td_dx);
+    main_table.appendChild(main_row);
     return main_table;
 }
 
 function createPianoRoll() {
     const pianoRollTable = document.createElement("div");
-    pianoRollTable.classList.add("table-scroll");
-    pianoRollTable.setAttribute("id", "table-scroll");
+    pianoRollTable.classList.add("mainTable");
+    pianoRollTable.classList.add("table-wrap");
+    //pianoRollTable.setAttribute("id", "table-scroll");
     main_table = createTable();
     pianoRollTable.appendChild(main_table);
     return pianoRollTable;
@@ -551,6 +618,8 @@ function play() {
             vettoreNote.push(nomeNota + octave);
         }
         synth.triggerAttackRelease(vettoreNote, 0.7);
+        synthB.triggerAttackRelease(vettoreNote, 1);
+        synthC.triggerAttackRelease(vettoreNote, 1);
     }
     vettoreNote = [];
     Columnplayed--;
