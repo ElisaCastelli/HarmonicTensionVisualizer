@@ -8,7 +8,18 @@ MIN_value = 2;
 MAX_value = 7;
 
 // creazione synthetizer
-let synth = new Tone.PolySynth().toMaster();
+let synth = new Tone.PolySynth().set({
+			"volume" : -7,
+			"oscillator" : {
+				"type" : "sine6"
+			},
+			"envelope" : {
+				"attack" :  0.015,
+				"decay" :  0.25,
+				"sustain" :  0.08,
+				"release" :  0.5,
+			},
+		}).toMaster();
 let Columnplayed = maxColumns - 1;
 // array completo
 numcell = numOctaves * 12 * maxColumns;
@@ -65,6 +76,8 @@ const key_color = [{
         color: "white"
     }
 ];
+
+
 
 const type = [{
         name: "Maj7",
@@ -242,12 +255,18 @@ function tablePause(){
 }
 
 function scrollTable(){
-  table.classList.remove("animationPaused");
-  table.classList.add("animationTableScroll");
+  const bar = document.getElementById("scrollingBar");
+  if(modelButton){
+    table.classList.remove("animationPaused");
+    table.classList.add("animationTableScroll");
+  }
 }
 
 function scrollEndBar(){
-  bar.classList.add("animationBarScrollEnd");
+  if(modelButton){
+    bar.classList.add("animationBarScrollEnd");
+  }
+
 }
 
 function scroll() {
@@ -258,8 +277,9 @@ function scroll() {
 
     bar.classList.remove("animationPaused");
     bar.classList.add("animationBarScrollStart");
-    setTimeout(scrollTable, 5000);
-    setTimeout(scrollEndBar, 13000);
+    timeTableScroll = setTimeout(scrollTable, 5000);
+    timeBarScroll = setTimeout(scrollEndBar, 13000);
+
 }
 
 function addNote(cell, idCell) {
@@ -488,13 +508,14 @@ function firstRender() {
     pianoContainer.appendChild(pianoRollTable);
     bar = createBar();
     pianoContainer.appendChild(bar);
+    var scrollInterval;
     playButton.onclick = function() {
         if (!modelButton) {
-          noncliccabile();
+          //noncliccabile();
             modelButton = true;
             play();
             scroll();
-            var scrollInterval = setInterval(play, 800);
+            scrollInterval = setInterval(play, 800);
             stopButton.onclick = function() {
                 modelButton = false;
                 bar.classList.add("animationPaused");
@@ -508,7 +529,9 @@ function firstRender() {
         bar.classList.remove("animationBarScrollStart");
         bar.classList.remove("animationBarScrollEnd");
         bar.classList.add("scrollingBar");
+        modelButton = false;
         Columnplayed = maxColumns-1;
+        clearInterval(scrollInterval);
     }
 
     // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
@@ -527,10 +550,8 @@ function play() {
             let octave = noteSelected[index].getOttava();
             vettoreNote.push(nomeNota + octave);
         }
-        console.log(vettoreNote);
         synth.triggerAttackRelease(vettoreNote, 0.7);
     }
-    synth = new Tone.PolySynth().toMaster();
     vettoreNote = [];
     Columnplayed--;
 }
