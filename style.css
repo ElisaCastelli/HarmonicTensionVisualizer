@@ -306,24 +306,23 @@
             .animationBarScrollEnd{
               animation: mymoveBarEnd;
               animation-duration: 5s ;
-              animation-delay: : 10s;
               animation-fill-mode: forwards;
               animation-timing-function: linear;
             }
 
             @keyframes mymoveBarEnd {
+              from {left: 706px;}
               to {left: 1412px;}
             }
 
             .animationTableScroll{
               animation: mymoveTable 8s linear;
-              animation-delay: : 10s;
               animation-fill-mode: forwards;
 
             }
 
             @keyframes mymoveTable {
-              100%{-webkit-transform: translateX(-30%);}
+              100%{-webkit-transform: translateX(-35%);}
             }
 
             .animationPaused{

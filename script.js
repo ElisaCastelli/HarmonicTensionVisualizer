@@ -241,33 +241,25 @@ function tablePause(){
   table.classList.add("animationPaused");
 }
 
+function scrollTable(){
+  table.classList.remove("animationPaused");
+  table.classList.add("animationTableScroll");
+}
+
+function scrollEndBar(){
+  bar.classList.add("animationBarScrollEnd");
+}
+
 function scroll() {
     const bar = document.getElementById("scrollingBar");
     const pianoContainer = document.getElementById("output_block");
     const tableScroll = document.getElementById("table-scroll");
     const table = document.getElementById("table");
-    /*let speed = 80;
-    let direction = 1;*/
 
-    let barLeftPos = bar.offsetLeft,
-        barRightPos = barLeftPos + bar.offsetWidth;
-    let containerWidth = pianoContainer.offsetWidth;
     bar.classList.remove("animationPaused");
     bar.classList.add("animationBarScrollStart");
-    //table.classList.remove("animationPaused");
-    //table.classList.add("animationTableScroll");
-    //bar.classList.add("animationBarScrollEnd");
-
-
-    /*if (barRightPos < containerWidth / 2) {
-        bar.style.left = (barLeftPos + speed * direction) + 'px';
-
-    }else if (tableScroll.scrollWidth - tableScroll.scrollLeft > containerWidth) {
-        tableScroll.scrollLeft += 1.5;
-    } else if (barRightPos < tableScroll.offsetWidth) {
-        bar.style.left = (barLeftPos + speed * direction) + 'px';
-        bar.classList.add("animationBarScrollEnd");
-    }*/
+    setTimeout(scrollTable, 5000);
+    setTimeout(scrollEndBar, 13000);
 }
 
 function addNote(cell, idCell) {
