@@ -440,6 +440,7 @@ resetNotes.onclick = function() {
         columns[index].classList.remove("red_background");
         unselectAllMatrix();
     }
+    modelButton = false;
     Columnplayed= maxColumns-1;
 }
 
@@ -489,7 +490,7 @@ function firstRender() {
     pianoContainer.appendChild(bar);
     playButton.onclick = function() {
         if (!modelButton) {
-          //noncliccabile();
+          noncliccabile();
             modelButton = true;
             play();
             scroll();
