@@ -126,7 +126,15 @@ const type = [{
     {
         name: "Diminished",
         shape: [3, 6, 9]
-    }
+    },
+    {
+        name: "",
+        shape: [4, 7]
+    },
+    {
+        name: "Min",
+        shape: [3, 7]
+    },
 ]
 
 const allNotes1D = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
@@ -247,14 +255,14 @@ function printChord(noteArray, octaveNoteSelected, columnNumber) {
     }
 }
 
-function chordBuilder(indiceMatrice, shape) {
-    let tonic = indiceMatrice % 12
+function chordBuilder(noteNumber, shape) {
+    let tonic = noteNumber % 12
     let Chord = [tonic]
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < shape.length ; i++) {
         Chord.push((shape[i] + tonic) % 12)
     }
     ChordNotes = []
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < Chord.length ; i++) {
         ChordNotes.push(allNotes1D[Chord[i]])
     }
     return ChordNotes
@@ -328,6 +336,8 @@ function addNote(cell, idCell) {
         // rimetti click su tutta la getColonna
         clickableColumn(matrice[matrixIndex].getColonna());
         removeColor(matrice[matrixIndex].getColonna());
+        // risetta l'header a "chord type"
+        // ...
     }
 }
 
