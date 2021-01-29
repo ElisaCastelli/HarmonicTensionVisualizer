@@ -233,6 +233,11 @@ function removeColor(numColumn) {
 
 function printChord(noteArray, octaveNoteSelected, columnNumber) {
     for (index = 0; index < noteArray.length; index++) {
+        if (index > 0) {
+            if (allNotes1D.indexOf(noteArray[index]) < allNotes1D.indexOf(noteArray[index - 1])) {
+                octaveNoteSelected += 1 
+            }
+        }
         noteToPrint = matrice.find(x => (x.getNota() == noteArray[index] && x.getOttava() == octaveNoteSelected && x.getColonna() == columnNumber));
         idCell = noteToPrint.getId();
         cell = document.getElementById(idCell);

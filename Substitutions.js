@@ -1,4 +1,5 @@
 function diatonicSub(grado) {
+    // vale solo per il primo grado
     possibleSub = [(7 + (grado - 2)) % 7 , (grado + 2) % 7 ] // risultato tra 0 e 6
     return possibleSub
 }
@@ -10,6 +11,8 @@ function diminishedDomSub(chord) {
     chord.splice(0,1);
     return chord
 }
+
+// considerare il VII come V nel II V I
 
 // permette di ritrovare l'accordo originale della sostituzione
 function reverseDiminishedDomSub(chord) {
@@ -25,3 +28,5 @@ function tritoneSub(chord) {
     subChord = chordBuilder(subTonic , [4,7,10])
     return subChord
 }
+
+// controllo cambio modale

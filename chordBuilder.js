@@ -42,10 +42,7 @@ function chordBuilder (indiceMatrice , shape){
     }
     return ChordNotes
 }
-
-function selezionabile (chord , colonna) {
-
-}
+console.log(chordBuilder(0,type[3].shape))
 
 index = type.findIndex(x => x.name ==="Min7");
 
