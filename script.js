@@ -426,7 +426,7 @@ function createHeader() {
             option4.setAttribute("value", "Half Diminished");
             const option5 = document.createElement("option");
             option5.text = "Diminished";
-            option4.setAttribute("value", "Diminished");
+            option5.setAttribute("value", "Diminished");
             select.appendChild(option0);
             select.appendChild(option1);
             select.appendChild(option2);
