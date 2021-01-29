@@ -271,6 +271,7 @@ function chordTypeSelected(columnNumber, chordType) {
         noteArray = chordBuilder(noteNumber, shape);
         printChord(noteArray, octaveNoteSelected, columnNumber);
     }
+    unclickableColumn(columnNumber)
 }
 
 // CONTROLLER
