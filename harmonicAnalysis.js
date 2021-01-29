@@ -42,9 +42,47 @@ const allnotes = {
 };
 
 
-// array of possible scales (for now, we just use major scale)
+// array of possible scales
 const scales = [{
-	name: 'major',
+	name: 'major (Ionian)',
+	intervals: [0, 2, 4, 5, 7, 9, 11],
+	triads: ["", "min", "min", "", "", "min", "dim"],
+	quadriads: ["maj7", "min7", "min7", "maj7", "7", "min7", "halfdim"],
+}, {
+	name: 'Dorian',
+	intervals: [0, 2, 3, 5, 7, 9, 10],
+	triads: ["min", "min", "", "", "min", "dim", ""],
+	quadriads: ["min7", "min7", "maj7", "7", "min7", "halfdim", "maj7"]
+}, {
+	name: 'Phrygian',
+	intervals: [0, 1, 3, 5, 7, 8, 10],
+	triads: ["min", "", "", "min", "dim", "", "min"],
+	quadriads: ["min7", "maj7", "7", "min7", "halfdim", "maj7", "min7"]
+}, {
+	name: 'Lydian',
+	intervals: [0, 2, 4, 6, 7, 9, 11],
+	triads: ["", "", "min", "dim", "", "min", "min"],
+	quadriads: ["maj7", "7", "min7", "halfdim", "maj7", "min7", "min7"]
+}, {
+	name: 'Mixolydian',
+	intervals: [0, 2, 4, 5, 7, 9, 10],
+	triads: ["", "min", "dim", "", "min", "min", ""],
+	quadriads: ["7", "min7", "halfdim", "maj7", "min7", "min7", "maj7"]
+}, {
+	name: 'Minor (aeolian)',
+	intervals: [0, 2, 3, 5, 7, 8, 10],
+	triads: ["min", "dim", "", "min", "min", "", ""],
+	quadriads: ["min7", "halfdim", "maj7", "min7", "min7", "maj7", "7"]
+}, {
+	name: 'Locrian',
+	intervals: [0, 1, 3, 5, 6, 8, 10],
+	triads: ["dim", "", "min", "min", "", "", "min"],
+	quadriads: ["halfdim", "maj7", "min7", "min7", "maj7", "7", "min7"]
+}];
+
+//array of major scale modes
+/*const modes = [{
+	name: 'dorian',
 	intervals: [0, 2, 4, 5, 7, 9, 11],
 	triads: ["", "min", "min", "", "", "min", "dim"],
 	quadriads: ["maj7", "min7", "min7", "maj7", "7", "min7", "halfdim"]
@@ -53,7 +91,8 @@ const scales = [{
 	intervals: [0, 2, 3, 5, 7, 8, 10],
 	triads: ["min", "dim", "", "min", "min", "", ""],
 	quadriads: ["min7", "halfdim", "maj7", "min7", "min7", "maj7", "7"]
-}];
+}];*/
+
 //}, {
 //	name: 'minor (dorian)',
 //	intervals: [0, 2, 3, 5, 7, 9, 10],
@@ -110,12 +149,19 @@ function getDegree(chord, key){
 		return 0;
 	}
 	let curr_interval = chord.getTonicInterval(new Chord(key.tonic));
-	//console.log(curr_interval);
 	let chord_deg_index = scales[getScaleIndex(key.scale)].intervals.indexOf(curr_interval);
+	// if note out of scale
 	if (chord_deg_index < 0){
 		chord_letter = chord.note.charAt(0);
 		tonic_letter = key.tonic.charAt(0);
 		let temp_degree = allnotes.letters.indexOf(chord_letter) - allnotes.letters.indexOf(tonic_letter);
+		// if the difference returns a negative value
+		if (temp_degree < 1) {
+			//set the real degree value
+			temp_degree = Math.abs(temp_degree) + 1;
+			//get the reciprocal interval, then remove the 1 added before
+			temp_degree = 9 - temp_degree - 1;
+		}
 		let temp_interval = scales[getScaleIndex(key.scale)].intervals[temp_degree];
 		if (temp_interval + 1 == curr_interval)
 			return degrees[temp_degree].concat("#");
@@ -178,9 +224,11 @@ function findKey(progression){
 					// check if the type of the chord is equal to the triad or quadriad of the current scale
 					triad_check = scales[scale].triads[chord_deg_index] == progression[chord].type;
 					quadriad_check = scales[scale].quadriads[chord_deg_index] == progression[chord].type;
-					
 					// point assignment
 					if (chord_degree == "I" && (triad_check || quadriad_check)) {
+						tempKey.points+=2;
+					}
+					else if (accepted_keys.length > 1 && accepted_keys[accepted_keys.length - 1].scale == scales[scale].name && (triad_check || quadriad_check)) {
 						tempKey.points+=2;
 					} 
 					else if (triad_check || quadriad_check){
@@ -273,18 +321,30 @@ function evaluateTension(progression){
 
 		deg_chord = {
 			degree: getDegree(progression[i], key),
-			type: progression[i].type
+			type: progression[i].type,
+			type_coherent: true
 		};
 		// check if the degree type is different from its scale
-//		triad_check = scales[0].triads[degrees.indexOf(deg_chord.degree)] == progression[i].type;
-//		quadriad_check = scales[0].quadriads[degrees.indexOf(deg_chord.degree)] == progression[i].type;
-//		if (! (triad_check || quadriad_check)) {
-//			deg_chord.type = progression[i].type;
-//		}
+		triad_check = scales[0].triads[degrees.indexOf(deg_chord.degree)] == progression[i].type;
+		quadriad_check = scales[0].quadriads[degrees.indexOf(deg_chord.degree)] == progression[i].type;
+		if (! (triad_check || quadriad_check)) {
+			deg_chord.type_coherent = false;
+		}
 		degrees_progression.push(deg_chord);
 	}
-	
 	// TENSION PROGRESSION
+	
+	// only for major scales, diatonic substitutions
+	if (key.scale == "major (Ionian)"){
+		for (let i = 0; i < degrees_progression.length; i++) {
+			for (let j = 0; j < majScaleChordFunction.length; j++) {
+				if (majScaleChordFunction[j].degrees.indexOf(degrees_progression[i].degree) >= 0 && degrees_progression[i].type_coherent) {
+					tension_progression[i] = majScaleChordFunction[j].tension;
+				}
+			}
+		}
+	}
+	
 	progPatterns.sort((a, b) => (a.tension.length > b.tension.length) ? -1 : 1);
 	for (let i = 0; i < degrees_progression.length; i++) {	
 		let found_pattern;
@@ -318,11 +378,11 @@ function evaluateTension(progression){
 // test progression, try the chords you like
 const progression = [];
 try {
-	progression.push(new Chord('A', 'min7'));
 	progression.push(new Chord('C'));
-	progression.push(new Chord('D'));
-	progression.push(new Chord('F'));
 	progression.push(new Chord('A', 'min'));
+	progression.push(new Chord('F'));
+	progression.push(new Chord('G', '7'));
+	progression.push(new Chord('C'));
 } catch (e) {
 	console.error(e);
 }
@@ -337,10 +397,10 @@ try {
 // Harmony analysis
 // - quadriadi + tese di triadi
 // - raggruppare pattern per scala?
-// - majScaleChordFunction solo controllo per scala maggiore
+// - majScaleChordFunction solo controllo per scala maggiore	FATTO
 // - harmony analysis cambia pattern/sostituzioni considerate in base a a scala
 // - pattern cambiano tensione in base a triade o quadriade (II V I triade è meno teso della corrispondente quadriade)
 // - cerca sostituzioni e interscambi modali
-// - se arrivo da un 2, il 5 è potenziato di tensione
+// - se arrivo da un 2, il 5 è potenziato di tensione	FATTO, MA DA RIVEDERE
 
 
