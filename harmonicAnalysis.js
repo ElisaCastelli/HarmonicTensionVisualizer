@@ -302,6 +302,12 @@ const progPatterns = [{
 	triads: [],
 	quadriads: ["7", "7"],
 	tension: [5, 5]
+}, {//come metterlo giù se non voglio controllare il grado?
+	name: "maj7 -> 7",
+	degrees: ["VIb", "V"],
+	triads: [],
+	quadriads: ["maj7", "7"],
+	tension: [5, 5]
 }];
 
 function evaluateTension(progression){
@@ -402,5 +408,6 @@ try {
 // - pattern cambiano tensione in base a triade o quadriade (II V I triade è meno teso della corrispondente quadriade)
 // - cerca sostituzioni e interscambi modali
 // - se arrivo da un 2, il 5 è potenziato di tensione	FATTO, MA DA RIVEDERE
+// - dovrei fare modo di non controllare i gradi assoluti, ma solo il rapporto tra
 
 
