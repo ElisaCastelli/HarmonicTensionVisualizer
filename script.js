@@ -8,18 +8,19 @@ MIN_value = 2;
 MAX_value = 7;
 
 // creazione synthetizer
-let synth = new Tone.PolySynth(4, Tone.AMSynth).set({
-    "volume": 0,
-    "detune": 1200,
+let synth = new Tone.PolySynth(2, Tone.Synth).set({
+    "detune": 100,
     "oscillator": {
-        "type": "sine"
+        "type": "sine3"
     },
     "envelope": {
-        "attack": 0.015,
-        "decay": 0.15,
-        "sustain": 0.02,
-        "release": 0.15,
+        "attack": 0.0,
+        "decay": 0.0,
+        "sustain": 0.20,
+        "release": 0.5,
     },
+    "volume": -8,
+    "portamento": 0.005,
 }).toMaster();
 let synthB = new Tone.PolySynth(4, Tone.AMSynth).set({
     "volume": 2,
@@ -243,7 +244,7 @@ function printChord(noteArray, octaveNoteSelected, columnNumber) {
     for (index = 0; index < noteArray.length; index++) {
         if (index > 0) {
             if (allNotes1D.indexOf(noteArray[index]) < allNotes1D.indexOf(noteArray[index - 1])) {
-                octaveNoteSelected += 1 
+                octaveNoteSelected += 1
             }
         }
         noteToPrint = matrice.find(x => (x.getNota() == noteArray[index] && x.getOttava() == octaveNoteSelected && x.getColonna() == columnNumber));
@@ -634,8 +635,8 @@ function play() {
             vettoreNote.push(nomeNota + octave);
         }
         synth.triggerAttackRelease(vettoreNote, 0.7);
-        synthB.triggerAttackRelease(vettoreNote, 1);
-        synthC.triggerAttackRelease(vettoreNote, 1);
+        //synthB.triggerAttackRelease(vettoreNote, 1);
+        //synthC.triggerAttackRelease(vettoreNote, 1);
     }
     vettoreNote = [];
     Columnplayed--;
