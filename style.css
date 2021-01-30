@@ -362,6 +362,7 @@
             /*select*/
 
             select {
+
                 -webkit-appearance: none;
                 -moz-appearance: none;
                 border-radius: 2px;

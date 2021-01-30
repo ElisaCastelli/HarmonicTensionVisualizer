@@ -11,7 +11,6 @@ MAX_value = 7;
 let synth = new Tone.PolySynth(2, Tone.Synth).set({
     "detune": 100,
     "oscillator": {
-        "type": "sine3"
     },
     "envelope": {
         "attack": 0.0,
@@ -413,6 +412,7 @@ function createRow(scaleNumber, noteNumber) {
 
 function createHeader() {
     const table_head = document.createElement("thead");
+    table_head.classList.add("topstop");
     const row = document.createElement("tr");
     row.classList.add("topstop");
     for (let columnNumber = maxColumns-1; columnNumber >= 0; columnNumber--) {
@@ -420,6 +420,7 @@ function createHeader() {
         // creazione prima riga di chord type
         if (columnNumber != maxColumns) {
             const select = document.createElement("select");
+            select.classList.add("topstop");
             const option0 = document.createElement("option");
             option0.text = "Chord type";
             option0.setAttribute("value", "default");
@@ -496,6 +497,7 @@ function createTable() {
     //table_dx.classList.add("table-wrap");
     table_dx.setAttribute("id", "table-scroll");
     table_head = createHeader();
+
     const table_body = document.createElement("tbody");
     //per ogni nota creo una riga della tabella e la carico nella tabella
     for (let rowNumber = numOctaves * key_color.length - 1; rowNumber >= 0; rowNumber--) {
@@ -634,7 +636,7 @@ function play() {
             let octave = noteSelected[index].getOttava();
             vettoreNote.push(nomeNota + octave);
         }
-        synth.triggerAttackRelease(vettoreNote, 0.7);
+        synth.triggerAttackRelease(vettoreNote, 1);
         //synthB.triggerAttackRelease(vettoreNote, 1);
         //synthC.triggerAttackRelease(vettoreNote, 1);
     }
