@@ -208,6 +208,7 @@
               margin: auto;
               overflow: auto;
               border: 1px solid #000;
+              border-radius: 10px;
             }
 
             .mainTable table{
@@ -233,11 +234,11 @@
             .mainTable th{
               position:sticky;
               height: 20px;
-              width: 80px;
+              width: 100px;
             }
             .mainTable td {
                 height: 20px;
-                width: 80px;
+                width: 100px;
                 border: 1px solid #000;
             }
 
@@ -260,7 +261,7 @@
                 position: -webkit-sticky;
                 position: sticky;
                 height: 25px;
-                width: 100px;
+                width: 120px;
                 left: 0;
                 z-index: 80;
                 border: 1px solid #000;
@@ -297,49 +298,11 @@
                 background: red;
                 height: 96.5%;
                 width: 5px;
-                left: 103px;
+                left: 83px;
                 top: -100.5%;
                 box-shadow: 0 0 5px #FF0000;
                 z-index: 90;
             }
-            .animationBarScrollStart{
-              animation: mymoveBarStart;
-              animation-duration: 5s;
-              animation-fill-mode: forwards;
-              animation-timing-function: linear;
-            }
-
-            @keyframes mymoveBarStart {
-              to {left: 706px;}
-            }
-
-            .animationBarScrollEnd{
-              animation: mymoveBarEnd;
-              animation-duration: 5s ;
-              animation-fill-mode: forwards;
-              animation-timing-function: linear;
-            }
-
-            @keyframes mymoveBarEnd {
-              from {left: 706px;}
-              to {left: 1412px;}
-            }
-
-            .animationTableScroll{
-              animation: mymoveTable 6s linear;
-              animation-fill-mode: forwards;
-
-            }
-
-            @keyframes mymoveTable {
-              100%{-webkit-transform: translateX(-35%);}
-            }
-
-            .animationPaused{
-              animation-play-state: paused;
-            }
-
-
             #valore {
                 width: 40px;
                 position: relative;
