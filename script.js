@@ -489,6 +489,7 @@ resetNotes.onclick = function() {
         unselectAllMatrix();
     }
     modelButton = false;
+    timeInterval = 0;
     Columnplayed= maxColumns-1;
 }
 
@@ -524,6 +525,9 @@ function changeNumOctave() {
 function refresh() {
     numcell = numOctaves * 12 * maxColumns;
     matrice = [];
+    timeInterval=0;
+    tableBackscroll();
+    bar.style.left='83px';
     const pianoContainer = document.getElementById("output_block");
     while (pianoContainer.lastChild) {
         pianoContainer.removeChild(pianoContainer.lastChild);
@@ -542,7 +546,6 @@ function firstRender() {
           //noncliccabile();
             modelButton = true;
             play();
-            //scroll();
             scrollInterval = setInterval(playAndScroll, 10);
             stopButton.onclick = function() {
                 modelButton = false;
