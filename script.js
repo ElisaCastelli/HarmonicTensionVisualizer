@@ -546,7 +546,7 @@ function firstRender() {
           //noncliccabile();
             modelButton = true;
             play();
-            scrollInterval = setInterval(playAndScroll, 10);
+            scrollInterval = setInterval(playAndScroll, 25);
             stopButton.onclick = function() {
                 modelButton = false;
                 clearInterval(scrollInterval);
@@ -570,8 +570,8 @@ function firstRender() {
 firstRender();
 
 function playAndScroll(){
-  timeInterval +=10;
-  if(timeInterval%900 == 0){
+  timeInterval +=25;
+  if(timeInterval%2350 == 0){
     play();
   }
   scroll();
