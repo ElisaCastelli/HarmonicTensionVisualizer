@@ -343,6 +343,7 @@ function addNote(cell, idCell, columnNumber) {
             addTone(cell , columnNumber , matrixIndex);
         }
     }
+
 }
 
 function addRoot(cell, matrixIndex) {
@@ -366,14 +367,14 @@ function removeRoot (matrixIndex) {
 }
 
 function addTone(cell , columnNumber , matrixIndex) {
-    if (matrice[matrixIndex].selezionato = false){
-        matrice[matrixIndex].selezionato = true;
-    } else {
+    if (matrice[matrixIndex].selezionato == true){
         matrice[matrixIndex].selezionato = false;
+    } else {
+        matrice[matrixIndex].selezionato = true;
     }
     cell.classList.toggle("disabled");
     cell.classList.toggle("red_background");
-    
+
     sameNote = matrice.filter(x => (x.getColonna() == columnNumber && x.getNota() == matrice[matrixIndex].getNota()));
     for (i=0 ; i< sameNote.length ; i++) {
         sameNoteid = sameNote[i].getId();
