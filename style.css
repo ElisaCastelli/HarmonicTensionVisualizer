@@ -48,7 +48,6 @@
                 top: 52%;
                 left: 1%;
                 height: 40%;
-                border: 1px solid black;
             }
 
             #bottom_panel {
@@ -98,10 +97,12 @@
                 width: 5%;
                 text-align: center;
                 z-index: 100;
+                border: none;
+                border-radius: 30px;
             }
 
             #playButton {
-                left: 35%;
+                left: 33%;
                 text-align: center;
                 position: fixed;
                 top: 25px;
@@ -109,7 +110,7 @@
             }
 
             #stopButton {
-                left: 40%;
+                left: 39%;
                 text-align: center;
                 position: fixed;
                 top: 25px;
@@ -127,7 +128,7 @@
             }
 
             #muteButton {
-                left: 49%;
+                left: 51%;
                 top: 25px;
                 position: fixed;
                 border-left: #a9a9a9;
@@ -136,7 +137,7 @@
             }
 
             #volumeDownButton {
-                left: 54%;
+                left: 57%;
                 top: 25px;
                 position: fixed;
                 border-left: #a9a9a9;
@@ -145,7 +146,7 @@
             }
 
             #volumeUpButton {
-                left: 59%;
+                left: 63%;
                 top: 25px;
                 position: fixed;
                 border-left: #a9a9a9;
@@ -154,7 +155,7 @@
             }
 
             #resetNotes {
-                left: 64%;
+                left: 69%;
                 top: 25px;
                 position: fixed;
                 border-left:#a9a9a9;
@@ -209,6 +210,7 @@
               overflow: auto;
               border: 1px solid #000;
               border-radius: 10px;
+              box-shadow: black -2px 3px 6px -1px;
             }
 
             .mainTable table{
@@ -216,7 +218,7 @@
               height: 100%;
               margin: auto;
               border-collapse: separate;
-              border-spacing: 0;
+              border-spacing: 4px;
             }
 
             .table-scroll {
@@ -229,17 +231,19 @@
             }
             .mainTable tr{
               border: 1px solid #000;
+              height: 25px;
             }
 
             .mainTable th{
               position:sticky;
-              height: 20px;
+              height: inherit;
               width: 100px;
             }
             .mainTable td {
-                height: 20px;
+                height: inherit;
                 width: 100px;
                 border: 1px solid #000;
+                border-radius: 2px;
             }
 
             .black_background {
@@ -265,6 +269,7 @@
                 left: 0;
                 z-index: 80;
                 border: 1px solid #000;
+                border-radius: 30px;
             }
 
             .topstop {
@@ -278,8 +283,8 @@
 
             .cellButton {
                 background-color: Transparent;
-                height: 20px;
-                width: 80px;
+                height: inherit;
+                width: inherit;
                 border: none;
                 cursor: pointer;
             }
@@ -300,8 +305,9 @@
                 width: 5px;
                 left: 83px;
                 top: -100.5%;
-                box-shadow: 0 0 5px rgb(160,223,179);
+                box-shadow: rgb(0 0 0) 0px 0px 3px 0px;
                 z-index: 90;
+                border-radius: 10px;
             }
             #valore {
                 width: 40px;
@@ -332,9 +338,11 @@
                 margin: auto;
                 color: rgb(105,149,200);
                 width: 100px;
-                height: 20px;
+                height: inherit;
                 cursor: pointer;
                 background: black;
+                border: none; /* for firefox */
+                text-align: center; /* only works on firefox */
             }
 
             select:hover {
