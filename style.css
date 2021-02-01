@@ -260,6 +260,10 @@
                 background-color: rgb(160,223,179);
             }
 
+            .light_background {
+                background-color: rgba(160, 223, 179, 0.377);
+            }
+
             .mainTable fixedColumn{
               position: sticky;
             }

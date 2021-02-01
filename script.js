@@ -151,6 +151,7 @@ function nota() {
     this.colonna = "";
     this.riga = "";
     this.selezionato = false; // booleano per definire se è selezionato o meno (nota attiva o disattiva)
+    this.selezionabile = false;
     this.id = this.riga + this.colonna; // concatenare indice riga e indice colonna
     this.root = false;
     this.getNota = function() { return this.nome; };
@@ -162,6 +163,9 @@ function nota() {
     }
     this.isSelezionato = function() {
         return this.selezionato;
+    }
+    this.isSelezionabile = function() {
+        return this.selezionabile;
     }
     this.isRoot = function() { return this.root; }
     this.getFrequenza = function() {};
@@ -230,28 +234,36 @@ function clickableColumn(numCol) {
     }
 }
 
-function removeColor(numColumn) {
+function removeAllColor(numColumn) {
     columnCell = matrice.filter(x => x.getColonna() == numColumn);
     for (index = 0; index < columnCell.length; index++) {
         idCell = columnCell[index].getId();
         cell = document.getElementById(idCell);
         cell.classList.remove("red_background");
+        cell.classList.remove("light_background");
     }
 }
 
-function printChord(noteArray, octaveNoteSelected, columnNumber) {
-    for (index = 0; index < noteArray.length; index++) {
-        if (index > 0) {
-            if (allNotes1D.indexOf(noteArray[index]) < allNotes1D.indexOf(noteArray[index - 1])) {
-                octaveNoteSelected += 1
-            }
-        }
-        noteToPrint = matrice.find(x => (x.getNota() == noteArray[index] && x.getOttava() == octaveNoteSelected && x.getColonna() == columnNumber));
-        idCell = noteToPrint.getId();
+function removeLightColor(numColumn) {
+    columnCell = matrice.filter(x => x.getColonna() == numColumn);
+    for (index = 0; index < columnCell.length; index++) {
+        idCell = columnCell[index].getId();
         cell = document.getElementById(idCell);
-        indexCell = matrice.findIndex(x => x.getId() == idCell);
-        matrice[indexCell].selezionato = true;
-        cell.classList.add("red_background");
+        cell.classList.remove("light_background");
+    }
+}
+
+function printSelectable(noteArray, columnNumber) {
+    for (index = 1; index < noteArray.length; index++) {
+        notesToPrint = matrice.filter(x => (x.getNota() == noteArray[index] && x.getColonna() == columnNumber));
+        for (i = 0 ; i < notesToPrint.length ; i++) {
+            idCell = notesToPrint[i].getId();
+            cell = document.getElementById(idCell);
+            indexCell = matrice.findIndex(x => x.getId() == idCell);
+            matrice[indexCell].selezionabile = true;
+            cell.classList.remove("disabled");
+            cell.classList.add("light_background");
+        }
     }
 }
 
@@ -269,17 +281,15 @@ function chordBuilder(noteNumber, shape) {
 }
 
 function chordTypeSelected(columnNumber, chordType) {
-    noteSelected = matrice.filter(x => (x.getColonna() == columnNumber && x.isSelezionato() == true && x.isRoot() == true));
-    noteSelected = noteSelected[0];
+    noteSelected = matrice.find(x => (x.getColonna() == columnNumber && x.isSelezionato() == true && x.isRoot() == true));
     if (noteSelected != null) {
         noteName = noteSelected.getNota();
         noteNumber = allNotes1D.indexOf(noteName);
         octaveNoteSelected = noteSelected.getOttava();
         shape = type[type.findIndex(x => x.name == chordType)].shape;
         noteArray = chordBuilder(noteNumber, shape);
-        printChord(noteArray, octaveNoteSelected, columnNumber);
+        printSelectable(noteArray, columnNumber);
     }
-    unclickableColumn(columnNumber)
 }
 
 // CONTROLLER
@@ -307,24 +317,66 @@ function scroll() {
 }
 
 
-function addNote(cell, idCell) {
+function addNote(cell, idCell, columnNumber) {
+    columnNumber = 19 - columnNumber;
+    matrixIndex = numOctaves * 12 * maxColumns - idCell;
+    findRoot = matrice.find(x => (x.getColonna() == columnNumber && x.isSelezionato() == true && x.isRoot() == true));
+    noteSelezionabili = matrice.filter(x => (x.getColonna() == columnNumber && x.isSelezionabile() == true));
+
+    // selecting the first note ( the root of the chord)
+    if (findRoot == undefined) {
+        addRoot(cell)
+    }
+    
+    // removing the root
+    if (findRoot.getId() == idCell) {
+        removeRoot()
+    }
+
+    // adding or removing chord tones
+    for (i=0 ; i<noteSelezionabili.length ; i++) {
+        if (noteSelezionabili[i].getId() == idCell ) {
+            addTone(cell , columnNumber);
+        }
+    }
+}
+
+function addRoot(cell) {
     cell.classList.toggle("red_background");
     // manca di segnare nella matrice che la casella è "piena"
-    matrixIndex = numOctaves * 12 * maxColumns - idCell;
-    if (matrice[matrixIndex].isSelezionato() == false) {
+    matrice[matrixIndex].selezionato = true;
+    matrice[matrixIndex].root = true;
+    unclickableColumn(matrice[matrixIndex].getColonna());
+}
+
+function removeRoot () {
+    for (i=0 ; i<matrice.length ; i++) {
+        matrice[i].selezionato = false;
+        matrice[i].selezionabile = false;
+    }
+    matrice[matrixIndex].root = false;
+    clickableColumn(matrice[matrixIndex].getColonna());
+    removeAllColor(matrice[matrixIndex].getColonna());
+    // risetta l'header a "chord type"
+    // ...
+}
+
+function addTone(cell , columnNumber) {
+    sameNote = matrice.filter(x => (x.getColonna() == columnNumber && x.getNota() == matrice[matrixIndex].getNota()));
+    for (c=0 ; c< sameNote.length ; c++) {
+        sameNoteid = sameNote[c].getId();
+        sameNoteCell = document.getElementById(sameNoteid);
+        sameNoteCell.classList.toggle("disabled");
+        sameNoteCell.classList.toggle("light_background");
+    }
+    cell.classList.toggle("disabled");
+    cell.classList.toggle("red_background");
+    if (matrice[matrixIndex].selezionato = false){
         matrice[matrixIndex].selezionato = true;
-        matrice[matrixIndex].root = true;
-        //blocca click su tutta la colonna
-        unclickableColumn(matrice[matrixIndex].getColonna());
     } else {
         matrice[matrixIndex].selezionato = false;
-        matrice[matrixIndex].root = false;
-        // rimetti click su tutta la getColonna
-        clickableColumn(matrice[matrixIndex].getColonna());
-        removeColor(matrice[matrixIndex].getColonna());
-        // risetta l'header a "chord type"
-        // ...
     }
+    
 }
 
 // VIEW
@@ -352,7 +404,7 @@ function createRow(scaleNumber, noteNumber) {
         const button = document.createElement("button");
         button.classList.add("cellButton");
         let idCell = numcell - rowNumber - (columnNumber * numOctaves * 12);
-        button.onclick = function() { addNote(cell, idCell); };
+        button.onclick = function() { addNote(cell, idCell, columnNumber); };
         cell.appendChild(button);
         cell.setAttribute("id", idCell);
         row.appendChild(cell);
@@ -381,30 +433,38 @@ function createHeader() {
             option0.text = "Chord type";
             option0.setAttribute("value", "default");
             const option1 = document.createElement("option");
-            option1.text = "Maj7";
-            option1.setAttribute("value", "Maj7");
+            option1.text = "Major";
+            option1.setAttribute("value", "");
             const option2 = document.createElement("option");
-            option2.text = "Min7";
-            option2.setAttribute("value", "Min7");
+            option2.text = "Minor";
+            option2.setAttribute("value", "Min");
             const option3 = document.createElement("option");
-            option3.text = "7";
-            option3.setAttribute("value", "7");
+            option3.text = "Maj7";
+            option3.setAttribute("value", "Maj7");
             const option4 = document.createElement("option");
-            option4.text = "Half Diminished";
-            option4.setAttribute("value", "Half Diminished");
+            option4.text = "Min7";
+            option4.setAttribute("value", "Min7");
             const option5 = document.createElement("option");
-            option5.text = "Diminished";
-            option5.setAttribute("value", "Diminished");
+            option5.text = "7";
+            option5.setAttribute("value", "7");
+            const option6 = document.createElement("option");
+            option6.text = "Half Diminished";
+            option6.setAttribute("value", "Half Diminished");
+            const option7 = document.createElement("option");
+            option7.text = "Diminished";
+            option7.setAttribute("value", "Diminished");
+
             select.appendChild(option0);
             select.appendChild(option1);
             select.appendChild(option2);
             select.appendChild(option3);
             select.appendChild(option4);
             select.appendChild(option5);
+            select.appendChild(option6);
+            select.appendChild(option7);
             select.addEventListener("change", function(event) {
                 let chordType = this.value;
-                clickableColumn(columnNumber);
-                removeColor(columnNumber);
+                removeLightColor(columnNumber);
                 if(chordType!="default"){
                   chordTypeSelected(columnNumber, chordType);
                 }
