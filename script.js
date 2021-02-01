@@ -595,7 +595,7 @@ function refresh() {
     matrice = [];
     timeInterval=0;
     tableBackscroll();
-    bar.style.left='83px';
+    bar.style.left='93px';
     const pianoContainer = document.getElementById("output_block");
     while (pianoContainer.lastChild) {
         pianoContainer.removeChild(pianoContainer.lastChild);
@@ -612,18 +612,21 @@ function firstRender() {
     playButton.onclick = function() {
         if (!modelButton) {
           //noncliccabile();
+          //playButton.classList.add("clickedBarButton");
             modelButton = true;
             play();
             scrollInterval = setInterval(playAndScroll, 25);
             stopButton.onclick = function() {
                 modelButton = false;
+                //playButton.classList.remove("clickedBarButton");
+                //stopButton.classList.add("clickedBarButton");
                 clearInterval(scrollInterval);
             }
         };
     }
     rewindButton.onclick = function() {
         tableBackscroll();
-        bar.style.left='83px';
+        bar.style.left='93px';
         modelButton = false;
         Columnplayed = maxColumns-1;
         timeInterval=0;
