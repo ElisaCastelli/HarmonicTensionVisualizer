@@ -12,44 +12,47 @@ let MIN_value = 2;
 let MAX_value = 7;
 
 // creazione synthetizer
-let synth = new Tone.PolySynth(2, Tone.Synth).set({
-    "detune": 100,
-    "oscillator": {},
-    "envelope": {
-        "attack": 0.010,
-        "decay": 0.0,
-        "sustain": 0.20,
-        "release": 0.5,
-    },
+let sampler = new Tone.Sampler({
+    "C2": "./piano/C2.mp3",
+    "C#2": "./piano/Cs2.mp3",
+    "D2": "./piano/D2.mp3",
+    "D#2": "./piano/Ds2.mp3",
+    "E2": "./piano/E2.mp3",
+    "F2": "./piano/F2.mp3",
+    "F#2": "./piano/Fs2.mp3",
+    "G2": "./piano/G2.mp3",
+    "G#2": "./piano/Gs2.mp3",
+    "A2": "./piano/A2.mp3",
+    "A#2": "./piano/As2.mp3",
+    "B2": "./piano/B2.mp3",
+    "C3": "./piano/C3.mp3",
+    "C#3": "./piano/Cs3.mp3",
+    "D3": "./piano/D3.mp3",
+    "D#3": "./piano/Ds3.mp3",
+    "E3": "./piano/E3.mp3",
+    "F3": "./piano/F3.mp3",
+    "F#3": "./piano/Fs3.mp3",
+    "G3": "./piano/G3.mp3",
+    "G#3": "./piano/Gs3.mp3",
+    "A3": "./piano/A3.mp3",
+    "A#3": "./piano/As3.mp3",
+    "B3": "./piano/B3.mp3",
+    "C4": "./piano/C4.mp3",
+    "C#4": "./piano/Cs4.mp3",
+    "D4": "./piano/D4.mp3",
+    "D#4": "./piano/Ds4.mp3",
+    "E4": "./piano/E4.mp3",
+    "F4": "./piano/F4.mp3",
+    "F#4": "./piano/Fs4.mp3",
+    "G4": "./piano/G4.mp3",
+    "G#4": "./piano/Gs4.mp3",
+    "A4": "./piano/A4.mp3",
+    "A#4": "./piano/As4.mp3",
+    "B4": "./piano/B4.mp3",
+}).set({
     "volume": -8,
-    "portamento": 0.005,
 }).toMaster();
-let synthB = new Tone.PolySynth(2, Tone.Synth).set({
-    "volume": -24,
-    "detune": 100,
-    "oscillator": {
-        type: "sine4",
-    },
-    "envelope": {
-        "attack": 0.010,
-        "decay": 0.0,
-        "sustain": 0.20,
-        "release": 0.15,
-    },
-}).toMaster();
-let synthC = new Tone.PolySynth(4, Tone.Synth).set({
-    "volume": -7,
-    "detune": 0,
-    "oscillator": {
-        "type": "sine2"
-    },
-    "envelope": {
-        "attack": 0.015,
-        "decay": 0.15,
-        "sustain": 0.02,
-        "release": 0.15,
-    },
-}).toMaster();
+
 let Columnplayed = maxColumns - 1;
 let timeInterval = 0;
 
@@ -153,15 +156,16 @@ const key_color = [{
 
 
 // costruttore nota
-function nota() {
-    this.ottava = "";
-    this.nome = "";
-    this.colonna = "";
-    this.riga = "";
-    this.selezionato = false; // booleano per definire se è selezionato o meno (nota attiva o disattiva)
-    this.selezionabile = false;
-    this.id = this.riga + this.colonna; // concatenare indice riga e indice colonna
-    this.root = false;
+function nota(ottava, nome, colonna, riga, id) {
+    this.ottava = ottava;
+    this.nome = nome;
+    this.colonna = colonna;
+    this.riga = riga;
+    this.id = id;
+    let selezionato = false; // booleano per definire se è selezionato o meno (nota attiva o disattiva)
+    let selezionabile = false;
+    //let id = this.riga + this.colonna; // concatenare indice riga e indice colonna
+    let root = false;
     this.getNota = function() { return this.nome; };
     this.getColonna = function() { return this.colonna; };
     this.getRiga = function() { return this.riga };
@@ -186,14 +190,15 @@ function generaMatrice() {
     for (let indiceColonna = maxColumns - 1; indiceColonna >= 0; indiceColonna--) {
         for (let indiceRiga = (numOctaves * 12) - 1; indiceRiga >= 0; indiceRiga--) {
             numeroNota = indiceRiga % 12;
-            let tmpNota = new nota();
-            tmpNota.riga = indiceRiga;
-            tmpNota.colonna = indiceColonna;
-            tmpNota.nome = key_color[numeroNota].pitch;
             numeroOttava = indiceRiga - numeroNota;
             numeroOttava = numeroOttava / 12;
-            tmpNota.ottava = numeroOttava;
-            tmpNota.id = String(indice);
+            let tmpNota = new nota(numeroOttava,key_color[numeroNota].pitch,  indiceColonna, indiceRiga,String(indice));
+            /*tmpNota.riga = indiceRiga;
+            tmpNota.colonna = indiceColonna;
+            nome = key_color[numeroNota].pitch;
+
+            tmpNota.ottava = numeroOttava;*/
+            //tmpNota.id = String(indice);
             indice--;
             tmpNota.selezionabile = false;
             tmpNota.selezionato = false;
@@ -666,36 +671,50 @@ function play() {
             let octave = noteSelected[index].getOttava();
             vettoreNote.push(nomeNota + octave);
         }
-        synth.triggerAttackRelease(vettoreNote, 2);
-        synthB.triggerAttackRelease(vettoreNote, 2);
-        //synthC.triggerAttackRelease(vettoreNote, 1);
+        console.log(vettoreNote);
+        sampler.triggerAttackRelease(["C2", "A2", "G2"], 2);
     }
     vettoreNote = [];
     Columnplayed--;
-    synth = new Tone.PolySynth(2, Tone.Synth).set({
-        "detune": 100,
-        "oscillator": {},
-        "envelope": {
-            "attack": 0.010,
-            "decay": 0.0,
-            "sustain": 0.02,
-            "release": 0.15,
-        },
+    let sampler = new Tone.Sampler({
+        "C2": "./piano/C2.mp3",
+        "C#2": "./piano/Cs2.mp3",
+        "D2": "./piano/D2.mp3",
+        "D#2": "./piano/Ds2.mp3",
+        "E2": "./piano/E2.mp3",
+        "F2": "./piano/F2.mp3",
+        "F#2": "./piano/Fs2.mp3",
+        "G2": "./piano/G2.mp3",
+        "G#2": "./piano/Gs2.mp3",
+        "A2": "./piano/A2.mp3",
+        "A#2": "./piano/As2.mp3",
+        "B2": "./piano/B2.mp3",
+        "C3": "./piano/C3.mp3",
+        "C#3": "./piano/Cs3.mp3",
+        "D3": "./piano/D3.mp3",
+        "D#3": "./piano/Ds3.mp3",
+        "E3": "./piano/E3.mp3",
+        "F3": "./piano/F3.mp3",
+        "F#3": "./piano/Fs3.mp3",
+        "G3": "./piano/G3.mp3",
+        "G#3": "./piano/Gs3.mp3",
+        "A3": "./piano/A3.mp3",
+        "A#3": "./piano/As3.mp3",
+        "B3": "./piano/B3.mp3",
+        "C4": "./piano/C4.mp3",
+        "C#4": "./piano/Cs4.mp3",
+        "D4": "./piano/D4.mp3",
+        "D#4": "./piano/Ds4.mp3",
+        "E4": "./piano/E4.mp3",
+        "F4": "./piano/F4.mp3",
+        "F#4": "./piano/Fs4.mp3",
+        "G4": "./piano/G4.mp3",
+        "G#4": "./piano/Gs4.mp3",
+        "A4": "./piano/A4.mp3",
+        "A#4": "./piano/As4.mp3",
+        "B4": "./piano/B4.mp3",
+    }).set({
         "volume": -8,
-        "portamento": 0.005,
-    }).toMaster();
-    synthB = new Tone.PolySynth(2, Tone.Synth).set({
-        "volume": -24,
-        "detune": 100,
-        "oscillator": {
-            type: "sine4",
-        },
-        "envelope": {
-            "attack": 0.010,
-            "decay": 0.0,
-            "sustain": 0.02,
-            "release": 0.15,
-        },
     }).toMaster();
 }
 
