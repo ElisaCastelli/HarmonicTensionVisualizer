@@ -42,8 +42,8 @@ const allnotes = {
 };
 
 
-// array of possible scales (for now just modes of major scale)
-const scales = [{
+// array of possible modes (for now just modes of major scale)
+const modes = [{
 	name: 'major (Ionian)',
 	intervals: [0, 2, 4, 5, 7, 9, 11],
 	triads: ["", "min", "min", "", "", "min", "dim"],
@@ -123,8 +123,8 @@ Chord.prototype.toString = function(){
 }
 
 function getScaleIndex(scale_name){
-	for (var i = 0; i < scales.length; i++) {
-		if (scales[i].name == scale_name) {
+	for (var i = 0; i < modes.length; i++) {
+		if (modes[i].name == scale_name) {
 			return i;
 		}
 	}
@@ -136,7 +136,7 @@ function getDegree(chord, key){
 		return 0;
 	}
 	let curr_interval = chord.getTonicInterval(new Chord(key.tonic));
-	let chord_deg_index = scales[getScaleIndex(key.scale)].intervals.indexOf(curr_interval);
+	let chord_deg_index = modes[getScaleIndex(key.scale)].intervals.indexOf(curr_interval);
 	// if note out of scale
 	if (chord_deg_index < 0){
 		chord_letter = chord.note.charAt(0);
@@ -149,7 +149,7 @@ function getDegree(chord, key){
 			//get the reciprocal interval, then remove the 1 added before
 			temp_degree = 9 - temp_degree - 1;
 		}
-		let temp_interval = scales[getScaleIndex(key.scale)].intervals[temp_degree];
+		let temp_interval = modes[getScaleIndex(key.scale)].intervals[temp_degree];
 		if (temp_interval + 1 == curr_interval)
 			return degrees[temp_degree].concat("#");
 		else
@@ -163,17 +163,23 @@ function getProgDegrees(progression, key){
 	
 	let degrees_progression = [];
 	let deg_chord = {};
-	
+	let triad_check;
+	let quadriad_check;
 	for (let i = 0; i < progression.length; i++) {
 		deg_chord = {
 			note: progression[i].note,
-			degree: getDegree(progression[i], key),
 			type: progression[i].type,
-			type_coherent: true
+			type_coherent: true,
+			degree: getDegree(progression[i], key),
+			degree_coherent: true,
+			curr_key: key.scale
 		};
+		if (deg_chord.degree.includes("#") || deg_chord.degree.includes("b")) {
+			deg_chord.degree_coherent = false;
+		}
 		// check if the degree type is different from its scale
-		triad_check = scales[getScaleIndex(key.scale)].triads[degrees.indexOf(deg_chord.degree)] == progression[i].type;
-		quadriad_check = scales[getScaleIndex(key.scale)].quadriads[degrees.indexOf(deg_chord.degree)] == progression[i].type;
+		triad_check = modes[getScaleIndex(key.scale)].triads[degrees.indexOf(deg_chord.degree)] == progression[i].type;
+		quadriad_check = modes[getScaleIndex(key.scale)].quadriads[degrees.indexOf(deg_chord.degree)] == progression[i].type;
 		if (! (triad_check || quadriad_check)) {
 			deg_chord.type_coherent = false;
 		}
@@ -191,7 +197,11 @@ function findKey(progression){
 	// each accepted key will gain or lose points according to different parameters (number of substitutions, kind of substitutions, ...)
 	let accepted_keys = [];
 	let tempKey = {};
-	//let chord_scales = new Array(progression.length);
+	
+	let chord_deg_index;
+	let chord_degree;
+	let triad_check;
+	let quadriad_check;
 	
 	// for every possible tonic in the progression
 	for (let tonic_index = 0; tonic_index < progression.length; tonic_index++) {
@@ -199,34 +209,30 @@ function findKey(progression){
 		tonic = progression[tonic_index];
 		
 		// for every scale known by the program
-		for (let scale = 0; scale < scales.length; scale++) {
+		for (let scale = 0; scale < modes.length; scale++) {
 			
 			// reset the counter
 			tempKey = {
 				tonic: tonic.note,
-				scale: scales[scale].name,
+				scale: modes[scale].name,
 				points: 0
 			};
-			// check that the chord is inside the scale "tonic.note scales[scale]"
+			// check that the chord is inside the scale "tonic.note modes[scale]"
 			for (let chord = 0; chord < progression.length; chord++) {
 				// evaluate interval with current tonic hypothesis
 				curr_interval = progression[chord].getTonicInterval(tonic);
 				
-				//if (tonic_index == 0) {
-				//	chord_scales[chord] = [];
-				//}
-				
 				// check if the interval between the two chords is contained in the scale
-				if (scales[scale].intervals.includes(curr_interval)){
+				if (modes[scale].intervals.includes(curr_interval)){
 					
 					// get the chord degree (real degree = chord_deg_index + 1, 
 					// because array indexing starts from 0, while chord degrees start from 1)
-					chord_deg_index = scales[scale].intervals.indexOf(curr_interval);
+					chord_deg_index = modes[scale].intervals.indexOf(curr_interval);
 					chord_degree = degrees[chord_deg_index];
 					
 					// check if the type of the chord is equal to the triad or quadriad of the current scale
-					triad_check = scales[scale].triads[chord_deg_index] == progression[chord].type;
-					quadriad_check = scales[scale].quadriads[chord_deg_index] == progression[chord].type;
+					triad_check = modes[scale].triads[chord_deg_index] == progression[chord].type;
+					quadriad_check = modes[scale].quadriads[chord_deg_index] == progression[chord].type;
 					// point assignment
 					
 					// this is just a statistic idea, tonic probably is at beginning and end of song
@@ -236,8 +242,8 @@ function findKey(progression){
 					}
 					else if (triad_check || quadriad_check){
 						tempKey.points++;
-						//if (chord_scales)
-						//chord_scales[chord].push(scales[scale].name);
+						//if (chord_modes)
+						//chord_modes[chord].push(modes[scale].name);
 					}
 				}
 			}
@@ -261,7 +267,6 @@ function findKey(progression){
 		concurrent_keys.push(accepted_keys.shift())
 	}
 	concurrent_keys.push(accepted_keys.shift());
-	//console.log(chord_scales)
 	return concurrent_keys;
 }
 
@@ -315,24 +320,65 @@ const progPatterns = [{
 
 // here the magic happens
 function evaluateTension(progression){
+	
 	// phase 1): select keys with highest number of compatible chords
 	let accepted_keys = findKey(progression); // array with selected keys
+	
 	if (accepted_keys.length == 0) {
 		throw "no key was given";
 	}
-	// for now, start with the first option (later I could give a priority to each scale)
-	key = accepted_keys[0];
 	
-	let tension_progression = new Array(progression.length);
-	tension_progression.fill(1);
+	let degrees_progression;
+	let tempChord;
+	// phase 2): choose the key with highest number of correct chords before the first wrong one
+	//for each accepted_key
+	for (let i = 0; i < accepted_keys.length; i++) {
+		// estimate relative degrees and coherence of each chord in the progression 
+		degrees_progression = getProgDegrees(progression, accepted_keys[i]);
+		
+		//for each chord
+		for (let j = 0; j < progression.length; j++) {
+			// if I find a chord not coherent with the current accepted key
+			if (! (degrees_progression[j].type_coherent && degrees_progression[j].degree_coherent)){
+				break;
+			}
+			accepted_keys[i].points++;
+		}
+	}
+	accepted_keys.sort((a, b) => (a.points > b.points) ? -1 : 1);
+	let key = accepted_keys[0];
+
+	// phase 3): analyze each "wrong" chord, with different options 
 	
-	// DEGREE PROGRESSION
+	// same operation as before, based on the chosen key
 	degrees_progression = getProgDegrees(progression, key);
 	
-	// TENSION PROGRESSION
+	// array of 
+	let priority_keys = [];
+	priority_keys.push(key);
 	
-	// only for major scales, diatonic substitutions
-	if (scales[getScaleIndex(key.scale)].tonal_harmony){
+	console.log("hey", priority_keys)
+	// search for chords out of key
+	for (let i = 0; i < degrees_progression.length; i++) {
+		
+		// if the chord tonic is correct, but the type is different: check for modal interchange
+		if ((! degrees_progression[i].type_coherent) && degrees_progression[i].degree_coherent) {
+			
+		}
+		
+		// if the chord is generally wrong, 
+		else if (! (degrees_progression[i].type_coherent && degrees_progression[i].degree_coherent)) {
+			
+		}
+	}
+	
+	
+	
+	// TENSION PROGRESSION
+	let tension_progression = new Array(progression.length);
+	tension_progression.fill(1);
+	// only for major modes, diatonic substitutions
+	if (modes[getScaleIndex(key.scale)].tonal_harmony){
 		for (let i = 0; i < degrees_progression.length; i++) {
 			for (let j = 0; j < majScaleChordFunction.length; j++) {
 				if (majScaleChordFunction[j].degrees.indexOf(degrees_progression[i].degree) >= 0 && degrees_progression[i].type_coherent) {
