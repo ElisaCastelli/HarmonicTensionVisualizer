@@ -124,7 +124,7 @@ const type = [{
         shape: [3, 6, 10]
     },
     {
-        name: "Diminished",
+        name: "Diminished7",
         shape: [3, 6, 9]
     },
     {
@@ -135,6 +135,10 @@ const type = [{
         name: "Min",
         shape: [3, 7]
     },
+    {
+        name: "Dim",
+        shape: [3, 6]
+    }
 ]
 
 const allNotes1D = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
@@ -325,23 +329,23 @@ function addNote(cell, idCell, columnNumber) {
 
     // selecting the first note ( the root of the chord)
     if (findRoot == undefined) {
-        addRoot(cell)
+        addRoot(cell, matrixIndex)
     }
     
     // removing the root
-    if (findRoot.getId() == idCell) {
-        removeRoot()
+    else if (findRoot.getId() == idCell) {
+        removeRoot(matrixIndex)
     }
 
     // adding or removing chord tones
     for (i=0 ; i<noteSelezionabili.length ; i++) {
         if (noteSelezionabili[i].getId() == idCell ) {
-            addTone(cell , columnNumber);
+            addTone(cell , columnNumber , matrixIndex);
         }
     }
 }
 
-function addRoot(cell) {
+function addRoot(cell, matrixIndex) {
     cell.classList.toggle("red_background");
     // manca di segnare nella matrice che la casella è "piena"
     matrice[matrixIndex].selezionato = true;
@@ -349,7 +353,7 @@ function addRoot(cell) {
     unclickableColumn(matrice[matrixIndex].getColonna());
 }
 
-function removeRoot () {
+function removeRoot (matrixIndex) {
     for (i=0 ; i<matrice.length ; i++) {
         matrice[i].selezionato = false;
         matrice[i].selezionabile = false;
@@ -361,22 +365,22 @@ function removeRoot () {
     // ...
 }
 
-function addTone(cell , columnNumber) {
-    sameNote = matrice.filter(x => (x.getColonna() == columnNumber && x.getNota() == matrice[matrixIndex].getNota()));
-    for (c=0 ; c< sameNote.length ; c++) {
-        sameNoteid = sameNote[c].getId();
-        sameNoteCell = document.getElementById(sameNoteid);
-        sameNoteCell.classList.toggle("disabled");
-        sameNoteCell.classList.toggle("light_background");
-    }
-    cell.classList.toggle("disabled");
-    cell.classList.toggle("red_background");
+function addTone(cell , columnNumber , matrixIndex) {
     if (matrice[matrixIndex].selezionato = false){
         matrice[matrixIndex].selezionato = true;
     } else {
         matrice[matrixIndex].selezionato = false;
     }
+    cell.classList.toggle("disabled");
+    cell.classList.toggle("red_background");
     
+    sameNote = matrice.filter(x => (x.getColonna() == columnNumber && x.getNota() == matrice[matrixIndex].getNota()));
+    for (i=0 ; i< sameNote.length ; i++) {
+        sameNoteid = sameNote[i].getId();
+        sameNoteCell = document.getElementById(sameNoteid);
+        sameNoteCell.classList.toggle("disabled");
+        sameNoteCell.classList.toggle("light_background");
+    }
 }
 
 // VIEW
@@ -439,20 +443,23 @@ function createHeader() {
             option2.text = "Minor";
             option2.setAttribute("value", "Min");
             const option3 = document.createElement("option");
-            option3.text = "Maj7";
-            option3.setAttribute("value", "Maj7");
+            option3.text = "Diminished";
+            option3.setAttribute("value", "Dim");
             const option4 = document.createElement("option");
-            option4.text = "Min7";
-            option4.setAttribute("value", "Min7");
+            option4.text = "Maj7";
+            option4.setAttribute("value", "Maj7");
             const option5 = document.createElement("option");
-            option5.text = "7";
-            option5.setAttribute("value", "7");
+            option5.text = "Min7";
+            option5.setAttribute("value", "Min7");
             const option6 = document.createElement("option");
-            option6.text = "Half Diminished";
-            option6.setAttribute("value", "Half Diminished");
+            option6.text = "7";
+            option6.setAttribute("value", "7");
             const option7 = document.createElement("option");
-            option7.text = "Diminished";
-            option7.setAttribute("value", "Diminished");
+            option7.text = "Half Diminished";
+            option7.setAttribute("value", "Half Diminished");
+            const option8 = document.createElement("option");
+            option8.text = "Diminished 7";
+            option8.setAttribute("value", "Diminished7");
 
             select.appendChild(option0);
             select.appendChild(option1);
