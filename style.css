@@ -86,7 +86,6 @@
                 position: fixed;
                 right: 1%;
                 top: 25px;
-                ;
             }
 
             .scrollButton {
@@ -105,8 +104,8 @@
                 border: none;
                 border-radius: 30px;
                 transition: ease-in-out;
-				transition-duration: 0.2s;
-				border: 2px solid black;
+				        transition-duration: 0.2s;
+				        border: 2px solid black;
             }
 
             .scrollButton:hover {
@@ -311,6 +310,14 @@
             .disabled{
               pointer-events: none;
             }
+
+            .label{
+              height: 25px;
+              width: 85px;
+              position:relative;
+              text-align: center;
+              top:4px;
+            }
             /*BAR*/
 
             .scrollingBar {
@@ -324,6 +331,7 @@
                 z-index: 90;
                 border-radius: 10px;
             }
+
             #valore {
                 width: 40px;
                 position: relative;

@@ -1,4 +1,6 @@
-const type = [
+
+
+export const type = [
     {
         name: "Maj7",
         shape: [4,7,11]
@@ -27,10 +29,10 @@ const allnotes = {
     flat: ["", "Db", "", "Eb", "", "", "Gb", "", "Ab", "", "Bb", ""]
 };
 
-const allNotes1D = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+export const allNotes1D = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 
 // Tonic è l'indice della nota con C0 = 0 , C1 = 12 ...
-function chordBuilder (indiceMatrice , shape){
+export function chordBuilder (indiceMatrice , shape){
     let tonic = indiceMatrice % 12
     let Chord = [tonic]
     for (i=0 ; i<3 ; i++) {
@@ -42,9 +44,9 @@ function chordBuilder (indiceMatrice , shape){
     }
     return ChordNotes
 }
-console.log(chordBuilder(0,type[3].shape))
+
+/*console.log(chordBuilder(0,type[3].shape))
 
 index = type.findIndex(x => x.name ==="Min7");
 
-console.log (index)
-
+console.log (index)*/

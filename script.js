@@ -1,9 +1,11 @@
 // import tone
 // import * as Tone from 'tone'
 
+import {type , allNotes1D , chordBuilder} from './chordBuilder.js';    // non riesco a farlo funzionare
+
 // MODEL
-numOctaves = 4;
-maxColumns = 20;
+let numOctaves = 4;
+let maxColumns = 20;
 MIN_value = 2;
 MAX_value = 7;
 
@@ -47,13 +49,13 @@ let synthC = new Tone.PolySynth(4, Tone.Synth).set({
     },
 }).toMaster();
 let Columnplayed = maxColumns - 1;
-timeInterval = 0;
+let timeInterval = 0;
 
 // array completo
-numcell = numOctaves * 12 * maxColumns;
-pianoRoll = nota(numcell);
+let numcell = numOctaves * 12 * maxColumns;
+let pianoRoll = nota(numcell);
 let matrice = Array();
-modelButton = false;
+let modelButton = false;
 
 const key_color = [{
         pitch: "C",
@@ -107,7 +109,7 @@ const key_color = [{
 
 
 
-const type = [{
+/*const type = [{
         name: "Maj7",
         shape: [4, 7, 11]
     },
@@ -139,14 +141,14 @@ const type = [{
         name: "Dim",
         shape: [3, 6]
     }
-]
+]*/
 
-const allNotes1D = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+// const allNotes1D = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 
 
 // Import
 
-// import {type , allNotes1D , chordBuilder} from './chordBuilder.js';    // non riesco a farlo funzionare
+
 
 // costruttore nota
 function nota() {
@@ -271,7 +273,7 @@ function printSelectable(noteArray, columnNumber) {
     }
 }
 
-function chordBuilder(noteNumber, shape) {
+/*function chordBuilder(noteNumber, shape) {
     let tonic = noteNumber % 12
     let Chord = [tonic]
     for (i = 0; i < shape.length ; i++) {
@@ -282,7 +284,7 @@ function chordBuilder(noteNumber, shape) {
         ChordNotes.push(allNotes1D[Chord[i]])
     }
     return ChordNotes
-}
+}*/
 
 function chordTypeSelected(columnNumber, chordType) {
     noteSelected = matrice.find(x => (x.getColonna() == columnNumber && x.isSelezionato() == true && x.isRoot() == true));
@@ -331,7 +333,7 @@ function addNote(cell, idCell, columnNumber) {
     if (findRoot == undefined) {
         addRoot(cell, matrixIndex)
     }
-    
+
     // removing the root
     else if (findRoot.getId() == idCell) {
         removeRoot(matrixIndex)
@@ -392,8 +394,11 @@ function createFixedColumn(scaleNumber, noteNumber){
   color = key_color[noteNumber].color;
   fixedColumn.classList.add(color);
   label = key_color[noteNumber].pitch+" "+scaleNumber;
+  divLabel = document.createElement("div");
   var t = document.createTextNode(label);
-  fixedColumn.append(t);
+  divLabel.appendChild(t);
+  divLabel.classList.add("label");
+  fixedColumn.append(divLabel);
   return fixedColumn;
 }
 
@@ -479,7 +484,7 @@ function createHeader() {
             }, false);
             cell.appendChild(select);
 
-        } else {
+        } /*else {
             // inserimento casella scelta numero ottave per piano roll
             const icon = document.createElement("i");
             icon.setAttribute("class", "fas fa-check");
@@ -498,7 +503,7 @@ function createHeader() {
             sendButton.onclick = changeNumOctave;
             boxOctave.appendChild(sendButton);
             cell.appendChild(boxOctave);
-        }
+        }*/
         row.appendChild(cell);
     }
     table_head.appendChild(row);
