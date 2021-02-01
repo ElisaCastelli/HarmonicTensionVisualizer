@@ -4,10 +4,12 @@
 import {type , allNotes1D , chordBuilder} from './chordBuilder.js';    // non riesco a farlo funzionare
 
 // MODEL
-let numOctaves = 4;
+let numOctaves = 3;
+let numOctavesMin = 2;
+let numOctaveMax = 4;
 let maxColumns = 20;
-MIN_value = 2;
-MAX_value = 7;
+let MIN_value = 2;
+let MAX_value = 7;
 
 // creazione synthetizer
 let synth = new Tone.PolySynth(2, Tone.Synth).set({
