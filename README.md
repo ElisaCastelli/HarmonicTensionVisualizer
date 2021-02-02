@@ -1,7 +1,13 @@
 # Harmonic Tension Visualizer
 
-The goal of our project is analyze a chords sequence, given by the user, in order to study the trend of the harmonic progression. Following criteria estabilished by us, we assign to each chord a certain level of tension based on both itsown composition and the chords progression in which it is.
-After done these computations, the results of our analysis are graphically  represented in a dynamic way that changes behaviour while the chord progression is playing.
+*Currently in Development*
+
+The goal of our project is to analyze a chord sequence, given by the user through an intuitive piano-roll interface, in order to determine the trend of the harmonic tension. Following different criteria, estabilished by us and based on music theory, we assign to each chord a certain level of tension, influenced by:
+- the chord's composition, 
+- well-known progression patterns,
+- the harmonic context.
+
+After these computations, the results of our analysis are graphically represented with dynamic visual effects while the chord progression is being played.
 
 ### Group components:
 * Francesco Zumerle
