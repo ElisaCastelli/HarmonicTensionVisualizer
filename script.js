@@ -1,7 +1,8 @@
 // import tone
 // import * as Tone from 'tone'
 
-import {type , allNotes1D , chordBuilder} from './chordBuilder.js';    // non riesco a farlo funzionare
+import {type , allNotes1D , chordBuilder} from './chordBuilder.js';
+import { tensionChange , start } from './tensionAnimation.js';
 
 // MODEL
 let numOctaves = 3;
@@ -388,6 +389,9 @@ function addTone(cell , columnNumber , matrixIndex) {
 }
 
 // VIEW
+
+start;
+tensionChange(1);
 
 function createFixedColumn(scaleNumber, noteNumber){
   const fixedColumn = document.createElement("th");
