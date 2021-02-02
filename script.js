@@ -337,7 +337,7 @@ function addNote(cell, idCell, columnNumber) {
 
     // removing the root
     else if (findRoot.getId() == idCell) {
-        removeRoot(matrixIndex)
+        removeAll(columnNumber)
     }
 
     // adding or removing chord tones
@@ -357,14 +357,14 @@ function addRoot(cell, matrixIndex) {
     unclickableColumn(matrice[matrixIndex].getColonna());
 }
 
-function removeRoot (matrixIndex) {
+function removeAll (columnNumber) {
     for (let i=0 ; i<matrice.length ; i++) {
         matrice[i].selezionato = false;
         matrice[i].selezionabile = false;
+        matrice[i].root = false;
     }
-    matrice[matrixIndex].root = false;
-    clickableColumn(matrice[matrixIndex].getColonna());
-    removeAllColor(matrice[matrixIndex].getColonna());
+    clickableColumn(columnNumber);
+    removeAllColor(columnNumber);
     // risetta l'header a "chord type"
     // ...
 }
@@ -477,6 +477,7 @@ function createHeader() {
             select.appendChild(option6);
             select.appendChild(option7);
             select.addEventListener("change", function(event) {
+                // removeAll(columNumber);
                 let chordType = this.value;
                 removeLightColor(columnNumber);
                 if(chordType!="default"){
