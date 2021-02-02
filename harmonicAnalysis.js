@@ -366,7 +366,9 @@ function evaluateTension(progression){
 			
 		}
 		
-		// if the chord is generally wrong, 
+		
+		
+		// if the chord is generally wrong, check for change of tonality
 		else if (! (degrees_progression[i].type_coherent && degrees_progression[i].degree_coherent)) {
 			
 		}
