@@ -15,7 +15,7 @@
                 height: 100%;
                 background: rgb(64,75,80);
             }
-
+			
             body{
               background: rgb(64,75,80);
             }
@@ -308,6 +308,10 @@
                 border: none;
                 cursor: pointer;
             }
+            
+            button.cellButton:focus {
+			    outline: 0;
+			}
 
             .pressButton {
                 background-color: #e92f32;
