@@ -163,20 +163,23 @@ function generaMatrice() {
     }
 }
 
-function unselectAllMatrix() {
-    for (let index = 0; index < matrice.length; index++) {
-        if (matrice[index].isSelezionato() == true) {
-            matrice[index].selezionato = false;
+function unselectMatrix(lastColumn) {
+    let index = numcell;
+    for(let indexColumn = maxColumns - 1; indexColumn >= lastColumn; indexColumn--){
+        for (let indexRow = (numOctaves * 12) - 1; indexRow >= 0; indexRow--) {
+            if (matrice[index].isSelezionato() == true) {
+                matrice[index].selezionato = false;
+            }
+            if (matrice[index].isRoot()) {
+                matrice[index].root = false;
+            }
+            let idCell = matrice[index].getId();
+            let cell = document.getElementById(idCell);
+            cell.classList.remove("disabled");
+            index--;
         }
-        if (matrice[index].isRoot()) {
-            matrice[index].root = false;
-        }
-        let idCell = matrice[index].getId();
-        let cell = document.getElementById(idCell);
-        cell.classList.remove("disabled");
-    }
+    } 
 }
-
 function unclickableColumn(numCol) {
     let columnCell = matrice.filter(x => (x.getColonna() == numCol && x.isSelezionato() == false));
     for (let index = 0; index < columnCell.length; index++) {
@@ -513,13 +516,17 @@ title_container.onclick = function() {
 
 resetNotes.onclick = function() {
     const columns = document.getElementsByClassName("white");
-    for (let index = 0; index < columns.length; index++) {
+    let lengthChordArray = finalProgression.indexOf(undefined);
+    console.log(lengthChordArray);
+    for (let index = 0; index < lengthChordArray; index++) {
         columns[index].classList.remove("red_background");
-        unselectAllMatrix();
     }
+    unselectAllMatrix(lengthChordArray);
     modelButton = false;
     timeInterval = 0;
     Columnplayed= maxColumns-1;
+    finalProgression=[];
+    analysisResults=[];
 }
 
 readme.onclick = function() {
@@ -552,10 +559,12 @@ contact_us.onclick = function() {
 
 // cancella tutto il contenuto del piano roll
 function refresh() {
-    numcell = numOctaves * 12 * maxColumns;
     matrice = [];
     timeInterval=0;
     tableBackscroll();
+    Columnplayed= maxColumns-1;
+    finalProgression=[];
+    analysisResults=[];
     bar.style.left='93px';
     const pianoContainer = document.getElementById("output_block");
     while (pianoContainer.lastChild) {
