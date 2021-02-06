@@ -105,6 +105,18 @@ export function Chord(note, type) {
 	} 
 	*/
 }
+
+export function ChordPlus(note, type, degree, curr_key) {
+	this.note = note;
+	this.type = type;
+	this.degree = degree;
+	this.curr_key = curr_key;
+	
+	this.type_coherent = true;
+	this.degree_coherent = true;
+	this.tension = 1;
+}
+
 //vedi sopra, defining getAbsValue Method of Chord
 Chord.prototype.getAbsValue = function(){
 	let value = allnotes.norm.indexOf(this.note);
@@ -164,31 +176,21 @@ function getDegree(chord, key){
 }
 
 function getProgDegrees(progression, key){
-	
 	let degrees_progression = [];
-	let deg_chord = {};
 	let triad_check;
 	let quadriad_check;
 	for (let i = 0; i < progression.length; i++) {
-		deg_chord = {
-			note: progression[i].note,
-			type: progression[i].type,
-			type_coherent: true,
-			degree: getDegree(progression[i], key),
-			degree_coherent: true,
-			curr_key: key.scale,
-			tension: 1
-		};
-		if (deg_chord.degree.includes("#") || deg_chord.degree.includes("b")) {
-			deg_chord.degree_coherent = false;
+		degrees_progression[i] = new ChordPlus(progression[i].note, progression[i].type, getDegree(progression[i], key), key.scale);
+
+		if (degrees_progression[i].degree.includes("#") || degrees_progression[i].degree.includes("b")) {
+			degrees_progression[i].degree_coherent = false;
 		}
 		// check if the degree type is different from its scale
-		triad_check = modes[getScaleIndex(key.scale)].triads[degrees.indexOf(deg_chord.degree)] == progression[i].type;
-		quadriad_check = modes[getScaleIndex(key.scale)].quadriads[degrees.indexOf(deg_chord.degree)] == progression[i].type;
+		triad_check = modes[getScaleIndex(key.scale)].triads[degrees.indexOf(degrees_progression[i].degree)] == progression[i].type;
+		quadriad_check = modes[getScaleIndex(key.scale)].quadriads[degrees.indexOf(degrees_progression[i].degree)] == progression[i].type;
 		if (! (triad_check || quadriad_check)) {
-			deg_chord.type_coherent = false;
+			degrees_progression[i].type_coherent = false;
 		}
-		degrees_progression.push(deg_chord);
 	}
 	return degrees_progression;
 }
