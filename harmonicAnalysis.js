@@ -94,7 +94,7 @@ function arraySum(total, num) {
 } 
 
 //approfondisci bene che cavolo sono sti prototype e cosa cambia con le classi
-export function Chord(note, type) {
+function Chord(note, type) {
 	this.note = note;
 	this.type = type || '';
 	/*if (! note_notation.test(this.note)) {
@@ -106,7 +106,7 @@ export function Chord(note, type) {
 	*/
 }
 
-export function ChordPlus(note, type, degree, curr_key) {
+function ChordPlus(note, type, degree, curr_key) {
 	this.note = note;
 	this.type = type;
 	this.degree = degree;
@@ -326,7 +326,7 @@ const progPatterns = [{
 }];
 
 // here the magic happens
-export function evaluateTension(progression){
+function evaluateTension(progression){
 
 	// phase 1): select keys with highest number of compatible chords
 	let accepted_keys = findKey(progression); // array with selected keys
@@ -488,9 +488,8 @@ export function evaluateTension(progression){
 				console.log("found pattern:", progPatterns[p].name);
 				// substitute tension values in tension_progression
 				for (let j = i; j < i + progPatterns[p].tension.length; j++) {
-					degrees_progression[j].tension = progPatterns[p].tension[j];
+					degrees_progression[j].tension = progPatterns[p].tension[j - i];
 				}
-				//Array.prototype.splice.apply(tension_progression, [i, progPatterns[p].tension.length].concat(progPatterns[p].tension));
 				i += progPatterns[p].tension.length;
 				break;
 			}
@@ -502,14 +501,14 @@ export function evaluateTension(progression){
 }
 
 // test progression, try the chords you like
-/*
+
 const progression = [];
 try {
-	progression.push(new Chord('A', 'min'));
 	progression.push(new Chord('C'));
-	progression.push(new Chord('D'));
-	progression.push(new Chord('F'));
 	progression.push(new Chord('A', 'min'));
+	progression.push(new Chord('D', 'min'));
+	progression.push(new Chord('G', '7'));
+	progression.push(new Chord('C'));
 
 } catch (e) {
 	console.error(e);
@@ -521,7 +520,7 @@ try {
 } catch (e) {
 	console.error(e);
 }
-*/
+
 
 // Harmony analysis
 // - quadriadi + tese di triadi
