@@ -94,7 +94,7 @@ function arraySum(total, num) {
 } 
 
 //approfondisci bene che cavolo sono sti prototype e cosa cambia con le classi
-function Chord(note, type) {
+export function Chord(note, type) {
 	this.note = note;
 	this.type = type || '';
 	/*if (! note_notation.test(this.note)) {
@@ -106,7 +106,7 @@ function Chord(note, type) {
 	*/
 }
 
-function ChordPlus(note, type, degree, curr_key) {
+export function ChordPlus(note, type, degree, curr_key) {
 	this.note = note;
 	this.type = type;
 	this.degree = degree;
@@ -326,7 +326,7 @@ const progPatterns = [{
 }];
 
 // here the magic happens
-function evaluateTension(progression){
+export function evaluateTension(progression){
 
 	// phase 1): select keys with highest number of compatible chords
 	let accepted_keys = findKey(progression); // array with selected keys
@@ -501,7 +501,7 @@ function evaluateTension(progression){
 }
 
 // test progression, try the chords you like
-
+/*
 const progression = [];
 try {
 	progression.push(new Chord('C'));
@@ -519,7 +519,7 @@ try {
 	console.log("Progression degrees and tension array:\n", evaluateTension(progression));
 } catch (e) {
 	console.error(e);
-}
+}*/
 
 
 // Harmony analysis
