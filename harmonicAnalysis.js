@@ -176,7 +176,8 @@ function getProgDegrees(progression, key){
 			type_coherent: true,
 			degree: getDegree(progression[i], key),
 			degree_coherent: true,
-			curr_key: key.scale
+			curr_key: key.scale,
+			tension: 1
 		};
 		if (deg_chord.degree.includes("#") || deg_chord.degree.includes("b")) {
 			deg_chord.degree_coherent = false;
@@ -335,7 +336,7 @@ export function evaluateTension(progression){
 	let degrees_progression;
 	let tempChord;
 	// phase 2): choose the key with highest number of correct chords before the first wrong one
-	//for each accepted_key
+	// for each accepted_key
 	for (let i = 0; i < accepted_keys.length; i++) {
 		// exception: give priority to major and minor scales
 		if (modes[getScaleIndex(accepted_keys[i].scale)].tonal_harmony) {
@@ -371,8 +372,9 @@ export function evaluateTension(progression){
 	// search for chords out of key
 	for (let i = 0; i < degrees_progression.length; i++) {
 		
-		// first option: MODAL INTERCHANGE
 		if (!( degrees_progression[i].type_coherent && degrees_progression[i].degree_coherent)) {
+			
+			// OPTION A): MODAL INTERCHANGE
 			
 			//reset temp array
 			tempKeys = [];
@@ -402,7 +404,7 @@ export function evaluateTension(progression){
 					break;
 				}
 				
-				
+				// choose the scale that has less differences (b or #) compared to the original mode
 				if(Math.abs(modes[getScaleIndex(tempKeys[m].scale)].intervals.reduce(arraySum) - keyIntervalsSum) <
 						Math.abs(modes[getScaleIndex(tempKeys[0].scale)].intervals.reduce(arraySum) - keyIntervalsSum)){
 					tempKeys[0] = tempKeys[m];
@@ -410,7 +412,6 @@ export function evaluateTension(progression){
 			}
 			// if at least one mode is compatible
 			if (tempKeys[0].points > 0) {
-				console.log(progression[i].toString(),tempKeys);
 				console.log(progression[i].toString(), "is borrowed from :", tempKeys[0].tonic, tempKeys[0].scale);
 				// add this key to priority_keys
 				priority_keys.push(tempKeys[0]);
@@ -418,35 +419,47 @@ export function evaluateTension(progression){
 				degrees_progression[i].curr_key = tempKeys[0].scale;
 				continue;
 			}
-		}
-		
-		
-		
-		// if the chord is generally wrong, check for change of tonality
-		else if (! (degrees_progression[i].type_coherent && degrees_progression[i].degree_coherent)) {
+			// note: the choices above are just a convention in order to solve ambiguiti, 
+			// it is not the aim of the project to identify the correct interpretation
+			
+			// OPTION B): CHANGE OF SCALE
+			
+			if (i != 0 && degrees_progression[i - 1].degree == "V") {
+				
+			}
 			
 		}
 		
-		// alla fine di tutto potresti aggiungere a tutti gli accordi compatibili il campo con la scala, 
-		// e tutti gli altri nello stesso campo avranno un'altra scala
 		
 	}
 	
 	
 	
 	// TENSION PROGRESSION
-	let tension_progression = new Array(progression.length);
-	tension_progression.fill(1);
-	// only for major modes, diatonic substitutions
-	if (modes[getScaleIndex(key.scale)].tonal_harmony){
+	// let tension_progression = new Array(progression.length);
+	// tension_progression.fill(1);
+	// only for major scale, diatonic substitutions
+	if (modes[getScaleIndex(key.scale)].name == 'major (Ionian)'){
 		for (let i = 0; i < degrees_progression.length; i++) {
 			for (let j = 0; j < majScaleChordFunction.length; j++) {
 				if (majScaleChordFunction[j].degrees.indexOf(degrees_progression[i].degree) >= 0 && degrees_progression[i].type_coherent) {
-					tension_progression[i] = majScaleChordFunction[j].tension;
+					degrees_progression[i].tension = majScaleChordFunction[j].tension;
 				}
 			}
 		}
 	}
+	// to be reviewed!
+	// for other scales, every chord that is not tonic, there is a little constant tension
+	else {
+		for (let i = 0; i < degrees_progression.length; i++) {
+		
+			if (degrees_progression[i].degree != "I") {
+				degrees_progression[i].tension = 2;
+			}
+
+		}
+	}
+	
 	// sort patterns from longest to shortest
 	progPatterns.sort((a, b) => (a.tension.length > b.tension.length) ? -1 : 1);
 	
@@ -479,12 +492,12 @@ export function evaluateTension(progression){
 		}
 		
 	}
-	return [degrees_progression, tension_progression];
+	return degrees_progression;
 }
 
 // test progression, try the chords you like
 
-/*const progression = [];
+const progression = [];
 try {
 	progression.push(new Chord('A', 'min'));
 	progression.push(new Chord('C'));
@@ -502,7 +515,7 @@ try {
 } catch (e) {
 	console.error(e);
 }
-*/
+
 
 // Harmony analysis
 // - quadriadi + tese di triadi
