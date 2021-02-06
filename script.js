@@ -3,6 +3,7 @@
 
 import {type , allNotes1D , chordBuilder} from './chordBuilder.js';
 import { tensionChange , start } from './tensionAnimation.js';
+import { evaluateTension , Chord } from './harmonicAnalysis.js';
 
 // MODEL
 let numOctaves = 3;
@@ -60,6 +61,7 @@ let timeInterval = 0;
 // array completo
 let numcell = numOctaves * 12 * maxColumns;
 let matrice = Array();
+let progression = Array(maxColumns);
 let modelButton = false;
 
 const key_color = [{
@@ -297,6 +299,8 @@ function chordTypeSelected(columnNumber, chordType) {
         let shape = type[type.findIndex(x => x.name == chordType)].shape;
         let noteArray = chordBuilder(noteNumber, shape);
         printSelectable(noteArray, columnNumber);
+        let chord = new Chord(noteName , chordType)
+        progression[Math.abs(maxColumns-columnNumber-1)] = chord ;
     }
 }
 
@@ -452,25 +456,25 @@ function createHeader() {
             option1.setAttribute("value", "");
             const option2 = document.createElement("option");
             option2.text = "Minor";
-            option2.setAttribute("value", "Min");
+            option2.setAttribute("value", "min");
             const option3 = document.createElement("option");
             option3.text = "Diminished";
-            option3.setAttribute("value", "Dim");
+            option3.setAttribute("value", "dim");
             const option4 = document.createElement("option");
             option4.text = "Maj7";
-            option4.setAttribute("value", "Maj7");
+            option4.setAttribute("value", "maj7");
             const option5 = document.createElement("option");
             option5.text = "Min7";
-            option5.setAttribute("value", "Min7");
+            option5.setAttribute("value", "min7");
             const option6 = document.createElement("option");
             option6.text = "7";
             option6.setAttribute("value", "7");
             const option7 = document.createElement("option");
             option7.text = "Half Diminished";
-            option7.setAttribute("value", "Half Diminished");
+            option7.setAttribute("value", "halfdim");
             const option8 = document.createElement("option");
             option8.text = "Diminished 7";
-            option8.setAttribute("value", "Diminished7");
+            option8.setAttribute("value", "dim7");
 
             select.appendChild(option0);
             select.appendChild(option1);

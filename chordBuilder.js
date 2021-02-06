@@ -1,11 +1,11 @@
 
 
 export const type = [{
-    name: "Maj7",
+    name: "maj7",
     shape: [4, 7, 11]
 },
 {
-    name: "Min7",
+    name: "min7",
     shape: [3, 7, 10]
 },
 {
@@ -13,11 +13,11 @@ export const type = [{
     shape: [4, 7, 10]
 },
 {
-    name: "Half Diminished",
+    name: "halfdim",
     shape: [3, 6, 10]
 },
 {
-    name: "Diminished7",
+    name: "dim7",
     shape: [3, 6, 9]
 },
 {
@@ -25,11 +25,11 @@ export const type = [{
     shape: [4, 7]
 },
 {
-    name: "Min",
+    name: "min",
     shape: [3, 7]
 },
 {
-    name: "Dim",
+    name: "dim",
     shape: [3, 6]
 }
 ];

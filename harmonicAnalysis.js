@@ -28,8 +28,8 @@
 //}
 
 // patterns for accepted chords
-const note_notation = /^[A-G][#b]?$/;
-const type_notation = /^(min|dim|aug|maj7|min7|7|halfdim|dim7)?$/;
+// const note_notation = /^[A-G][#b]?$/;
+// const type_notation = /^(min|dim|aug|maj7|min7|7|halfdim|dim7)?$/;
 
 const degrees = ["I", "II", "III", "IV", "V", "VI", "VII"];
 
@@ -94,15 +94,16 @@ function arraySum(total, num) {
 } 
 
 //approfondisci bene che cavolo sono sti prototype e cosa cambia con le classi
-function Chord(note, type) {
+export function Chord(note, type) {
 	this.note = note;
 	this.type = type || '';
-	if (! note_notation.test(this.note)) {
+	/*if (! note_notation.test(this.note)) {
 		throw "note is not valid";
 	}
 	if (! type_notation.test(this.type)) {
 		throw "type is not valid";
-	}
+	} 
+	*/
 }
 //vedi sopra, defining getAbsValue Method of Chord
 Chord.prototype.getAbsValue = function(){
@@ -322,7 +323,7 @@ const progPatterns = [{
 }];
 
 // here the magic happens
-function evaluateTension(progression){
+export function evaluateTension(progression){
 	
 	// phase 1): select keys with highest number of compatible chords
 	let accepted_keys = findKey(progression); // array with selected keys
@@ -482,7 +483,8 @@ function evaluateTension(progression){
 }
 
 // test progression, try the chords you like
-const progression = [];
+
+/*const progression = [];
 try {
 	progression.push(new Chord('A', 'min'));
 	progression.push(new Chord('C'));
@@ -500,6 +502,7 @@ try {
 } catch (e) {
 	console.error(e);
 }
+*/
 
 // Harmony analysis
 // - quadriadi + tese di triadi
