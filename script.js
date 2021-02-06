@@ -246,7 +246,7 @@ function chordTypeSelected(columnNumber, chordType) {
         printSelectable(noteArray, columnNumber);
         let chord = new Chord(noteName , chordType)
         finalProgression[Math.abs(maxColumns-columnNumber-1)] = chord ;
-        console.log(finalProgression); // da togliere
+        // console.log(finalProgression); // da togliere
     }
 }
 
@@ -582,7 +582,7 @@ function firstRender() {
 				}
             }
             analysisResults = evaluateTension(finalProgression);
-            play();
+            // play();
             scrollInterval = setInterval(playAndScroll, 25);
             stopButton.onclick = function() {
                 modelButton = false;
@@ -612,8 +612,9 @@ function playAndScroll(){
   timeInterval +=25;
   if(timeInterval%2350 == 0){
     play();
-    console.log(analysisResults[Columnplayed]);
-    tensionChange(analysisResults[Columnplayed].tension);
+    console.log('column : ', Math.abs(Columnplayed + 2 - maxColumns))
+    console.log('tension : ', analysisResults[Math.abs(Columnplayed + 2 - maxColumns)].tension);
+    tensionChange(analysisResults[Math.abs(Columnplayed + 2 - maxColumns)].tension);
   }
   scroll();
 }

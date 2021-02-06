@@ -496,7 +496,7 @@ function evaluateTension(progression){
 		}
 		
 	}
-	console.log(degrees_progression[0].tension);
+	// console.log(degrees_progression[0].tension);
 	return degrees_progression;
 }
 
