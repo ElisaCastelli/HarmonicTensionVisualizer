@@ -60,8 +60,9 @@ let timeInterval = 0;
 
 // array completo
 let numcell = numOctaves * 12 * maxColumns;
-let matrice = Array();
-let progression = Array(maxColumns);
+let matrice = new Array();
+let finalProgression = new Array(maxColumns);
+let analysisResults = new Array();
 let modelButton = false;
 
 const key_color = [{
@@ -113,49 +114,6 @@ const key_color = [{
         color: "white"
     }
 ];
-
-
-
-/*const type = [{
-        name: "Maj7",
-        shape: [4, 7, 11]
-    },
-    {
-        name: "Min7",
-        shape: [3, 7, 10]
-    },
-    {
-        name: "7",
-        shape: [4, 7, 10]
-    },
-    {
-        name: "Half Diminished",
-        shape: [3, 6, 10]
-    },
-    {
-        name: "Diminished7",
-        shape: [3, 6, 9]
-    },
-    {
-        name: "",
-        shape: [4, 7]
-    },
-    {
-        name: "Min",
-        shape: [3, 7]
-    },
-    {
-        name: "Dim",
-        shape: [3, 6]
-    }
-]*/
-
-// const allNotes1D = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
-
-
-// Import
-
-
 
 // costruttore nota
 function nota(ottava, nome, colonna, riga, id) {
@@ -277,19 +235,6 @@ function printSelectable(noteArray, columnNumber) {
     }
 }
 
-/*function chordBuilder(noteNumber, shape) {
-    let tonic = noteNumber % 12
-    let Chord = [tonic]
-    for (i = 0; i < shape.length ; i++) {
-        Chord.push((shape[i] + tonic) % 12)
-    }
-    ChordNotes = []
-    for (i = 0; i < Chord.length ; i++) {
-        ChordNotes.push(allNotes1D[Chord[i]])
-    }
-    return ChordNotes
-}*/
-
 function chordTypeSelected(columnNumber, chordType) {
     let noteSelected = matrice.find(x => (x.getColonna() == columnNumber && x.isSelezionato() == true && x.isRoot() == true));
     if (noteSelected != null) {
@@ -300,7 +245,8 @@ function chordTypeSelected(columnNumber, chordType) {
         let noteArray = chordBuilder(noteNumber, shape);
         printSelectable(noteArray, columnNumber);
         let chord = new Chord(noteName , chordType)
-        progression[Math.abs(maxColumns-columnNumber-1)] = chord ;
+        finalProgression[Math.abs(maxColumns-columnNumber-1)] = chord ;
+        console.log(finalProgression); // da togliere
     }
 }
 
@@ -395,7 +341,7 @@ function addTone(cell , columnNumber , matrixIndex) {
 // VIEW
 
 start;
-tensionChange(1);
+tensionChange(0);
 
 function createFixedColumn(scaleNumber, noteNumber){
   const fixedColumn = document.createElement("th");
@@ -629,6 +575,13 @@ function firstRender() {
           //noncliccabile();
           //playButton.classList.add("clickedBarButton");
             modelButton = true;
+            for (let index = 0; index < finalProgression.length; index++) {
+                if (typeof finalProgression[index] === 'undefined'){
+                    finalProgression = finalProgression.slice(0,index);
+                    break;
+				}
+            }
+            analysisResults = evaluateTension(finalProgression);
             play();
             scrollInterval = setInterval(playAndScroll, 25);
             stopButton.onclick = function() {
@@ -659,6 +612,8 @@ function playAndScroll(){
   timeInterval +=25;
   if(timeInterval%2350 == 0){
     play();
+    console.log(analysisResults[Columnplayed]);
+    tensionChange(analysisResults[Columnplayed].tension);
   }
   scroll();
 }

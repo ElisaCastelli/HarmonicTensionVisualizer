@@ -325,7 +325,7 @@ const progPatterns = [{
 
 // here the magic happens
 export function evaluateTension(progression){
-	
+
 	// phase 1): select keys with highest number of compatible chords
 	let accepted_keys = findKey(progression); // array with selected keys
 	
@@ -492,11 +492,12 @@ export function evaluateTension(progression){
 		}
 		
 	}
+	console.log(degrees_progression[0].tension);
 	return degrees_progression;
 }
 
 // test progression, try the chords you like
-
+/*
 const progression = [];
 try {
 	progression.push(new Chord('A', 'min'));
@@ -515,7 +516,7 @@ try {
 } catch (e) {
 	console.error(e);
 }
-
+*/
 
 // Harmony analysis
 // - quadriadi + tese di triadi
