@@ -487,7 +487,10 @@ export function evaluateTension(progression){
 			if (found_pattern) {
 				console.log("found pattern:", progPatterns[p].name);
 				// substitute tension values in tension_progression
-				Array.prototype.splice.apply(tension_progression, [i, progPatterns[p].tension.length].concat(progPatterns[p].tension));
+				for (let j = i; j < i + progPatterns[p].tension.length; j++) {
+					degrees_progression[j].tension = progPatterns[p].tension[j];
+				}
+				//Array.prototype.splice.apply(tension_progression, [i, progPatterns[p].tension.length].concat(progPatterns[p].tension));
 				i += progPatterns[p].tension.length;
 				break;
 			}
