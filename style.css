@@ -42,8 +42,8 @@
                 width: 100%;
                 position: absolute;
                 /* left: 1%; */
-                top: 15%;
-                height: 35%;
+                top: 12%;
+                height: 30%;
                 /* border: 1px solid black; */
             }
             
@@ -56,9 +56,9 @@
             #output_block {
                 width: 98%;
                 position: absolute;
-                top: 52%;
+                top: 45%;
                 left: 1%;
-                height: 40%;
+                height: 48%;
             }
 
             #bottom_panel {

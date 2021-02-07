@@ -118,19 +118,18 @@ function nota(ottava, nome, colonna, riga, id) {
     this.id = id;
     let selezionato = false; // booleano per definire se è selezionato o meno (nota attiva o disattiva)
     let selezionabile = false;
-    //let id = this.riga + this.colonna; // concatenare indice riga e indice colonna
     let root = false; 
 }
 
-nota.prototype.getNota = function() { return this.nome; }
-nota.prototype.getColonna = function() { return this.colonna; }
-nota.prototype.getRiga = function() { return this.riga; }
-nota.prototype.getOttava = function() { return this.ottava; }
-nota.prototype.getId = function() { return this.id; }
-nota.prototype.isSelezionato = function() { return this.selezionato; }
-nota.prototype.isSelezionabile = function() { return this.selezionabile; }
-nota.prototype.isRoot = function() { return this.root; }
-nota.prototype.getFrequenza = function() {};
+//nota.prototype.getNota = function() { return this.nome; }
+//nota.prototype.getColonna = function() { return this.colonna; }
+//nota.prototype.getRiga = function() { return this.riga; }
+//nota.prototype.getOttava = function() { return this.ottava; }
+//nota.prototype.getId = function() { return this.id; }
+//nota.prototype.isSelezionato = function() { return this.selezionato; }
+//nota.prototype.isSelezionabile = function() { return this.selezionabile; }
+//nota.prototype.isRoot = function() { return this.root; }
+//nota.prototype.getFrequenza = function() {};
 
 function generaMatrice() {
     let numeroOttava = 0;
@@ -140,7 +139,7 @@ function generaMatrice() {
         for (let indiceRiga = (numOctaves * 12) - 1; indiceRiga >= 0; indiceRiga--) {
             numeroNota = indiceRiga % 12;
             numeroOttava = indiceRiga - numeroNota;
-            numeroOttava = numeroOttava / 12;
+            numeroOttava = numeroOttava / 12 +numOctavesMin;
             let tmpNota = new nota(numeroOttava,key_color[numeroNota].pitch,  indiceColonna, indiceRiga,String(indice));
             indice--;
             tmpNota.selezionabile = false;
@@ -153,59 +152,60 @@ function generaMatrice() {
 
 function unselectMatrix(lastColumn) {
     let index = 0;
-    if(lastColumn>0){
+    if(lastColumn>=0){
         for(let indexColumn = maxColumns - 1; indexColumn >= lastColumn; indexColumn--){
             for (let indexRow = (numOctaves * 12) - 1; indexRow >= 0; indexRow--) {
-                if (matrice[index].isSelezionato() == true) {
+                if (matrice[index].selezionato == true) {
                     matrice[index].selezionato = false;
                 }
-                if (matrice[index].isRoot()) {
+                if (matrice[index].root) {
                     matrice[index].root = false;
                 }
-                if(matrice[index].isSelezionabile()){
+                if(matrice[index].selezionabile){
                     matrice[index].selezionabile = false;
                 }
-                let idCell = matrice[index].getId();
+                let idCell = matrice[index].id;
                 let cell = document.getElementById(idCell);
                 cell.classList.remove("disabled");
                 cell.classList.remove("selected_background");
                 cell.classList.remove("light_background");
                 index++;
             }
+            resetSelect(indexColumn);
         } 
     }else{
         // se sono selezionate note singole
     }
 }
 function unclickableColumn(numCol) {
-    let columnCell = matrice.filter(x => (x.getColonna() == numCol && x.isSelezionato() == false));
+    let columnCell = matrice.filter(x => (x.colonna == numCol && x.selezionato == false));
     for (let index = 0; index < columnCell.length; index++) {
-        let idCell = columnCell[index].getId();
+        let idCell = columnCell[index].id;
         let cell = document.getElementById(idCell);
         cell.classList.add("disabled");
     }
 }
 
 function clickableColumn(numCol) {
-    let columnCell = matrice.filter(x => x.getColonna() == numCol);
+    let columnCell = matrice.filter(x => x.colonna == numCol);
     for (let index = 0; index < columnCell.length; index++) {
-        let idCell = columnCell[index].getId();
+        let idCell = columnCell[index].id;
         let cell = document.getElementById(idCell);
         cell.classList.remove("disabled");
-        let indexMatrix = matrice.findIndex(x => (x.getId() == columnCell[index].getId()));
-        if (matrice[indexMatrix].isSelezionato()) {
+        let indexMatrix = matrice.findIndex(x => (x.id == columnCell[index].id));
+        if (matrice[indexMatrix].selezionato) {
         	matrice[indexMatrix].selezionato = false;
         }
-        if (matrice[indexMatrix].isRoot()) {
+        if (matrice[indexMatrix].root) {
         	matrice[indexMatrix].root = false;
         }
     }
 }
 
 function removeAllColor(numColumn) {
-    let columnCell = matrice.filter(x => x.getColonna() == numColumn);
+    let columnCell = matrice.filter(x => x.colonna == numColumn);
     for (let index = 0; index < columnCell.length; index++) {
-        let idCell = columnCell[index].getId();
+        let idCell = columnCell[index].id;
         let cell = document.getElementById(idCell);
         cell.classList.remove("selected_background");
         cell.classList.remove("light_background");
@@ -213,9 +213,9 @@ function removeAllColor(numColumn) {
 }
 
 function removeLightColor(numColumn) {
-    let columnCell = matrice.filter(x => x.getColonna() == numColumn);
+    let columnCell = matrice.filter(x => x.colonna == numColumn);
     for (let index = 0; index < columnCell.length; index++) {
-        let idCell = columnCell[index].getId();
+        let idCell = columnCell[index].id;
         let cell = document.getElementById(idCell);
         cell.classList.remove("light_background");
     }
@@ -223,11 +223,11 @@ function removeLightColor(numColumn) {
 
 function printSelectable(noteArray, columnNumber) {
     for (let index = 1; index < noteArray.length; index++) {
-        let notesToPrint = matrice.filter(x => (x.getNota() == noteArray[index] && x.getColonna() == columnNumber));
+        let notesToPrint = matrice.filter(x => (x.nome == noteArray[index] && x.colonna == columnNumber));
         for (let i = 0 ; i < notesToPrint.length ; i++) {
-            let idCell = notesToPrint[i].getId();
+            let idCell = notesToPrint[i].id;
             let cell = document.getElementById(idCell);
-            let indexCell = matrice.findIndex(x => x.getId() == idCell);
+            let indexCell = matrice.findIndex(x => x.id == idCell);
             matrice[indexCell].selezionabile = true;
             cell.classList.remove("disabled");
             cell.classList.add("light_background");
@@ -236,15 +236,15 @@ function printSelectable(noteArray, columnNumber) {
 }
 
 function chordTypeSelected(columnNumber, chordType) {
-    let noteSelected = matrice.find(x => (x.getColonna() == columnNumber && x.isSelezionato() == true && x.isRoot() == true));
+    let noteSelected = matrice.find(x => (x.colonna == columnNumber && x.selezionato == true && x.root == true));
     if (noteSelected != null) {
-        let noteName = noteSelected.getNota();
+        let noteName = noteSelected.nome;
         let noteNumber = allNotes1D.indexOf(noteName);
-        let octaveNoteSelected = noteSelected.getOttava();
+        let octaveNoteSelected = noteSelected.ottava;
         let shape = type[type.findIndex(x => x.name == chordType)].shape;
         let noteArray = chordBuilder(noteNumber, shape);
         printSelectable(noteArray, columnNumber);
-        let chord = new Chord(noteName , chordType)
+        let chord = new Chord(noteName , chordType);
         finalProgression[Math.abs(maxColumns-columnNumber-1)] = chord ;
         // console.log(finalProgression); // da togliere
     }
@@ -278,22 +278,22 @@ function scroll() {
 function addNote(cell, idCell, columnNumber) {
     columnNumber = 19 - columnNumber;
     let matrixIndex = numOctaves * 12 * maxColumns - idCell;
-    let findRoot = matrice.find(x => (x.getColonna() == columnNumber && x.isSelezionato() == true && x.isRoot() == true));
-    let noteSelezionabili = matrice.filter(x => (x.getColonna() == columnNumber && x.isSelezionabile() == true));
+    let findRoot = matrice.find(x => (x.colonna == columnNumber && x.selezionato == true && x.root == true));
+    let noteSelezionabili = matrice.filter(x => (x.colonna == columnNumber && x.selezionabile == true));
 
     // selecting the first note ( the root of the chord)
     if (findRoot == undefined) {
-        addRoot(cell, matrixIndex)
+        addRoot(cell, matrixIndex);
     }
 
     // removing the root
-    else if (findRoot.getId() == idCell) {
-        removeAll(columnNumber)
+    else if (findRoot.id == idCell) {
+        removeAll(columnNumber);
     }
 
     // adding or removing chord tones
     for (let i=0 ; i<noteSelezionabili.length ; i++) {
-        if (noteSelezionabili[i].getId() == idCell ) {
+        if (noteSelezionabili[i].id == idCell ) {
             addTone(cell , columnNumber , matrixIndex);
         }
     }
@@ -305,7 +305,7 @@ function addRoot(cell, matrixIndex) {
     // manca di segnare nella matrice che la casella è "piena"
     matrice[matrixIndex].selezionato = true;
     matrice[matrixIndex].root = true;
-    unclickableColumn(matrice[matrixIndex].getColonna());
+    unclickableColumn(matrice[matrixIndex].colonna);
 }
 
 function removeAll (columnNumber) {
@@ -318,6 +318,12 @@ function removeAll (columnNumber) {
     removeAllColor(columnNumber);
     // risetta l'header a "chord type"
     // ...
+    resetSelect(columnNumber);
+}
+
+function resetSelect(columnNumber){
+    let select = document.getElementById("select"+columnNumber);
+    select.value = "default";
 }
 
 function addTone(cell , columnNumber , matrixIndex) {
@@ -329,9 +335,9 @@ function addTone(cell , columnNumber , matrixIndex) {
     cell.classList.toggle("disabled");
     cell.classList.toggle("selected_background");
 
-    let sameNote = matrice.filter(x => (x.getColonna() == columnNumber && x.getNota() == matrice[matrixIndex].getNota()));
+    let sameNote = matrice.filter(x => (x.colonna == columnNumber && x.nome == matrice[matrixIndex].nome));
     for (let i=0 ; i< sameNote.length ; i++) {
-        let sameNoteid = sameNote[i].getId();
+        let sameNoteid = sameNote[i].id;
         let sameNoteCell = document.getElementById(sameNoteid);
         sameNoteCell.classList.toggle("disabled");
         sameNoteCell.classList.toggle("light_background");
@@ -344,12 +350,11 @@ start;
 tensionChange(0);
 
 function createFixedColumn(scaleNumber, noteNumber){
-    let scaleNum = scaleNumber + numOctavesMin;
     const fixedColumn = document.createElement("th");
     fixedColumn.classList.add("leftstop");
     let color = key_color[noteNumber].color;
     fixedColumn.classList.add(color);
-    let label = key_color[noteNumber].pitch+" "+scaleNum;
+    let label = key_color[noteNumber].pitch+" "+scaleNumber;
     let divLabel = document.createElement("div");
     var t = document.createTextNode(label);
     divLabel.appendChild(t);
@@ -360,7 +365,7 @@ function createFixedColumn(scaleNumber, noteNumber){
 
 function createRow(scaleNumber, noteNumber) {
     const row = document.createElement("tr");
-    let rowNumber = numOctaves * 12 - (scaleNumber * 12 + noteNumber) - 1;
+    let rowNumber = numOctaves * 12 - ((scaleNumber-numOctavesMin) * 12 + noteNumber) - 1;
     // per ogni riga aggiungo la prima colonna che rimarrà fissa e poi tutte le altre
     let fixedColumn = createFixedColumn(scaleNumber, noteNumber);
     row.appendChild(fixedColumn);
@@ -454,6 +459,7 @@ function createTable() {
     for(let rowNumber = numOctaves * key_color.length - 1; rowNumber >= 0; rowNumber--){
       let scaleNumber = Math.floor(rowNumber/key_color.length);
       let noteNumber = rowNumber - (key_color.length * scaleNumber);
+      scaleNumber = scaleNumber + numOctavesMin;
       let row = createRow(scaleNumber, noteNumber);
       table_body.appendChild(row);
     }
@@ -492,13 +498,13 @@ title_container.onclick = function() {
 }
 
 resetNotes.onclick = function() {
-    let lengthChordArray = finalProgression.indexOf(undefined);
+    let lengthChordArray = finalProgression.findIndex(x => typeof x == 'undefined');
     unselectMatrix(lengthChordArray);
     modelButton = false;
     timeInterval = 0;
     columnPlayed= maxColumns-1;
-    finalProgression=[];
-    analysisResults=[];
+    finalProgression= new Array(20);
+    analysisResults= new Array();
 }
 
 /*readme.onclick = function() {
@@ -529,6 +535,79 @@ function refresh() {
     }
 }
 
+function playAndScroll(){
+    timeInterval +=25;
+    if(timeInterval%2350 == 0){
+      play();
+      console.log('column : ', Math.abs(columnPlayed + 2 - maxColumns))
+      console.log('tension : ', analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
+      tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
+    }
+    scroll();
+  }
+  
+  
+  function play() {
+      let noteSelected = new Array();
+      let vettoreNote = new Array();
+      noteSelected = matrice.filter(x => (x.colonna == columnPlayed && x.selezionato == true));
+      if (noteSelected != null) {
+          for (let index = 0; index < noteSelected.length; index++) {
+              let nomeNota = noteSelected[index].nome;
+              let octave = noteSelected[index].ottava;
+              vettoreNote.push(nomeNota + octave);
+          }
+          console.log(vettoreNote);
+          if(vettoreNote.length == 4){
+            sampler.triggerAttackRelease([vettoreNote[0], vettoreNote[1], vettoreNote[2]], 2);
+          }else{
+            sampler.triggerAttackRelease([vettoreNote[0], vettoreNote[1], vettoreNote[2], vettoreNote[3]], 2);
+          }
+      }
+      vettoreNote = [];
+      columnPlayed--;
+      sampler = new Tone.Sampler({
+          "C2": "./piano/C2.mp3",
+          "C#2": "./piano/Cs2.mp3",
+          "D2": "./piano/D2.mp3",
+          "D#2": "./piano/Ds2.mp3",
+          "E2": "./piano/E2.mp3",
+          "F2": "./piano/F2.mp3",
+          "F#2": "./piano/Fs2.mp3",
+          "G2": "./piano/G2.mp3",
+          "G#2": "./piano/Gs2.mp3",
+          "A2": "./piano/A2.mp3",
+          "A#2": "./piano/As2.mp3",
+          "B2": "./piano/B2.mp3",
+          "C3": "./piano/C3.mp3",
+          "C#3": "./piano/Cs3.mp3",
+          "D3": "./piano/D3.mp3",
+          "D#3": "./piano/Ds3.mp3",
+          "E3": "./piano/E3.mp3",
+          "F3": "./piano/F3.mp3",
+          "F#3": "./piano/Fs3.mp3",
+          "G3": "./piano/G3.mp3",
+          "G#3": "./piano/Gs3.mp3",
+          "A3": "./piano/A3.mp3",
+          "A#3": "./piano/As3.mp3",
+          "B3": "./piano/B3.mp3",
+          "C4": "./piano/C4.mp3",
+          "C#4": "./piano/Cs4.mp3",
+          "D4": "./piano/D4.mp3",
+          "D#4": "./piano/Ds4.mp3",
+          "E4": "./piano/E4.mp3",
+          "F4": "./piano/F4.mp3",
+          "F#4": "./piano/Fs4.mp3",
+          "G4": "./piano/G4.mp3",
+          "G#4": "./piano/Gs4.mp3",
+          "A4": "./piano/A4.mp3",
+          "A#4": "./piano/As4.mp3",
+          "B4": "./piano/B4.mp3",
+      }).set({
+          "volume": -8,
+      }).toMaster();
+  }
+
 function firstRender() {
     const pianoContainer = document.getElementById("output_block");
     let pianoRollTable = createPianoRoll();
@@ -540,12 +619,14 @@ function firstRender() {
         if (!modelButton) {
           //noncliccabile();
             modelButton = true;
-            for (let index = 0; index < finalProgression.length; index++) {
+            let maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
+            finalProgression = finalProgression.slice(0,maxIndex);
+            /*for (let index = 0; index < finalProgression.length; index++) {
                 if (typeof finalProgression[index] === 'undefined'){
                     finalProgression = finalProgression.slice(0,index);
                     break;
 				}
-            }
+            }*/
             analysisResults = evaluateTension(finalProgression);
             scrollInterval = setInterval(playAndScroll, 25);
             stopButton.onclick = function() {
@@ -570,78 +651,11 @@ function firstRender() {
 
 firstRender();
 
-function playAndScroll(){
-  timeInterval +=25;
-  if(timeInterval%2350 == 0){
-    play();
-    console.log('column : ', Math.abs(columnPlayed + 2 - maxColumns))
-    console.log('tension : ', analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
-    tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
-  }
-  scroll();
-}
 
-
-function play() {
-    let noteSelected = new Array();
-    let vettoreNote = new Array();
-    noteSelected = matrice.filter(x => (x.getColonna() == columnPlayed && x.isSelezionato() == true));
-    if (noteSelected != null) {
-        for (let index = 0; index < noteSelected.length; index++) {
-            let nomeNota = noteSelected[index].getNota();
-            let octave = noteSelected[index].getOttava();
-            vettoreNote.push(nomeNota + octave);
-        }
-        console.log(vettoreNote);
-        sampler.triggerAttackRelease(["C2", "A2", "G2"], 2);
-    }
-    vettoreNote = [];
-    columnPlayed--;
-    sampler = new Tone.Sampler({
-        "C2": "./piano/C2.mp3",
-        "C#2": "./piano/Cs2.mp3",
-        "D2": "./piano/D2.mp3",
-        "D#2": "./piano/Ds2.mp3",
-        "E2": "./piano/E2.mp3",
-        "F2": "./piano/F2.mp3",
-        "F#2": "./piano/Fs2.mp3",
-        "G2": "./piano/G2.mp3",
-        "G#2": "./piano/Gs2.mp3",
-        "A2": "./piano/A2.mp3",
-        "A#2": "./piano/As2.mp3",
-        "B2": "./piano/B2.mp3",
-        "C3": "./piano/C3.mp3",
-        "C#3": "./piano/Cs3.mp3",
-        "D3": "./piano/D3.mp3",
-        "D#3": "./piano/Ds3.mp3",
-        "E3": "./piano/E3.mp3",
-        "F3": "./piano/F3.mp3",
-        "F#3": "./piano/Fs3.mp3",
-        "G3": "./piano/G3.mp3",
-        "G#3": "./piano/Gs3.mp3",
-        "A3": "./piano/A3.mp3",
-        "A#3": "./piano/As3.mp3",
-        "B3": "./piano/B3.mp3",
-        "C4": "./piano/C4.mp3",
-        "C#4": "./piano/Cs4.mp3",
-        "D4": "./piano/D4.mp3",
-        "D#4": "./piano/Ds4.mp3",
-        "E4": "./piano/E4.mp3",
-        "F4": "./piano/F4.mp3",
-        "F#4": "./piano/Fs4.mp3",
-        "G4": "./piano/G4.mp3",
-        "G#4": "./piano/Gs4.mp3",
-        "A4": "./piano/A4.mp3",
-        "A#4": "./piano/As4.mp3",
-        "B4": "./piano/B4.mp3",
-    }).set({
-        "volume": -8,
-    }).toMaster();
-}
 
 function noncliccabile() {
     matrice.forEach(element => {
-        idCell = element.getId();
+        idCell = element.id;
         cell = document.getElementById(idCell);
         cell.classList.add("disabled");
     });
