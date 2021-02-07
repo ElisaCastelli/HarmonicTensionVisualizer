@@ -42,7 +42,7 @@
                 width: 100%;
                 position: absolute;
                 /* left: 1%; */
-                top: 12%;
+                top: 13%;
                 height: 30%;
                 /* border: 1px solid black; */
             }
@@ -186,6 +186,15 @@
 
             #folderIcon {
                 left: 94%;
+                top: 25px;
+                position: fixed;
+                text-align: center;
+                cursor: pointer;
+                color: rgb(223, 193, 85);
+            }
+
+            #downloadButton{
+                left: 88%;
                 top: 25px;
                 position: fixed;
                 text-align: center;
