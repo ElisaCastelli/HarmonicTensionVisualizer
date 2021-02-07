@@ -180,7 +180,11 @@
                 color: rgb(223, 193, 85);
             }
 
-            #FolderIcon {
+            input{
+                display: none;
+            }
+
+            #folderIcon {
                 left: 94%;
                 top: 25px;
                 position: fixed;

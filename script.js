@@ -4,6 +4,8 @@ import {type , allNotes1D , chordBuilder} from './chordBuilder.js';
 import { tensionChange , start } from './tensionAnimation.js';
 import { evaluateTension , Chord } from './harmonicAnalysis.js';
 
+var fileInput  = document.querySelector( ".input-file" );
+
 // MODEL
 let numOctaves = 3;
 let numOctavesMin = 2;
@@ -505,6 +507,10 @@ resetNotes.onclick = function() {
     columnPlayed= maxColumns-1;
     finalProgression= new Array(20);
     analysisResults= new Array();
+}
+
+folderIcon.onclick = function(){
+    fileInput.focus();  
 }
 
 /*readme.onclick = function() {
