@@ -351,11 +351,11 @@
             .scrollingBar {
                 position: relative;
                 background: rgb(63,132,87);
-                height: 96.5%;
+                height: 88%;
                 width: 5px;
                 left: 93px;
-                top: -100.5%;
-                box-shadow: rgb(0 0 0) 0px 0px 3px 0px;
+                top: -91.5%;
+                box-shadow: rgb(160,223,179) 0px 2px 5px 0px;
                 z-index: 90;
                 border-radius: 10px;
             }

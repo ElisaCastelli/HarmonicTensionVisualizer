@@ -3,7 +3,7 @@
 import {type , allNotes1D , chordBuilder} from './chordBuilder.js';
 import { tensionChange , start } from './tensionAnimation.js';
 import { evaluateTension , Chord } from './harmonicAnalysis.js';
-import { readFile} from './readFile.js';
+import { readFile, downloadFile} from './readFile.js';
 
 const fileInput = document.getElementById('file-input');
 
@@ -112,27 +112,41 @@ const key_color = [{
     }
 ];
 
-// costruttore nota
-function nota(ottava, nome, colonna, riga, id) {
+// costruttore Note
+function Note(ottava, nome, colonna, riga, id) {
     this.ottava = ottava;
     this.nome = nome;
     this.colonna = colonna;
     this.riga = riga;
     this.id = id;
-    let selezionato = false; // booleano per definire se è selezionato o meno (nota attiva o disattiva)
+    let selezionato = false; // booleano per definire se è selezionato o meno (Note attiva o disattiva)
     let selezionabile = false;
     let root = false; 
 }
 
-//nota.prototype.getNota = function() { return this.nome; }
-//nota.prototype.getColonna = function() { return this.colonna; }
-//nota.prototype.getRiga = function() { return this.riga; }
-//nota.prototype.getOttava = function() { return this.ottava; }
-//nota.prototype.getId = function() { return this.id; }
-//nota.prototype.isSelezionato = function() { return this.selezionato; }
-//nota.prototype.isSelezionabile = function() { return this.selezionabile; }
-//nota.prototype.isRoot = function() { return this.root; }
-//nota.prototype.getFrequenza = function() {};
+function finalProgressionToString(){
+    let text = "";
+    for(let index = 0; index < maxColumns; index++){
+        if(typeof finalProgression[index] != 'undefined'){
+            text += finalProgression[index]+" ";
+        }
+    }
+    return text;
+}
+
+function matrixToString(){
+    let text="";
+    for(let index = 0; index< numcell; index++){
+        if(matrice[index].selezionato == true){
+            text += 1+" ";
+        }else{
+            text += 0+" ";
+        }
+    }
+    text += "\n";
+    text += finalProgressionToString();
+    return text;
+}
 
 function generaMatrice() {
     let numeroOttava = 0;
@@ -143,7 +157,7 @@ function generaMatrice() {
             numeroNota = indiceRiga % 12;
             numeroOttava = indiceRiga - numeroNota;
             numeroOttava = numeroOttava / 12 +numOctavesMin;
-            let tmpNota = new nota(numeroOttava,key_color[numeroNota].pitch,  indiceColonna, indiceRiga,String(indice));
+            let tmpNota = new Note(numeroOttava,key_color[numeroNota].pitch,  indiceColonna, indiceRiga,String(indice));
             indice--;
             tmpNota.selezionabile = false;
             tmpNota.selezionato = false;
@@ -515,6 +529,12 @@ resetNotes.onclick = function() {
 
 folderIcon.onchange = function(){
     readFile(fileInput.files[0]);
+}
+
+downloadButton.onclick = function(){
+    let fileName = "MyChordProgression";
+    let text = matrixToString();
+    downloadFile(fileName, text);
 }
 
 /*readme.onclick = function() {
