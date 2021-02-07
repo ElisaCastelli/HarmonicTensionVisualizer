@@ -190,11 +190,11 @@
                 width: max-content;
             }
 
-            #octaveButton {
+            /*#octaveButton {
                 position: relative;
                 left: 0px;
                 color: green;
-            }
+            }*/
 
             #BoxOctave {
                 position: relative;
@@ -262,7 +262,7 @@
                 border-radius: 2px;
             }
 
-            .black_background {
+            .dark_background {
                 background: rgb(53,75,87);
             }
 
@@ -270,7 +270,7 @@
                 cursor: pointer;
             }
 
-            .red_background {
+            .selected_background {
                 background-color: rgb(160,223,179);
             }
 
