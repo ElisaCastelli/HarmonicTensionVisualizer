@@ -529,6 +529,7 @@ export function evaluateTension(progression){
 // test progression, try the chords you like
 /*
 const progression = [];
+
 try {
 	progression.push(new Chord('F', 'maj7'));
 	progression.push(new Chord('F', 'maj7'));
@@ -543,14 +544,14 @@ try {
 } catch (e) {
 	console.error(e);
 }
-*/
+
 console.log('\n ACCEPTED KEYS:\n', findKey(progression));
 try {
 	console.log("Progression degrees and tension array:\n", evaluateTension(progression));
 } catch (e) {
 	console.error(e);
 }
-
+*/
 
 // Harmony analysis
 // - quadriadi + tese di triadi
