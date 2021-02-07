@@ -610,6 +610,7 @@ function playAndScroll(){
 
 function firstRender() {
     const pianoContainer = document.getElementById("output_block");
+    const playButton = document.getElementById("playButton");
     let pianoRollTable = createPianoRoll();
     pianoContainer.appendChild(pianoRollTable);
     let bar = createBar();
@@ -619,6 +620,7 @@ function firstRender() {
         if (!modelButton) {
           //noncliccabile();
             modelButton = true;
+            playButton.classList.add("playButtonActive");
             let maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
             finalProgression = finalProgression.slice(0,maxIndex);
             /*for (let index = 0; index < finalProgression.length; index++) {
@@ -631,6 +633,7 @@ function firstRender() {
             scrollInterval = setInterval(playAndScroll, 25);
             stopButton.onclick = function() {
                 modelButton = false;
+                playButton.classList.remove("playButtonActive");
                 clearInterval(scrollInterval);
             }
         };
@@ -643,7 +646,6 @@ function firstRender() {
         timeInterval=0;
         clearInterval(scrollInterval);
     }
-
     // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
     generaMatrice();
 }

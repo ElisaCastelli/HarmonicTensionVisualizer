@@ -30,7 +30,7 @@
                 /* options : HachiMaruPop */
                 /* options : East+Sea+Dokdo */
                 color: rgb(255, 255, 255);
-                width: 50%;
+                width: 25%;
                 text-align: left;
                 top: 24px;
                 margin-left: 5%;
@@ -58,7 +58,7 @@
                 position: absolute;
                 top: 45%;
                 left: 1%;
-                height: 48%;
+                height: 50%;
             }
 
             #bottom_panel {
@@ -125,6 +125,11 @@
                 position: fixed;
                 top: 25px;
                 color: rgb(63,132,87);
+                
+            }
+
+            .playButtonActive{
+                color: rgb(81, 187, 118);
             }
 
             #stopButton {
