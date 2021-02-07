@@ -335,7 +335,7 @@ const progPatterns = [{
 }];
 
 // here the magic happens
-function evaluateTension(progression){
+export function evaluateTension(progression){
 
 	// phase 1): select keys with highest number of compatible chords
 	let accepted_keys = findKey(progression); // array with selected keys
