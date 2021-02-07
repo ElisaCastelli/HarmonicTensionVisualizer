@@ -106,11 +106,11 @@ export function Chord(note, type) {
 	*/
 }
 
-export function ChordPlus(note, type, degree, curr_key) {
+export function ChordPlus(note, type, degree, curr_tonic, curr_scale) {
 	this.note = note;
 	this.type = type;
 	this.degree = degree;
-	this.curr_key = curr_key;
+	this.curr_key = [curr_tonic, curr_scale];
 	
 	this.type_coherent = true;
 	this.degree_coherent = true;
@@ -180,7 +180,7 @@ function getProgDegrees(progression, key){
 	let triad_check;
 	let quadriad_check;
 	for (let i = 0; i < progression.length; i++) {
-		degrees_progression[i] = new ChordPlus(progression[i].note, progression[i].type, getDegree(progression[i], key), key.scale);
+		degrees_progression[i] = new ChordPlus(progression[i].note, progression[i].type, getDegree(progression[i], key), key.tonic, key.scale);
 
 		if (degrees_progression[i].degree.includes("#") || degrees_progression[i].degree.includes("b")) {
 			degrees_progression[i].degree_coherent = false;
@@ -244,8 +244,13 @@ function findKey(progression){
 					
 					// this is just a statistic idea, tonic probably is at beginning and end of song
 					// ocio a logica e parentesi!! primo anno di università, dai
-					if((tonic_index == 0 || tonic_index == progression.length -1) && (triad_check || quadriad_check)){
-						tempKey.points+=2;
+					if((tonic_index == 0 /*|| tonic_index == progression.length -1*/) && (triad_check || quadriad_check)){
+						tempKey.points += 2;
+					}
+					else if (chord_degree == "V" && progression[chord].type == "7"){
+						tempKey.points += 2;
+						//if (chord_modes)
+						//chord_modes[chord].push(modes[scale].name);
 					}
 					else if (triad_check || quadriad_check){
 						tempKey.points++;
@@ -270,8 +275,12 @@ function findKey(progression){
 	accepted_keys.sort((a, b) => (a.points > b.points) ? -1 : 1);
 	// select the key/keys with highest .points value
 	let concurrent_keys = [];
-	while (accepted_keys[0].points == accepted_keys[1].points) {
-		concurrent_keys.push(accepted_keys.shift())
+	
+	for (let i = 0; i < accepted_keys.length; i++) {
+		if (accepted_keys[0].points == accepted_keys[1].points)
+			concurrent_keys.push(accepted_keys.shift());
+		else
+			break;
 	}
 	concurrent_keys.push(accepted_keys.shift());
 	return concurrent_keys;
@@ -326,7 +335,7 @@ const progPatterns = [{
 }];
 
 // here the magic happens
-export function evaluateTension(progression){
+function evaluateTension(progression){
 
 	// phase 1): select keys with highest number of compatible chords
 	let accepted_keys = findKey(progression); // array with selected keys
@@ -370,10 +379,11 @@ export function evaluateTension(progression){
 	priority_keys.push(key);
 	
 	let tempKeys = [];
+	let temp_deg_progression;
 	
 	// search for chords out of key
 	for (let i = 0; i < degrees_progression.length; i++) {
-		
+		console.log(degrees_progression[i])
 		if (!( degrees_progression[i].type_coherent && degrees_progression[i].degree_coherent)) {
 			
 			// OPTION A): MODAL INTERCHANGE
@@ -425,9 +435,25 @@ export function evaluateTension(progression){
 			// it is not the aim of the project to identify the correct interpretation
 			
 			// OPTION B): CHANGE OF SCALE
-			
-			if (i != 0 && degrees_progression[i - 1].degree == "V") {
-				
+			// check if from this point a new key is possible
+			//console.log("hey", progression.slice(i, progression.length))
+			tempkeys = findKey(progression.slice(i, progression.length));
+			// take the first one
+			temp_deg_progression = getProgDegrees(progression.slice(i, progression.length), tempkeys[0]);
+			console.log('keys found', tempkeys);
+			if (tempkeys[0].points > 1) {
+				for (let j = 0; j < progression.length - i; j++) {
+					degrees_progression[i + j] = temp_deg_progression[j];
+				}
+				// check also if some previous chords are both in current and original scale
+				temp_deg_progression = getProgDegrees(progression.slice(0, i), tempkeys[0]);
+				for (let j = i - 1; j > 0; j--) {
+					if (temp_deg_progression[j].type_coherent && temp_deg_progression[j].degree_coherent)
+						degrees_progression[j] = temp_deg_progression[j];
+					else
+						break;
+				}
+				continue;
 			}
 			
 		}
@@ -438,8 +464,7 @@ export function evaluateTension(progression){
 	
 	
 	// TENSION PROGRESSION
-	// let tension_progression = new Array(progression.length);
-	// tension_progression.fill(1);
+
 	// only for major scale, diatonic substitutions
 	if (modes[getScaleIndex(key.scale)].name == 'major (Ionian)'){
 		for (let i = 0; i < degrees_progression.length; i++) {
@@ -473,7 +498,7 @@ export function evaluateTension(progression){
 		for (let p = 0; p < progPatterns.length; p++) {
 			pattern = degrees_progression.slice(i, i + progPatterns[p].degrees.length);
 			found_pattern = true;
-			// check every following chord that belong to the current pattern
+			// check every following chord that could belong to the current pattern
 			for (let j = 0; j < pattern.length; j++) {
 				if (pattern[j].degree == progPatterns[p].degrees[j] && 
 						(pattern[j].type == progPatterns[p].triads[j] || 
@@ -484,6 +509,7 @@ export function evaluateTension(progression){
 					break;
 				}
 			}
+			// if every chord fit the pattern, update the tension and move on
 			if (found_pattern) {
 				console.log("found pattern:", progPatterns[p].name);
 				// substitute tension values in tension_progression
@@ -504,22 +530,26 @@ export function evaluateTension(progression){
 /*
 const progression = [];
 try {
-	progression.push(new Chord('C'));
+	progression.push(new Chord('F', 'maj7'));
+	progression.push(new Chord('F', 'maj7'));
+	progression.push(new Chord('F', 'maj7'));
+	progression.push(new Chord('G', 'min'));
 	progression.push(new Chord('A', 'min'));
-	progression.push(new Chord('D', 'min'));
-	progression.push(new Chord('G', '7'));
-	progression.push(new Chord('C'));
+	progression.push(new Chord('D', '7'));
+	progression.push(new Chord('G', 'maj7'));
+	progression.push(new Chord('A', 'min'));
+	progression.push(new Chord('G', 'maj7'));
 
 } catch (e) {
 	console.error(e);
 }
-
+*/
 console.log('\n ACCEPTED KEYS:\n', findKey(progression));
 try {
 	console.log("Progression degrees and tension array:\n", evaluateTension(progression));
 } catch (e) {
 	console.error(e);
-}*/
+}
 
 
 // Harmony analysis
