@@ -3,8 +3,9 @@
 import {type , allNotes1D , chordBuilder} from './chordBuilder.js';
 import { tensionChange , start } from './tensionAnimation.js';
 import { evaluateTension , Chord } from './harmonicAnalysis.js';
+import { readFile} from './readFile.js';
 
-var fileInput  = document.querySelector( ".input-file" );
+const fileInput = document.getElementById('file-input');
 
 // MODEL
 let numOctaves = 3;
@@ -276,6 +277,9 @@ function scroll() {
     }
 }
 
+function addNoteFromFile(chord, column){
+    //let indexMatrix = matrice.findIndex(x => x.)
+}
 
 function addNote(cell, idCell, columnNumber) {
     columnNumber = 19 - columnNumber;
@@ -509,8 +513,8 @@ resetNotes.onclick = function() {
     analysisResults= new Array();
 }
 
-folderIcon.onclick = function(){
-    fileInput.focus();  
+folderIcon.onchange = function(){
+    readFile(fileInput.files[0]);
 }
 
 /*readme.onclick = function() {
