@@ -155,8 +155,8 @@ function getDegree(chord, key){
 	let chord_deg_index = modes[getScaleIndex(key.scale)].intervals.indexOf(curr_interval);
 	// if note out of scale
 	if (chord_deg_index < 0){
-		chord_letter = chord.note.charAt(0);
-		tonic_letter = key.tonic.charAt(0);
+		let chord_letter = chord.note.charAt(0);
+		let tonic_letter = key.tonic.charAt(0);
 		let temp_degree = allnotes.letters.indexOf(chord_letter) - allnotes.letters.indexOf(tonic_letter);
 		// if the difference returns a negative value
 		if (temp_degree < 0) {
