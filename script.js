@@ -432,16 +432,18 @@ function resetSelect(columnNumber) {
 }
 
 function playAndScroll() {
-    
     scroll();
     if (timeInterval % 2350 == 0) {
         play();
-        console.log('column : ', Math.abs(columnPlayed + 2 - maxColumns))
-        console.log('tension : ', analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
-        tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
+        //console.log('column : ', Math.abs(columnPlayed + 2 - maxColumns))
+        //console.log('tension : ', analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
+        let maxColumnIndex = finalProgression.findIndex(x => typeof x == 'undefined');
+        if(columnPlayed<maxColumnIndex){
+            tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
+        }
+        
     }
     timeInterval += 25;
-    
 }
 
 function play() {
@@ -664,6 +666,7 @@ resetNotes.onclick = function() {
     columnPlayed = maxColumns - 1;
     finalProgression = new Array(20);
     analysisResults = new Array();
+    tensionChange(0);
 }
 
 folderIcon.onchange = function() {
@@ -748,6 +751,7 @@ function firstRender() {
                 modelButton = false;
                 playButton.classList.remove("playButtonActive");
                 clearInterval(scrollInterval);
+                tensionChange(0);
             }
         };
     }
@@ -758,6 +762,7 @@ function firstRender() {
             columnPlayed = maxColumns - 1;
             timeInterval = 0;
             clearInterval(scrollInterval);
+            tensionChange(0);
         }
         // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
     matrixConstructor();
