@@ -438,10 +438,10 @@ function playAndScroll() {
         //console.log('column : ', Math.abs(columnPlayed + 2 - maxColumns))
         //console.log('tension : ', analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
         let maxColumnIndex = finalProgression.findIndex(x => typeof x == 'undefined');
-        if(columnPlayed<maxColumnIndex){
+        if (columnPlayed < maxColumnIndex) {
             tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
         }
-        
+
     }
     timeInterval += 25;
 }
@@ -794,4 +794,8 @@ volumeDownButton.onclick = function() {
     if ((Volume - 1) >= minVolume)
         Volume--;
     else alert("Min Volume Reached");
+}
+
+git.onclick() = function() {
+    window.open("https://github.com/ElisaCastelli/HarmonicTensionVisualizer.git");
 }
