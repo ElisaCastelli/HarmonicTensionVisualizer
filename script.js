@@ -669,8 +669,8 @@ resetNotes.onclick = function() {
         modelButton = false;
         timeInterval = 0;
         columnPlayed = maxColumns - 1;
-        finalProgression = new Array(20);
-        analysisResults = new Array();
+        //finalProgression = new Array(20);
+        //analysisResults = new Array();
         firstPlay = true;
         tensionChange(0);
     }
@@ -754,6 +754,8 @@ function firstRender() {
             if(firstPlay){
                 bar.style.left = '93px';
                 tableBackscroll();
+            }
+            if(finalProgression.length == maxColumns){
                 maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
             }else{
                 maxIndex = finalProgression.length;
