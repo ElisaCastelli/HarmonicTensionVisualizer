@@ -434,14 +434,12 @@ function resetSelect(columnNumber) {
 function playAndScroll() {
     scroll();
     if (timeInterval % 2350 == 0) {
-        play();
-        //console.log('column : ', Math.abs(columnPlayed + 2 - maxColumns))
-        //console.log('tension : ', analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
-        let maxColumnIndex = finalProgression.findIndex(x => typeof x == 'undefined');
-        if(columnPlayed<maxColumnIndex){
+        if((maxColumns - columnPlayed-1)<finalProgression.length){
+            play();
+            //console.log('column : ', Math.abs(columnPlayed + 2 - maxColumns))
+            //console.log('tension : ', analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
             tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
         }
-        
     }
     timeInterval += 25;
 }
