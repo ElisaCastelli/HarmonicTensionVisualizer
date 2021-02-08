@@ -731,6 +731,7 @@ function refresh() {
 function firstRender() {
     const pianoContainer = document.getElementById("output_block");
     const playButton = document.getElementById("playButton");
+    
     let pianoRollTable = createPianoRoll();
     pianoContainer.appendChild(pianoRollTable);
     let bar = createBar();
@@ -739,6 +740,8 @@ function firstRender() {
     playButton.onclick = function() {
         if (!modelButton) {
             //noncliccabile();
+            tableBackscroll();
+            bar.style.left = '93px';
             modelButton = true;
             playButton.classList.add("playButtonActive");
             let maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
