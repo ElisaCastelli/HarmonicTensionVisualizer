@@ -1,9 +1,9 @@
 // IMPORT
 
-import {type , allNotes1D , chordBuilder} from './chordBuilder.js';
-import { tensionChange , start } from './tensionAnimation.js';
-import { evaluateTension , Chord } from './harmonicAnalysis.js';
-import {readProgression, downloadFile} from './readFile.js';
+import { type, allNotes1D, chordBuilder } from './chordBuilder.js';
+import { tensionChange, start } from './tensionAnimation.js';
+import { evaluateTension, Chord } from './harmonicAnalysis.js';
+import { readProgression, downloadFile } from './readFile.js';
 
 const fileInput = document.getElementById('file-input');
 
@@ -20,6 +20,9 @@ let analysisResults = new Array();
 let modelButton = false;
 
 // creazione synthetizer
+let muted = false;
+
+
 let sampler = new Tone.Sampler({
     "C2": "./piano/C2.mp3",
     "C#2": "./piano/Cs2.mp3",
@@ -58,7 +61,7 @@ let sampler = new Tone.Sampler({
     "A#4": "./piano/As4.mp3",
     "B4": "./piano/B4.mp3",
 }).set({
-    "volume": -8,
+    "volume": -4,
 }).toMaster();
 
 
@@ -121,26 +124,26 @@ function Note(ottava, nome, colonna, riga, id) {
     this.id = id;
     let selezionato = false; // booleano per definire se è selezionato o meno (Note attiva o disattiva)
     let selezionabile = false;
-    let root = false; 
+    let root = false;
 }
 
-function finalProgressionToString(){
+function finalProgressionToString() {
     let text = "";
-    for(let index = 0; index < maxColumns; index++){
-        if(typeof finalProgression[index] != 'undefined'){
-            text += finalProgression[index]+" ";
+    for (let index = 0; index < maxColumns; index++) {
+        if (typeof finalProgression[index] != 'undefined') {
+            text += finalProgression[index] + " ";
         }
     }
     return text;
 }
 
-function matrixToString(){
-    let text="";
-    for(let index = 0; index< numcell; index++){
-        if(matrice[index].selezionato == true){
-            text += 1+" ";
-        }else{
-            text += 0+" ";
+function matrixToString() {
+    let text = "";
+    for (let index = 0; index < numcell; index++) {
+        if (matrice[index].selezionato == true) {
+            text += 1 + " ";
+        } else {
+            text += 0 + " ";
         }
     }
     text += "\n";
@@ -156,8 +159,8 @@ function matrixConstructor() {
         for (let indiceRiga = (numOctaves * 12) - 1; indiceRiga >= 0; indiceRiga--) {
             numeroNota = indiceRiga % 12;
             numeroOttava = indiceRiga - numeroNota;
-            numeroOttava = numeroOttava / 12 +numOctavesMin;
-            let tmpNota = new Note(numeroOttava,key_color[numeroNota].pitch,  indiceColonna, indiceRiga,String(indice));
+            numeroOttava = numeroOttava / 12 + numOctavesMin;
+            let tmpNota = new Note(numeroOttava, key_color[numeroNota].pitch, indiceColonna, indiceRiga, String(indice));
             indice--;
             tmpNota.selezionabile = false;
             tmpNota.selezionato = false;
@@ -167,24 +170,24 @@ function matrixConstructor() {
     }
 }
 
-function fillMatrix(matrixRead){
+function fillMatrix(matrixRead) {
     let maxColumnIndex = finalProgression.findIndex(x => typeof x == 'undefined');
     unselectMatrix(maxColumnIndex);
     let indexMainMatrix = 0;
-    for(let index = 0; index < matrixRead.length; index++){
-        if(index%2 == 0){
-            if(matrixRead[index] == 1){
+    for (let index = 0; index < matrixRead.length; index++) {
+        if (index % 2 == 0) {
+            if (matrixRead[index] == 1) {
                 matrice[indexMainMatrix].selezionato = true;
             }
-            indexMainMatrix ++;
+            indexMainMatrix++;
         }
     }
     printMatrix();
 }
 
-function printMatrix(){
+function printMatrix() {
     matrice.forEach(element => {
-        if(element.selezionato){
+        if (element.selezionato) {
             let idCell = element.id;
             let cell = document.getElementById(idCell);
             cell.classList.add("selected_background");
@@ -194,8 +197,8 @@ function printMatrix(){
 
 function unselectMatrix(lastColumn) {
     let index = 0;
-    if(lastColumn>=0){
-        for(let indexColumn = maxColumns - 1; indexColumn >= lastColumn; indexColumn--){
+    if (lastColumn >= 0) {
+        for (let indexColumn = maxColumns - 1; indexColumn >= lastColumn; indexColumn--) {
             for (let indexRow = (numOctaves * 12) - 1; indexRow >= 0; indexRow--) {
                 if (matrice[index].selezionato == true) {
                     matrice[index].selezionato = false;
@@ -203,7 +206,7 @@ function unselectMatrix(lastColumn) {
                 if (matrice[index].root) {
                     matrice[index].root = false;
                 }
-                if(matrice[index].selezionabile){
+                if (matrice[index].selezionabile) {
                     matrice[index].selezionabile = false;
                 }
                 let idCell = matrice[index].id;
@@ -214,8 +217,8 @@ function unselectMatrix(lastColumn) {
                 index++;
             }
             resetSelect(indexColumn);
-        } 
-    }else{
+        }
+    } else {
         // se sono selezionate note singole
     }
 }
@@ -237,10 +240,10 @@ function clickableColumn(numCol) {
         cell.classList.remove("disabled");
         let indexMatrix = matrice.findIndex(x => (x.id == columnCell[index].id));
         if (matrice[indexMatrix].selezionato) {
-        	matrice[indexMatrix].selezionato = false;
+            matrice[indexMatrix].selezionato = false;
         }
         if (matrice[indexMatrix].root) {
-        	matrice[indexMatrix].root = false;
+            matrice[indexMatrix].root = false;
         }
     }
 }
@@ -267,7 +270,7 @@ function removeLightColor(numColumn) {
 function printSelectable(noteArray, columnNumber) {
     for (let index = 1; index < noteArray.length; index++) {
         let notesToPrint = matrice.filter(x => (x.nome == noteArray[index] && x.colonna == columnNumber));
-        for (let i = 0 ; i < notesToPrint.length ; i++) {
+        for (let i = 0; i < notesToPrint.length; i++) {
             let idCell = notesToPrint[i].id;
             let cell = document.getElementById(idCell);
             let indexCell = matrice.findIndex(x => x.id == idCell);
@@ -287,49 +290,49 @@ function chordTypeSelected(columnNumber, chordType) {
         let shape = type[type.findIndex(x => x.name == chordType)].shape;
         let noteArray = chordBuilder(noteNumber, shape);
         printSelectable(noteArray, columnNumber);
-        let chord = new Chord(noteName , chordType);
-        finalProgression[Math.abs(maxColumns-columnNumber-1)] = chord ;
+        let chord = new Chord(noteName, chordType);
+        finalProgression[Math.abs(maxColumns - columnNumber - 1)] = chord;
         // console.log(finalProgression); // da togliere
     }
 }
 
-function fillFinalProgression(progressionRead){
+function fillFinalProgression(progressionRead) {
     finalProgression = new Array(maxColumns);
-    progressionRead = progressionRead.substring(1,progressionRead.length);
+    progressionRead = progressionRead.substring(1, progressionRead.length);
     let indexSpace = 0;
     let indexProgression = 0;
-    while(progressionRead!= " "){
+    while (progressionRead != " ") {
         indexSpace = progressionRead.indexOf(" ");
-        let chordString = progressionRead.substring(0,indexSpace);
+        let chordString = progressionRead.substring(0, indexSpace);
         let chord = new Chord();
-        let type="";
+        let type = "";
         let note = chordString[0];
         let secondChar = chordString[1];
-        if(secondChar=="#"){
-            note = note+secondChar;
+        if (secondChar == "#") {
+            note = note + secondChar;
         }
-        type=chordString.substring(note.length,chordString.length);
-        chord.note=note;
-        chord.type=type;
-        finalProgression[indexProgression]=chord;
-        progressionRead= progressionRead.slice(indexSpace, progressionRead.length);
+        type = chordString.substring(note.length, chordString.length);
+        chord.note = note;
+        chord.type = type;
+        finalProgression[indexProgression] = chord;
+        progressionRead = progressionRead.slice(indexSpace, progressionRead.length);
         indexProgression++;
     }
     console.log(finalProgression);
 }
 
-function selectRoot(){
+function selectRoot() {
     let maxColumnIndex = finalProgression.findIndex(x => typeof x == 'undefined');
-    for(let index = 0; index<maxColumnIndex; index++){
-        let chord =finalProgression[index];
+    for (let index = 0; index < maxColumnIndex; index++) {
+        let chord = finalProgression[index];
         let note = chord.note;
         let type = chord.type;
-        let indexMatrix = matrice.findIndex(x => x.nome == note && x.colonna == (maxColumns-1-index) && x.selezionato==true);
-        if(indexMatrix!=null){
+        let indexMatrix = matrice.findIndex(x => x.nome == note && x.colonna == (maxColumns - 1 - index) && x.selezionato == true);
+        if (indexMatrix != null) {
             matrice[indexMatrix].root = true;
             let col = matrice[indexMatrix].colonna;
-            let select = document.getElementById("select"+col);
-            select.value=type;
+            let select = document.getElementById("select" + col);
+            select.value = type;
         }
     }
 }
@@ -351,15 +354,15 @@ function scroll() {
     let containerWidth = pianoContainer.offsetWidth;
     if (barRightPos < containerWidth / 2) {
         bar.style.left = (barLeftPos + speed * direction) + 'px';
-    }else if (tableScroll.scrollWidth - tableScroll.scrollLeft > containerWidth) {
-        tableScroll.scrollLeft +=1;
+    } else if (tableScroll.scrollWidth - tableScroll.scrollLeft > containerWidth) {
+        tableScroll.scrollLeft += 1;
     } else if (barRightPos < tableScroll.offsetWidth) {
         bar.style.left = (barLeftPos + speed * direction) + 'px';
     }
 }
 
-function addTone(cell , columnNumber , matrixIndex) {
-    if (matrice[matrixIndex].selezionato == true){
+function addTone(cell, columnNumber, matrixIndex) {
+    if (matrice[matrixIndex].selezionato == true) {
         matrice[matrixIndex].selezionato = false;
     } else {
         matrice[matrixIndex].selezionato = true;
@@ -368,7 +371,7 @@ function addTone(cell , columnNumber , matrixIndex) {
     cell.classList.toggle("selected_background");
 
     let sameNote = matrice.filter(x => (x.colonna == columnNumber && x.nome == matrice[matrixIndex].nome));
-    for (let i=0 ; i< sameNote.length ; i++) {
+    for (let i = 0; i < sameNote.length; i++) {
         let sameNoteid = sameNote[i].id;
         let sameNoteCell = document.getElementById(sameNoteid);
         sameNoteCell.classList.toggle("disabled");
@@ -393,9 +396,9 @@ function addNote(cell, idCell, columnNumber) {
     }
 
     // adding or removing chord tones
-    for (let i=0 ; i<noteSelezionabili.length ; i++) {
-        if (noteSelezionabili[i].id == idCell ) {
-            addTone(cell , columnNumber , matrixIndex);
+    for (let i = 0; i < noteSelezionabili.length; i++) {
+        if (noteSelezionabili[i].id == idCell) {
+            addTone(cell, columnNumber, matrixIndex);
         }
     }
 
@@ -409,8 +412,8 @@ function addRoot(cell, matrixIndex) {
     unclickableColumn(matrice[matrixIndex].colonna);
 }
 
-function removeAll (columnNumber) {
-    for (let i=0 ; i<matrice.length ; i++) {
+function removeAll(columnNumber) {
+    for (let i = 0; i < matrice.length; i++) {
         matrice[i].selezionato = false;
         matrice[i].selezionabile = false;
         matrice[i].root = false;
@@ -422,81 +425,81 @@ function removeAll (columnNumber) {
     resetSelect(columnNumber);
 }
 
-function resetSelect(columnNumber){
-    let select = document.getElementById("select"+columnNumber);
+function resetSelect(columnNumber) {
+    let select = document.getElementById("select" + columnNumber);
     select.value = "default";
 }
 
-function playAndScroll(){
-    timeInterval +=25;
-    if(timeInterval%2350 == 0){
-      play();
-      console.log('column : ', Math.abs(columnPlayed + 2 - maxColumns))
-      console.log('tension : ', analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
-      tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
+function playAndScroll() {
+    timeInterval += 25;
+    if (timeInterval % 2350 == 0) {
+        play();
+        console.log('column : ', Math.abs(columnPlayed + 2 - maxColumns))
+        console.log('tension : ', analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
+        tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
     }
     scroll();
 }
-  
+
 function play() {
-      let noteSelected = new Array();
-      let vettoreNote = new Array();
-      noteSelected = matrice.filter(x => (x.colonna == columnPlayed && x.selezionato == true));
-      if (noteSelected != null) {
-          for (let index = 0; index < noteSelected.length; index++) {
-              let nomeNota = noteSelected[index].nome;
-              let octave = noteSelected[index].ottava;
-              vettoreNote.push(nomeNota + octave);
-          }
-          console.log(vettoreNote);
-          if(vettoreNote.length == 4){
+    let noteSelected = new Array();
+    let vettoreNote = new Array();
+    noteSelected = matrice.filter(x => (x.colonna == columnPlayed && x.selezionato == true));
+    if (noteSelected != null) {
+        for (let index = 0; index < noteSelected.length; index++) {
+            let nomeNota = noteSelected[index].nome;
+            let octave = noteSelected[index].ottava;
+            vettoreNote.push(nomeNota + octave);
+        }
+        console.log(vettoreNote);
+        if (vettoreNote.length == 3) {
             sampler.triggerAttackRelease([vettoreNote[0], vettoreNote[1], vettoreNote[2]], 2);
-          }else{
+        } else if (vettoreNote.length == 4) {
             sampler.triggerAttackRelease([vettoreNote[0], vettoreNote[1], vettoreNote[2], vettoreNote[3]], 2);
-          }
-      }
-      vettoreNote = [];
-      columnPlayed--;
-      sampler = new Tone.Sampler({
-          "C2": "./piano/C2.mp3",
-          "C#2": "./piano/Cs2.mp3",
-          "D2": "./piano/D2.mp3",
-          "D#2": "./piano/Ds2.mp3",
-          "E2": "./piano/E2.mp3",
-          "F2": "./piano/F2.mp3",
-          "F#2": "./piano/Fs2.mp3",
-          "G2": "./piano/G2.mp3",
-          "G#2": "./piano/Gs2.mp3",
-          "A2": "./piano/A2.mp3",
-          "A#2": "./piano/As2.mp3",
-          "B2": "./piano/B2.mp3",
-          "C3": "./piano/C3.mp3",
-          "C#3": "./piano/Cs3.mp3",
-          "D3": "./piano/D3.mp3",
-          "D#3": "./piano/Ds3.mp3",
-          "E3": "./piano/E3.mp3",
-          "F3": "./piano/F3.mp3",
-          "F#3": "./piano/Fs3.mp3",
-          "G3": "./piano/G3.mp3",
-          "G#3": "./piano/Gs3.mp3",
-          "A3": "./piano/A3.mp3",
-          "A#3": "./piano/As3.mp3",
-          "B3": "./piano/B3.mp3",
-          "C4": "./piano/C4.mp3",
-          "C#4": "./piano/Cs4.mp3",
-          "D4": "./piano/D4.mp3",
-          "D#4": "./piano/Ds4.mp3",
-          "E4": "./piano/E4.mp3",
-          "F4": "./piano/F4.mp3",
-          "F#4": "./piano/Fs4.mp3",
-          "G4": "./piano/G4.mp3",
-          "G#4": "./piano/Gs4.mp3",
-          "A4": "./piano/A4.mp3",
-          "A#4": "./piano/As4.mp3",
-          "B4": "./piano/B4.mp3",
-      }).set({
-          "volume": -8,
-      }).toMaster();
+        }
+    }
+    vettoreNote = [];
+    columnPlayed--;
+    sampler = new Tone.Sampler({
+        "C2": "./piano/C2.mp3",
+        "C#2": "./piano/Cs2.mp3",
+        "D2": "./piano/D2.mp3",
+        "D#2": "./piano/Ds2.mp3",
+        "E2": "./piano/E2.mp3",
+        "F2": "./piano/F2.mp3",
+        "F#2": "./piano/Fs2.mp3",
+        "G2": "./piano/G2.mp3",
+        "G#2": "./piano/Gs2.mp3",
+        "A2": "./piano/A2.mp3",
+        "A#2": "./piano/As2.mp3",
+        "B2": "./piano/B2.mp3",
+        "C3": "./piano/C3.mp3",
+        "C#3": "./piano/Cs3.mp3",
+        "D3": "./piano/D3.mp3",
+        "D#3": "./piano/Ds3.mp3",
+        "E3": "./piano/E3.mp3",
+        "F3": "./piano/F3.mp3",
+        "F#3": "./piano/Fs3.mp3",
+        "G3": "./piano/G3.mp3",
+        "G#3": "./piano/Gs3.mp3",
+        "A3": "./piano/A3.mp3",
+        "A#3": "./piano/As3.mp3",
+        "B3": "./piano/B3.mp3",
+        "C4": "./piano/C4.mp3",
+        "C#4": "./piano/Cs4.mp3",
+        "D4": "./piano/D4.mp3",
+        "D#4": "./piano/Ds4.mp3",
+        "E4": "./piano/E4.mp3",
+        "F4": "./piano/F4.mp3",
+        "F#4": "./piano/Fs4.mp3",
+        "G4": "./piano/G4.mp3",
+        "G#4": "./piano/Gs4.mp3",
+        "A4": "./piano/A4.mp3",
+        "A#4": "./piano/As4.mp3",
+        "B4": "./piano/B4.mp3",
+    }).set({
+        "volume": -8,
+    }).toMaster();
 }
 
 // VIEW
@@ -504,12 +507,12 @@ function play() {
 start;
 tensionChange(0);
 
-function createFixedColumn(scaleNumber, noteNumber){
+function createFixedColumn(scaleNumber, noteNumber) {
     const fixedColumn = document.createElement("th");
     fixedColumn.classList.add("leftstop");
     let color = key_color[noteNumber].color;
     fixedColumn.classList.add(color);
-    let label = key_color[noteNumber].pitch+" "+scaleNumber;
+    let label = key_color[noteNumber].pitch + " " + scaleNumber;
     let divLabel = document.createElement("div");
     var t = document.createTextNode(label);
     divLabel.appendChild(t);
@@ -520,7 +523,7 @@ function createFixedColumn(scaleNumber, noteNumber){
 
 function createRow(scaleNumber, noteNumber) {
     const row = document.createElement("tr");
-    let rowNumber = numOctaves * 12 - ((scaleNumber-numOctavesMin) * 12 + noteNumber) - 1;
+    let rowNumber = numOctaves * 12 - ((scaleNumber - numOctavesMin) * 12 + noteNumber) - 1;
     // per ogni riga aggiungo la prima colonna che rimarrà fissa e poi tutte le altre
     let fixedColumn = createFixedColumn(scaleNumber, noteNumber);
     row.appendChild(fixedColumn);
@@ -553,7 +556,7 @@ function createHeader() {
         // creazione prima riga di chord type
         if (columnNumber != maxColumns) {
             const select = document.createElement("select");
-            select.setAttribute("id", "select"+columnNumber);
+            select.setAttribute("id", "select" + columnNumber);
             const option0 = document.createElement("option");
             option0.text = "Chord type";
             option0.setAttribute("value", "default");
@@ -593,13 +596,13 @@ function createHeader() {
             select.addEventListener("change", function(event) {
                 let chordType = this.value;
                 removeLightColor(columnNumber);
-                if(chordType!="default"){
-                  chordTypeSelected(columnNumber, chordType);
+                if (chordType != "default") {
+                    chordTypeSelected(columnNumber, chordType);
                 }
             }, false);
             cell.appendChild(select);
 
-        } 
+        }
         row.appendChild(cell);
     }
     table_head.appendChild(row);
@@ -608,18 +611,18 @@ function createHeader() {
 
 function createTable() {
     const main_table = document.createElement("table");
-  	let table_head = createHeader();
-  	const table_body =document.createElement("tbody");
+    let table_head = createHeader();
+    const table_body = document.createElement("tbody");
     //per ogni nota creo una riga della tabella e la carico nella tabella
-    for(let rowNumber = numOctaves * key_color.length - 1; rowNumber >= 0; rowNumber--){
-      let scaleNumber = Math.floor(rowNumber/key_color.length);
-      let noteNumber = rowNumber - (key_color.length * scaleNumber);
-      scaleNumber = scaleNumber + numOctavesMin;
-      let row = createRow(scaleNumber, noteNumber);
-      table_body.appendChild(row);
+    for (let rowNumber = numOctaves * key_color.length - 1; rowNumber >= 0; rowNumber--) {
+        let scaleNumber = Math.floor(rowNumber / key_color.length);
+        let noteNumber = rowNumber - (key_color.length * scaleNumber);
+        scaleNumber = scaleNumber + numOctavesMin;
+        let row = createRow(scaleNumber, noteNumber);
+        table_body.appendChild(row);
     }
-  	main_table.appendChild(table_head);
-  	main_table.appendChild(table_body);
+    main_table.appendChild(table_head);
+    main_table.appendChild(table_body);
     return main_table;
 }
 
@@ -627,13 +630,13 @@ function createPianoRoll() {
     const pianoRollTable = document.createElement("div");
     pianoRollTable.classList.add("table-scroll");
     pianoRollTable.classList.add("mainTable");
-  	pianoRollTable.setAttribute("id", "table-scroll");
-    const table_wrap =document.createElement("div");
+    pianoRollTable.setAttribute("id", "table-scroll");
+    const table_wrap = document.createElement("div");
     table_wrap.classList.add("table-wrap");
-  	let main_table = createTable();
-  	table_wrap.appendChild(main_table);
+    let main_table = createTable();
+    table_wrap.appendChild(main_table);
     pianoRollTable.appendChild(table_wrap);
-  	return pianoRollTable;
+    return pianoRollTable;
 }
 
 function createBar() {
@@ -655,39 +658,39 @@ resetNotes.onclick = function() {
     unselectMatrix(lengthChordArray);
     modelButton = false;
     timeInterval = 0;
-    columnPlayed= maxColumns-1;
-    finalProgression= new Array(20);
-    analysisResults= new Array();
+    columnPlayed = maxColumns - 1;
+    finalProgression = new Array(20);
+    analysisResults = new Array();
 }
 
-folderIcon.onchange = function(){
+folderIcon.onchange = function() {
     read(fileInput.files[0]);
 }
 
-function read(file){
+function read(file) {
     let textType = /text.*/;
-    let matrixString="";
-    let progressionString="";
-	if (file.type.match(textType)) {
-		let reader = new FileReader();
-        reader.readAsText(file);	
-		reader.onload = function(e) {
+    let matrixString = "";
+    let progressionString = "";
+    if (file.type.match(textType)) {
+        let reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = function(e) {
             let text = reader.result;
             let lastIndex = text.indexOf("\n");
-            matrixString = text.substring(0,lastIndex);
+            matrixString = text.substring(0, lastIndex);
             //console.log(matrixString);
             fillMatrix(matrixString);
             progressionString = text.substring(lastIndex, text.length);
             fillFinalProgression(progressionString);
             selectRoot();
-		}
-	} else {
+        }
+    } else {
         console.log("File not supported!");
-	} 
+    }
 }
 
 
-downloadButton.onclick = function(){
+downloadButton.onclick = function() {
     let fileName = "MyChordProgression";
     let text = matrixToString();
     downloadFile(fileName, text);
@@ -709,12 +712,12 @@ contact_us.onclick = function() {
 // cancella tutto il contenuto del piano roll
 function refresh() {
     matrice = [];
-    timeInterval=0;
+    timeInterval = 0;
     tableBackscroll();
-    columnPlayed= maxColumns-1;
-    finalProgression=[];
-    analysisResults=[];
-    bar.style.left='93px';
+    columnPlayed = maxColumns - 1;
+    finalProgression = [];
+    analysisResults = [];
+    bar.style.left = '93px';
     const pianoContainer = document.getElementById("output_block");
     while (pianoContainer.lastChild) {
         pianoContainer.removeChild(pianoContainer.lastChild);
@@ -733,11 +736,11 @@ function firstRender() {
     let scrollInterval;
     playButton.onclick = function() {
         if (!modelButton) {
-          //noncliccabile();
+            //noncliccabile();
             modelButton = true;
             playButton.classList.add("playButtonActive");
             let maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
-            finalProgression = finalProgression.slice(0,maxIndex);
+            finalProgression = finalProgression.slice(0, maxIndex);
             analysisResults = evaluateTension(finalProgression);
             scrollInterval = setInterval(playAndScroll, 25);
             stopButton.onclick = function() {
@@ -748,14 +751,14 @@ function firstRender() {
         };
     }
     rewindButton.onclick = function() {
-        tableBackscroll();
-        bar.style.left='93px';
-        modelButton = false;
-        columnPlayed = maxColumns-1;
-        timeInterval=0;
-        clearInterval(scrollInterval);
-    }
-    // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
+            tableBackscroll();
+            bar.style.left = '93px';
+            modelButton = false;
+            columnPlayed = maxColumns - 1;
+            timeInterval = 0;
+            clearInterval(scrollInterval);
+        }
+        // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
     matrixConstructor();
 }
 
@@ -770,4 +773,9 @@ function noncliccabile() {
         cell = document.getElementById(idCell);
         cell.classList.add("disabled");
     });
+}
+
+muteButton.onclick = function() {
+    muted = !muted;
+    Tone.Master.mute = muted;
 }
