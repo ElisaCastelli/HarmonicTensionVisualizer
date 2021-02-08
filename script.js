@@ -751,10 +751,10 @@ function firstRender() {
             modelButton = true;
             //noncliccabile();
             let maxIndex=0;
-            if(firstPlay){
+            /*if(firstPlay){
                 bar.style.left = '93px';
                 tableBackscroll();
-            }
+            }*/
             if(finalProgression.length == maxColumns){
                 maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
             }else{
