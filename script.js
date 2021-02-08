@@ -1,5 +1,5 @@
 // IMPORT
-
+// bug su chrome da sistemare
 import { type, allNotes1D, chordBuilder } from './chordBuilder.js';
 import { tensionChange, start } from './tensionAnimation.js';
 import { evaluateTension, Chord } from './harmonicAnalysis.js';
