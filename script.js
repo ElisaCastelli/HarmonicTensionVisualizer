@@ -725,8 +725,6 @@ function refresh() {
     }
 }
 
-
-
 function firstRender() {
     const pianoContainer = document.getElementById("output_block");
     const playButton = document.getElementById("playButton");
@@ -778,6 +776,7 @@ muteButton.onclick = function() {
     muted = !muted;
     Tone.Master.mute = muted;
 }
+
 volumeUpButton.onclick = function() {
     if ((Volume + 1) <= MaxVolume)
         Volume++;
@@ -785,7 +784,7 @@ volumeUpButton.onclick = function() {
 }
 
 volumeDownButton.onclick = function() {
-    if ((Volume - 1) <= minVolume)
+    if ((Volume - 1) >= minVolume)
         Volume--;
     else alert("Min Volume Reached");
 }
