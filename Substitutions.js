@@ -1,32 +1,18 @@
-function diatonicSub(grado) {
-    // vale solo per il primo grado
-    possibleSub = [(7 + (grado - 2)) % 7 , (grado + 2) % 7 ] // risultato tra 0 e 6
-    return possibleSub
-}
+import { Chord, ChordPlus } from './harmonicAnalysis.js';
+import { allNotes1D } from './chordBuilder.js';
 
-// permette di fare una sostituzione di dominante
-function diminishedDomSub(chord) {
-    flatNine = (chord[-1] +3) % 12
-    chord.push(flatNine);
-    chord.splice(0,1);
-    return chord
-}
+// permette di ritrovare l'accordo originale della sostituzione di dominante diminuita
 
-// considerare il VII come V nel II V I
-
-// permette di ritrovare l'accordo originale della sostituzione
-function reverseDiminishedDomSub(chord) {
-    tonic = (12 + (chord[0] - 4)) % 12
-    chord.unshift(tonic)
-    chord.splice(4,1)
-    return chord
-}
-
-function tritoneSub(chord) {
-    tonic = chord[0]
-    subTonic = ( 12 + (tonic - 6)) % 12
-    subChord = chordBuilder(subTonic , [4,7,10])
+export function DiminishedDomSub(Chord) {
+    let tonic = allNotes1D[ (12 + (allNotes1D.indexOf(Chord.note) - 4)) % 12 ];
+    let subChord = new Chord(tonic, '7');
     return subChord
 }
 
-// controllo cambio modale
+// permette di trovare la sostituzione di tritono
+
+export function tritoneSub(Chord) {
+    let note = allNotes1D[ (allNotes1D.indexOf(Chord.note) + 6) % 12 ];
+    let subChord = new Chord(note, '7');
+    return subChord
+}
