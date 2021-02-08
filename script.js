@@ -433,25 +433,13 @@ function resetSelect(columnNumber) {
 
 function playAndScroll() {
     scroll();
-<<<<<<< HEAD
-    if (timeInterval % 2350 == 0) {
-        play();
-        //console.log('column : ', Math.abs(columnPlayed + 2 - maxColumns))
-        //console.log('tension : ', analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
-        let maxColumnIndex = finalProgression.findIndex(x => typeof x == 'undefined');
-        if (columnPlayed < maxColumnIndex) {
-            tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
-        }
-
-=======
     if (timeInterval % 2700 == 0) {
-        if((maxColumns - columnPlayed-1)<finalProgression.length){
+        if ((maxColumns - columnPlayed - 1) < finalProgression.length) {
             play();
             //console.log('column : ', Math.abs(columnPlayed + 2 - maxColumns))
             //console.log('tension : ', analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
             tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
         }
->>>>>>> e66d21ed5523e7888bc4d59bfceedac1a7f4e694
     }
     timeInterval += 25;
 }
@@ -804,8 +792,4 @@ volumeDownButton.onclick = function() {
     if ((Volume - 1) >= minVolume)
         Volume--;
     else alert("Min Volume Reached");
-}
-
-git.onclick() = function() {
-    window.open("https://github.com/ElisaCastelli/HarmonicTensionVisualizer.git");
 }
