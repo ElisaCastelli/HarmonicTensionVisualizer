@@ -432,14 +432,16 @@ function resetSelect(columnNumber) {
 }
 
 function playAndScroll() {
-    timeInterval += 25;
+    
+    scroll();
     if (timeInterval % 2350 == 0) {
         play();
         console.log('column : ', Math.abs(columnPlayed + 2 - maxColumns))
         console.log('tension : ', analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
         tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
     }
-    scroll();
+    timeInterval += 25;
+    
 }
 
 function play() {
