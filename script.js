@@ -18,6 +18,7 @@ let matrice = new Array();
 let finalProgression = new Array(maxColumns);
 let analysisResults = new Array();
 let modelButton = false;
+let firstPlay = true;
 
 // creazione synthetizer
 let muted = false;
@@ -670,6 +671,7 @@ resetNotes.onclick = function() {
         columnPlayed = maxColumns - 1;
         finalProgression = new Array(20);
         analysisResults = new Array();
+        firstPlay = true;
         tensionChange(0);
     }
 }
@@ -746,18 +748,24 @@ function firstRender() {
     let scrollInterval;
     playButton.onclick = function() {
         if (!modelButton) {
-            //noncliccabile();
-            tableBackscroll();
-            bar.style.left = '93px';
             modelButton = true;
-            playButton.classList.add("playButtonActive");
-            let maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
+            //noncliccabile();
+            let maxIndex=0;
+            if(firstPlay){
+                bar.style.left = '93px';
+                tableBackscroll();
+                maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
+            }else{
+                maxIndex = finalProgression.length;
+            }
+            //playButton.classList.add("playButtonActive");
             finalProgression = finalProgression.slice(0, maxIndex);
             analysisResults = evaluateTension(finalProgression);
             scrollInterval = setInterval(playAndScroll, 25);
             stopButton.onclick = function() {
                 modelButton = false;
-                playButton.classList.remove("playButtonActive");
+                firstPlay = false;
+                //playButton.classList.remove("playButtonActive");
                 clearInterval(scrollInterval);
                 tensionChange(0);
             }
@@ -772,6 +780,7 @@ function firstRender() {
             timeInterval = 0;
             clearInterval(scrollInterval);
             tensionChange(0);
+            firstPlay = true;
         }
         // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
     matrixConstructor();
