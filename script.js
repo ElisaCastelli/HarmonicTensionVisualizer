@@ -298,7 +298,7 @@ function fillFinalProgression(progressionRead){
     progressionRead = progressionRead.substring(1,progressionRead.length);
     let indexSpace = 0;
     let indexProgression = 0;
-    while(progressionRead!= " "){
+    while(progressionRead!= ""){
         indexSpace = progressionRead.indexOf(" ");
         let chordString = progressionRead.substring(0,indexSpace);
         let chord = new Chord();
@@ -312,7 +312,7 @@ function fillFinalProgression(progressionRead){
         chord.note=note;
         chord.type=type;
         finalProgression[indexProgression]=chord;
-        progressionRead= progressionRead.slice(indexSpace, progressionRead.length);
+        progressionRead= progressionRead.slice(indexSpace+1, progressionRead.length);
         indexProgression++;
     }
     console.log(finalProgression);
