@@ -433,6 +433,7 @@ function resetSelect(columnNumber) {
 
 function playAndScroll() {
     scroll();
+<<<<<<< HEAD
     if (timeInterval % 2350 == 0) {
         play();
         //console.log('column : ', Math.abs(columnPlayed + 2 - maxColumns))
@@ -442,6 +443,15 @@ function playAndScroll() {
             tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
         }
 
+=======
+    if (timeInterval % 2700 == 0) {
+        if((maxColumns - columnPlayed-1)<finalProgression.length){
+            play();
+            //console.log('column : ', Math.abs(columnPlayed + 2 - maxColumns))
+            //console.log('tension : ', analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
+            tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
+        }
+>>>>>>> e66d21ed5523e7888bc4d59bfceedac1a7f4e694
     }
     timeInterval += 25;
 }
