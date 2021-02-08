@@ -349,7 +349,7 @@ function scroll() {
     const bar = document.getElementById("scrollingBar");
     const pianoContainer = document.getElementById("output_block");
     const tableScroll = document.getElementById("table-scroll");
-    let speed = 0.6;
+    let speed = 1;
     let direction = 1;
     let barLeftPos = bar.offsetLeft,
         barRightPos = barLeftPos + bar.offsetWidth;
