@@ -88,11 +88,19 @@
                 font-size: x-large;
             }
 
-            #volume_range {
+            /*#logo{
+                background: url(/poli.png);
+                position:relative;
+                width:400px;
+                height: 40px;
+                left:30%;
+            }*/
+
+            /*#volume_range {
                 position: fixed;
                 right: 1%;
                 top: 25px;
-            }
+            }*/
 
             .scrollButton {
                 position: fixed;

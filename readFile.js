@@ -1,31 +1,39 @@
-export function readFile(file){
+export function readMatrice(file){
     let textType = /text.*/;
+    let matrixString="";
+    //let matrixSelected = new Array();
 	if (file.type.match(textType)) {
 		let reader = new FileReader();
         reader.readAsText(file);	
 		reader.onload = function(e) {
             let text = reader.result;
-            let lastIndex = text.indexOf("]");
-            // parsing chords
-            while(lastIndex >=0){
-                let firstIndex = text.indexOf("[") +1;
-                let firstChord = text.substring(firstIndex, lastIndex);
-                let textTemp = text.slice(lastIndex+1, text.length);
-                text ="";
-                text = textTemp;
-                //print cells from firstChord
-                console.log(firstChord);
-                console.log(lastIndex);
-                lastIndex = text.indexOf("]");
-            }
-            
+            let lastIndex = text.indexOf("\n");
+            matrixString = text.substring(0,lastIndex);
+            console.log(matrixString);
 		}
-		
 	} else {
         console.log("File not supported!");
 	} 
+    return matrixString;
 }
 
+export function readProgression(file){
+    let textType = /text.*/;
+    let finalProgressionSelected = new Array();
+	if (file.type.match(textType)) {
+		let reader = new FileReader();
+        reader.readAsText(file);	
+		reader.onload = function(e) {
+            let text = reader.result;
+            let lastIndex = text.indexOf("\n");
+            let finalProgString = text.substring(lastIndex, text.length);
+            console.log(finalProgString);
+		}
+	} else {
+        console.log("File not supported!");
+	} 
+    return finalProgressionSelected;
+}
 
 export function downloadFile(filename, text){
     var element = document.createElement('a');

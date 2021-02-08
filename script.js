@@ -3,7 +3,7 @@
 import {type , allNotes1D , chordBuilder} from './chordBuilder.js';
 import { tensionChange , start } from './tensionAnimation.js';
 import { evaluateTension , Chord } from './harmonicAnalysis.js';
-import { readFile, downloadFile} from './readFile.js';
+import {readProgression, downloadFile} from './readFile.js';
 
 const fileInput = document.getElementById('file-input');
 
@@ -148,7 +148,7 @@ function matrixToString(){
     return text;
 }
 
-function generaMatrice() {
+function matrixConstructor() {
     let numeroOttava = 0;
     let numeroNota = 0;
     let indice = numcell;
@@ -165,6 +165,31 @@ function generaMatrice() {
         }
 
     }
+}
+
+function fillMatrix(matrixRead){
+    let maxColumnIndex = finalProgression.findIndex(x => typeof x == 'undefined');
+    unselectMatrix(maxColumnIndex);
+    let indexMainMatrix = 0;
+    for(let index = 0; index < matrixRead.length; index++){
+        if(index%2 == 0){
+            if(matrixRead[index] == 1){
+                matrice[indexMainMatrix].selezionato = true;
+            }
+            indexMainMatrix ++;
+        }
+    }
+    printMatrix();
+}
+
+function printMatrix(){
+    matrice.forEach(element => {
+        if(element.selezionato){
+            let idCell = element.id;
+            let cell = document.getElementById(idCell);
+            cell.classList.add("selected_background");
+        }
+    });
 }
 
 function unselectMatrix(lastColumn) {
@@ -194,6 +219,7 @@ function unselectMatrix(lastColumn) {
         // se sono selezionate note singole
     }
 }
+
 function unclickableColumn(numCol) {
     let columnCell = matrice.filter(x => (x.colonna == numCol && x.selezionato == false));
     for (let index = 0; index < columnCell.length; index++) {
@@ -267,6 +293,24 @@ function chordTypeSelected(columnNumber, chordType) {
     }
 }
 
+function fillFinalProgression(progressionRead){
+    finalProgression = new Array(maxColumns);
+    progressionRead = progressionRead.substring(1,progressionRead.length);
+    let indexSpace = 0;
+    let indexProgression = 0;
+    while(progressionRead!= " "){
+        indexSpace = progressionRead.indexOf(" ");
+        finalProgression[indexProgression]=progressionRead.substring(0,indexSpace);
+        progressionRead= progressionRead.slice(indexSpace, progressionRead.length);
+        indexProgression++;
+    }
+    console.log(finalProgression);
+}
+
+function selectRoot(){
+
+}
+
 // CONTROLLER
 function tableBackscroll() {
     const table = document.getElementById("table-scroll");
@@ -293,6 +337,24 @@ function scroll() {
 
 function addNoteFromFile(chord, column){
     //let indexMatrix = matrice.findIndex(x => x.)
+}
+
+function addTone(cell , columnNumber , matrixIndex) {
+    if (matrice[matrixIndex].selezionato == true){
+        matrice[matrixIndex].selezionato = false;
+    } else {
+        matrice[matrixIndex].selezionato = true;
+    }
+    cell.classList.toggle("disabled");
+    cell.classList.toggle("selected_background");
+
+    let sameNote = matrice.filter(x => (x.colonna == columnNumber && x.nome == matrice[matrixIndex].nome));
+    for (let i=0 ; i< sameNote.length ; i++) {
+        let sameNoteid = sameNote[i].id;
+        let sameNoteCell = document.getElementById(sameNoteid);
+        sameNoteCell.classList.toggle("disabled");
+        sameNoteCell.classList.toggle("light_background");
+    }
 }
 
 function addNote(cell, idCell, columnNumber) {
@@ -346,22 +408,76 @@ function resetSelect(columnNumber){
     select.value = "default";
 }
 
-function addTone(cell , columnNumber , matrixIndex) {
-    if (matrice[matrixIndex].selezionato == true){
-        matrice[matrixIndex].selezionato = false;
-    } else {
-        matrice[matrixIndex].selezionato = true;
+function playAndScroll(){
+    timeInterval +=25;
+    if(timeInterval%2350 == 0){
+      play();
+      console.log('column : ', Math.abs(columnPlayed + 2 - maxColumns))
+      console.log('tension : ', analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
+      tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
     }
-    cell.classList.toggle("disabled");
-    cell.classList.toggle("selected_background");
-
-    let sameNote = matrice.filter(x => (x.colonna == columnNumber && x.nome == matrice[matrixIndex].nome));
-    for (let i=0 ; i< sameNote.length ; i++) {
-        let sameNoteid = sameNote[i].id;
-        let sameNoteCell = document.getElementById(sameNoteid);
-        sameNoteCell.classList.toggle("disabled");
-        sameNoteCell.classList.toggle("light_background");
-    }
+    scroll();
+}
+  
+function play() {
+      let noteSelected = new Array();
+      let vettoreNote = new Array();
+      noteSelected = matrice.filter(x => (x.colonna == columnPlayed && x.selezionato == true));
+      if (noteSelected != null) {
+          for (let index = 0; index < noteSelected.length; index++) {
+              let nomeNota = noteSelected[index].nome;
+              let octave = noteSelected[index].ottava;
+              vettoreNote.push(nomeNota + octave);
+          }
+          console.log(vettoreNote);
+          if(vettoreNote.length == 4){
+            sampler.triggerAttackRelease([vettoreNote[0], vettoreNote[1], vettoreNote[2]], 2);
+          }else{
+            sampler.triggerAttackRelease([vettoreNote[0], vettoreNote[1], vettoreNote[2], vettoreNote[3]], 2);
+          }
+      }
+      vettoreNote = [];
+      columnPlayed--;
+      sampler = new Tone.Sampler({
+          "C2": "./piano/C2.mp3",
+          "C#2": "./piano/Cs2.mp3",
+          "D2": "./piano/D2.mp3",
+          "D#2": "./piano/Ds2.mp3",
+          "E2": "./piano/E2.mp3",
+          "F2": "./piano/F2.mp3",
+          "F#2": "./piano/Fs2.mp3",
+          "G2": "./piano/G2.mp3",
+          "G#2": "./piano/Gs2.mp3",
+          "A2": "./piano/A2.mp3",
+          "A#2": "./piano/As2.mp3",
+          "B2": "./piano/B2.mp3",
+          "C3": "./piano/C3.mp3",
+          "C#3": "./piano/Cs3.mp3",
+          "D3": "./piano/D3.mp3",
+          "D#3": "./piano/Ds3.mp3",
+          "E3": "./piano/E3.mp3",
+          "F3": "./piano/F3.mp3",
+          "F#3": "./piano/Fs3.mp3",
+          "G3": "./piano/G3.mp3",
+          "G#3": "./piano/Gs3.mp3",
+          "A3": "./piano/A3.mp3",
+          "A#3": "./piano/As3.mp3",
+          "B3": "./piano/B3.mp3",
+          "C4": "./piano/C4.mp3",
+          "C#4": "./piano/Cs4.mp3",
+          "D4": "./piano/D4.mp3",
+          "D#4": "./piano/Ds4.mp3",
+          "E4": "./piano/E4.mp3",
+          "F4": "./piano/F4.mp3",
+          "F#4": "./piano/Fs4.mp3",
+          "G4": "./piano/G4.mp3",
+          "G#4": "./piano/Gs4.mp3",
+          "A4": "./piano/A4.mp3",
+          "A#4": "./piano/As4.mp3",
+          "B4": "./piano/B4.mp3",
+      }).set({
+          "volume": -8,
+      }).toMaster();
 }
 
 // VIEW
@@ -509,8 +625,6 @@ function createBar() {
 }
 
 
-
-
 // metodi onclick
 
 title_container.onclick = function() {
@@ -528,8 +642,34 @@ resetNotes.onclick = function() {
 }
 
 folderIcon.onchange = function(){
-    readFile(fileInput.files[0]);
+    readMatrice(fileInput.files[0]);
+    //let progressionRead = readProgression(fileInput.files[0]);
+    //finalProgression = progressionRead;
+    //fillMatrix(matrixRead);
 }
+
+function readMatrice(file){
+    let textType = /text.*/;
+    let matrixString="";
+    //let matrixSelected = new Array();
+	if (file.type.match(textType)) {
+		let reader = new FileReader();
+        reader.readAsText(file);	
+		reader.onload = function(e) {
+            let text = reader.result;
+            let lastIndex = text.indexOf("\n");
+            matrixString = text.substring(0,lastIndex);
+            //console.log(matrixString);
+            fillMatrix(matrixString);
+            let finalProgString = text.substring(lastIndex, text.length);
+            fillFinalProgression(finalProgString);
+            selectRoot();
+		}
+	} else {
+        console.log("File not supported!");
+	} 
+}
+
 
 downloadButton.onclick = function(){
     let fileName = "MyChordProgression";
@@ -565,78 +705,7 @@ function refresh() {
     }
 }
 
-function playAndScroll(){
-    timeInterval +=25;
-    if(timeInterval%2350 == 0){
-      play();
-      console.log('column : ', Math.abs(columnPlayed + 2 - maxColumns))
-      console.log('tension : ', analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
-      tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
-    }
-    scroll();
-  }
-  
-  
-  function play() {
-      let noteSelected = new Array();
-      let vettoreNote = new Array();
-      noteSelected = matrice.filter(x => (x.colonna == columnPlayed && x.selezionato == true));
-      if (noteSelected != null) {
-          for (let index = 0; index < noteSelected.length; index++) {
-              let nomeNota = noteSelected[index].nome;
-              let octave = noteSelected[index].ottava;
-              vettoreNote.push(nomeNota + octave);
-          }
-          console.log(vettoreNote);
-          if(vettoreNote.length == 4){
-            sampler.triggerAttackRelease([vettoreNote[0], vettoreNote[1], vettoreNote[2]], 2);
-          }else{
-            sampler.triggerAttackRelease([vettoreNote[0], vettoreNote[1], vettoreNote[2], vettoreNote[3]], 2);
-          }
-      }
-      vettoreNote = [];
-      columnPlayed--;
-      sampler = new Tone.Sampler({
-          "C2": "./piano/C2.mp3",
-          "C#2": "./piano/Cs2.mp3",
-          "D2": "./piano/D2.mp3",
-          "D#2": "./piano/Ds2.mp3",
-          "E2": "./piano/E2.mp3",
-          "F2": "./piano/F2.mp3",
-          "F#2": "./piano/Fs2.mp3",
-          "G2": "./piano/G2.mp3",
-          "G#2": "./piano/Gs2.mp3",
-          "A2": "./piano/A2.mp3",
-          "A#2": "./piano/As2.mp3",
-          "B2": "./piano/B2.mp3",
-          "C3": "./piano/C3.mp3",
-          "C#3": "./piano/Cs3.mp3",
-          "D3": "./piano/D3.mp3",
-          "D#3": "./piano/Ds3.mp3",
-          "E3": "./piano/E3.mp3",
-          "F3": "./piano/F3.mp3",
-          "F#3": "./piano/Fs3.mp3",
-          "G3": "./piano/G3.mp3",
-          "G#3": "./piano/Gs3.mp3",
-          "A3": "./piano/A3.mp3",
-          "A#3": "./piano/As3.mp3",
-          "B3": "./piano/B3.mp3",
-          "C4": "./piano/C4.mp3",
-          "C#4": "./piano/Cs4.mp3",
-          "D4": "./piano/D4.mp3",
-          "D#4": "./piano/Ds4.mp3",
-          "E4": "./piano/E4.mp3",
-          "F4": "./piano/F4.mp3",
-          "F#4": "./piano/Fs4.mp3",
-          "G4": "./piano/G4.mp3",
-          "G#4": "./piano/Gs4.mp3",
-          "A4": "./piano/A4.mp3",
-          "A#4": "./piano/As4.mp3",
-          "B4": "./piano/B4.mp3",
-      }).set({
-          "volume": -8,
-      }).toMaster();
-  }
+
 
 function firstRender() {
     const pianoContainer = document.getElementById("output_block");
@@ -653,12 +722,6 @@ function firstRender() {
             playButton.classList.add("playButtonActive");
             let maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
             finalProgression = finalProgression.slice(0,maxIndex);
-            /*for (let index = 0; index < finalProgression.length; index++) {
-                if (typeof finalProgression[index] === 'undefined'){
-                    finalProgression = finalProgression.slice(0,index);
-                    break;
-				}
-            }*/
             analysisResults = evaluateTension(finalProgression);
             scrollInterval = setInterval(playAndScroll, 25);
             stopButton.onclick = function() {
@@ -677,7 +740,7 @@ function firstRender() {
         clearInterval(scrollInterval);
     }
     // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
-    generaMatrice();
+    matrixConstructor();
 }
 
 
