@@ -301,11 +301,7 @@ function fillFinalProgression(progressionRead) {
     progressionRead = progressionRead.substring(1, progressionRead.length);
     let indexSpace = 0;
     let indexProgression = 0;
-<<<<<<< HEAD
-    while (progressionRead != " ") {
-=======
-    while(progressionRead!= ""){
->>>>>>> 576687086cf285e7be87cd38823d9f47e3a51787
+    while (progressionRead != "") {
         indexSpace = progressionRead.indexOf(" ");
         let chordString = progressionRead.substring(0, indexSpace);
         let chord = new Chord();
@@ -315,19 +311,11 @@ function fillFinalProgression(progressionRead) {
         if (secondChar == "#") {
             note = note + secondChar;
         }
-<<<<<<< HEAD
         type = chordString.substring(note.length, chordString.length);
         chord.note = note;
         chord.type = type;
         finalProgression[indexProgression] = chord;
-        progressionRead = progressionRead.slice(indexSpace, progressionRead.length);
-=======
-        type=chordString.substring(note.length,chordString.length);
-        chord.note=note;
-        chord.type=type;
-        finalProgression[indexProgression]=chord;
-        progressionRead= progressionRead.slice(indexSpace+1, progressionRead.length);
->>>>>>> 576687086cf285e7be87cd38823d9f47e3a51787
+        progressionRead = progressionRead.slice(indexSpace + 1, progressionRead.length);
         indexProgression++;
     }
     console.log(finalProgression);
