@@ -698,6 +698,13 @@ function read(file) {
     } else {
         console.log("File not supported!");
     }
+    let maxIndex=0;
+    if(finalProgression.length == maxColumns){
+        maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
+    }else{
+        maxIndex = finalProgression.length;
+    }
+    unselectMatrix(maxIndex);
 }
 
 
@@ -751,10 +758,10 @@ function firstRender() {
             modelButton = true;
             //noncliccabile();
             let maxIndex=0;
-            /*if(firstPlay){
+            if(firstPlay){
                 bar.style.left = '93px';
                 tableBackscroll();
-            }*/
+            }
             if(finalProgression.length == maxColumns){
                 maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
             }else{
