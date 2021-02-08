@@ -390,6 +390,8 @@
                 display: inline-block;
                 width: 33%;
                 bottom: 60%;
+                top: 10px;
+                vertical-align: middle;
                 text-align: center;
                 font-family: 'Roboto', sans-serif;
                 font-weight: semi-bold;
