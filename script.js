@@ -66,7 +66,6 @@ let sampler = new Tone.Sampler({
     "volume": Volume,
 }).toMaster();
 
-
 const key_color = [{
         pitch: "C",
         color: "white",
@@ -780,5 +779,13 @@ muteButton.onclick = function() {
     Tone.Master.mute = muted;
 }
 volumeUpButton.onclick = function() {
-    Volume++;
+    if ((Volume + 1) <= MaxVolume)
+        Volume++;
+    else alert("Max Volume Reached");
+}
+
+volumeDownButton.onclick = function() {
+    if ((Volume - 1) <= minVolume)
+        Volume--;
+    else alert("Min Volume Reached");
 }
