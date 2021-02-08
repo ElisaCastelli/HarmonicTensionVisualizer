@@ -508,8 +508,6 @@ function play() {
 
 // VIEW
 
-start;
-tensionChange(0);
 
 function createFixedColumn(scaleNumber, noteNumber) {
     const fixedColumn = document.createElement("th");
@@ -669,8 +667,8 @@ resetNotes.onclick = function() {
         modelButton = false;
         timeInterval = 0;
         columnPlayed = maxColumns - 1;
-        //finalProgression = new Array(20);
-        //analysisResults = new Array();
+        finalProgression = new Array(20);
+        analysisResults = new Array();
         firstPlay = true;
         tensionChange(0);
     }
@@ -738,6 +736,8 @@ function refresh() {
 }
 
 function firstRender() {
+    start;
+    tensionChange(0);
     const pianoContainer = document.getElementById("output_block");
     const playButton = document.getElementById("playButton");
     
