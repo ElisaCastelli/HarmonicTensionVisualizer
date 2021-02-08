@@ -433,7 +433,7 @@ function resetSelect(columnNumber) {
 
 function playAndScroll() {
     scroll();
-    if (timeInterval % 2350 == 0) {
+    if (timeInterval % 2700 == 0) {
         if((maxColumns - columnPlayed-1)<finalProgression.length){
             play();
             //console.log('column : ', Math.abs(columnPlayed + 2 - maxColumns))
