@@ -657,14 +657,21 @@ title_container.onclick = function() {
 }
 
 resetNotes.onclick = function() {
-    let lengthChordArray = finalProgression.findIndex(x => typeof x == 'undefined');
-    unselectMatrix(lengthChordArray);
-    modelButton = false;
-    timeInterval = 0;
-    columnPlayed = maxColumns - 1;
-    finalProgression = new Array(20);
-    analysisResults = new Array();
-    tensionChange(0);
+    if(!modelButton){
+        let lengthChordArray=0;
+        if(finalProgression.length == maxColumns){
+            lengthChordArray = finalProgression.findIndex(x => typeof x == 'undefined');
+        }else{
+            lengthChordArray = finalProgression.length;
+        }
+        unselectMatrix(lengthChordArray);
+        modelButton = false;
+        timeInterval = 0;
+        columnPlayed = maxColumns - 1;
+        finalProgression = new Array(20);
+        analysisResults = new Array();
+        tensionChange(0);
+    }
 }
 
 folderIcon.onchange = function() {
@@ -756,6 +763,7 @@ function firstRender() {
             }
         };
     }
+   
     rewindButton.onclick = function() {
             tableBackscroll();
             bar.style.left = '93px';
