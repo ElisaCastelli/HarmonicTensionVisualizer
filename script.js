@@ -21,7 +21,9 @@ let modelButton = false;
 
 // creazione synthetizer
 let muted = false;
-
+let minVolume = -8;
+let MaxVolume = -4;
+let Volume = (MaxVolume + minVolume) / 2;
 
 let sampler = new Tone.Sampler({
     "C2": "./piano/C2.mp3",
@@ -61,7 +63,7 @@ let sampler = new Tone.Sampler({
     "A#4": "./piano/As4.mp3",
     "B4": "./piano/B4.mp3",
 }).set({
-    "volume": -4,
+    "volume": Volume,
 }).toMaster();
 
 
@@ -498,7 +500,7 @@ function play() {
         "A#4": "./piano/As4.mp3",
         "B4": "./piano/B4.mp3",
     }).set({
-        "volume": -8,
+        "volume": Volume,
     }).toMaster();
 }
 
@@ -765,8 +767,6 @@ function firstRender() {
 
 firstRender();
 
-
-
 function noncliccabile() {
     matrice.forEach(element => {
         idCell = element.id;
@@ -778,4 +778,7 @@ function noncliccabile() {
 muteButton.onclick = function() {
     muted = !muted;
     Tone.Master.mute = muted;
+}
+volumeUpButton.onclick = function() {
+    Volume++;
 }
