@@ -3,7 +3,7 @@ import { allNotes1D } from './chordBuilder.js';
 
 // permette di ritrovare l'accordo originale della sostituzione di dominante diminuita
 
-export function DiminishedDomSub(Chord) {
+export function diminishedDomSub(Chord) {
     let tonic = allNotes1D[ (12 + (allNotes1D.indexOf(Chord.note) - 4)) % 12 ];
     let subChord = new Chord(tonic, '7');
     return subChord
