@@ -259,9 +259,8 @@ function findKey(progression){
 					}
 				}
 			}
-			
+			// if I have already saved the current key, merge the occourrences and sum points
 			accepted_keys.push(tempKey);
-			
 			for (let i = 0; i < accepted_keys.length - 1; i++) {
 				if (tempKey.tonic == accepted_keys[i].tonic && tempKey.scale == accepted_keys[i].scale){
 					accepted_keys[i].points += tempKey.points;
@@ -437,16 +436,16 @@ export function evaluateTension(progression){
 			// OPTION B): CHANGE OF SCALE
 			// check if from this point a new key is possible
 			//console.log("hey", progression.slice(i, progression.length))
-			tempkeys = findKey(progression.slice(i, progression.length));
+			tempKeys = findKey(progression.slice(i, progression.length));
 			// take the first one
-			temp_deg_progression = getProgDegrees(progression.slice(i, progression.length), tempkeys[0]);
-			console.log('keys found', tempkeys);
-			if (tempkeys[0].points > 1) {
+			temp_deg_progression = getProgDegrees(progression.slice(i, progression.length), tempKeys[0]);
+			console.log('keys found', tempKeys);
+			if (tempKeys[0].points > 1) {
 				for (let j = 0; j < progression.length - i; j++) {
 					degrees_progression[i + j] = temp_deg_progression[j];
 				}
 				// check also if some previous chords are both in current and original scale
-				temp_deg_progression = getProgDegrees(progression.slice(0, i), tempkeys[0]);
+				temp_deg_progression = getProgDegrees(progression.slice(0, i), tempKeys[0]);
 				for (let j = i - 1; j > 0; j--) {
 					if (temp_deg_progression[j].type_coherent && temp_deg_progression[j].degree_coherent)
 						degrees_progression[j] = temp_deg_progression[j];
