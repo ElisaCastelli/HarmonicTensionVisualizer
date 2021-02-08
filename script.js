@@ -300,7 +300,18 @@ function fillFinalProgression(progressionRead){
     let indexProgression = 0;
     while(progressionRead!= " "){
         indexSpace = progressionRead.indexOf(" ");
-        finalProgression[indexProgression]=progressionRead.substring(0,indexSpace);
+        let chordString = progressionRead.substring(0,indexSpace);
+        let chord = new Chord();
+        let type="";
+        let note = chordString[0];
+        let secondChar = chordString[1];
+        if(secondChar=="#"){
+            note = note+secondChar;
+        }
+        type=chordString.substring(note.length,chordString.length);
+        chord.note=note;
+        chord.type=type;
+        finalProgression[indexProgression]=chord;
         progressionRead= progressionRead.slice(indexSpace, progressionRead.length);
         indexProgression++;
     }
@@ -308,7 +319,19 @@ function fillFinalProgression(progressionRead){
 }
 
 function selectRoot(){
-
+    let maxColumnIndex = finalProgression.findIndex(x => typeof x == 'undefined');
+    for(let index = 0; index<maxColumnIndex; index++){
+        let chord =finalProgression[index];
+        let note = chord.note;
+        let type = chord.type;
+        let indexMatrix = matrice.findIndex(x => x.nome == note && x.colonna == (maxColumns-1-index) && x.selezionato==true);
+        if(indexMatrix!=null){
+            matrice[indexMatrix].root = true;
+            let col = matrice[indexMatrix].colonna;
+            let select = document.getElementById("select"+col);
+            select.value=type;
+        }
+    }
 }
 
 // CONTROLLER
@@ -333,10 +356,6 @@ function scroll() {
     } else if (barRightPos < tableScroll.offsetWidth) {
         bar.style.left = (barLeftPos + speed * direction) + 'px';
     }
-}
-
-function addNoteFromFile(chord, column){
-    //let indexMatrix = matrice.findIndex(x => x.)
 }
 
 function addTone(cell , columnNumber , matrixIndex) {
@@ -642,16 +661,13 @@ resetNotes.onclick = function() {
 }
 
 folderIcon.onchange = function(){
-    readMatrice(fileInput.files[0]);
-    //let progressionRead = readProgression(fileInput.files[0]);
-    //finalProgression = progressionRead;
-    //fillMatrix(matrixRead);
+    read(fileInput.files[0]);
 }
 
-function readMatrice(file){
+function read(file){
     let textType = /text.*/;
     let matrixString="";
-    //let matrixSelected = new Array();
+    let progressionString="";
 	if (file.type.match(textType)) {
 		let reader = new FileReader();
         reader.readAsText(file);	
@@ -661,8 +677,8 @@ function readMatrice(file){
             matrixString = text.substring(0,lastIndex);
             //console.log(matrixString);
             fillMatrix(matrixString);
-            let finalProgString = text.substring(lastIndex, text.length);
-            fillFinalProgression(finalProgString);
+            progressionString = text.substring(lastIndex, text.length);
+            fillFinalProgression(progressionString);
             selectRoot();
 		}
 	} else {
