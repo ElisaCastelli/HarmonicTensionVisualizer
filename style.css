@@ -60,7 +60,6 @@
                 height: 50%;
             }
             
-            
             #bottom_panel {
                 width: 100%;
                 position: absolute;
@@ -76,8 +75,8 @@
                 height: 1%;
                 color: black;
             }
-
-            #logosrc{
+            
+            #logosrc {
                 width: 210px;
                 height: 52px;
             }
@@ -181,8 +180,8 @@
             }
             
             i.fas.fa-folder-open {
-			    cursor: pointer;
-			}
+                cursor: pointer;
+            }
             
             #downloadButton {
                 left: 88%;
@@ -290,6 +289,7 @@
             
             .mainTable fixedColumn {
                 position: sticky;
+                position: -webkit-sticky;
             }
             
             .leftstop {
@@ -303,7 +303,7 @@
                 border-radius: 30px;
             }
             
-            .topstop{
+            .topstop {
                 position: -webkit-sticky;
                 position: sticky;
                 top: 0;

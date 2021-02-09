@@ -552,9 +552,10 @@ function createRow(scaleNumber, noteNumber) {
 function createHeader() {
     const table_head = document.createElement("thead");
     const row = document.createElement("tr");
-    row.classList.add("topstop");
+    row.classList.add("topsbar");
     for (let columnNumber = maxColumns; columnNumber >= 0; columnNumber--) {
         const cell = document.createElement("th");
+        cell.className = "topstop";
         // creazione prima riga di chord type
         if (columnNumber != maxColumns) {
             const select = document.createElement("select");
@@ -656,11 +657,11 @@ title_container.onclick = function() {
 }
 
 resetNotes.onclick = function() {
-    if(!modelButton){
-        let lengthChordArray=0;
-        if(finalProgression.length == maxColumns){
+    if (!modelButton) {
+        let lengthChordArray = 0;
+        if (finalProgression.length == maxColumns) {
             lengthChordArray = finalProgression.findIndex(x => typeof x == 'undefined');
-        }else{
+        } else {
             lengthChordArray = finalProgression.length;
         }
         unselectMatrix(lengthChordArray);
@@ -698,10 +699,10 @@ function read(file) {
     } else {
         console.log("File not supported!");
     }
-    let maxIndex=0;
-    if(finalProgression.length == maxColumns){
+    let maxIndex = 0;
+    if (finalProgression.length == maxColumns) {
         maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
-    }else{
+    } else {
         maxIndex = finalProgression.length;
     }
     unselectMatrix(maxIndex);
@@ -747,7 +748,7 @@ function firstRender() {
     tensionChange(0);
     const pianoContainer = document.getElementById("output_block");
     const playButton = document.getElementById("playButton");
-    
+
     let pianoRollTable = createPianoRoll();
     pianoContainer.appendChild(pianoRollTable);
     let bar = createBar();
@@ -757,14 +758,14 @@ function firstRender() {
         if (!modelButton) {
             modelButton = true;
             //noncliccabile();
-            let maxIndex=0;
-            if(firstPlay){
+            let maxIndex = 0;
+            if (firstPlay) {
                 bar.style.left = '93px';
                 tableBackscroll();
             }
-            if(finalProgression.length == maxColumns){
+            if (finalProgression.length == maxColumns) {
                 maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
-            }else{
+            } else {
                 maxIndex = finalProgression.length;
             }
             //playButton.classList.add("playButtonActive");
@@ -780,7 +781,7 @@ function firstRender() {
             }
         };
     }
-   
+
     rewindButton.onclick = function() {
             tableBackscroll();
             bar.style.left = '93px';
