@@ -403,6 +403,8 @@ function playAndScroll() {
 
 /** Function to play the chord using a Sampler */
 function play() {
+    const chordPlayed = document.getElementById("chordPlayed");
+    var t = finalProgression[maxColumns -1 - columnPlayed].note + finalProgression[maxColumns -1 - columnPlayed].type;
     let noteSelected = getSelectedByColumn(columnPlayed);
     let notesArray = new Array();
     if (noteSelected != null) {
@@ -411,7 +413,8 @@ function play() {
             let octave = noteSelected[index].octave;
             notesArray.push(noteName + octave);
         }
-        console.log(notesArray);
+        chordPlayed.textContent= t;
+        //chordPlayed.appendChild(t);
         if (notesArray.length == 3) {
             sampler.triggerAttackRelease([notesArray[0], notesArray[1], notesArray[2]], 2);
         } else if (notesArray.length == 4) {
@@ -658,6 +661,8 @@ resetButton.onclick = function() {
         } else {
             lengthChordArray = finalProgression.length;
         }
+        const chordPlayed = document.getElementById("chordPlayed");
+        chordPlayed.textContent="";
         unselectMatrix(lengthChordArray);
         modelButton = false;
         timeInterval = 0;
@@ -722,6 +727,8 @@ function firstRender() {
     tensionChange(0);
     const pianoContainer = document.getElementById("output_block");
     const playButton = document.getElementById("playButton");
+    const divChordPlayed = document.getElementById("chordPlayed");
+    divChordPlayed.style.visibility='hidden';
     let pianoRollTable = createPianoRoll();
     pianoContainer.appendChild(pianoRollTable);
     let bar = createBar();
@@ -734,6 +741,7 @@ function firstRender() {
         if (!modelButton && !emptyMatrix()) {
             const tableScroll = document.getElementById("table-scroll");
             modelButton = true;
+            divChordPlayed.style.visibility='visible';
             //noncliccabile();
             let maxIndex = 0;
             if (firstPlay) {
@@ -769,6 +777,9 @@ function firstRender() {
         tableBackscroll(0);
         tableScroll.style.overflowX='auto';
         bar.style.left = '93px';
+        const chordPlayed = document.getElementById("chordPlayed");
+        chordPlayed.textContent="";
+        chordPlayed.style.visibility="hidden";
         modelButton = false;
         columnPlayed = maxColumns - 1;
         timeInterval = 0;
