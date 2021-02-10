@@ -106,6 +106,10 @@ export function getSelectableByColumn(columnNumber){
     return matrixTable.filter(x => (x.column == columnNumber && x.selectable == true));
 }
 
+export function checkSelectableByColumn(columnNumber){
+    return matrixTable.find(x => (x.column == columnNumber && x.selectable == true));
+}
+
 export function getCellsToMakeSelectable(columNumber, idRoot){
     return matrixTable.filter(x => x.column == columNumber && x.selected == true && x.id != idRoot);
 }
@@ -206,5 +210,24 @@ export function rootAfterChordType (matrixIndex , columnNumber) {
         let shape = type[type.findIndex(x => x.name == chordType)].shape;
         let noteArray = chordBuilder(noteNumber, shape);
         printSelectable(noteArray, columnNumber);
+    }
+}
+
+export function printChord(noteArray, octaveNoteSelected, columnNumber) {
+    for (let index = 0; index < noteArray.length; index++) {
+        if (index > 0) {
+            if (allNotes1D.indexOf(noteArray[index]) < allNotes1D.indexOf(noteArray[index - 1] && octaveNoteSelected < 4)) {
+                octaveNoteSelected += 1 
+            }
+        }
+        let noteToPrint = matrixTable.find(x => (x.name == noteArray[index] && x.octave == octaveNoteSelected && x.column == columnNumber + 1));
+        let idCell = noteToPrint.id;
+        let cell = document.getElementById(idCell);
+        let indexCell = matrixTable.findIndex(x => x.id == idCell);
+        matrixTable[indexCell].selected = true;
+        matrixTable[indexCell].selectable = false;
+        cell.classList.remove("light_background");
+        cell.classList.add("selected_background");
+
     }
 }

@@ -4,7 +4,7 @@ import { type, allNotes1D, chordBuilder } from './chordBuilder.js';
 import { tensionChange, start } from './tensionAnimation.js';
 import { evaluateTension, Chord } from './harmonicAnalysis.js';
 import { downloadFile } from './readFile.js';
-import { matrixConstructor, matrixToString, emptyMatrix, clearMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell,findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType } from './matrix.js';
+import { matrixConstructor, matrixToString, emptyMatrix, clearMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell,findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord } from './matrix.js';
 
 const fileInput = document.getElementById('file-input');
 
@@ -284,6 +284,18 @@ function chordTypeSelected(columnNumber, chordType) {
     }
 }
 
+function autoFill(columnNumber){
+    let root = findRootNoteByColumn(columnNumber + 1);
+    let rootName = root.name;
+    let rootNumber = allNotes1D.indexOf(rootName);
+    let select = document.getElementById("select" + (columnNumber + 1));
+    let chordType = select.value;
+    let shape = type[type.findIndex(x => x.name == chordType)].shape;
+    let noteArray = chordBuilder(rootNumber, shape);
+    let octaveNoteSelected = root.octave;
+    printChord(noteArray, octaveNoteSelected, columnNumber);
+}
+
 
 // CONTROLLER
 
@@ -333,6 +345,10 @@ function addNote(cell, idCell, columnNumber) {
     let findRoot = findRootNoteByColumn(columnNumber);
     let selectableNotes = getSelectableByColumn(columnNumber);
     // selecting the first note ( the root of the chord)
+    if (columnNumber != (maxColumns - 1) && checkSelectableByColumn(columnNumber + 1) != undefined) {
+        autoFill(columnNumber);
+    }
+
     if (findRoot == undefined) {
         addRoot(cell, matrixIndex, columnNumber);
     }
