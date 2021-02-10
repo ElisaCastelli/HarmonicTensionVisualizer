@@ -4,6 +4,7 @@ import { type, allNotes1D, chordBuilder } from './chordBuilder.js';
 import { tensionChange, start } from './tensionAnimation.js';
 import { evaluateTension, Chord } from './harmonicAnalysis.js';
 import { downloadFile } from './readFile.js';
+import { matrixConstructor, matrixToString, emptyMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell,findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable } from './Matrix.js';
 
 const fileInput = document.getElementById('file-input');
 
@@ -14,7 +15,6 @@ let maxColumns = 20;
 let cellsNumber = numOctaves * 12 * maxColumns;
 let columnPlayed = maxColumns - 1;
 let timeInterval = 0;
-let matrixTable = new Array();
 let finalProgression = new Array(maxColumns);
 let analysisResults = new Array();
 let modelButton = false;
@@ -124,199 +124,9 @@ function Note(octave, name, column, row, id) {
     this.column = column;
     this.row = row;
     this.id = id;
-    let selected = false; // booleano per definire se è selected o meno (Note attiva o disattiva)
+    let selected = false; 
     let selectable = false;
     let root = false;
-}
-
-/** Function to convert finalProgression into a String in order to write it on a text file */ 
-function finalProgressionToString() {
-    let text = "";
-    for (let index = 0; index < maxColumns; index++) {
-        if (typeof finalProgression[index] != 'undefined') {
-            text += finalProgression[index] + " ";
-        }
-    }
-    return text;
-}
-
-/** Function to convert matrixTable into a String in order to write it on a text file */ 
-function matrixToString() {
-    let text = "";
-    for (let index = 0; index < cellsNumber; index++) {
-        if (matrixTable[index].selected == true) {
-            text += 1 + " ";
-        } else {
-            text += 0 + " ";
-        }
-    }
-    text += "\n";
-    text += finalProgressionToString();
-    return text;
-}
-
-/** Function to create for the first time matrixTable */
-function matrixConstructor() {
-    let octaveNumber = 0;
-    let noteNumber = 0;
-    let index = cellsNumber;
-    for (let columnIndex = maxColumns - 1; columnIndex >= 0; columnIndex--) {
-        for (let rowIndex = (numOctaves * 12) - 1; rowIndex >= 0; rowIndex--) {
-            noteNumber = rowIndex % 12;
-            octaveNumber = rowIndex - noteNumber;
-            octaveNumber = octaveNumber / 12 + numOctavesMin;
-            let tmpNota = new Note(octaveNumber, key_color[noteNumber].pitch, columnIndex, rowIndex, String(index));
-            index--;
-            tmpNota.selectable = false;
-            tmpNota.selected = false;
-            matrixTable.push(tmpNota);
-        }
-
-    }
-}
-
-/* Function to check if matrixTable is still empty*/ 
-function emptyMatrix(){
-    let filledCells = matrixTable.filter(x => x.selected == true);
-    if(filledCells.length==0){
-        return true;
-    }else{
-        return false;
-    }
-}
-
-/** Function to fill matrixTable with the content of a file */
-function fillMatrix(matrixRead) {
-    let maxColumnIndex = finalProgression.findIndex(x => typeof x == 'undefined');
-    unselectMatrix(maxColumnIndex);
-    let indexMainMatrix = 0;
-    for (let index = 0; index < matrixRead.length; index++) {
-        if (index % 2 == 0) {
-            if (matrixRead[index] == 1) {
-                matrixTable[indexMainMatrix].selected = true;
-            }
-            indexMainMatrix++;
-        }
-    }
-    printMatrix();
-}
-
-/** Function to update the visual content of the table based on the update matrixTable */
-function printMatrix() {
-    matrixTable.forEach(element => {
-        if (element.selected) {
-            let idCell = element.id;
-            let cell = document.getElementById(idCell);
-            cell.classList.add("selected_background");
-        }
-    });
-}
-
-/** Function to unselect all the cells of the table and update the variables of the matrix elements Note */
-function unselectMatrix(lastColumn) {
-    let index = 0;
-    if (lastColumn >= 0) {
-        for (let indexColumn = maxColumns - 1; indexColumn >= lastColumn; indexColumn--) {
-            for (let indexRow = (numOctaves * 12) - 1; indexRow >= 0; indexRow--) {
-                if (matrixTable[index].selected == true) {
-                    matrixTable[index].selected = false;
-                }
-                if (matrixTable[index].root) {
-                    matrixTable[index].root = false;
-                }
-                if (matrixTable[index].selectable) {
-                    matrixTable[index].selectable = false;
-                }
-                let idCell = matrixTable[index].id;
-                let cell = document.getElementById(idCell);
-                cell.classList.remove("disabled");
-                cell.classList.remove("selected_background");
-                cell.classList.remove("light_background");
-                index++;
-            }
-            resetSelect(indexColumn);
-        }
-    } else {
-        // se sono selezionate note singole
-    }
-}
-
-/** Function to disable click on a certain given column */
-function unclickableColumn(numCol) {
-    let columnCell = matrixTable.filter(x => (x.column == numCol && x.selected == false));
-    for (let index = 0; index < columnCell.length; index++) {
-        let idCell = columnCell[index].id;
-        let cell = document.getElementById(idCell);
-        cell.classList.add("disabled");
-    }
-}
-
-/** Function to allow click on a certain given column */
-function clickableColumn(numCol) {
-    let columnCell = matrixTable.filter(x => x.column == numCol);
-    for (let index = 0; index < columnCell.length; index++) {
-        let idCell = columnCell[index].id;
-        let cell = document.getElementById(idCell);
-        cell.classList.remove("disabled");
-        let indexMatrix = matrixTable.findIndex(x => (x.id == columnCell[index].id));
-        if (matrixTable[indexMatrix].selected) {
-            matrixTable[indexMatrix].selected = false;
-        }
-        if (matrixTable[indexMatrix].root) {
-            matrixTable[indexMatrix].root = false;
-        }
-    }
-}
-
-/** Function to remove the visual content of a specific column of the table  */
-function removeAllColor(numColumn) {
-    let columnCell = matrixTable.filter(x => x.column == numColumn);
-    for (let index = 0; index < columnCell.length; index++) {
-        let idCell = columnCell[index].id;
-        let cell = document.getElementById(idCell);
-        cell.classList.remove("selected_background");
-        cell.classList.remove("light_background");
-    }
-}
-
-/** Function to remove the visual content associated to the selectable cells of a specific column of the table  */
-function removeLightColor(numColumn) {
-    let columnCell = matrixTable.filter(x => x.column == numColumn);
-    for (let index = 0; index < columnCell.length; index++) {
-        let idCell = columnCell[index].id;
-        let cell = document.getElementById(idCell);
-        cell.classList.remove("light_background");
-    }
-}
-
-/** Function to remove the visual content associated to the selectable cells of a specific column of the table  */
-function printSelectable(noteArray, columnNumber) {
-    for (let index = 1; index < noteArray.length; index++) {
-        let notesToPrint = matrixTable.filter(x => (x.name == noteArray[index] && x.column == columnNumber));
-        for (let i = 0; i < notesToPrint.length; i++) {
-            let idCell = notesToPrint[i].id;
-            let cell = document.getElementById(idCell);
-            let indexCell = matrixTable.findIndex(x => x.id == idCell);
-            matrixTable[indexCell].selectable = true;
-            cell.classList.remove("disabled");
-            cell.classList.add("light_background");
-        }
-    }
-}
-
-/** Function called after selecting the tonic note and the type of chord to compute which are the other notes needed to complete the chord we want */
-function chordTypeSelected(columnNumber, chordType) {
-    let noteSelected = matrixTable.find(x => (x.column == columnNumber && x.selected == true && x.root == true));
-    if (noteSelected != null) {
-        let noteName = noteSelected.name;
-        let noteNumber = allNotes1D.indexOf(noteName);
-        let shape = type[type.findIndex(x => x.name == chordType)].shape;
-        let noteArray = chordBuilder(noteNumber, shape);
-        printSelectable(noteArray, columnNumber);
-        let chord = new Chord(noteName, chordType);
-        finalProgression[Math.abs(maxColumns - columnNumber - 1)] = chord;
-        
-    }
 }
 
 /** Function to fill the finalProgression array with the one read from a file */
@@ -351,23 +161,131 @@ function selectRoot() {
         let chord = finalProgression[index];
         let note = chord.note;
         let type = chord.type;
-        let indexMatrix = matrixTable.findIndex(x => x.name == note && x.column == (maxColumns - 1 - index) && x.selected == true);
+        let columnIndex = maxColumns - 1 - index;
+        let indexMatrix = getIndexSelectedCell(note, columnIndex);
         if (indexMatrix != null) {
-            let idRoot = matrixTable[indexMatrix].id;
-            matrixTable[indexMatrix].root = true;
-            let col = matrixTable[indexMatrix].column;
+            let idRoot = getIdCell(indexMatrix);
+            addRootCell(indexMatrix);
+            let col = getCellColumnByIndex(indexMatrix);
             let select = document.getElementById("select" + col);
             select.value = type;
-            let selectableCells = matrixTable.filter(x => x.column == (maxColumns - 1 - index) && x.selected == true && x.id != idRoot);
+            let selectableCells = getCellsToMakeSelectable(columnIndex, idRoot);
             if(selectableCells.length>0){
                 selectableCells.forEach(cell => {
-                    matrixTable[cellsNumber - cell.id].selectable = true;
-                    
+                    setSelectableCell(cellsNumber - cell.id);
                 });
             }
         }
     }
 }
+
+/** Function to unselect all the cells of the table and update the variables of the matrix elements Note */
+function unselectMatrix() {
+    let lastColumn = finalProgression.findIndex(x => typeof x == 'undefined');
+    let index = 0;
+    if (lastColumn >= 0) {
+        for (let indexColumn = maxColumns - 1; indexColumn >= lastColumn; indexColumn--) {
+            for (let indexRow = (numOctaves * 12) - 1; indexRow >= 0; indexRow--) {
+                emptyCell(index);
+                let idCell = getIdCell(index);
+                let cell = document.getElementById(idCell);
+                cell.classList.remove("disabled");
+                cell.classList.remove("selected_background");
+                cell.classList.remove("light_background");
+                index++;
+            }
+            resetSelect(indexColumn);
+        }
+    } else {
+        // se sono selezionate note singole
+    }
+}
+
+
+
+/** Function to disable click on a certain given column */
+function unclickableColumn(numCol) {
+    let columnCell = findUnselectedCell(numCol);
+    for (let index = 0; index < columnCell.length; index++) {
+        let idCell = columnCell[index].id;
+        let cell = document.getElementById(idCell);
+        cell.classList.add("disabled");
+    }
+}
+
+/** Function to allow click on a certain given column */
+function clickableColumn(numCol) {
+    let columnCell = findCellsByColumn(numCol);
+    for (let index = 0; index < columnCell.length; index++) {
+        let idCell = columnCell[index].id;
+        let cell = document.getElementById(idCell);
+        cell.classList.remove("disabled");
+        indexCell = getIndexCellById(columnCell[index].id);
+        unselectCell(indexCell);
+    }
+}
+
+/** Function to remove the visual content of a specific column of the table  */
+function removeAllColor(numColumn) {
+    let columnCell = findCellsByColumn(numCol);
+    for (let index = 0; index < columnCell.length; index++) {
+        let idCell = columnCell[index].id;
+        let cell = document.getElementById(idCell);
+        cell.classList.remove("selected_background");
+        cell.classList.remove("light_background");
+    }
+}
+
+/** Function to remove the visual content associated to the selectable cells of a specific column of the table  */
+function removeLightColor(numColumn) {
+    let columnCell = findCellsByColumn(numColumn);
+    for (let index = 0; index < columnCell.length; index++) {
+        let idCell = columnCell[index].id;
+        let cell = document.getElementById(idCell);
+        cell.classList.remove("light_background");
+    }
+}
+
+/** Function to update the visual content of the table based on the update matrixTable */
+function printSelected() {
+    let selectedCells = getAllSelectedId();
+    selectedCells.forEach(id=>{
+        let cell = document.getElementById(id);
+        cell.classList.add("selected_background");
+    });
+}
+
+/** Function to remove the visual content associated to the selectable cells of a specific column of the table  */
+function printSelectable(noteArray, columnNumber) {
+    for (let index = 1; index < noteArray.length; index++) {
+        let notesToPrint = findNoteByNameAndColumn(noteArray[index], columnNumber);
+        for (let i = 0; i < notesToPrint.length; i++) {
+            let idCell = notesToPrint[i].id;
+            let cell = document.getElementById(idCell);
+            let indexCell = getIndexCellById(idCell);
+            setSelectableCell(indexCell);
+            cell.classList.remove("disabled");
+            cell.classList.add("light_background");
+        }
+    }
+}
+
+/** Function called after selecting the tonic note and the type of chord to compute which are the other notes needed to complete the chord we want */
+function chordTypeSelected(columnNumber, chordType) {
+    let noteSelected = findRootNoteByColumn(columnNumber);
+    if (noteSelected != null) {
+        let noteName = noteSelected.name;
+        let noteNumber = allNotes1D.indexOf(noteName);
+        let shape = type[type.findIndex(x => x.name == chordType)].shape;
+        let noteArray = chordBuilder(noteNumber, shape);
+        printSelectable(noteArray, columnNumber);
+        let chord = new Chord(noteName, chordType);
+        finalProgression[Math.abs(maxColumns - columnNumber - 1)] = chord;
+        
+    }
+}
+
+
 
 // CONTROLLER
 
@@ -397,18 +315,13 @@ function scroll() {
 }
 
 /** */
-function addTone(cell, columnNumber, matrixIndex) {
-    if (matrixTable[matrixIndex].selected == true) {
-        matrixTable[matrixIndex].selected = false;
-    } else {
-        matrixTable[matrixIndex].selected = true;
-    }
+function addTone(cell, columnNumber, cellIndex) {
+    changeSelection(cellIndex);
     cell.classList.toggle("disabled");
     cell.classList.toggle("selected_background");
-
-    let sameNote = matrixTable.filter(x => (x.column == columnNumber && x.name == matrixTable[matrixIndex].name));
-    for (let i = 0; i < sameNote.length; i++) {
-        let sameNoteid = sameNote[i].id;
+    let sameNotes = findSameNotes(columnNumber, cellIndex);
+    for (let i = 0; i < sameNotes.length; i++) {
+        let sameNoteid = sameNotes[i].id;
         let sameNoteCell = document.getElementById(sameNoteid);
         sameNoteCell.classList.toggle("disabled");
         sameNoteCell.classList.toggle("light_background");
@@ -419,44 +332,34 @@ function addTone(cell, columnNumber, matrixIndex) {
 function addNote(cell, idCell, columnNumber) {
     columnNumber = 19 - columnNumber;
     let matrixIndex = numOctaves * 12 * maxColumns - idCell;
-    let findRoot = matrixTable.find(x => (x.column == columnNumber && x.selected == true && x.root == true));
-    let selectableNotes = matrixTable.filter(x => (x.column == columnNumber && x.selectable == true));
-
+    let findRoot = findRootNoteByColumn(columnNumber);
+    let selectableNotes = getSelectableByColumn(columnNumber);
     // selecting the first note ( the root of the chord)
     if (findRoot == undefined) {
         addRoot(cell, matrixIndex);
     }
-
     // removing the root
     else if (findRoot.id == idCell) {
         removeAll(columnNumber);
     }
-
     // adding or removing chord tones
     for (let i = 0; i < selectableNotes.length; i++) {
         if (selectableNotes[i].id == idCell) {
             addTone(cell, columnNumber, matrixIndex);
         }
     }
-
 }
 
 /** */
 function addRoot(cell, matrixIndex) {
     cell.classList.toggle("selected_background");
-    // manca di segnare nella matrice che la casella è "piena"
-    matrixTable[matrixIndex].selected = true;
-    matrixTable[matrixIndex].root = true;
-    unclickableColumn(matrixTable[matrixIndex].column);
+    addRootCell(matrixIndex);
+    unclickableColumn(getCellColumnByIndex(matrixIndex));
 }
 
 /** Function to remove everything from a column */
 function removeAll(columnNumber) {
-    for (let i = 0; i < matrixTable.length; i++) {
-        matrixTable[i].selected = false;
-        matrixTable[i].selectable = false;
-        matrixTable[i].root = false;
-    }
+    clearMatrix();
     clickableColumn(columnNumber);
     removeAllColor(columnNumber);
     resetSelect(columnNumber);
@@ -482,9 +385,8 @@ function playAndScroll() {
 
 /** Function to play the chord using a Sampler */
 function play() {
-    let noteSelected = new Array();
+    let noteSelected = getSelectedByColumn(columnPlayed);
     let notesArray = new Array();
-    noteSelected = matrixTable.filter(x => (x.column == columnPlayed && x.selected == true));
     if (noteSelected != null) {
         for (let index = 0; index < noteSelected.length; index++) {
             let noteName = noteSelected[index].name;
@@ -555,6 +457,7 @@ function read(file) {
             let lastIndex = text.indexOf("\n");
             matrixString = text.substring(0, lastIndex);
             fillMatrix(matrixString);
+            printSelected();
             progressionString = text.substring(lastIndex, text.length);
             fillFinalProgression(progressionString);
             selectRoot();
@@ -753,13 +656,11 @@ uploadButton.onchange = function() {
     read(fileInput.files[0]);
 }
 
-
-
 /** onclick associated with the downloadButton to download a file that contains the chord progression you put inside the pianoroll */
 downloadButton.onclick = function() {
     if(!emptyMatrix()){
         let fileName = "MyChordProgression";
-        let text = matrixToString();
+        let text = matrixToString(finalProgression, maxColumns, cellsNumber);
         downloadFile(fileName, text);
     }
 }
@@ -829,7 +730,6 @@ function firstRender() {
             }
             bar.style.left = lastBarPosition;
             tableBackscroll(lastTableScrollPosition);
-            //playButton.classList.add("playButtonActive");
             finalProgression = finalProgression.slice(0, maxIndex);
             analysisResults = evaluateTension(finalProgression);
             scrollInterval = setInterval(playAndScroll, 25);
@@ -839,7 +739,6 @@ function firstRender() {
                 modelButton = false;
                 firstPlay = false;
                 tableScroll.style.overflowX='auto';
-                //playButton.classList.remove("playButtonActive");
                 clearInterval(scrollInterval);
                 tensionChange(0);
                 
@@ -860,7 +759,7 @@ function firstRender() {
         firstPlay = true;
     }
         // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
-    matrixConstructor();
+    matrixConstructor(cellsNumber, maxColumns, numOctaves, numOctavesMin, key_color);
 }
 
 
