@@ -349,9 +349,9 @@ function selectRoot() {
 }
 
 // CONTROLLER
-function tableBackscroll() {
+function tableBackscroll(position) {
     const table = document.getElementById("table-scroll");
-    table.scrollLeft = 0;
+    table.scrollLeft = position;
 }
 
 function scroll() {
@@ -724,7 +724,7 @@ downloadButton.onclick = function() {
 function refresh() {
     matrixTable = [];
     timeInterval = 0;
-    tableBackscroll();
+    tableBackscroll(0);
     columnPlayed = maxColumns - 1;
     finalProgression = [];
     analysisResults = [];
@@ -743,7 +743,8 @@ function firstRender() {
     let pianoRollTable = createPianoRoll();
     pianoContainer.appendChild(pianoRollTable);
     let bar = createBar();
-    let lastPosition = bar.style.left;
+    let lastBarPosition = bar.style.left;
+    let lastTableScrollPosition;
     pianoContainer.appendChild(bar);
 
     let scrollInterval;
@@ -754,8 +755,8 @@ function firstRender() {
             //noncliccabile();
             let maxIndex = 0;
             if (firstPlay) {
-                lastPosition = '93px';
-                tableBackscroll();
+                lastBarPosition = '93px';
+                lastTableScrollPosition = 0;
             }
             tableScroll.style.overflowX='hidden';
             if (finalProgression.length == maxColumns) {
@@ -763,25 +764,29 @@ function firstRender() {
             } else {
                 maxIndex = finalProgression.length;
             }
-            bar.style.left = lastPosition;
+            bar.style.left = lastBarPosition;
+            tableBackscroll(lastTableScrollPosition);
             //playButton.classList.add("playButtonActive");
             finalProgression = finalProgression.slice(0, maxIndex);
             analysisResults = evaluateTension(finalProgression);
             scrollInterval = setInterval(playAndScroll, 25);
             stopButton.onclick = function() {
+                lastBarPosition = bar.style.left;
+                lastTableScrollPosition = tableScroll.style.scrollLeft;
                 modelButton = false;
                 firstPlay = false;
+                tableScroll.style.overflowX='auto';
                 //playButton.classList.remove("playButtonActive");
                 clearInterval(scrollInterval);
                 tensionChange(0);
-                lastPosition = bar.style.left;
+                
             }
         };
     }
 
     rewindButton.onclick = function() {
         const tableScroll = document.getElementById("table-scroll");
-        tableBackscroll();
+        tableBackscroll(0);
         tableScroll.style.overflowX='auto';
         bar.style.left = '93px';
         modelButton = false;
