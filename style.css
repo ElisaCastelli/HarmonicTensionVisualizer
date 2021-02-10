@@ -160,7 +160,7 @@
                 color: rgb(105, 149, 200);
             }
             
-            #resetNotes {
+            #resetButton {
                 left: 69%;
                 top: 25px;
                 position: fixed;
@@ -172,7 +172,7 @@
                 display: none;
             }
             
-            #folderIcon {
+            #uploadButton {
                 left: 94%;
                 top: 25px;
                 position: fixed;
