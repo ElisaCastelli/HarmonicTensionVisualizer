@@ -180,11 +180,10 @@ function selectRoot() {
 }
 
 /** Function to unselect all the cells of the table and update the variables of the matrix elements Note */
-function unselectMatrix() {
-    let lastColumn = finalProgression.findIndex(x => typeof x == 'undefined');
+function unselectMatrix(lengthChordArray) {
     let index = 0;
-    if (lastColumn >= 0) {
-        for (let indexColumn = maxColumns - 1; indexColumn >= lastColumn; indexColumn--) {
+    if (lengthChordArray >= 0) {
+        for (let indexColumn = maxColumns - 1; indexColumn >= lengthChordArray; indexColumn--) {
             for (let indexRow = (numOctaves * 12) - 1; indexRow >= 0; indexRow--) {
                 emptyCell(index);
                 let idCell = getIdCell(index);
@@ -663,6 +662,7 @@ resetButton.onclick = function() {
         }
         const chordPlayed = document.getElementById("chordPlayed");
         chordPlayed.textContent="";
+        chordPlayed.style.visibility="hidden";
         unselectMatrix(lengthChordArray);
         modelButton = false;
         timeInterval = 0;
