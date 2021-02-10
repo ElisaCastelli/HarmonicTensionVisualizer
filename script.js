@@ -220,14 +220,14 @@ function clickableColumn(numCol) {
         let idCell = columnCell[index].id;
         let cell = document.getElementById(idCell);
         cell.classList.remove("disabled");
-        indexCell = getIndexCellById(columnCell[index].id);
+        let indexCell = getIndexCellById(columnCell[index].id);
         unselectCell(indexCell);
     }
 }
 
 /** Function to remove the visual content of a specific column of the table  */
 function removeAllColor(numColumn) {
-    let columnCell = findCellsByColumn(numCol);
+    let columnCell = findCellsByColumn(numColumn);
     for (let index = 0; index < columnCell.length; index++) {
         let idCell = columnCell[index].id;
         let cell = document.getElementById(idCell);
