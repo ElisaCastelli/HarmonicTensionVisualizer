@@ -9,7 +9,7 @@ let maxHeight = canvas.height;
 let maxSpeed = 0.03;
 
 //ctx.fillStyle = 'LightSlateGrey';
-ctx.fillStyle = 'rgb(64,75,80)';
+//ctx.fillStyle = 'rgb(64,75,80)';
 
 function tensionChange(finalTension) {
   let initialTension = tension
@@ -50,7 +50,7 @@ function waveColor(tension,maxTension) {
 
 function draw() {
   ctx.clearRect(0,0,canvas.width,canvas.height)
-  ctx.fillRect(0,0,canvas.width,canvas.height)
+  //ctx.fillRect(0,0,canvas.width,canvas.height)
   ctx.beginPath()
   generateData(tension,maxTension)
   waveColor(tension,maxTension)
