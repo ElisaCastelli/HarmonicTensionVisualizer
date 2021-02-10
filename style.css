@@ -34,16 +34,13 @@
                 top: 24px;
                 margin-left: 5%;
                 cursor: pointer;
-                /*border:1px solid black;*/
             }
             
             #input_block {
                 width: 100%;
                 position: absolute;
-                /* left: 1%; */
                 top: 13%;
                 height: 30%;
-                /* border: 1px solid black; */
             }
             
             canvas {
@@ -193,26 +190,6 @@
                 color: rgb(223, 193, 85);
             }
             
-            /*#numeroOttave {
-                position: relative;
-                top: 0;
-                text-align: center;
-                width: max-content;
-            }*/
-            /*#octaveButton {
-                position: relative;
-                left: 0px;
-                color: green;
-            }*/
-            
-            /*#BoxOctave {
-                position: relative;
-                width: max-content;
-                color: white;
-                background-color: transparent;
-                border: transparent;
-            }*/
-            
             .clickedBarButton {
                 color: rgb(160, 223, 179);
             }
@@ -309,6 +286,7 @@
                 position: sticky;
                 top: 0;
             }
+
             /*Button table cells*/
             
             .cellButton {
@@ -323,10 +301,6 @@
                 outline: 0;
             }
             
-            /*.pressButton {
-                background-color: #e92f32;
-            }*/
-            
             .disabled {
                 pointer-events: none;
             }
@@ -338,6 +312,7 @@
                 text-align: center;
                 top: 4px;
             }
+
             /*BAR*/
             
             .scrollingBar {
@@ -352,25 +327,6 @@
                 border-radius: 10px;
             }
             
-            #valore {
-                width: 40px;
-                position: relative;
-                background: transparent;
-                left: 5px;
-            }
-            
-            #send {
-                width: 40px;
-                position: relative;
-                background-color: transparent;
-                border: none;
-                cursor: pointer;
-                border-radius: 3px;
-            }
-            
-            #octaves {
-                position: relative;
-            }
             /*select*/
             
             select {
