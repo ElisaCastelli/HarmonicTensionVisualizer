@@ -218,11 +218,11 @@
             }
             
             .white {
-                background: rgb(60, 83, 94);
+                background: rgb(68, 96, 109);
             }
             
             .black {
-                background: rgb(35, 52, 60);
+                background: rgb(26, 50, 61);
                 color: white;
             }
             /*TABLE*/
@@ -323,9 +323,9 @@
                 outline: 0;
             }
             
-            .pressButton {
+            /*.pressButton {
                 background-color: #e92f32;
-            }
+            }*/
             
             .disabled {
                 pointer-events: none;

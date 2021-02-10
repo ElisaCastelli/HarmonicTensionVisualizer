@@ -297,7 +297,7 @@ function chordTypeSelected(columnNumber, chordType) {
     if (noteSelected != null) {
         let noteName = noteSelected.name;
         let noteNumber = allNotes1D.indexOf(noteName);
-        let octaveNoteSelected = noteSelected.ottava;
+        //let octaveNoteSelected = noteSelected.ottava;
         let shape = type[type.findIndex(x => x.name == chordType)].shape;
         let noteArray = chordBuilder(noteNumber, shape);
         printSelectable(noteArray, columnNumber);
@@ -329,7 +329,6 @@ function fillFinalProgression(progressionRead) {
         progressionRead = progressionRead.slice(indexSpace + 1, progressionRead.length);
         indexProgression++;
     }
-    console.log(finalProgression);
 }
 
 function selectRoot() {
@@ -340,10 +339,18 @@ function selectRoot() {
         let type = chord.type;
         let indexMatrix = matrixTable.findIndex(x => x.name == note && x.column == (maxColumns - 1 - index) && x.selected == true);
         if (indexMatrix != null) {
+            let idRoot = matrixTable[indexMatrix].id;
             matrixTable[indexMatrix].root = true;
             let col = matrixTable[indexMatrix].column;
             let select = document.getElementById("select" + col);
             select.value = type;
+            let selectableCells = matrixTable.filter(x => x.column == (maxColumns - 1 - index) && x.selected == true && x.id != idRoot);
+            if(selectableCells.length>0){
+                selectableCells.forEach(cell => {
+                    matrixTable[cellsNumber - cell.id].selectable = true;
+                    
+                });
+            }
         }
     }
 }
@@ -457,7 +464,7 @@ function play() {
     if (noteSelected != null) {
         for (let index = 0; index < noteSelected.length; index++) {
             let noteName = noteSelected[index].name;
-            let octave = noteSelected[index].ottava;
+            let octave = noteSelected[index].octave;
             notesArray.push(noteName + octave);
         }
         console.log(notesArray);
