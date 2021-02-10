@@ -129,6 +129,7 @@ function Note(octave, name, column, row, id) {
     let root = false;
 }
 
+/** Function to convert finalProgression into a String in order to write it on a text file */ 
 function finalProgressionToString() {
     let text = "";
     for (let index = 0; index < maxColumns; index++) {
@@ -139,6 +140,7 @@ function finalProgressionToString() {
     return text;
 }
 
+/** Function to convert matrixTable into a String in order to write it on a text file */ 
 function matrixToString() {
     let text = "";
     for (let index = 0; index < cellsNumber; index++) {
@@ -153,6 +155,7 @@ function matrixToString() {
     return text;
 }
 
+/** Function to create for the first time matrixTable */
 function matrixConstructor() {
     let octaveNumber = 0;
     let noteNumber = 0;
@@ -172,6 +175,7 @@ function matrixConstructor() {
     }
 }
 
+/* Function to check if matrixTable is still empty*/ 
 function emptyMatrix(){
     let filledCells = matrixTable.filter(x => x.selected == true);
     if(filledCells.length==0){
@@ -181,6 +185,7 @@ function emptyMatrix(){
     }
 }
 
+/** Function to fill matrixTable with the content of a file */
 function fillMatrix(matrixRead) {
     let maxColumnIndex = finalProgression.findIndex(x => typeof x == 'undefined');
     unselectMatrix(maxColumnIndex);
@@ -196,6 +201,7 @@ function fillMatrix(matrixRead) {
     printMatrix();
 }
 
+/** Function to update the visual content of the table based on the update matrixTable */
 function printMatrix() {
     matrixTable.forEach(element => {
         if (element.selected) {
@@ -206,6 +212,7 @@ function printMatrix() {
     });
 }
 
+/** Function to unselect all the cells of the table and update the variables of the matrix elements Note */
 function unselectMatrix(lastColumn) {
     let index = 0;
     if (lastColumn >= 0) {
@@ -234,6 +241,7 @@ function unselectMatrix(lastColumn) {
     }
 }
 
+/** Function to disable click on a certain given column */
 function unclickableColumn(numCol) {
     let columnCell = matrixTable.filter(x => (x.column == numCol && x.selected == false));
     for (let index = 0; index < columnCell.length; index++) {
@@ -243,6 +251,7 @@ function unclickableColumn(numCol) {
     }
 }
 
+/** Function to allow click on a certain given column */
 function clickableColumn(numCol) {
     let columnCell = matrixTable.filter(x => x.column == numCol);
     for (let index = 0; index < columnCell.length; index++) {
@@ -259,6 +268,7 @@ function clickableColumn(numCol) {
     }
 }
 
+/** Function to remove the visual content of a specific column of the table  */
 function removeAllColor(numColumn) {
     let columnCell = matrixTable.filter(x => x.column == numColumn);
     for (let index = 0; index < columnCell.length; index++) {
@@ -269,6 +279,7 @@ function removeAllColor(numColumn) {
     }
 }
 
+/** Function to remove the visual content associated to the selectable cells of a specific column of the table  */
 function removeLightColor(numColumn) {
     let columnCell = matrixTable.filter(x => x.column == numColumn);
     for (let index = 0; index < columnCell.length; index++) {
@@ -278,6 +289,7 @@ function removeLightColor(numColumn) {
     }
 }
 
+/** Function to remove the visual content associated to the selectable cells of a specific column of the table  */
 function printSelectable(noteArray, columnNumber) {
     for (let index = 1; index < noteArray.length; index++) {
         let notesToPrint = matrixTable.filter(x => (x.name == noteArray[index] && x.column == columnNumber));
@@ -292,21 +304,22 @@ function printSelectable(noteArray, columnNumber) {
     }
 }
 
+/** Function called after selecting the tonic note and the type of chord to compute which are the other notes needed to complete the chord we want */
 function chordTypeSelected(columnNumber, chordType) {
     let noteSelected = matrixTable.find(x => (x.column == columnNumber && x.selected == true && x.root == true));
     if (noteSelected != null) {
         let noteName = noteSelected.name;
         let noteNumber = allNotes1D.indexOf(noteName);
-        //let octaveNoteSelected = noteSelected.ottava;
         let shape = type[type.findIndex(x => x.name == chordType)].shape;
         let noteArray = chordBuilder(noteNumber, shape);
         printSelectable(noteArray, columnNumber);
         let chord = new Chord(noteName, chordType);
         finalProgression[Math.abs(maxColumns - columnNumber - 1)] = chord;
-        // console.log(finalProgression); // da togliere
+        
     }
 }
 
+/** Function to fill the finalProgression array with the one read from a file */
 function fillFinalProgression(progressionRead) {
     finalProgression = new Array(maxColumns);
     progressionRead = progressionRead.substring(1, progressionRead.length);
@@ -331,6 +344,7 @@ function fillFinalProgression(progressionRead) {
     }
 }
 
+/** Function to select the root of a chord when upload a file  */
 function selectRoot() {
     let maxColumnIndex = finalProgression.findIndex(x => typeof x == 'undefined');
     for (let index = 0; index < maxColumnIndex; index++) {
@@ -356,11 +370,14 @@ function selectRoot() {
 }
 
 // CONTROLLER
+
+/** Function to move the table scroll in its starting position */
 function tableBackscroll(position) {
     const table = document.getElementById("table-scroll");
     table.scrollLeft = position;
 }
 
+/** Function to move the table scroll */
 function scroll() {
     const bar = document.getElementById("scrollingBar");
     const pianoContainer = document.getElementById("output_block");
@@ -379,6 +396,7 @@ function scroll() {
     }
 }
 
+/** */
 function addTone(cell, columnNumber, matrixIndex) {
     if (matrixTable[matrixIndex].selected == true) {
         matrixTable[matrixIndex].selected = false;
@@ -397,6 +415,7 @@ function addTone(cell, columnNumber, matrixIndex) {
     }
 }
 
+/** */
 function addNote(cell, idCell, columnNumber) {
     columnNumber = 19 - columnNumber;
     let matrixIndex = numOctaves * 12 * maxColumns - idCell;
@@ -422,6 +441,7 @@ function addNote(cell, idCell, columnNumber) {
 
 }
 
+/** */
 function addRoot(cell, matrixIndex) {
     cell.classList.toggle("selected_background");
     // manca di segnare nella matrice che la casella è "piena"
@@ -430,6 +450,7 @@ function addRoot(cell, matrixIndex) {
     unclickableColumn(matrixTable[matrixIndex].column);
 }
 
+/** Function to remove everything from a column */
 function removeAll(columnNumber) {
     for (let i = 0; i < matrixTable.length; i++) {
         matrixTable[i].selected = false;
@@ -441,11 +462,13 @@ function removeAll(columnNumber) {
     resetSelect(columnNumber);
 }
 
+/** Function to reset select value */
 function resetSelect(columnNumber) {
     let select = document.getElementById("select" + columnNumber);
     select.value = "default";
 }
 
+/** Function to alternate the recalling of scroll() and play() functions */
 function playAndScroll() {
     scroll();
     if (timeInterval % 2700 == 0) {
@@ -457,6 +480,7 @@ function playAndScroll() {
     timeInterval += 25;
 }
 
+/** Function to play the chord using a Sampler */
 function play() {
     let noteSelected = new Array();
     let notesArray = new Array();
@@ -518,9 +542,40 @@ function play() {
     }).toMaster();
 }
 
+/** Function used to read the file uploaded */
+function read(file) {
+    let textType = /text.*/;
+    let matrixString = "";
+    let progressionString = "";
+    if (file.type.match(textType)) {
+        let reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = function(e) {
+            let text = reader.result;
+            let lastIndex = text.indexOf("\n");
+            matrixString = text.substring(0, lastIndex);
+            fillMatrix(matrixString);
+            progressionString = text.substring(lastIndex, text.length);
+            fillFinalProgression(progressionString);
+            selectRoot();
+        }
+    } else {
+        console.log("File not supported!");
+    }
+    let maxIndex = 0;
+    if (finalProgression.length == maxColumns) {
+        maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
+    } else {
+        maxIndex = finalProgression.length;
+    }
+    unselectMatrix(maxIndex);
+}
+
+
+
 // VIEW
 
-
+/** Function called the first time the page is loaded to add the left fixed column of the table that shows the corresponding notes to each row*/
 function createFixedColumn(scaleNumber, noteNumber) {
     const fixedColumn = document.createElement("th");
     fixedColumn.classList.add("leftstop");
@@ -535,6 +590,7 @@ function createFixedColumn(scaleNumber, noteNumber) {
     return fixedColumn;
 }
 
+/** Function called the first time the page is loaded to add the table rows*/
 function createRow(scaleNumber, noteNumber) {
     const row = document.createElement("tr");
     let rowNumber = numOctaves * 12 - ((scaleNumber - numOctavesMin) * 12 + noteNumber) - 1;
@@ -561,6 +617,7 @@ function createRow(scaleNumber, noteNumber) {
     return row;
 }
 
+/** Function called the first time the page is loaded to add the first fixed table row with the select elements*/
 function createHeader() {
     const table_head = document.createElement("thead");
     const row = document.createElement("tr");
@@ -623,6 +680,7 @@ function createHeader() {
     return table_head;
 }
 
+/** Function called the first time the page is loaded to add the table element */
 function createTable() {
     const main_table = document.createElement("table");
     let table_head = createHeader();
@@ -640,6 +698,7 @@ function createTable() {
     return main_table;
 }
 
+/** Function called the first time the page is loaded to add the div element that contains the table */
 function createPianoRoll() {
     const pianoRollTable = document.createElement("div");
     pianoRollTable.classList.add("table-scroll");
@@ -653,6 +712,7 @@ function createPianoRoll() {
     return pianoRollTable;
 }
 
+/** Function called the first time the page is loaded to add the div element that corresponds to the scroll bar */
 function createBar() {
     const bar = document.createElement("div");
     bar.setAttribute("id", "scrollingBar");
@@ -661,13 +721,15 @@ function createBar() {
 }
 
 
-// metodi onclick
+/** Onclick functions */
 
+/** onclick associated with the div that contains the title to reload the page */
 title_container.onclick = function() {
     window.location.reload(false);
 }
 
-resetNotes.onclick = function() {
+/** onclick associated with the resetButton to empty the content of the table and reset all the global variables */
+resetButton.onclick = function() {
     if (!modelButton) {
         let lengthChordArray = 0;
         if (finalProgression.length == maxColumns) {
@@ -686,39 +748,14 @@ resetNotes.onclick = function() {
     }
 }
 
-folderIcon.onchange = function() {
+/** onclick associated with the uploadButton to read a file */
+uploadButton.onchange = function() {
     read(fileInput.files[0]);
 }
 
-function read(file) {
-    let textType = /text.*/;
-    let matrixString = "";
-    let progressionString = "";
-    if (file.type.match(textType)) {
-        let reader = new FileReader();
-        reader.readAsText(file);
-        reader.onload = function(e) {
-            let text = reader.result;
-            let lastIndex = text.indexOf("\n");
-            matrixString = text.substring(0, lastIndex);
-            fillMatrix(matrixString);
-            progressionString = text.substring(lastIndex, text.length);
-            fillFinalProgression(progressionString);
-            selectRoot();
-        }
-    } else {
-        console.log("File not supported!");
-    }
-    let maxIndex = 0;
-    if (finalProgression.length == maxColumns) {
-        maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
-    } else {
-        maxIndex = finalProgression.length;
-    }
-    unselectMatrix(maxIndex);
-}
 
 
+/** onclick associated with the downloadButton to download a file that contains the chord progression you put inside the pianoroll */
 downloadButton.onclick = function() {
     if(!emptyMatrix()){
         let fileName = "MyChordProgression";
@@ -727,8 +764,26 @@ downloadButton.onclick = function() {
     }
 }
 
+
+muteButton.onclick = function() {
+    muted = !muted;
+    Tone.Master.mute = muted;
+}
+
+volumeUpButton.onclick = function() {
+    if ((Volume + 1) <= MaxVolume)
+        Volume++;
+    else alert("Max Volume Reached");
+}
+
+volumeDownButton.onclick = function() {
+    if ((Volume - 1) >= minVolume)
+        Volume--;
+    else alert("Min Volume Reached");
+}
+
 // cancella tutto il contenuto del piano roll
-function refresh() {
+/*function refresh() {
     matrixTable = [];
     timeInterval = 0;
     tableBackscroll(0);
@@ -740,8 +795,9 @@ function refresh() {
     while (pianoContainer.lastChild) {
         pianoContainer.removeChild(pianoContainer.lastChild);
     }
-}
+}*/
 
+/** Function called at the first load of the page to add al the graphic elements */
 function firstRender() {
     start;
     tensionChange(0);
@@ -810,27 +866,11 @@ function firstRender() {
 
 firstRender();
 
-function noncliccabile() {
+/*function noncliccabile() {
     matrixTable.forEach(element => {
         idCell = element.id;
         cell = document.getElementById(idCell);
         cell.classList.add("disabled");
     });
-}
+}*/
 
-muteButton.onclick = function() {
-    muted = !muted;
-    Tone.Master.mute = muted;
-}
-
-volumeUpButton.onclick = function() {
-    if ((Volume + 1) <= MaxVolume)
-        Volume++;
-    else alert("Max Volume Reached");
-}
-
-volumeDownButton.onclick = function() {
-    if ((Volume - 1) >= minVolume)
-        Volume--;
-    else alert("Min Volume Reached");
-}
