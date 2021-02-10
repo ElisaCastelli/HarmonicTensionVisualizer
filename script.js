@@ -682,7 +682,7 @@ uploadButton.onchange = function() {
 /** onclick associated with the downloadButton to download a file that contains the chord progression you put inside the pianoroll */
 downloadButton.onclick = function() {
     if(!emptyMatrix()){
-        let fileName = "MyChordProgression";
+        let fileName = "MyChordProgression.txt";
         let text = matrixToString(finalProgression, maxColumns, cellsNumber);
         downloadFile(fileName, text);
     }
