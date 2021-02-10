@@ -4,7 +4,7 @@ import { type, allNotes1D, chordBuilder } from './chordBuilder.js';
 import { tensionChange, start } from './tensionAnimation.js';
 import { evaluateTension, Chord } from './harmonicAnalysis.js';
 import { downloadFile } from './readFile.js';
-import { matrixConstructor, matrixToString, emptyMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell,findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable } from './Matrix.js';
+import { matrixConstructor, matrixToString, emptyMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell,findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType } from './matrix.js';
 
 const fileInput = document.getElementById('file-input');
 
@@ -256,7 +256,7 @@ function printSelected() {
 }
 
 /** Function to remove the visual content associated to the selectable cells of a specific column of the table  */
-function printSelectable(noteArray, columnNumber) {
+export function printSelectable(noteArray, columnNumber) {
     for (let index = 1; index < noteArray.length; index++) {
         let notesToPrint = findNoteByNameAndColumn(noteArray[index], columnNumber);
         for (let i = 0; i < notesToPrint.length; i++) {
@@ -281,10 +281,8 @@ function chordTypeSelected(columnNumber, chordType) {
         printSelectable(noteArray, columnNumber);
         let chord = new Chord(noteName, chordType);
         finalProgression[Math.abs(maxColumns - columnNumber - 1)] = chord;
-        
     }
 }
-
 
 
 // CONTROLLER
@@ -330,13 +328,13 @@ function addTone(cell, columnNumber, cellIndex) {
 
 /** */
 function addNote(cell, idCell, columnNumber) {
-    columnNumber = 19 - columnNumber;
+    columnNumber = (maxColumns - 1) - columnNumber;
     let matrixIndex = numOctaves * 12 * maxColumns - idCell;
     let findRoot = findRootNoteByColumn(columnNumber);
     let selectableNotes = getSelectableByColumn(columnNumber);
     // selecting the first note ( the root of the chord)
     if (findRoot == undefined) {
-        addRoot(cell, matrixIndex);
+        addRoot(cell, matrixIndex, columnNumber);
     }
     // removing the root
     else if (findRoot.id == idCell) {
@@ -351,10 +349,14 @@ function addNote(cell, idCell, columnNumber) {
 }
 
 /** */
-function addRoot(cell, matrixIndex) {
+function addRoot(cell, matrixIndex, columnNumber) {
     cell.classList.toggle("selected_background");
     addRootCell(matrixIndex);
     unclickableColumn(getCellColumnByIndex(matrixIndex));
+    let select = document.getElementById("select" + columnNumber);
+    if (select.value != 'default') {
+        rootAfterChordType(matrixIndex ,columnNumber);
+    }
 }
 
 /** Function to remove everything from a column */

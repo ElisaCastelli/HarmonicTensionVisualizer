@@ -1,3 +1,6 @@
+import { type, allNotes1D, chordBuilder } from './chordBuilder.js';
+import { printSelectable } from './script.js';
+
 let matrixTable = new Array();;
 
 // costruttore Note
@@ -193,3 +196,15 @@ export function fillMatrix(matrixRead) {
     return matrixTable;
 }
 
+export function rootAfterChordType (matrixIndex , columnNumber) {
+    let noteSelected = matrixTable[matrixIndex];
+    if (noteSelected != null) {
+        let noteName = noteSelected.name;
+        let noteNumber = allNotes1D.indexOf(noteName);
+        let select = document.getElementById("select" + columnNumber);
+        let chordType = select.value;
+        let shape = type[type.findIndex(x => x.name == chordType)].shape;
+        let noteArray = chordBuilder(noteNumber, shape);
+        printSelectable(noteArray, columnNumber);
+    }
+}

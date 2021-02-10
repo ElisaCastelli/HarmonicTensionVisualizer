@@ -34,12 +34,6 @@ export const type = [{
 }
 ];
 
-const allnotes = {
-	norm: ["C", "", "D", "", "E", "F", "", "G", "", "A", "", "B"],
-	sharp: ["", "C#", "", "D#", "", "", "F#", "", "G#", "", "A#", ""],
-    flat: ["", "Db", "", "Eb", "", "", "Gb", "", "Ab", "", "Bb", ""]
-};
-
 export const allNotes1D = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 
 // Tonic è l'indice della nota con C0 = 0 , C1 = 12 ...
@@ -55,9 +49,3 @@ export function chordBuilder(noteNumber, shape) {
     }
     return ChordNotes
 }
-
-/*console.log(chordBuilder(0,type[3].shape))
-
-index = type.findIndex(x => x.name ==="Min7");
-
-console.log (index)*/
