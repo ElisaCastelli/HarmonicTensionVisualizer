@@ -31,6 +31,8 @@
 // const note_notation = /^[A-G][#b]?$/;
 // const type_notation = /^(min|dim|aug|maj7|min7|7|halfdim|dim7)?$/;
 
+import { diminishedDomSub, tritoneSub } from './Substitutions.js';
+
 const degrees = ["I", "II", "III", "IV", "V", "VI", "VII"];
 
 // object containing notes at corresponding index, used for extracting value
@@ -106,12 +108,13 @@ export function Chord(note, type) {
 	*/
 }
 
-export function ChordPlus(note, type, degree, curr_tonic, curr_scale) {
+export function ChordPlus(note, type, degree, key) {
 	this.note = note;
 	this.type = type;
 	this.degree = degree;
-	this.curr_key = [curr_tonic, curr_scale];
+	this.curr_key = key;
 	
+	this.substitution = [];
 	this.type_coherent = true;
 	this.degree_coherent = true;
 	this.tension = 1;
@@ -180,7 +183,7 @@ function getProgDegrees(progression, key){
 	let triad_check;
 	let quadriad_check;
 	for (let i = 0; i < progression.length; i++) {
-		degrees_progression[i] = new ChordPlus(progression[i].note, progression[i].type, getDegree(progression[i], key), key.tonic, key.scale);
+		degrees_progression[i] = new ChordPlus(progression[i].note, progression[i].type, getDegree(progression[i], key), key);
 
 		if (degrees_progression[i].degree.includes("#") || degrees_progression[i].degree.includes("b")) {
 			degrees_progression[i].degree_coherent = false;
@@ -385,7 +388,34 @@ export function evaluateTension(progression){
 		console.log(degrees_progression[i])
 		if (!( degrees_progression[i].type_coherent && degrees_progression[i].degree_coherent)) {
 			
-			// OPTION A): MODAL INTERCHANGE
+			// OPTION A): CHORD SUBSTITUTION
+			if (degrees_progression[i].type == "dim7") {
+				tempChord = diminishedDomSub(degrees_progression[i]);
+				// check if it is coherent with the current key
+				tempChord = getProgDegrees([tempChord], degrees_progression[i].curr_key);
+				if (tempChord.type_coherent && tempChord.degree_coherent) {
+					tempChord.substitution = degrees_progression[i];
+					degrees_progression[i] = tempChord;
+					// add this key to priority_keys
+					priority_keys.push(tempKeys[0]);
+					console.log("substitution dim7 found!", degrees_progression[i])
+				}
+			}
+			if (degrees_progression[i].type == "7") {
+				tempChord = tritoneSub(degrees_progression[i]);
+				// check if it is coherent with the current key
+				tempChord = getProgDegrees([tempChord], degrees_progression[i].curr_key);
+				if (tempChord.type_coherent && tempChord.degree_coherent) {
+					tempChord.substitution = degrees_progression[i];
+					degrees_progression[i] = tempChord;
+					// add this key to priority_keys
+					priority_keys.push(tempKeys[0]);
+					console.log("tritone substitution found!", degrees_progression[i])
+				}
+			}
+			
+			
+			// OPTION B): MODAL INTERCHANGE
 			
 			//reset temp array
 			tempKeys = [];
@@ -427,15 +457,15 @@ export function evaluateTension(progression){
 				// add this key to priority_keys
 				priority_keys.push(tempKeys[0]);
 				// update chord information
-				degrees_progression[i].curr_key = tempKeys[0].scale;
+				degrees_progression[i].curr_key = tempKeys[0];
 				continue;
 			}
 			// note: the choices above are just a convention in order to solve ambiguiti, 
 			// it is not the aim of the project to identify the correct interpretation
 			
-			// OPTION B): CHANGE OF SCALE
+			
+			// OPTION C): CHANGE OF SCALE
 			// check if from this point a new key is possible
-			//console.log("hey", progression.slice(i, progression.length))
 			tempKeys = findKey(progression.slice(i, progression.length));
 			// take the first one
 			temp_deg_progression = getProgDegrees(progression.slice(i, progression.length), tempKeys[0]);
@@ -452,6 +482,8 @@ export function evaluateTension(progression){
 					else
 						break;
 				}
+				// add this key to priority_keys
+				priority_keys.push(tempKeys[0]);
 				continue;
 			}
 			
@@ -512,7 +544,8 @@ export function evaluateTension(progression){
 			if (found_pattern) {
 				console.log("found pattern:", progPatterns[p].name);
 				// substitute tension values in tension_progression
-				for (let j = i; j < i + progPatterns[p].tension.length; j++) {
+				for (let j = i; j < i + progPatterns[p].tension.length && j < degrees_progression.length; j++) {
+					console.log(j, progPatterns[p].tension.length)
 					degrees_progression[j].tension = progPatterns[p].tension[j - i];
 				}
 				i += progPatterns[p].tension.length;
@@ -550,8 +583,8 @@ try {
 } catch (e) {
 	console.error(e);
 }
-*/
 
+*/
 // Harmony analysis
 // - quadriadi + tese di triadi
 // - raggruppare pattern per scala?
