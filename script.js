@@ -802,6 +802,6 @@ firstRender();
 // spacebar event
 document.body.onkeyup = function(e) {
     if (e.keyCode == 32) {
-
+        // eventuale codice spacebar
     }
 }
