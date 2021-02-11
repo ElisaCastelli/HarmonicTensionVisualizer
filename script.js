@@ -4,7 +4,7 @@ import { type, allNotes1D, chordBuilder } from './Resources/chordBuilder.js';
 import { tensionChange, start } from './Resources/tensionAnimation.js';
 import { evaluateTension, Chord, ChordPlus, Key} from './Resources/harmonicAnalysis.js';
 import { downloadFile } from './Resources/readFile.js';
-import { matrixConstructor, matrixToString, emptyMatrix, clearMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell, findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord, getSelectedByColumnExceptRoot} from './Resources/matrix.js';
+import { matrixConstructor, matrixToString, emptyMatrix, clearMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell, findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord, getSelectedByColumnExceptRoot, getSelectedAndSelectable} from './Resources/matrix.js';
 
 const fileInput = document.getElementById('file-input');
 
@@ -226,6 +226,7 @@ function clickableColumn(numCol) {
 }
 
 /** Function to remove the visual content of a specific column of the table  */
+/*
 function removeAllColor(numColumn) {
     let columnCell = findCellsByColumn(numColumn);
     for (let index = 0; index < columnCell.length; index++) {
@@ -233,6 +234,20 @@ function removeAllColor(numColumn) {
         let cell = document.getElementById(idCell);
         cell.classList.remove("selected_background");
         cell.classList.remove("light_background");
+    }
+}*/
+
+/** Function to clear all notes selected or selectable from a specific column */
+function clearColumn(columnNumber) {
+    let notesToClear = getSelectedAndSelectable(columnNumber);
+    for (let index = 0; index < notesToClear.length; index++) {
+        notesToClear[index].selectable = false;
+        notesToClear[index].selected = false;
+        notesToClear[index].root = false;
+        let idCell = notesToClear[index].id;
+        let cell = document.getElementById(idCell);
+        cell.classList.remove("light_background");
+        cell.classList.remove("selected_background");
     }
 }
 
@@ -374,6 +389,7 @@ function addNote(cell, idCell, columnNumber) {
     for (let i = 0; i < selectableNotes.length; i++) {
         if (selectableNotes[i].id == idCell) {
             addTone(cell, columnNumber, matrixIndex);
+            console.log('added a tone')
         }
     }
 }
@@ -391,9 +407,8 @@ function addRoot(cell, matrixIndex, columnNumber) {
 
 /** Function to remove everything from a column */
 function removeAll(columnNumber) {
-    clearMatrix();
+    clearColumn(columnNumber);
     clickableColumn(columnNumber);
-    removeAllColor(columnNumber);
     resetSelect(columnNumber);
 }
 

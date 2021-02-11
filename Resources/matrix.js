@@ -96,6 +96,10 @@ export function getSelectedByColumnExceptRoot(columNumber) {
     return matrixTable.filter(x => (x.column == columNumber && x.selected == true && x.root != true));
 }
 
+export function getSelectedAndSelectable(columNumber) {
+    return matrixTable.filter(x => (x.column == columNumber && (x.selected == true || x.selectable == true)));
+}
+
 export function getAllSelectedId() {
     let selectedId = [];
     matrixTable.forEach(element => {
