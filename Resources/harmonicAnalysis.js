@@ -111,6 +111,14 @@ export function ChordPlus(note, type, degree, key) {
 	this.curr_pattern = "";
 }
 
+export function Key(tonic, scale){
+	this.tonic = tonic;
+	this.scale = scale;
+	
+	this.scale_index = getScaleIndex(scale);
+	this.points = 0;
+}
+
 //vedi sopra, defining getAbsValue Method of Chord
 Chord.prototype.getAbsValue = function(){
 	let value = allnotes.norm.indexOf(this.note);
@@ -159,7 +167,7 @@ function getDegree(chord, key){
 		return 0;
 	}
 	let curr_interval = chord.getTonicInterval(new Chord(key.tonic));
-	let chord_deg_index = modes[getScaleIndex(key.scale)].intervals.indexOf(curr_interval);
+	let chord_deg_index = modes[key.scale_index].intervals.indexOf(curr_interval);
 	// if note out of scale
 	if (chord_deg_index < 0){
 		let chord_letter = chord.note.charAt(0);
@@ -172,7 +180,7 @@ function getDegree(chord, key){
 			//get the reciprocal interval, then remove the 1 added before
 			temp_degree = 9 - temp_degree - 1;
 		}
-		let temp_interval = modes[getScaleIndex(key.scale)].intervals[temp_degree];
+		let temp_interval = modes[key.scale_index].intervals[temp_degree];
 		if (temp_interval + 1 == curr_interval)
 			return degrees[temp_degree].concat("#");
 		else
@@ -193,8 +201,8 @@ function getProgDegrees(progression, key){
 			degrees_progression[i].degree_coherent = false;
 		}
 		// check if the degree type is different from its scale
-		triad_check = modes[getScaleIndex(key.scale)].triads[degrees.indexOf(degrees_progression[i].degree)] == progression[i].type;
-		quadriad_check = modes[getScaleIndex(key.scale)].quadriads[degrees.indexOf(degrees_progression[i].degree)] == progression[i].type;
+		triad_check = modes[key.scale_index].triads[degrees.indexOf(degrees_progression[i].degree)] == progression[i].type;
+		quadriad_check = modes[key.scale_index].quadriads[degrees.indexOf(degrees_progression[i].degree)] == progression[i].type;
 		if (! (triad_check || quadriad_check)) {
 			degrees_progression[i].type_coherent = false;
 		}
@@ -210,7 +218,7 @@ function findKey(progression){
 	
 	// each accepted key will gain or lose points according to different parameters (number of substitutions, kind of substitutions, ...)
 	let accepted_keys = [];
-	let tempKey = {};
+	let tempKey;
 	
 	let chord_deg_index;
 	let chord_degree;
@@ -226,11 +234,8 @@ function findKey(progression){
 		for (let scale = 0; scale < modes.length; scale++) {
 			
 			// reset the counter
-			tempKey = {
-				tonic: tonic.note,
-				scale: modes[scale].name,
-				points: 0
-			};
+			tempKey = new Key(tonic.note, modes[scale].name);
+			
 			// check that the chord is inside the scale "tonic.note modes[scale]"
 			for (let chord = 0; chord < progression.length; chord++) {
 				// evaluate interval with current tonic hypothesis
@@ -356,7 +361,7 @@ export function evaluateTension(progression){
 	// for each accepted_key
 	for (let i = 0; i < accepted_keys.length; i++) {
 		// exception: give priority to major and minor scales
-		if (modes[getScaleIndex(accepted_keys[i].scale)].tonal_harmony) {
+		if (modes[accepted_keys[i].scale_index].tonal_harmony) {
 			accepted_keys[i].points+= 10;
 		}
 		
@@ -428,7 +433,7 @@ export function evaluateTension(progression){
 			for (let m = 0; m < modes.length; m++) {
 				
 				// check if the scale is compatible with any other mode
-				tempKeys.push({tonic: key.tonic, scale: modes[m].name, points: 0});
+				tempKeys.push(new Key(key.tonic, modes[m].name));
 				
 				//for each mode, with same tonic
 				for (let j = i; j < degrees_progression.length; j++) {
@@ -446,15 +451,15 @@ export function evaluateTension(progression){
 			/** if multiple modes with same points:
 			 * 1): check if any of them is inside priority_keys
 			 * 2): sort by mode similarity*/
-			let keyIntervalsSum = modes[getScaleIndex(key.scale)].intervals.reduce(arraySum);
+			let keyIntervalsSum = modes[key.scale_index].intervals.reduce(arraySum);
 			for (let m = 0; m < tempKeys.length; m++) {
 				if (tempKeys[m].points < tempKeys[0].points) {
 					break;
 				}
-				
+				console.log(tempKeys)
 				// choose the scale that has less differences (b or #) compared to the original mode
-				if(Math.abs(modes[getScaleIndex(tempKeys[m].scale)].intervals.reduce(arraySum) - keyIntervalsSum) <
-						Math.abs(modes[getScaleIndex(tempKeys[0].scale)].intervals.reduce(arraySum) - keyIntervalsSum)){
+				if(Math.abs(modes[tempKeys[m].scale_index].intervals.reduce(arraySum) - keyIntervalsSum) <
+						Math.abs(modes[tempKeys[0].scale].intervals.reduce(arraySum) - keyIntervalsSum)){
 					tempKeys[0] = tempKeys[m];
 				}
 			}
@@ -510,7 +515,7 @@ export function evaluateTension(progression){
 	// TENSION PROGRESSION
 
 	// only for major scale, diatonic substitutions
-	if (modes[getScaleIndex(key.scale)].name == 'major (Ionian)'){
+	if (modes[key.scale_index].name == 'major (Ionian)'){
 		for (let i = 0; i < degrees_progression.length; i++) {
 			for (let j = 0; j < majScaleChordFunction.length; j++) {
 				if (majScaleChordFunction[j].degrees.indexOf(degrees_progression[i].degree) >= 0 && degrees_progression[i].type_coherent) {
