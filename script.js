@@ -4,7 +4,7 @@ import { type, allNotes1D, chordBuilder } from './Resources/chordBuilder.js';
 import { tensionChange, start } from './Resources/tensionAnimation.js';
 import { evaluateTension, Chord, ChordPlus, Key} from './Resources/harmonicAnalysis.js';
 import { downloadFile } from './Resources/readFile.js';
-import { matrixConstructor, matrixToString, emptyMatrix, clearMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell, findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord, getSelectedByColumnExceptRoot, getSelectedAndSelectable} from './Resources/matrix.js';
+import { matrixConstructor, matrixToString, emptyMatrix, clearMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell, findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord, getSelectedByColumnExceptRoot, getSelectedAndSelectable, findNoteByMatrixIndex} from './Resources/matrix.js';
 
 const fileInput = document.getElementById('file-input');
 
@@ -353,7 +353,7 @@ function scroll() {
     }
 }
 
-/** */
+/** function to add a tone from the selectable options. Updates both the matrix and the visuals*/
 function addTone(cell, columnNumber, cellIndex) {
     changeSelection(cellIndex);
     cell.classList.toggle("disabled");
@@ -367,7 +367,7 @@ function addTone(cell, columnNumber, cellIndex) {
     }
 }
 
-/** */
+/** Funtion that adds or removes notes from the pianoroll*/
 function addNote(cell, idCell, columnNumber) {
     columnNumber = (maxColumns - 1) - columnNumber;
     let matrixIndex = numOctaves * 12 * maxColumns - idCell;
@@ -389,12 +389,11 @@ function addNote(cell, idCell, columnNumber) {
     for (let i = 0; i < selectableNotes.length; i++) {
         if (selectableNotes[i].id == idCell) {
             addTone(cell, columnNumber, matrixIndex);
-            console.log('added a tone')
         }
     }
 }
 
-/** */
+/** function that adds the root of a chord on the pianoroll */
 function addRoot(cell, matrixIndex, columnNumber) {
     cell.classList.toggle("selected_background");
     addRootCell(matrixIndex);
@@ -402,6 +401,12 @@ function addRoot(cell, matrixIndex, columnNumber) {
     let select = document.getElementById("select" + columnNumber);
     if (select.value != 'default') {
         rootAfterChordType(matrixIndex, columnNumber);
+        let note = findNoteByMatrixIndex(matrixIndex);
+        let noteName = note.name;
+        let select = document.getElementById("select" + columnNumber);
+        let chordType = select.value;
+        let chord = new Chord(noteName, chordType);
+        finalProgression[Math.abs(maxColumns - columnNumber - 1)] = chord;
     }
 }
 

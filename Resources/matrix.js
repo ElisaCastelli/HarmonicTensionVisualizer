@@ -149,6 +149,10 @@ export function findNoteByNameAndColumn(name, columnNumber) {
     return matrixTable.filter(x => (x.name == name && x.column == columnNumber));
 }
 
+export function findNoteByMatrixIndex(matrixIndex) {
+    return matrixTable[matrixIndex]
+}
+
 /** Function to convert finalProgression into a String in order to write it on a text file */
 function finalProgressionToString(finalProgression, maxColumns) {
     let text = "";
