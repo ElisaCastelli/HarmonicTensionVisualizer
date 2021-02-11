@@ -92,6 +92,10 @@ export function getSelectedByColumn(columNumber) {
     return matrixTable.filter(x => (x.column == columNumber && x.selected == true));
 }
 
+export function getSelectedByColumnExceptRoot(columNumber) {
+    return matrixTable.filter(x => (x.column == columNumber && x.selected == true && x.root != true));
+}
+
 export function getAllSelectedId() {
     let selectedId = [];
     matrixTable.forEach(element => {
@@ -225,9 +229,6 @@ export function printChord(noteArray, octaveNoteSelected, columnNumber) {
         let cell = document.getElementById(idCell);
         let indexCell = matrixTable.findIndex(x => x.id == idCell);
         matrixTable[indexCell].selected = true;
-        matrixTable[indexCell].selectable = false;
-        cell.classList.remove("light_background");
         cell.classList.add("selected_background");
-
     }
 }

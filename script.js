@@ -4,7 +4,7 @@ import { type, allNotes1D, chordBuilder } from './Resources/chordBuilder.js';
 import { tensionChange, start } from './Resources/tensionAnimation.js';
 import { evaluateTension, Chord, ChordPlus, Key} from './Resources/harmonicAnalysis.js';
 import { downloadFile } from './Resources/readFile.js';
-import { matrixConstructor, matrixToString, emptyMatrix, clearMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell, findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord } from './Resources/matrix.js';
+import { matrixConstructor, matrixToString, emptyMatrix, clearMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell, findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord, getSelectedByColumnExceptRoot} from './Resources/matrix.js';
 
 const fileInput = document.getElementById('file-input');
 
@@ -237,12 +237,25 @@ function removeAllColor(numColumn) {
 }
 
 /** Function to remove the visual content associated to the selectable cells of a specific column of the table  */
-function removeLightColor(numColumn) {
-    let columnCell = findCellsByColumn(numColumn);
-    for (let index = 0; index < columnCell.length; index++) {
-        let idCell = columnCell[index].id;
+function removeSelectable(columnNumber) {
+    let selectableNotes = getSelectableByColumn(columnNumber);
+    for (let index = 0; index < selectableNotes.length; index++) {
+        selectableNotes[index].selectable = false;
+        let idCell = selectableNotes[index].id;
         let cell = document.getElementById(idCell);
         cell.classList.remove("light_background");
+        cell.classList.add('disabled')
+    }
+}
+
+function removeSelectedExceptRoot(columnNumber) {
+    let selectedNotes = getSelectedByColumnExceptRoot(columnNumber);
+    for (let index = 0; index < selectedNotes.length; index++) {
+        selectedNotes[index].selected = false;
+        let idCell = selectedNotes[index].id;
+        let cell = document.getElementById(idCell);
+        cell.classList.remove("selected_background");
+        cell.classList.add('disabled')
     }
 }
 
@@ -293,6 +306,7 @@ function autoFill(columnNumber) {
     let shape = type[type.findIndex(x => x.name == chordType)].shape;
     let noteArray = chordBuilder(rootNumber, shape);
     let octaveNoteSelected = root.octave;
+    removeSelectable(columnNumber + 1);
     printChord(noteArray, octaveNoteSelected, columnNumber);
 }
 
@@ -593,7 +607,8 @@ function createHeader() {
             select.appendChild(option7);
             select.addEventListener("change", function(event) {
                 let chordType = this.value;
-                removeLightColor(columnNumber);
+                removeSelectable(columnNumber);
+                removeSelectedExceptRoot(columnNumber);
                 if (chordType != "default") {
                     chordTypeSelected(columnNumber, chordType);
                 }
