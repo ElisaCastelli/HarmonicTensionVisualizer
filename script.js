@@ -450,7 +450,6 @@ function playAndScroll() {
             const stopButton = document.getElementById("stopButton");
             stopButton.onclick();
             timeInterval-=25;
-            //clearInterval(scrollInterval);
         }
     }
     timeInterval += 25;
@@ -459,7 +458,9 @@ function playAndScroll() {
 /** Function to play the chord using a Sampler */
 function play() {
     const chordPlayed = document.getElementById("chordPlayed");
-    var t = finalProgression[maxColumns - 1 - columnPlayed].note + finalProgression[maxColumns - 1 - columnPlayed].type;
+    //var t = finalProgression[maxColumns - 1 - columnPlayed].note + finalProgression[maxColumns - 1 - columnPlayed].type;
+    var t = 'Degree: '+analysisResults[maxColumns - 1 - columnPlayed].degree + '\n'+analysisResults[maxColumns - 1 - columnPlayed].substitution;
+    const progressionInfo = document.getElementById('progressionInfo');
     let noteSelected = getSelectedByColumn(columnPlayed);
     let notesArray = new Array();
     if (noteSelected != null) {
@@ -468,8 +469,14 @@ function play() {
             let octave = noteSelected[index].octave;
             notesArray.push(noteName + octave);
         }
+        if(typeof analysisResults[maxColumns - 1 - columnPlayed].pattern!= 'undefined'){
+            progressionInfo.style.visibility='visible';
+            progressionInfo.textContent=analysisResults[maxColumns - 1 - columnPlayed].pattern;
+        }else{
+            progressionInfo.style.visibility='hidden';
+            progressionInfo.textContent="";
+        }
         chordPlayed.textContent = t;
-        //chordPlayed.appendChild(t);
         if (notesArray.length == 3) {
             sampler.triggerAttackRelease([notesArray[0], notesArray[1], notesArray[2]], 2);
         } else if (notesArray.length == 4) {
@@ -784,7 +791,9 @@ function firstRender() {
     const pianoContainer = document.getElementById("output_block");
     const playButton = document.getElementById("playButton");
     const divChordPlayed = document.getElementById("chordPlayed");
+    const progressionInfo = document.getElementById('progressionInfo');
     divChordPlayed.style.visibility = 'hidden';
+    progressionInfo.style.visibility = 'hidden';
     let pianoRollTable = createPianoRoll();
     pianoContainer.appendChild(pianoRollTable);
     let bar = createBar();
