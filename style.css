@@ -12,8 +12,12 @@
             /* fine import */
             
             * {
-                font-family: 'HachiMaruPop', cursive;
+                /*font-family: 'HachiMaruPop', cursive;*/
+                /*font-family: 'Gloria Hallelujah';*/
+                font-family: 'Nanum Pen Script';
+                font-size:large;
             }
+
             
             #pagina {
                 position: absolute;

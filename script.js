@@ -20,6 +20,7 @@ let analysisResults = new Array();
 let modelButton = false;
 let firstPlay = true;
 
+
 // creazione synthetizer
 let muted = false;
 let minVolume = -8;
@@ -395,6 +396,10 @@ function playAndScroll() {
         if ((maxColumns - columnPlayed - 1) < finalProgression.length) {
             play();
             tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
+        }else{
+            const stopButton = document.getElementById("stopButton");
+            stopButton.onclick();
+            //clearInterval(scrollInterval);
         }
     }
     timeInterval += 25;
@@ -733,9 +738,8 @@ function firstRender() {
     let bar = createBar();
     let lastBarPosition = bar.style.left;
     let lastTableScrollPosition;
-    pianoContainer.appendChild(bar);
-
     let scrollInterval;
+    pianoContainer.appendChild(bar);
     playButton.onclick = function() {
         if (!modelButton && !emptyMatrix()) {
             const tableScroll = document.getElementById("table-scroll");
