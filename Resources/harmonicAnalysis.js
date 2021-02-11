@@ -88,10 +88,10 @@ export function Chord(note, type) {
 	this.note = note;
 	this.type = type || '';
 	if (! note_notation.test(this.note)) {
-		throw "note is not valid";
+		throw "note is not valid: " + note;
 	}
 	if (! type_notation.test(this.type)) {
-		throw "type is not valid";
+		throw "type is not valid: " + type;
 	} 
 	
 }
@@ -153,6 +153,11 @@ ChordPlus.prototype.printEvent = function(){
 ChordPlus.prototype.printPattern = function(){
 	return this.note.concat(this.type);
 }
+
+Key.prototype.toString = function(){
+	return this.tonic.concat(this.scale);
+}
+
 function getScaleIndex(scale_name){
 	for (var i = 0; i < modes.length; i++) {
 		if (modes[i].name == scale_name) {
@@ -224,6 +229,8 @@ function findKey(progression){
 	let chord_degree;
 	let triad_check;
 	let quadriad_check;
+	/**I need at least one I chord to accept a key*/
+	let firstDegreePresent;
 	
 	// for every possible tonic in the progression
 	for (let tonic_index = 0; tonic_index < progression.length; tonic_index++) {
@@ -235,6 +242,7 @@ function findKey(progression){
 			
 			// reset the counter
 			tempKey = new Key(tonic.note, modes[scale].name);
+			firstDegreePresent = false;
 			
 			// check that the chord is inside the scale "tonic.note modes[scale]"
 			for (let chord = 0; chord < progression.length; chord++) {
@@ -256,30 +264,34 @@ function findKey(progression){
 					
 					// this is just a statistic idea, tonic probably is at beginning and end of song
 					// ocio a logica e parentesi!! primo anno di università, dai
-					if((tonic_index == 0 /*|| tonic_index == progression.length -1*/) && (triad_check || quadriad_check)){
+					if (chord_degree == "I" && (triad_check || quadriad_check)){
+						//console.log(progression[chord].toString(), "is tonic of", tempKey.toString())
+						firstDegreePresent = true;
 						tempKey.points += 2;
 					}
 					else if (chord_degree == "V" && progression[chord].type == "7"){
 						tempKey.points += 2;
-						//if (chord_modes)
-						//chord_modes[chord].push(modes[scale].name);
 					}
 					else if (triad_check || quadriad_check){
 						tempKey.points++;
-						//if (chord_modes)
-						//chord_modes[chord].push(modes[scale].name);
+					}
+				}
+				// should I put here check for substitutions????????????????????????????????
+				
+			}
+			// if I have already saved the current key, merge the occourrences and sum points
+			if (firstDegreePresent) {
+				accepted_keys.push(tempKey);
+				// merge duplicate occourrences of keys
+				for (let i = 0; i < accepted_keys.length - 1; i++) {
+					if (tempKey.tonic == accepted_keys[i].tonic && tempKey.scale == accepted_keys[i].scale){
+						accepted_keys[i].points += tempKey.points;
+						accepted_keys.pop();
+						break;
 					}
 				}
 			}
-			// if I have already saved the current key, merge the occourrences and sum points
-			accepted_keys.push(tempKey);
-			for (let i = 0; i < accepted_keys.length - 1; i++) {
-				if (tempKey.tonic == accepted_keys[i].tonic && tempKey.scale == accepted_keys[i].scale){
-					accepted_keys[i].points += tempKey.points;
-					accepted_keys.pop();
-					break;
-				}
-			}
+			
 		}
 	}
 	// sort accepted_keys based on points
@@ -394,7 +406,6 @@ export function evaluateTension(progression){
 	
 	// search for chords out of key
 	for (let i = 0; i < degrees_progression.length; i++) {
-		console.log(degrees_progression[i])
 		if (!( degrees_progression[i].type_coherent && degrees_progression[i].degree_coherent)) {
 			
 			/** OPTION A): CHORD SUBSTITUTION*/
@@ -409,9 +420,10 @@ export function evaluateTension(progression){
 					degrees_progression[i].event = "dim7 substitution";
 					// add this key to priority_keys
 					priority_keys.push(tempKeys[0]);
+					continue;
 				}
 			}
-			if (degrees_progression[i].type == "7") {
+			else if (degrees_progression[i].type == "7") {
 				tempChord = tritoneSub(degrees_progression[i]);
 				// check if it is coherent with the current key
 				tempChord = getProgDegrees([tempChord], degrees_progression[i].curr_key);
@@ -421,6 +433,7 @@ export function evaluateTension(progression){
 					// add this key to priority_keys
 					priority_keys.push(tempKeys[0]);
 					degrees_progression[i].event = "tritone substitution";
+					continue;
 				}
 			}
 			
@@ -446,6 +459,7 @@ export function evaluateTension(progression){
 					tempKeys[m].points++;
 				}
 			}
+			
 			//sort by points
 			tempKeys.sort((a, b) => (a.points > b.points) ? -1 : 1);
 			/** if multiple modes with same points:
@@ -456,10 +470,9 @@ export function evaluateTension(progression){
 				if (tempKeys[m].points < tempKeys[0].points) {
 					break;
 				}
-				console.log(tempKeys)
 				// choose the scale that has less differences (b or #) compared to the original mode
 				if(Math.abs(modes[tempKeys[m].scale_index].intervals.reduce(arraySum) - keyIntervalsSum) <
-						Math.abs(modes[tempKeys[0].scale].intervals.reduce(arraySum) - keyIntervalsSum)){
+						Math.abs(modes[tempKeys[0].scale_index].intervals.reduce(arraySum) - keyIntervalsSum)){
 					tempKeys[0] = tempKeys[m];
 				}
 			}
@@ -486,7 +499,7 @@ export function evaluateTension(progression){
 			// da scrivere!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			
 			temp_deg_progression = getProgDegrees(progression.slice(i, progression.length), tempKeys[0]);
-			console.log('keys found', tempKeys);
+
 			if (tempKeys[0].points > 1) {
 				for (let j = 0; j < progression.length - i; j++) {
 					degrees_progression[i + j] = temp_deg_progression[j];
@@ -501,40 +514,43 @@ export function evaluateTension(progression){
 				}
 				// add this key to priority_keys
 				priority_keys.push(tempKeys[0]);
-				degrees_progression[i].event = "change of key: " + tempKeys[0];
+				degrees_progression[i].event = "change of key: " + tempKeys[0].toString();
 				continue;
 			}
+			
+			/** OPTION D): GENERAL CHORD OUT OF KEY*/
+			degrees_progression[i].event = "out of key";
 			
 		}
 		
 		
 	}
 	
-	
+	console.log(degrees_progression);
 	
 	// TENSION PROGRESSION
-
-	// only for major scale, diatonic substitutions
-	if (modes[key.scale_index].name == 'major (Ionian)'){
-		for (let i = 0; i < degrees_progression.length; i++) {
-			for (let j = 0; j < majScaleChordFunction.length; j++) {
-				if (majScaleChordFunction[j].degrees.indexOf(degrees_progression[i].degree) >= 0 && degrees_progression[i].type_coherent) {
+	
+	for (let i = 0; i < degrees_progression.length; i++) {
+		
+		if (degrees_progression[i].degree_coherent && degrees_progression[i].type_coherent) {
+			// only for major scale, diatonic substitutions
+			if (degrees_progression[i].curr_key.name == modes[0].name) {
+				for (let j = 0; j < majScaleChordFunction.length; j++) {
 					degrees_progression[i].tension = majScaleChordFunction[j].tension;
 				}
 			}
-		}
-	}
-	// to be reviewed!
-	// for other scales, every chord that is not tonic, there is a little constant tension
-	else {
-		for (let i = 0; i < degrees_progression.length; i++) {
-		
-			if (degrees_progression[i].degree != "I") {
-				degrees_progression[i].tension = 2;
+			// for other scales, every chord that is not tonic, there is a little constant tension
+			else if (degrees_progression[i].degree != "I") {
+				degrees_progression[i].tension = 3;
 			}
-
+		}
+		// assign high tension to chords that contain tritone
+		else if (["7", "dim", "halfdim", "dim7"].includes(degrees_progression[i].type)) {
+			console.log("contr", degrees_progression[i].toString())
+			degrees_progression[i].tension = 7;
 		}
 	}
+	
 	
 	// sort patterns from longest to shortest
 	progPatterns.sort((a, b) => (a.tension.length > b.tension.length) ? -1 : 1);
@@ -542,28 +558,27 @@ export function evaluateTension(progression){
 	// for each chord in the progression
 	for (let i = 0; i < degrees_progression.length; i++) {	
 		let found_pattern;
-		let pattern;
+		let extract;
 		// for each tension pattern 
 		for (let p = 0; p < progPatterns.length; p++) {
-			pattern = degrees_progression.slice(i, i + progPatterns[p].degrees.length);
+			extract = degrees_progression.slice(i, i + progPatterns[p].degrees.length);
 			found_pattern = true;
 			// check every following chord that could belong to the current pattern
-			for (let j = 0; j < pattern.length; j++) {
-				if (pattern[j].degree == progPatterns[p].degrees[j] && 
-						(pattern[j].type == progPatterns[p].triads[j] || 
-						pattern[j].type == progPatterns[p].quadriads[j])) {
+			for (let j = 0; j < extract.length; j++) {
+				if (extract[j].degree == progPatterns[p].degrees[j] && 
+						(extract[j].type == progPatterns[p].triads[j] || 
+						extract[j].type == progPatterns[p].quadriads[j])) {
 				}
 				else {
 					found_pattern = false;
 					break;
 				}
 			}
-			// if every chord fit the pattern, update the tension and move on
-			if (found_pattern) {
+			/** if every chord fits the pattern and length is correct, update ChordPlus and move on*/
+			if (found_pattern && extract.length == progPatterns[p].tension.length) {
 				console.log("found pattern:", progPatterns[p].name);
 				// substitute tension values in tension_progression
 				for (let j = i; j < i + progPatterns[p].tension.length && j < degrees_progression.length; j++) {
-					console.log(j, progPatterns[p].tension.length)
 					degrees_progression[j].tension = progPatterns[p].tension[j - i];
 					degrees_progression[j].pattern = progPatterns[p].name;
 				}
