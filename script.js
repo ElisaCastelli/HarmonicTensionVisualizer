@@ -139,7 +139,6 @@ function fillFinalProgression(progressionRead) {
     while (progressionRead != "") {
         indexSpace = progressionRead.indexOf(" ");
         let chordString = progressionRead.substring(0, indexSpace);
-        let chord = new Chord();
         let type = "";
         let note = chordString[0];
         let secondChar = chordString[1];
@@ -147,8 +146,7 @@ function fillFinalProgression(progressionRead) {
             note = note + secondChar;
         }
         type = chordString.substring(note.length, chordString.length);
-        chord.note = note;
-        chord.type = type;
+        let chord = new Chord(note, type);
         finalProgression[indexProgression] = chord;
         progressionRead = progressionRead.slice(indexSpace + 1, progressionRead.length);
         indexProgression++;
@@ -170,6 +168,8 @@ function selectRoot() {
             let col = getCellColumnByIndex(indexMatrix);
             let select = document.getElementById("select" + col);
             select.value = type;
+            const cellRoot = document.getElementById(idRoot);
+            cellRoot.textContent = chord.note + chord.type;
             let selectableCells = getCellsToMakeSelectable(columnIndex, idRoot);
             if (selectableCells.length > 0) {
                 selectableCells.forEach(cell => {
