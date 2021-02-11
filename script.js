@@ -1,10 +1,10 @@
 // IMPORT
 
-import { type, allNotes1D, chordBuilder } from './chordBuilder.js';
-import { tensionChange, start } from './tensionAnimation.js';
-import { evaluateTension, Chord } from './harmonicAnalysis.js';
-import { downloadFile } from './readFile.js';
-import { matrixConstructor, matrixToString, emptyMatrix, clearMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell, findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord } from './matrix.js';
+import { type, allNotes1D, chordBuilder } from './Resources/chordBuilder.js';
+import { tensionChange, start } from './Resources/tensionAnimation.js';
+import { evaluateTension, Chord } from './Resources/harmonicAnalysis.js';
+import { downloadFile } from './Resources/readFile.js';
+import { matrixConstructor, matrixToString, emptyMatrix, clearMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell, findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord } from './Resources/matrix.js';
 
 const fileInput = document.getElementById('file-input');
 
