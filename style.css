@@ -8,6 +8,7 @@
             @import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
             @import url('https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&family=Rock+Salt&display=swap');
             @import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Nothing+You+Could+Do&family=Rock+Salt&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap');
             /* fine import */
             
             * {
@@ -30,8 +31,8 @@
             #title_container {
                 position: fixed;
                 font-weight: semi-bold;
-                font-size: xx-large;
-                font-family: 'Nanum Pen Script', cursive;
+                font-size: x-large;
+                font-family: 'Gloria Hallelujah', cursive;
                 /*'Nothing You Could Do',
                 cursive;*/
                 /* options : Rock Salt', cursive; */
