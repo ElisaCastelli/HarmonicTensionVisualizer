@@ -309,6 +309,10 @@ function chordTypeSelected(columnNumber, chordType) {
         printSelectable(noteArray, columnNumber);
         let chord = new Chord(noteName, chordType);
         finalProgression[Math.abs(maxColumns - columnNumber - 1)] = chord;
+        // write name of the chord in the root
+        let idCell = noteSelected.id;
+        let cell = document.getElementById(idCell);
+        cell.innerHTML = noteName + chordType;
     }
 }
 
@@ -417,6 +421,8 @@ function addRoot(cell, matrixIndex, columnNumber) {
         let chordType = select.value;
         let chord = new Chord(noteName, chordType);
         finalProgression[Math.abs(maxColumns - columnNumber - 1)] = chord;
+        // write chord name in the root note
+        cell.innerHTML = note.name + chordType
     }
 }
 
