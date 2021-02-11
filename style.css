@@ -335,6 +335,7 @@
                 position: relative;
                 text-align: center;
                 top: 4px;
+                font-size: larger;
             }
             /*BAR*/
             
@@ -358,7 +359,7 @@
                 margin: auto;
                 color: rgb(105, 149, 200);
                 width: 100px;
-                height: inherit;
+                height: 32px;
                 cursor: pointer;
                 background: black;
                 border: none;
@@ -366,7 +367,7 @@
                 text-align: center;
                 /* for chrome */
                 text-align-last: center;
-                font-size: inherit;
+                font-size: 23px;
             }
             
             select:hover {
