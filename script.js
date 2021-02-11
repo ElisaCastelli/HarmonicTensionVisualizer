@@ -449,6 +449,7 @@ function playAndScroll() {
         }else{
             const stopButton = document.getElementById("stopButton");
             stopButton.onclick();
+            timeInterval-=25;
             //clearInterval(scrollInterval);
         }
     }
