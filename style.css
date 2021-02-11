@@ -10,6 +10,10 @@
             @import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Nothing+You+Could+Do&family=Rock+Salt&display=swap');
             /* fine import */
             
+            * {
+                font-family: 'HachiMaruPop', cursive;
+            }
+            
             #pagina {
                 position: absolute;
                 left: 0;
@@ -17,11 +21,6 @@
                 width: 100%;
                 height: 100%;
                 background: rgb(64, 75, 80);
-            }
-            
-            @font-face {
-                font-family: 'Daybury-OVdB3';
-                src: url('../HarmonicTensionVisualizer/font/Daybury-OVdB3.ttf') format('truetype');
             }
             
             body {
