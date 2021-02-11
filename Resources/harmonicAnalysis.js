@@ -11,25 +11,13 @@
  */
 
 /** ASSUMPTIONS (may be modified in future updates)
- * 1) just major scale progressions
- * 2) no modal progressions
- * 2) only triads and quadriads
+ * 1) only triads and quadriads
+ * 2) 
  */
-//const chord_notation = /^[A-G][#b]?(min|dim|aug|maj7|min7|7|halfdim|dim7)?$/;
-//class Chord {
-//	constructor(chord){
-//		if (chord_notation.test(chord)) {
-//			this.chord = chord;
-//		}
-//		else {
-//			throw "chord is not valid";
-//		}
-//	}
-//}
 
 // patterns for accepted chords
-// const note_notation = /^[A-G][#b]?$/;
-// const type_notation = /^(min|dim|aug|maj7|min7|7|halfdim|dim7)?$/;
+const note_notation = /^[A-G][#b]?$/;
+const type_notation = /^(min|dim|aug|maj7|min7|7|halfdim|dim7)?$/;
 
 import { diminishedDomSub, tritoneSub } from './Substitutions.js';
 
@@ -95,19 +83,20 @@ function arraySum(total, num) {
 	return total + num;
 } 
 
-//approfondisci bene che cavolo sono sti prototype e cosa cambia con le classi
+/** Chord prototype*/
 export function Chord(note, type) {
 	this.note = note;
 	this.type = type || '';
-	/*if (! note_notation.test(this.note)) {
+	if (! note_notation.test(this.note)) {
 		throw "note is not valid";
 	}
 	if (! type_notation.test(this.type)) {
 		throw "type is not valid";
 	} 
-	*/
+	
 }
-
+/** ChordPlus prototype:
+ * Contains additional information obtained during the analysis*/
 export function ChordPlus(note, type, degree, key) {
 	this.note = note;
 	this.type = type;
@@ -118,6 +107,8 @@ export function ChordPlus(note, type, degree, key) {
 	this.type_coherent = true;
 	this.degree_coherent = true;
 	this.tension = 1;
+	this.event = "";
+	this.curr_pattern = "";
 }
 
 //vedi sopra, defining getAbsValue Method of Chord
@@ -137,10 +128,23 @@ Chord.prototype.getTonicInterval = function(tonic){
 		value = value - shift >= 0 ? value - shift : value - shift + 12;
 	return value;
 }
+
 Chord.prototype.toString = function(){
 	return this.note.concat(this.type);
 }
 
+ChordPlus.prototype.toString = function(){
+	return this.note.concat(this.type);
+}
+
+// grado e sostisuzione
+ChordPlus.prototype.printEvent = function(){
+	return this.event;
+}
+// pattern 
+ChordPlus.prototype.printPattern = function(){
+	return this.note.concat(this.type);
+}
 function getScaleIndex(scale_name){
 	for (var i = 0; i < modes.length; i++) {
 		if (modes[i].name == scale_name) {
@@ -336,10 +340,10 @@ const progPatterns = [{
 	tension: [5, 5]
 }];
 
-// here the magic happens
+/** Main function*/
 export function evaluateTension(progression){
 
-	// phase 1): select keys with highest number of compatible chords
+	/** phase 1): select keys with highest number of compatible chords*/
 	let accepted_keys = findKey(progression); // array with selected keys
 	
 	if (accepted_keys.length == 0) {
@@ -348,7 +352,7 @@ export function evaluateTension(progression){
 	
 	let degrees_progression;
 	let tempChord;
-	// phase 2): choose the key with highest number of correct chords before the first wrong one
+	/** phase 2): choose the key with highest number of correct chords before the first wrong one*/
 	// for each accepted_key
 	for (let i = 0; i < accepted_keys.length; i++) {
 		// exception: give priority to major and minor scales
@@ -371,7 +375,7 @@ export function evaluateTension(progression){
 	accepted_keys.sort((a, b) => (a.points > b.points) ? -1 : 1);
 	let key = accepted_keys[0];
 
-	// phase 3): analyze each "wrong" chord, with different options 
+	/** phase 3): analyze each "wrong" chord, with different options*/ 
 	
 	// same operation as before, based on the chosen key
 	degrees_progression = getProgDegrees(progression, key);
@@ -388,17 +392,18 @@ export function evaluateTension(progression){
 		console.log(degrees_progression[i])
 		if (!( degrees_progression[i].type_coherent && degrees_progression[i].degree_coherent)) {
 			
-			// OPTION A): CHORD SUBSTITUTION
+			/** OPTION A): CHORD SUBSTITUTION*/
 			if (degrees_progression[i].type == "dim7") {
 				tempChord = diminishedDomSub(degrees_progression[i]);
 				// check if it is coherent with the current key
 				tempChord = getProgDegrees([tempChord], degrees_progression[i].curr_key);
 				if (tempChord.type_coherent && tempChord.degree_coherent) {
+					// save original chord and add event
 					tempChord.substitution = degrees_progression[i];
 					degrees_progression[i] = tempChord;
+					degrees_progression[i].event = "dim7 substitution";
 					// add this key to priority_keys
 					priority_keys.push(tempKeys[0]);
-					console.log("substitution dim7 found!", degrees_progression[i])
 				}
 			}
 			if (degrees_progression[i].type == "7") {
@@ -410,12 +415,12 @@ export function evaluateTension(progression){
 					degrees_progression[i] = tempChord;
 					// add this key to priority_keys
 					priority_keys.push(tempKeys[0]);
-					console.log("tritone substitution found!", degrees_progression[i])
+					degrees_progression[i].event = "tritone substitution";
 				}
 			}
 			
 			
-			// OPTION B): MODAL INTERCHANGE
+			/** OPTION B): MODAL INTERCHANGE */
 			
 			//reset temp array
 			tempKeys = [];
@@ -438,7 +443,9 @@ export function evaluateTension(progression){
 			}
 			//sort by points
 			tempKeys.sort((a, b) => (a.points > b.points) ? -1 : 1);
-			// sort by mode similarity
+			/** if multiple modes with same points:
+			 * 1): check if any of them is inside priority_keys
+			 * 2): sort by mode similarity*/
 			let keyIntervalsSum = modes[getScaleIndex(key.scale)].intervals.reduce(arraySum);
 			for (let m = 0; m < tempKeys.length; m++) {
 				if (tempKeys[m].points < tempKeys[0].points) {
@@ -458,16 +465,21 @@ export function evaluateTension(progression){
 				priority_keys.push(tempKeys[0]);
 				// update chord information
 				degrees_progression[i].curr_key = tempKeys[0];
+				degrees_progression[i].event = "modal interchange: chord borrowed from " + tempKeys[0].tonic + tempKeys[0].scale;
 				continue;
 			}
 			// note: the choices above are just a convention in order to solve ambiguiti, 
 			// it is not the aim of the project to identify the correct interpretation
 			
 			
-			// OPTION C): CHANGE OF SCALE
+			/** OPTION C): CHANGE OF SCALE */
+			
 			// check if from this point a new key is possible
 			tempKeys = findKey(progression.slice(i, progression.length));
-			// take the first one
+			// in case of multiple keys, check if one of them is inside priority_keys
+			
+			// da scrivere!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			
 			temp_deg_progression = getProgDegrees(progression.slice(i, progression.length), tempKeys[0]);
 			console.log('keys found', tempKeys);
 			if (tempKeys[0].points > 1) {
@@ -484,6 +496,7 @@ export function evaluateTension(progression){
 				}
 				// add this key to priority_keys
 				priority_keys.push(tempKeys[0]);
+				degrees_progression[i].event = "change of key: " + tempKeys[0];
 				continue;
 			}
 			
@@ -547,6 +560,7 @@ export function evaluateTension(progression){
 				for (let j = i; j < i + progPatterns[p].tension.length && j < degrees_progression.length; j++) {
 					console.log(j, progPatterns[p].tension.length)
 					degrees_progression[j].tension = progPatterns[p].tension[j - i];
+					degrees_progression[j].pattern = progPatterns[p].name;
 				}
 				i += progPatterns[p].tension.length;
 				break;
@@ -591,8 +605,6 @@ try {
 // - majScaleChordFunction solo controllo per scala maggiore	FATTO
 // - harmony analysis cambia pattern/sostituzioni considerate in base a a scala
 // - pattern cambiano tensione in base a triade o quadriade (II V I triade è meno teso della corrispondente quadriade)
-// - cerca sostituzioni e interscambi modali
-// - se arrivo da un 2, il 5 è potenziato di tensione	FATTO, MA DA RIVEDERE
-// - dovrei fare modo di non controllare i gradi assoluti, ma solo il rapporto tra
-
-
+// - cerca sostituzioni e interscambi modali FATTO
+// - se arrivo da un 2, il 5 è potenziato di tensione	FATTO
+// - dovrei fare modo di non controllare i gradi assoluti, ma solo il rapporto tra toniche IMPORTANTE
