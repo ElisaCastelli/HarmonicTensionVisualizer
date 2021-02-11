@@ -322,6 +322,7 @@ function autoFill(columnNumber) {
     let noteArray = chordBuilder(rootNumber, shape);
     let octaveNoteSelected = root.octave;
     removeSelectable(columnNumber + 1);
+    removeSelectedExceptRoot(columnNumber + 1);
     printChord(noteArray, octaveNoteSelected, columnNumber);
 }
 
@@ -356,10 +357,16 @@ function scroll() {
 /** function to add a tone from the selectable options. Updates both the matrix and the visuals*/
 function addTone(cell, columnNumber, cellIndex) {
     changeSelection(cellIndex);
+    //let note = findNoteByMatrixIndex(cellIndex);
     cell.classList.toggle("disabled");
     cell.classList.toggle("selected_background");
     let sameNotes = findSameNotes(columnNumber, cellIndex);
     for (let i = 0; i < sameNotes.length; i++) {
+        if (sameNotes[i].selectable == true) {
+            sameNotes[i].selectable = false;
+        } else {
+            sameNotes[i].selectable = true;
+        }
         let sameNoteid = sameNotes[i].id;
         let sameNoteCell = document.getElementById(sameNoteid);
         sameNoteCell.classList.toggle("disabled");
@@ -371,13 +378,16 @@ function addTone(cell, columnNumber, cellIndex) {
 function addNote(cell, idCell, columnNumber) {
     columnNumber = (maxColumns - 1) - columnNumber;
     let matrixIndex = numOctaves * 12 * maxColumns - idCell;
+    let note = findNoteByMatrixIndex(matrixIndex);
     let findRoot = findRootNoteByColumn(columnNumber);
-    let selectableNotes = getSelectableByColumn(columnNumber);
-    // selecting the first note ( the root of the chord)
+    //let selectableNotes = getSelectableByColumn(columnNumber);
+
+    // autofill the previous column in fundamental position if there are still selectable notes
     if (columnNumber != (maxColumns - 1) && checkSelectableByColumn(columnNumber + 1) != undefined) {
         autoFill(columnNumber);
     }
 
+    // selecting the first note ( the root of the chord)
     if (findRoot == undefined) {
         addRoot(cell, matrixIndex, columnNumber);
     }
@@ -386,11 +396,11 @@ function addNote(cell, idCell, columnNumber) {
         removeAll(columnNumber);
     }
     // adding or removing chord tones
-    for (let i = 0; i < selectableNotes.length; i++) {
-        if (selectableNotes[i].id == idCell) {
+    if(note.selected && note.root != true){
+        addTone(cell, columnNumber, matrixIndex);
+    } else if (note.selectable) {
             addTone(cell, columnNumber, matrixIndex);
-        }
-    }
+        }  
 }
 
 /** function that adds the root of a chord on the pianoroll */

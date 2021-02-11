@@ -237,6 +237,8 @@ export function printChord(noteArray, octaveNoteSelected, columnNumber) {
         let cell = document.getElementById(idCell);
         let indexCell = matrixTable.findIndex(x => x.id == idCell);
         matrixTable[indexCell].selected = true;
+        matrixTable[indexCell].selectable = false;
         cell.classList.add("selected_background");
+        cell.classList.remove('disabled');
     }
 }
