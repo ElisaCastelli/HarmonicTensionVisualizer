@@ -546,7 +546,6 @@ export function evaluateTension(progression){
 		}
 		// assign high tension to chords that contain tritone
 		else if (["7", "dim", "halfdim", "dim7"].includes(degrees_progression[i].type)) {
-			console.log("contr", degrees_progression[i].toString())
 			degrees_progression[i].tension = 7;
 		}
 	}
