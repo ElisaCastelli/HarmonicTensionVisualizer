@@ -5,16 +5,16 @@ import { allNotes1D } from './chordBuilder.js';
 
 export function diminishedDomSub(chord) {
     let tonic = allNotes1D[ (12 + (allNotes1D.indexOf(chord.note) - 4)) % 12 ];
-    console.log(tonic)
     let subChord = new Chord(tonic, '7');
-    return subChord
+    console.log(subChord, " substituted with ", chord);
+    return subChord;
 }
 
 // permette di trovare la sostituzione di tritono
 
 export function tritoneSub(chord) {
     let tonic = allNotes1D[ (allNotes1D.indexOf(chord.note) + 6) % 12 ];
-    console.log(tonic)
     let subChord = new Chord(tonic, '7');
+    console.log(subChord, " substituted with ", chord);
     return subChord
 }
