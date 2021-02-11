@@ -189,7 +189,6 @@ function unselectMatrix(lengthChordArray) {
                 emptyCell(index);
                 let idCell = getIdCell(index);
                 let cell = document.getElementById(idCell);
-                cell.textContent="";
                 cell.classList.remove("disabled");
                 cell.classList.remove("selected_background");
                 cell.classList.remove("light_background");
