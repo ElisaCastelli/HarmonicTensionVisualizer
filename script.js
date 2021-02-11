@@ -4,7 +4,7 @@ import { type, allNotes1D, chordBuilder } from './chordBuilder.js';
 import { tensionChange, start } from './tensionAnimation.js';
 import { evaluateTension, Chord } from './harmonicAnalysis.js';
 import { downloadFile } from './readFile.js';
-import { matrixConstructor, matrixToString, emptyMatrix, clearMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell,findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord } from './matrix.js';
+import { matrixConstructor, matrixToString, emptyMatrix, clearMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell, findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord } from './matrix.js';
 
 const fileInput = document.getElementById('file-input');
 
@@ -124,7 +124,7 @@ function Note(octave, name, column, row, id) {
     this.column = column;
     this.row = row;
     this.id = id;
-    let selected = false; 
+    let selected = false;
     let selectable = false;
     let root = false;
 }
@@ -170,7 +170,7 @@ function selectRoot() {
             let select = document.getElementById("select" + col);
             select.value = type;
             let selectableCells = getCellsToMakeSelectable(columnIndex, idRoot);
-            if(selectableCells.length>0){
+            if (selectableCells.length > 0) {
                 selectableCells.forEach(cell => {
                     setSelectableCell(cellsNumber - cell.id);
                 });
@@ -248,7 +248,7 @@ function removeLightColor(numColumn) {
 /** Function to update the visual content of the table based on the update matrixTable */
 function printSelected() {
     let selectedCells = getAllSelectedId();
-    selectedCells.forEach(id=>{
+    selectedCells.forEach(id => {
         let cell = document.getElementById(id);
         cell.classList.add("selected_background");
     });
@@ -283,7 +283,7 @@ function chordTypeSelected(columnNumber, chordType) {
     }
 }
 
-function autoFill(columnNumber){
+function autoFill(columnNumber) {
     let root = findRootNoteByColumn(columnNumber + 1);
     let rootName = root.name;
     let rootNumber = allNotes1D.indexOf(rootName);
@@ -370,7 +370,7 @@ function addRoot(cell, matrixIndex, columnNumber) {
     unclickableColumn(getCellColumnByIndex(matrixIndex));
     let select = document.getElementById("select" + columnNumber);
     if (select.value != 'default') {
-        rootAfterChordType(matrixIndex ,columnNumber);
+        rootAfterChordType(matrixIndex, columnNumber);
     }
 }
 
@@ -403,7 +403,7 @@ function playAndScroll() {
 /** Function to play the chord using a Sampler */
 function play() {
     const chordPlayed = document.getElementById("chordPlayed");
-    var t = finalProgression[maxColumns -1 - columnPlayed].note + finalProgression[maxColumns -1 - columnPlayed].type;
+    var t = finalProgression[maxColumns - 1 - columnPlayed].note + finalProgression[maxColumns - 1 - columnPlayed].type;
     let noteSelected = getSelectedByColumn(columnPlayed);
     let notesArray = new Array();
     if (noteSelected != null) {
@@ -412,7 +412,7 @@ function play() {
             let octave = noteSelected[index].octave;
             notesArray.push(noteName + octave);
         }
-        chordPlayed.textContent= t;
+        chordPlayed.textContent = t;
         //chordPlayed.appendChild(t);
         if (notesArray.length == 3) {
             sampler.triggerAttackRelease([notesArray[0], notesArray[1], notesArray[2]], 2);
@@ -493,7 +493,6 @@ function read(file) {
     }
     unselectMatrix(maxIndex);
 }
-
 
 
 // VIEW
@@ -661,8 +660,8 @@ resetButton.onclick = function() {
             lengthChordArray = finalProgression.length;
         }
         const chordPlayed = document.getElementById("chordPlayed");
-        chordPlayed.textContent="";
-        chordPlayed.style.visibility="hidden";
+        chordPlayed.textContent = "";
+        chordPlayed.style.visibility = "hidden";
         unselectMatrix(lengthChordArray);
         modelButton = false;
         timeInterval = 0;
@@ -681,7 +680,7 @@ uploadButton.onchange = function() {
 
 /** onclick associated with the downloadButton to download a file that contains the chord progression you put inside the pianoroll */
 downloadButton.onclick = function() {
-    if(!emptyMatrix()){
+    if (!emptyMatrix()) {
         let fileName = "MyChordProgression.txt";
         let text = matrixToString(finalProgression, maxColumns, cellsNumber);
         downloadFile(fileName, text);
@@ -728,7 +727,7 @@ function firstRender() {
     const pianoContainer = document.getElementById("output_block");
     const playButton = document.getElementById("playButton");
     const divChordPlayed = document.getElementById("chordPlayed");
-    divChordPlayed.style.visibility='hidden';
+    divChordPlayed.style.visibility = 'hidden';
     let pianoRollTable = createPianoRoll();
     pianoContainer.appendChild(pianoRollTable);
     let bar = createBar();
@@ -741,14 +740,14 @@ function firstRender() {
         if (!modelButton && !emptyMatrix()) {
             const tableScroll = document.getElementById("table-scroll");
             modelButton = true;
-            divChordPlayed.style.visibility='visible';
+            divChordPlayed.style.visibility = 'visible';
             //noncliccabile();
             let maxIndex = 0;
             if (firstPlay) {
                 lastBarPosition = '93px';
                 lastTableScrollPosition = 0;
             }
-            tableScroll.style.overflowX='hidden';
+            tableScroll.style.overflowX = 'hidden';
             if (finalProgression.length == maxColumns) {
                 maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
             } else {
@@ -764,33 +763,31 @@ function firstRender() {
                 lastTableScrollPosition = tableScroll.style.scrollLeft;
                 modelButton = false;
                 firstPlay = false;
-                tableScroll.style.overflowX='auto';
+                tableScroll.style.overflowX = 'auto';
                 clearInterval(scrollInterval);
                 tensionChange(0);
-                
             }
         };
     }
 
     rewindButton.onclick = function() {
-        const tableScroll = document.getElementById("table-scroll");
-        tableBackscroll(0);
-        tableScroll.style.overflowX='auto';
-        bar.style.left = '93px';
-        const chordPlayed = document.getElementById("chordPlayed");
-        chordPlayed.textContent="";
-        chordPlayed.style.visibility="hidden";
-        modelButton = false;
-        columnPlayed = maxColumns - 1;
-        timeInterval = 0;
-        clearInterval(scrollInterval);
-        tensionChange(0);
-        firstPlay = true;
-    }
+            const tableScroll = document.getElementById("table-scroll");
+            tableBackscroll(0);
+            tableScroll.style.overflowX = 'auto';
+            bar.style.left = '93px';
+            const chordPlayed = document.getElementById("chordPlayed");
+            chordPlayed.textContent = "";
+            chordPlayed.style.visibility = "hidden";
+            modelButton = false;
+            columnPlayed = maxColumns - 1;
+            timeInterval = 0;
+            clearInterval(scrollInterval);
+            tensionChange(0);
+            firstPlay = true;
+        }
         // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
     matrixConstructor(cellsNumber, maxColumns, numOctaves, numOctavesMin, key_color);
 }
-
 
 firstRender();
 
@@ -802,3 +799,9 @@ firstRender();
     });
 }*/
 
+// spacebar event
+document.body.onkeyup = function(e) {
+    if (e.keyCode == 32) {
+
+    }
+}

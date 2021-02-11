@@ -5,6 +5,9 @@
             @import url('https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&display=swap');
             @import url('https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&display=swap');
             @import url('https://fonts.googleapis.com/css2?family=Roboto:ital@1&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&family=Rock+Salt&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Nothing+You+Could+Do&family=Rock+Salt&display=swap');
             /* fine import */
             
             #pagina {
@@ -16,6 +19,11 @@
                 background: rgb(64, 75, 80);
             }
             
+            @font-face {
+                font-family: 'Daybury-OVdB3';
+                src: url('../HarmonicTensionVisualizer/font/Daybury-OVdB3.ttf') format('truetype');
+            }
+            
             body {
                 background: rgb(64, 75, 80);
             }
@@ -24,7 +32,10 @@
                 position: fixed;
                 font-weight: semi-bold;
                 font-size: xx-large;
-                font-family: 'Roboto', sans-serif;
+                font-family: 'Nanum Pen Script', cursive;
+                /*'Nothing You Could Do',
+                cursive;*/
+                /* options : Rock Salt', cursive; */
                 /* options : Fraunces */
                 /* options : HachiMaruPop */
                 /* options : East+Sea+Dokdo */
@@ -42,17 +53,17 @@
                 top: 16%;
                 height: 30%;
             }
-
-            #chordPlayed{
-                position:relative;
-                height:20px;
+            
+            #chordPlayed {
+                position: relative;
+                height: 20px;
                 width: 80px;
-                background: rgb(117, 130, 136) ;
+                background: rgb(117, 130, 136);
                 border-radius: 10px;
                 border-color: rgb(73, 94, 104);
-                border:solid 1px;
+                border: solid 1px;
                 top: 9%;
-                left:50%;
+                left: 50%;
                 text-align: center;
                 font-family: 'Roboto', sans-serif;
                 font-size: medium;
@@ -70,7 +81,7 @@
                 top: 50%;
                 left: 1%;
                 height: 46%;
-                background: rgb(117, 130, 136) ;
+                background: rgb(117, 130, 136);
                 border-radius: 10px;
             }
             
@@ -301,7 +312,6 @@
                 position: sticky;
                 top: 0;
             }
-
             /*Button table cells*/
             
             .cellButton {
@@ -327,7 +337,6 @@
                 text-align: center;
                 top: 4px;
             }
-
             /*BAR*/
             
             .scrollingBar {
@@ -341,7 +350,6 @@
                 z-index: 90;
                 border-radius: 10px;
             }
-            
             /*select*/
             
             select {
