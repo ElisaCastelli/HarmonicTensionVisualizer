@@ -179,12 +179,6 @@ export function matrixToString(finalProgression, maxColumns, cellsNumber) {
     return text;
 }
 
-export function clearMatrix() {
-    for (let i = 0; i < matrixTable.length; i++) {
-        emptyCell(i);
-    }
-}
-
 
 /* Function to check if matrixTable is still empty*/
 export function emptyMatrix() {

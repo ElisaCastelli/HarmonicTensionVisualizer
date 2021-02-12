@@ -65,11 +65,12 @@
                 border-radius: 10px;
                 border-color: rgb(73, 94, 104);
                 border: solid 1px;
-                top: 9%;
+                top: 10%;
                 left: 50%;
                 text-align: center;
                 font-family: 'Roboto', sans-serif;
                 font-size: medium;
+                visibility: hidden;
             }
             
             #progressionInfo {
@@ -86,6 +87,7 @@
                 font-family: 'Roboto', sans-serif;
                 font-size: medium;
                 z-index: 10;
+                visibility: hidden;
             }
             
             canvas {
