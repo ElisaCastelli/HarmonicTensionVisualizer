@@ -110,7 +110,7 @@ export function ChordPlus(note, type, degree, key) {
 	this.degree_coherent = true;
 	this.event = "";
 	this.curr_pattern = "";
-	/***/
+	/**Values for visual representation*/
 	this.tension = 1;
 	this.surprise = "";
 }
@@ -374,6 +374,19 @@ const progPatterns = [{
 	quadriad_tension: [5, 10]
 }];
 
+function findSecondaryDom(chord1, chord2){
+	let tempProg = [chord1, chord2];
+	let tempKeys = findKey(tempProg);
+	console.log("heyyy", tempKeys[0]);
+	tempProg = getProgDegrees(tempProg, tempKeys[0]);
+	if (tempProg[0].degree == "V" && tempProg[1].degree == "I") {
+		tempProg[0].event = "secondary dominant";
+		return tempProg[0];
+	}
+	else
+		return false;
+}
+
 function findModalInterchange(progression, priority_keys, chord, index){
 	let surprise = "B";
 	let tempChord;
@@ -433,6 +446,58 @@ function findModalInterchange(progression, priority_keys, chord, index){
 
 }
 
+function findSubs(progression, priority_keys, chord, index){
+	let surprise = "A";
+	let tempChord;
+	
+	// experimental: discuss it with colleagues!
+	if (["dim", "halfdim", "dim7"].includes(chord.type))
+		tempChord = diminishedDomSub(chord);
+	else if (chord.type == "7")
+		tempChord = tritoneSub(chord);
+	else
+		return false;
+	
+	// check if it is coherent with the current key
+	tempChord = getProgDegrees([tempChord], chord.curr_key);
+	tempChord = tempChord[0];
+	
+	tempChord.substitution = chord;
+	console.log("ciao", tempChord)
+	if (tempChord.type_coherent && tempChord.degree_coherent) {
+		// save original chord and add event
+		chord = tempChord;
+		chord.event = "substitution";
+		chord.surprise = surprise;
+		return chord;
+	}
+	// test with cowboy bebop: if it works there, it works
+	else if (tempChord.degree_coherent) {
+		let tempChord2 = findModalInterchange(progression, priority_keys, tempChord, index);
+		if (tempChord2) {
+			console.log("like cowboy bebop", tempChord2)
+			chord = tempChord2;
+			/*priority_keys.push(tempKeys[0]);*/
+			return chord;
+		}
+		// test with have you met miss jones: if it works there, it works
+		else if (tempChord.type == "7") {
+			// search for secondary dominant
+			let sub = tempChord.substitution;
+			tempChord = findSecondaryDom(new Chord(tempChord.note, tempChord.type), progression[index + 1])
+			if (tempChord) {
+				console.log("like have you met miss jones", tempChord);
+				chord = tempChord;
+				chord.substitution = sub;
+				return chord;
+			}
+		}
+	}
+	
+	else
+		return false;
+}
+
 /** Main function*/
 export function evaluateTension(progression){
 
@@ -485,63 +550,18 @@ export function evaluateTension(progression){
 		if (!( progression_plus[i].type_coherent && progression_plus[i].degree_coherent)) {
 			
 			/** OPTION A): CHORD SUBSTITUTION*/
-			surprise = "A";
-			
-			// experimental: discuss it with colleagues!
-			if (["dim", "halfdim", "dim7"].includes(progression_plus[i].type)) {
-				tempChord = diminishedDomSub(progression_plus[i]);
-				// check if it is coherent with the current key
-				tempChord = getProgDegrees([tempChord], progression_plus[i].curr_key);
-				tempChord = tempChord[0];
-				
-				tempChord.substitution = progression_plus[i].toString();
-				console.log("ciao", tempChord)
-				if (tempChord.type_coherent && tempChord.degree_coherent) {
-					// save original chord and add event
-					progression_plus[i] = tempChord;
-					progression_plus[i].event = "dim7 substitution";
-					progression_plus[i].surprise = surprise;
-					continue;
-				}
-				// test with cowboy bebop: if it works there, it works
-				else if (tempChord.degree_coherent) {
-					console.log("hey1", tempChord)
-					tempChord = findModalInterchange(progression, priority_keys, tempChord, i);
-					if (tempChord) {
-						console.log("hey2", tempChord)
-						progression_plus[i] = tempChord;
-						priority_keys.push(tempKeys[0]);
-						continue;
-					}
-				}
-				// test with have you met miss jones: if it works there, it works
-				else if (tempChord.type == "7") {
-					console.log("da scrivere");
-					// search for secondary dominant
-				}
+			tempChord = findSubs(progression, priority_keys, progression_plus[i], i);
+			if (tempChord) {
+				progression_plus[i] = tempChord;
+				priority_keys.push(tempChord.curr_key);
+				continue;
 			}
-			else if (progression_plus[i].type == "7") {
-				tempChord = tritoneSub(progression_plus[i]);
-				// check if it is coherent with the current key
-				tempChord = getProgDegrees([tempChord], progression_plus[i].curr_key);
-				if (tempChord.type_coherent && tempChord.degree_coherent) {
-					console.log("hey", tempChord, progression_plus[i])
-					tempChord.substitution = progression_plus[i];
-					progression_plus[i] = tempChord;
-					// add this key to priority_keys
-					// priority_keys.push(tempKeys[0]); ????
-					progression_plus[i].event = "tritone substitution";
-					progression_plus[i].surprise = surprise;
-					continue;
-				}
-			}
-			
 			
 			/** OPTION B): MODAL INTERCHANGE */
 			tempChord = findModalInterchange(progression, priority_keys, progression_plus[i], i);
 			if (tempChord) {
 				progression_plus[i] = tempChord;
-				priority_keys.push(tempKeys[0]);
+				priority_keys.push(tempChord.curr_key);
 				continue;
 			}
 			
