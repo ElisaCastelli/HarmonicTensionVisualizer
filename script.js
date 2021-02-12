@@ -247,9 +247,18 @@ function clearColumn(columnNumber) {
         notesToClear[index].root = false;
         let idCell = notesToClear[index].id;
         let cell = document.getElementById(idCell);
+        let button = document.getElementById("b" + idCell);
+        button.textContent = "";
         cell.classList.remove("light_background");
         cell.classList.remove("selected_background");
     }
+}
+
+function clearRootText(columnNumber) {
+    let root = findRootNoteByColumn(columnNumber);
+    let idCell = root.id;
+    let button = document.getElementById("b" + idCell);
+    button.textContent = "";
 }
 
 /** Function to remove the visual content associated to the selectable cells of a specific column of the table  */
@@ -312,8 +321,8 @@ function chordTypeSelected(columnNumber, chordType) {
         finalProgression[Math.abs(maxColumns - columnNumber - 1)] = chord;
         // write name of the chord in the root
         let idCell = noteSelected.id;
-        let cell = document.getElementById(idCell);
-        cell.innerHTML = noteName + chordType;
+        let button = document.getElementById("b" + idCell);
+        button.textContent = noteName + chordType;
     }
 }
 
@@ -423,7 +432,9 @@ function addRoot(cell, matrixIndex, columnNumber) {
         let chord = new Chord(noteName, chordType);
         finalProgression[Math.abs(maxColumns - columnNumber - 1)] = chord;
         // write chord name in the root note
-        cell.innerHTML = note.name + chordType
+        let idCell = noteSelected.id;
+        let button = document.getElementById("b" + idCell);
+        button.textContent = noteName + chordType;
     }
 }
 
@@ -591,6 +602,7 @@ function createRow(scaleNumber, noteNumber) {
         let idCell = cellsNumber - rowNumber - (columnNumber * numOctaves * 12);
         button.onclick = function() { addNote(cell, idCell, columnNumber); };
         cell.appendChild(button);
+        button.setAttribute("id", "b" + idCell);
         cell.setAttribute("id", idCell);
         row.appendChild(cell);
         // alternanza sfondi per righe piano roll (nero e bianco)
@@ -654,6 +666,9 @@ function createHeader() {
                 let chordType = this.value;
                 removeSelectable(columnNumber);
                 removeSelectedExceptRoot(columnNumber);
+                if (chordType == "default"){
+                    clearRootText(columnNumber);
+                } 
                 if (chordType != "default") {
                     chordTypeSelected(columnNumber, chordType);
                 }
@@ -727,11 +742,14 @@ resetButton.onclick = function() {
         const chordPlayed = document.getElementById("chordPlayed");
         chordPlayed.textContent = "";
         chordPlayed.style.visibility = "hidden";
+        for (let indexColumn = maxColumns - 1; indexColumn > ((maxColumns - 1) - lengthChordArray); indexColumn--) {
+            clearRootText(indexColumn);
+        }
         unselectMatrix(lengthChordArray);
         modelButton = false;
         timeInterval = 0;
         columnPlayed = maxColumns - 1;
-        finalProgression = new Array(20);
+        finalProgression = new Array(maxColumns);
         analysisResults = new Array();
         firstPlay = true;
         tableBackscroll(0);
