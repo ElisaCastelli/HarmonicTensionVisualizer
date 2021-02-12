@@ -478,7 +478,7 @@ function playAndScroll() {
 function play() {
     const chordPlayed = document.getElementById("chordPlayed");
     var degree = 'Degree: ' + analysisResults[maxColumns - 1 - columnPlayed].degree;
-    var substitution = 'Substitution: \n'+analysisResults[maxColumns - 1 - columnPlayed].substitution;
+    var substitution = 'Substitution: \n'+analysisResults[maxColumns - 1 - columnPlayed].substitution.toString();
     const progressionInfo = document.getElementById('progressionInfo');
     let noteSelected = getSelectedByColumn(columnPlayed);
     let notesArray = new Array();
