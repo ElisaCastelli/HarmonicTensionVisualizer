@@ -604,15 +604,15 @@ export function evaluateTension(progression){
 
 			
 			/** if every chord fits the pattern and length is correct, update ChordPlus and move on*/
-			if (found_pattern && extract.length == progPatterns[p].tension.length) {
+			if (found_pattern && extract.length == progPatterns[p].degrees.length) {
 				console.log("found pattern:", progPatterns[p].name);
 				/** substitute tension values, choosing between triad and quadriad values  */
-				for (let j = i; j < i + progPatterns[p].tension.length && j < progression_plus.length; j++) {
+				for (let j = i; j < i + progPatterns[p].degrees.length && j < progression_plus.length; j++) {
 					progression_plus[j].tension = progression_plus[j].type == 
 						progPatterns[p].triads[j - i] ? progPatterns[p].triad_tension[j - i] : progPatterns[p].quadriad_tension[j - i];
 					progression_plus[j].curr_pattern = progPatterns[p].name;
 				}
-				i += progPatterns[p].tension.length;
+				i += progPatterns[p].degrees.length;
 				break;
 			}
 		}
