@@ -190,7 +190,6 @@ export function unselectMatrix(lengthChordArray) {
                 emptyCell(index);
                 let idCell = getIdCell(index);
                 let cell = document.getElementById(idCell);
-                //cell.textContent="";
                 cell.classList.remove("disabled");
                 cell.classList.remove("selected_background");
                 cell.classList.remove("light_background");
@@ -351,7 +350,7 @@ function scroll() {
     if (barRightPos < containerWidth / 2) {
         bar.style.left = (barLeftPos + speed * direction) + 'px';
     } else if (tableScroll.scrollWidth - tableScroll.scrollLeft > containerWidth) {
-        tableScroll.scrollLeft += 1;
+        tableScroll.scrollLeft += speed * direction;
     } else if (barRightPos < tableScroll.offsetWidth) {
         bar.style.left = (barLeftPos + speed * direction) + 'px';
     }
@@ -360,7 +359,6 @@ function scroll() {
 /** function to add a tone from the selectable options. Updates both the matrix and the visuals*/
 function addTone(cell, columnNumber, cellIndex) {
     changeSelection(cellIndex);
-    //let note = findNoteByMatrixIndex(cellIndex);
     cell.classList.toggle("disabled");
     cell.classList.toggle("selected_background");
     let sameNotes = findSameNotes(columnNumber, cellIndex);
@@ -383,8 +381,7 @@ function addNote(cell, idCell, columnNumber) {
     let matrixIndex = numOctaves * 12 * maxColumns - idCell;
     let note = findNoteByMatrixIndex(matrixIndex);
     let findRoot = findRootNoteByColumn(columnNumber);
-    //let selectableNotes = getSelectableByColumn(columnNumber);
-
+    
     // autofill the previous column in fundamental position if there are still selectable notes
     if (columnNumber != (maxColumns - 1) && checkSelectableByColumn(columnNumber + 1) != undefined) {
         autoFill(columnNumber);
@@ -459,7 +456,6 @@ function playAndScroll() {
 /** Function to play the chord using a Sampler */
 function play() {
     const chordPlayed = document.getElementById("chordPlayed");
-    //var t = finalProgression[maxColumns - 1 - columnPlayed].note + finalProgression[maxColumns - 1 - columnPlayed].type;
     var t = 'Degree: ' + analysisResults[maxColumns - 1 - columnPlayed].degree + '\n' + analysisResults[maxColumns - 1 - columnPlayed].substitution;
     const progressionInfo = document.getElementById('progressionInfo');
     let noteSelected = getSelectedByColumn(columnPlayed);
