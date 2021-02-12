@@ -18,3 +18,4 @@ export function tritoneSub(chord) {
     console.log(subChord, " substituted with ", chord);
     return subChord
 }
+
