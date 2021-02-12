@@ -478,8 +478,10 @@ function playAndScroll() {
 function play() {
     const chordPlayed = document.getElementById("chordPlayed");
     var degree = 'Degree: ' + analysisResults[maxColumns - 1 - columnPlayed].degree;
-    var substitution = 'Substitution: \n'+analysisResults[maxColumns - 1 - columnPlayed].substitution.toString();
+    const eventContainer = document.getElementById('eventContainer');
+    var substitution = "";
     const progressionInfo = document.getElementById('progressionInfo');
+    const subInfo = document.getElementById("substitutionInfo");
     let noteSelected = getSelectedByColumn(columnPlayed);
     let notesArray = new Array();
     if (noteSelected != null) {
@@ -488,10 +490,21 @@ function play() {
             let octave = noteSelected[index].octave;
             notesArray.push(noteName + octave);
         }
-        if(substitution!=""){
-            const subInfo = document.getElementById("substitutionInfo");
-            subInfo.visibility='visible';
+        if(analysisResults[maxColumns - 1 - columnPlayed].substitution.length != 0 ){
+            substitution = 'Substitution: \n'+analysisResults[maxColumns - 1 - columnPlayed].substitution.toString();
+            subInfo.style.visibility='visible';
             subInfo.textContent= substitution;
+        }else{
+            subInfo.style.visibility='hidden';
+            subInfo.textContent= "";
+        }
+        if(analysisResults[maxColumns - 1 - columnPlayed].event!=""){
+            eventContainer.style.visibility='visible';
+            var text = analysisResults[maxColumns - 1 - columnPlayed].event;
+            eventContainer.textContent=text;
+        }else{
+            eventContainer.textContent="";
+            eventContainer.style.visibility='hidden';
         }
         if (analysisResults[maxColumns - 1 - columnPlayed].curr_pattern != "") {
             progressionInfo.style.visibility = 'visible';
@@ -737,7 +750,11 @@ resetButton.onclick = function() {
         const bar = document.getElementById("scrollingBar");
         bar.style.left = '93px';
         const progressionInfo = document.getElementById('progressionInfo');
-        progressionInfo.visibility='hidden';
+        progressionInfo.textContent="";
+        progressionInfo.style.visibility='hidden';
+        const eventContainer = document.getElementById('eventContainer');
+        eventContainer.textContent="";
+        eventContainer.style.visibility='hidden';
         tensionChange(0);
     }
 }
@@ -809,9 +826,6 @@ function firstRender() {
     const pianoContainer = document.getElementById("output_block");
     const playButton = document.getElementById("playButton");
     const divChordPlayed = document.getElementById("chordPlayed");
-    const progressionInfo = document.getElementById('progressionInfo');
-    divChordPlayed.style.visibility = 'hidden';
-    //progressionInfo.style.visibility = 'hidden';
     let pianoRollTable = createPianoRoll();
     pianoContainer.appendChild(pianoRollTable);
     let bar = createBar();
@@ -824,7 +838,6 @@ function firstRender() {
             const tableScroll = document.getElementById("table-scroll");
             modelButton = true;
             divChordPlayed.style.visibility = 'visible';
-            //noncliccabile();
             let maxIndex = 0;
             if (firstPlay) {
                 lastBarPosition = '93px';
@@ -875,14 +888,6 @@ function firstRender() {
 }
 
 firstRender();
-
-/*function noncliccabile() {
-    matrixTable.forEach(element => {
-        idCell = element.id;
-        cell = document.getElementById(idCell);
-        cell.classList.add("disabled");
-    });
-}*/
 
 // spacebar event
 document.body.onkeyup = function(e) {
