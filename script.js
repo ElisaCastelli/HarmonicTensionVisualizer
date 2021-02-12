@@ -345,7 +345,7 @@ function scroll() {
     const bar = document.getElementById("scrollingBar");
     const pianoContainer = document.getElementById("output_block");
     const tableScroll = document.getElementById("table-scroll");
-    let speed = 1;
+    let speed = 1.5;
     let direction = 1;
     let barLeftPos = bar.offsetLeft,
         barRightPos = barLeftPos + bar.offsetWidth;
@@ -443,17 +443,17 @@ function resetSelect(columnNumber) {
 /** Function to alternate the recalling of scroll() and play() functions */
 function playAndScroll() {
     scroll();
-    if (timeInterval % 2700 == 0) {
+    if (timeInterval % 1590 == 0) {
         if ((maxColumns - columnPlayed - 1) < finalProgression.length) {
             play();
             tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
         } else {
             const stopButton = document.getElementById("stopButton");
             stopButton.onclick();
-            timeInterval -= 25;
+            timeInterval -= 30;
         }
     }
-    timeInterval += 25;
+    timeInterval += 30;
 }
 
 /** Function to play the chord using a Sampler */
@@ -479,9 +479,9 @@ function play() {
         }
         chordPlayed.textContent = t;
         if (notesArray.length == 3) {
-            sampler.triggerAttackRelease([notesArray[0], notesArray[1], notesArray[2]], 2);
+            sampler.triggerAttackRelease([notesArray[0], notesArray[1], notesArray[2]], 1.5);
         } else if (notesArray.length == 4) {
-            sampler.triggerAttackRelease([notesArray[0], notesArray[1], notesArray[2], notesArray[3]], 2);
+            sampler.triggerAttackRelease([notesArray[0], notesArray[1], notesArray[2], notesArray[3]], 1.5);
         }
     }
     notesArray = [];
