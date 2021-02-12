@@ -517,7 +517,7 @@ export function evaluateTension(progression){
 			tempKeys = findKey(progression.slice(i, progression.length));
 			
 			// in case of multiple keys, check if one of them is inside priority_keys
-			for (let k = 0; k < array.length; k++) {
+			for (let k = 0; k < tempKeys.length; k++) {
 				if (priority_keys.includes(tempKeys[k])) {
 					tempKeys[0] = tempKeys[k];
 					break;
