@@ -405,3 +405,11 @@
                 font-weight: semi-bold;
                 font-size: xx-large;
             }
+            
+            #readmeButton {
+                left: 21%;
+                top: 25px;
+                position: fixed;
+                text-align: center;
+                color: rgb(105, 149, 200);
+            }
