@@ -211,15 +211,18 @@
                 display: none;
             }
 
-            #fileName{
-                width: 92px;
-                top:28px;
-                position: fixed;
-                left: 80%;
-            }
+            #fileName {
+			    top: 66px;
+			    position: fixed;
+			    left: 87%;
+			    border-radius: 8px;
+			    border: none;
+			    width: 11%;
+			    font-size: inherit;
+			}
             
             #uploadButton {
-                left: 94%;
+                left: 93%;
                 top: 25px;
                 position: fixed;
                 text-align: center;
@@ -232,7 +235,7 @@
             }
             
             #downloadButton {
-                left: 88%;
+                left: 87%;
                 top: 25px;
                 position: fixed;
                 text-align: center;
@@ -460,12 +463,12 @@
             }
             
             #contenitore {
-                width: 100%;
+                width: 99%;
+                left: 0.5%;
                 height: 14%;
-                top: 5px;
+                top: 9px;
                 background-color: rgb(64, 75, 80);
                 position: fixed;
-                top: 0;
                 font-family: 'Roboto', sans-serif;
                 font-weight: semi-bold;
                 font-size: x-large;
@@ -477,5 +480,5 @@
                 border-radius: 30px;
                 transition: ease-in-out;
                 transition-duration: 0.2s;
-                opacity: 0.9;
+                /*opacity: 0.9;*/
             }
