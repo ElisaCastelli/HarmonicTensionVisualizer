@@ -438,7 +438,7 @@ function addRoot(cell, matrixIndex, columnNumber) {
         let chord = new Chord(noteName, chordType);
         finalProgression[Math.abs(maxColumns - columnNumber - 1)] = chord;
         // write chord name in the root note
-        let idCell = noteSelected.id;
+        let idCell = note.id;
         let button = document.getElementById("b" + idCell);
         button.textContent = noteName + chordType;
     }
