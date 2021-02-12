@@ -4,7 +4,7 @@ import { type, allNotes1D, chordBuilder } from './Resources/chordBuilder.js';
 import { tensionChange, start } from './Resources/tensionAnimation.js';
 import { evaluateTension, Chord, ChordPlus, Key } from './Resources/harmonicAnalysis.js';
 import { uploadFile, downloadFile } from './Resources/readFile.js';
-import { matrixConstructor, matrixToString, emptyMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell, findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord, getSelectedByColumnExceptRoot, getSelectedAndSelectable, findNoteByMatrixIndex } from './Resources/matrix.js';
+import { matrixConstructor, matrixToString, emptyMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell, findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord, getSelectedByColumnExceptRoot, getSelectedAndSelectable, findNoteByMatrixIndex, getColumnNotes } from './Resources/matrix.js';
 
 const fileInput = document.getElementById('file-input');
 
@@ -315,16 +315,16 @@ function chordTypeSelected(columnNumber, chordType) {
 }
 
 function autoFill(columnNumber) {
-    let root = findRootNoteByColumn(columnNumber + 1);
+    let root = findRootNoteByColumn(columnNumber);
     let rootName = root.name;
     let rootNumber = allNotes1D.indexOf(rootName);
-    let select = document.getElementById("select" + (columnNumber + 1));
+    let select = document.getElementById("select" + (columnNumber));
     let chordType = select.value;
     let shape = type[type.findIndex(x => x.name == chordType)].shape;
     let noteArray = chordBuilder(rootNumber, shape);
     let octaveNoteSelected = root.octave;
-    removeSelectable(columnNumber + 1);
-    removeSelectedExceptRoot(columnNumber + 1);
+    removeSelectable(columnNumber);
+    removeSelectedExceptRoot(columnNumber);
     printChord(noteArray, octaveNoteSelected, columnNumber);
 }
 
@@ -381,25 +381,45 @@ function addNote(cell, idCell, columnNumber) {
     let matrixIndex = numOctaves * 12 * maxColumns - idCell;
     let note = findNoteByMatrixIndex(matrixIndex);
     let findRoot = findRootNoteByColumn(columnNumber);
+    let rightColumn = maxColumns - 1 - finalProgression.findIndex(x => typeof x == 'undefined');
     
-    // autofill the previous column in fundamental position if there are still selectable notes
-    if (columnNumber != (maxColumns - 1) && checkSelectableByColumn(columnNumber + 1) != undefined) {
-        autoFill(columnNumber);
-    }
+    // condition to fill the columns in order
+    if ( findRootNoteByColumn(columnNumber) != undefined || columnNumber == (maxColumns-1) || columnNumber == rightColumn){
 
-    // selecting the first note ( the root of the chord)
-    if (findRoot == undefined) {
-        addRoot(cell, matrixIndex, columnNumber);
-    }
-    // removing the root
-    else if (findRoot.id == idCell) {
-        removeAll(columnNumber);
-    }
-    // adding or removing chord tones
-    if (note.selected && note.root != true) {
-        addTone(cell, columnNumber, matrixIndex);
-    } else if (note.selectable) {
-        addTone(cell, columnNumber, matrixIndex);
+        // autofill the previous column in fundamental position if there are still selectable notes
+        if (columnNumber != (maxColumns - 1)) {
+            for (let columnIndex = maxColumns-1 ; columnIndex >= rightColumn ; columnIndex--) {
+                if (checkSelectableByColumn(columnIndex) != undefined && columnNumber != columnIndex) {
+                    autoFill(columnIndex);
+                }
+            }
+        }
+
+        // selecting the first note ( the root of the chord)
+        if (findRoot == undefined) {
+            addRoot(cell, matrixIndex, columnNumber);
+        }
+        // removing the root
+        else if (findRoot.id == idCell) {
+            removeAll(columnNumber);
+        }
+        // adding or removing chord tones
+        if (note.selected && note.root != true) {
+            addTone(cell, columnNumber, matrixIndex);
+        } else if (note.selectable) {
+            addTone(cell, columnNumber, matrixIndex);
+        }
+
+    } else {
+        // highlight the right column
+        let notes = getColumnNotes(rightColumn);
+        alert("please fill the highlighted column first");
+        for (let index = 0; index < notes.length; index++) {
+            let idCell = notes[index].id;
+            let cell = document.getElementById(idCell);
+            cell.classList.add("highlighted_column");
+            setTimeout( function() { cell.classList.remove("highlighted_column")} , 1000);
+        }
     }
 }
 
@@ -429,6 +449,7 @@ function removeAll(columnNumber) {
     clearColumn(columnNumber);
     clickableColumn(columnNumber);
     resetSelect(columnNumber);
+    finalProgression[maxColumns - 1 - columnNumber] = undefined;
 }
 
 /** Function to reset select value */

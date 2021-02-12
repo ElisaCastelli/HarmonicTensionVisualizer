@@ -313,6 +313,10 @@
             .selected_background {
                 background-color: rgb(223, 193, 85);
             }
+
+            .highlighted_column{
+                background-color: rgba(204, 88, 59, 0.76);
+            }
             
             .light_background {
                 background-color: rgba(160, 223, 179, 0.377);

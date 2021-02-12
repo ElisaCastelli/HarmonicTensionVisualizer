@@ -224,7 +224,7 @@ export function printChord(noteArray, octaveNoteSelected, columnNumber) {
                 octaveNoteSelected += 1
             }
         }
-        let noteToPrint = matrixTable.find(x => (x.name == noteArray[index] && x.octave == octaveNoteSelected && x.column == columnNumber + 1));
+        let noteToPrint = matrixTable.find(x => (x.name == noteArray[index] && x.octave == octaveNoteSelected && x.column == columnNumber));
         let idCell = noteToPrint.id;
         let cell = document.getElementById(idCell);
         let indexCell = matrixTable.findIndex(x => x.id == idCell);
@@ -233,4 +233,8 @@ export function printChord(noteArray, octaveNoteSelected, columnNumber) {
         cell.classList.add("selected_background");
         cell.classList.remove('disabled');
     }
+}
+
+export function getColumnNotes(columnNumber) {
+    return matrixTable.filter(x => (x.column == columnNumber));
 }
