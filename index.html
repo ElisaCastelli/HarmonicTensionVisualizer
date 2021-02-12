@@ -18,25 +18,27 @@
     <script src="https://unpkg.com/tone@13.8.25/build/Tone.js"></script>
     <!-- partial:index.partial.html -->
     <div id="pagina">
-        <div id="title_container">
-            HARMONIC VISUALIZER
+
+        <div id="contenitore">
+            <div id="title_container">
+                HARMONIC VISUALIZER
+            </div>
+            <div id="playButton" class="scrollButton"><i class="fas fa-play"></i></div>
+            <div id="stopButton" class="scrollButton"><i class="fas fa-pause"></i></div>
+            <div id="rewindButton" class="scrollButton"><i class="fas fa-stop"></i></div>
+            <div id="muteButton" class="scrollButton"><i class="fas fa-volume-mute"></i></div>
+            <div id="volumeDownButton" class="scrollButton"><i class="fas fa-volume-down"></i></div>
+            <div id="volumeUpButton" class="scrollButton"><i class="fas fa-volume-up"></i></div>
+            <div id="resetButton" class="scrollButton"><i class="fas fa-trash-alt"></i></div>
+            <div id="downloadButton" class="scrollButton"><i class="fas fa-file-download"></i></div>
+            <div id="readmeButton" class="scrollButton">
+                <a href="#readMe"><i class="fab fa-readme"></i></a></div>
+            <div id="uploadButton" class="scrollButton">
+                <label for="file-input"><i class="fas fa-folder-open"></i></label>
+                <input type="file" id="file-input" accept="text/txt">
+            </div>
+            <div id="chordPlayed"></div>
         </div>
-        <div id="playButton" class="scrollButton"><i class="fas fa-play"></i></div>
-        <div id="stopButton" class="scrollButton"><i class="fas fa-pause"></i></div>
-        <div id="rewindButton" class="scrollButton"><i class="fas fa-stop"></i></div>
-        <div id="muteButton" class="scrollButton"><i class="fas fa-volume-mute"></i></div>
-        <div id="volumeDownButton" class="scrollButton"><i class="fas fa-volume-down"></i></div>
-        <div id="volumeUpButton" class="scrollButton"><i class="fas fa-volume-up"></i></div>
-        <div id="resetButton" class="scrollButton"><i class="fas fa-trash-alt"></i></div>
-        <div id="downloadButton" class="scrollButton"><i class="fas fa-file-download"></i></div>
-        <div id="readmeButton" class="scrollButton">
-            <a href="#readMe"><i class="fab fa-readme"></i></a></div>
-            <label for="file-input"> <div id="uploadButton" class="scrollButton">
-            <i class="fas fa-folder-open"></i>
-            
-        </div></label>
-        <input type="file" id="file-input" accept="text/txt">
-        <div id="chordPlayed"></div>
         <div id="input_block">
             <div id="progressionInfo"></div>
             <canvas>
