@@ -105,7 +105,7 @@ export function ChordPlus(note, type, degree, key) {
 	this.degree = degree;
 	this.curr_key = key;
 	
-	this.substitution = [];
+	this.substitution = "";
 	this.type_coherent = true;
 	this.degree_coherent = true;
 	this.event = "";
@@ -374,6 +374,65 @@ const progPatterns = [{
 	quadriad_tension: [5, 10]
 }];
 
+function findModalInterchange(progression, priority_keys, chord, index){
+	let surprise = "B";
+	let tempChord;
+	let tempKeys = [];
+	
+	//for each mode, with same tonic
+	for (let m = 0; m < modes.length; m++) {
+		
+		// check if the scale is compatible with any other mode
+		tempKeys.push(new Key(chord.curr_key.tonic, modes[m].name));
+		
+		//for each mode, with same tonic
+		for (let j = index; j < progression.length; j++) {
+			
+			tempChord = getProgDegrees([progression[j]], tempKeys[m]);
+			if (! (tempChord[0].type_coherent && tempChord[0].degree_coherent)) {
+				break;
+			}
+			//give points for each compatible chord
+			tempKeys[m].points++;
+		}
+	}
+	
+	//sort by points
+	tempKeys.sort((a, b) => (a.points > b.points) ? -1 : 1);
+	/** if multiple modes with same points:
+	 * 1): check if any of them is inside priority_keys
+	 * 2): sort by mode similarity*/
+	let keyIntervalsSum = modes[chord.curr_key.scale_index].intervals.reduce(arraySum);
+	for (let m = 0; m < tempKeys.length; m++) {
+		if (tempKeys[m].points < tempKeys[0].points) {
+			break;
+		}
+		if (priority_keys.includes(tempKeys[m])) {
+			tempKeys[0] = tempKeys[m];
+			break;
+		}
+		// choose the scale that has less differences (b or #) compared to the original mode
+		else if(Math.abs(modes[tempKeys[m].scale_index].intervals.reduce(arraySum) - keyIntervalsSum) <
+				Math.abs(modes[tempKeys[0].scale_index].intervals.reduce(arraySum) - keyIntervalsSum)){
+			tempKeys[0] = tempKeys[m];
+		}
+	}
+	// if at least one mode is compatible
+	if (tempKeys[0].points > 0) {
+		console.log(progression[index].toString(), "is borrowed from :", tempKeys[0].tonic, tempKeys[0].scale);
+		// add this key to priority_keys
+		priority_keys.push(tempKeys[0]);
+		// update chord information
+		chord.curr_key = tempKeys[0];
+		chord.event = "borrowed from " + tempKeys[0].tonic + tempKeys[0].scale;
+		chord.surprise = surprise;
+		return chord;
+	}
+	else
+		return false;
+
+}
+
 /** Main function*/
 export function evaluateTension(progression){
 
@@ -407,16 +466,15 @@ export function evaluateTension(progression){
 		}
 	}
 	accepted_keys.sort((a, b) => (a.points > b.points) ? -1 : 1);
-	let key = accepted_keys[0];
 
 	/** phase 3): analyze each "wrong" chord, with different options*/ 
 	
 	// same operation as before, based on the chosen key
-	progression_plus = getProgDegrees(progression, key);
+	progression_plus = getProgDegrees(progression, accepted_keys[0]);
 	
 	// array of all keys that may be found during analysis 
 	let priority_keys = [];
-	priority_keys.push(key);
+	priority_keys.push(accepted_keys[0]);
 	
 	let tempKeys = [];
 	let temp_deg_progression;
@@ -434,13 +492,32 @@ export function evaluateTension(progression){
 				tempChord = diminishedDomSub(progression_plus[i]);
 				// check if it is coherent with the current key
 				tempChord = getProgDegrees([tempChord], progression_plus[i].curr_key);
+				tempChord = tempChord[0];
+				
+				tempChord.substitution = progression_plus[i].toString();
+				console.log("ciao", tempChord)
 				if (tempChord.type_coherent && tempChord.degree_coherent) {
 					// save original chord and add event
-					tempChord.substitution = progression_plus[i];
 					progression_plus[i] = tempChord;
 					progression_plus[i].event = "dim7 substitution";
 					progression_plus[i].surprise = surprise;
 					continue;
+				}
+				// test with cowboy bebop: if it works there, it works
+				else if (tempChord.degree_coherent) {
+					console.log("hey1", tempChord)
+					tempChord = findModalInterchange(progression, priority_keys, tempChord, i);
+					if (tempChord) {
+						console.log("hey2", tempChord)
+						progression_plus[i] = tempChord;
+						priority_keys.push(tempKeys[0]);
+						continue;
+					}
+				}
+				// test with have you met miss jones: if it works there, it works
+				else if (tempChord.type == "7") {
+					console.log("da scrivere");
+					// search for secondary dominant
 				}
 			}
 			else if (progression_plus[i].type == "7") {
@@ -448,6 +525,7 @@ export function evaluateTension(progression){
 				// check if it is coherent with the current key
 				tempChord = getProgDegrees([tempChord], progression_plus[i].curr_key);
 				if (tempChord.type_coherent && tempChord.degree_coherent) {
+					console.log("hey", tempChord, progression_plus[i])
 					tempChord.substitution = progression_plus[i];
 					progression_plus[i] = tempChord;
 					// add this key to priority_keys
@@ -460,61 +538,12 @@ export function evaluateTension(progression){
 			
 			
 			/** OPTION B): MODAL INTERCHANGE */
-			surprise = "B";
-			
-			//reset temp array
-			tempKeys = [];
-			//for each mode, with same tonic
-			for (let m = 0; m < modes.length; m++) {
-				
-				// check if the scale is compatible with any other mode
-				tempKeys.push(new Key(key.tonic, modes[m].name));
-				
-				//for each mode, with same tonic
-				for (let j = i; j < progression_plus.length; j++) {
-					
-					tempChord = getProgDegrees([progression[j]], tempKeys[m]);
-					if (! (tempChord[0].type_coherent && tempChord[0].degree_coherent)) {
-						break;
-					}
-					//give points for each compatible chord
-					tempKeys[m].points++;
-				}
-			}
-			
-			//sort by points
-			tempKeys.sort((a, b) => (a.points > b.points) ? -1 : 1);
-			/** if multiple modes with same points:
-			 * 1): check if any of them is inside priority_keys
-			 * 2): sort by mode similarity*/
-			let keyIntervalsSum = modes[key.scale_index].intervals.reduce(arraySum);
-			for (let m = 0; m < tempKeys.length; m++) {
-				if (tempKeys[m].points < tempKeys[0].points) {
-					break;
-				}
-				if (priority_keys.includes(tempKeys[m])) {
-					tempKeys[0] = tempKeys[m];
-					break;
-				}
-				// choose the scale that has less differences (b or #) compared to the original mode
-				else if(Math.abs(modes[tempKeys[m].scale_index].intervals.reduce(arraySum) - keyIntervalsSum) <
-						Math.abs(modes[tempKeys[0].scale_index].intervals.reduce(arraySum) - keyIntervalsSum)){
-					tempKeys[0] = tempKeys[m];
-				}
-			}
-			// if at least one mode is compatible
-			if (tempKeys[0].points > 0) {
-				console.log(progression[i].toString(), "is borrowed from :", tempKeys[0].tonic, tempKeys[0].scale);
-				// add this key to priority_keys
+			tempChord = findModalInterchange(progression, priority_keys, progression_plus[i], i);
+			if (tempChord) {
+				progression_plus[i] = tempChord;
 				priority_keys.push(tempKeys[0]);
-				// update chord information
-				progression_plus[i].curr_key = tempKeys[0];
-				progression_plus[i].event = "modal interchange: chord borrowed from " + tempKeys[0].tonic + tempKeys[0].scale;
-				progression_plus[i].surprise = surprise;
 				continue;
 			}
-			// note: the choices above are just a convention in order to solve ambiguiti, 
-			// it is not the aim of the project to identify the correct interpretation
 			
 			
 			/** OPTION C): CHANGE OF SCALE */
