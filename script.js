@@ -487,9 +487,9 @@ function play() {
             let octave = noteSelected[index].octave;
             notesArray.push(noteName + octave);
         }
-        if (typeof analysisResults[maxColumns - 1 - columnPlayed].pattern != 'undefined') {
+        if (analysisResults[maxColumns - 1 - columnPlayed].curr_pattern != "") {
             progressionInfo.style.visibility = 'visible';
-            progressionInfo.textContent = analysisResults[maxColumns - 1 - columnPlayed].pattern;
+            progressionInfo.textContent = analysisResults[maxColumns - 1 - columnPlayed].curr_pattern;
         } else {
             progressionInfo.style.visibility = 'hidden';
             progressionInfo.textContent = "";
@@ -730,6 +730,8 @@ resetButton.onclick = function() {
         tableBackscroll(0);
         const bar = document.getElementById("scrollingBar");
         bar.style.left = '93px';
+        const progressionInfo = document.getElementById('progressionInfo');
+        progressionInfo.visibility='hidden';
         tensionChange(0);
     }
 }
