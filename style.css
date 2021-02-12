@@ -443,3 +443,11 @@
                 background: rgb(226, 22, 50);
                 border: 1px solid black;
             }
+            
+            a {
+                color: rgb(105, 149, 200);
+            }
+            
+            html {
+                scroll-behavior: smooth;
+            }
