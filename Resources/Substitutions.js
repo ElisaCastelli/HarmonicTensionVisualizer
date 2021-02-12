@@ -6,7 +6,7 @@ import { allNotes1D } from './chordBuilder.js';
 export function diminishedDomSub(chord) {
     let tonic = allNotes1D[ (12 + (allNotes1D.indexOf(chord.note) - 4)) % 12 ];
     let subChord = new Chord(tonic, '7');
-    console.log(subChord, " substituted with ", chord);
+    //console.log(subChord, " substituted with ", chord);
     return subChord;
 }
 
@@ -15,7 +15,7 @@ export function diminishedDomSub(chord) {
 export function tritoneSub(chord) {
     let tonic = allNotes1D[ (allNotes1D.indexOf(chord.note) + 6) % 12 ];
     let subChord = new Chord(tonic, '7');
-    console.log(subChord, " substituted with ", chord);
+    //console.log(subChord, " substituted with ", chord);
     return subChord
 }
 
