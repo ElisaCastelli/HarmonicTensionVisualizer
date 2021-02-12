@@ -2,9 +2,9 @@
 
 import { type, allNotes1D, chordBuilder } from './Resources/chordBuilder.js';
 import { tensionChange, start } from './Resources/tensionAnimation.js';
-import { evaluateTension, Chord, ChordPlus, Key} from './Resources/harmonicAnalysis.js';
+import { evaluateTension, Chord, ChordPlus, Key } from './Resources/harmonicAnalysis.js';
 import { downloadFile } from './Resources/readFile.js';
-import { matrixConstructor, matrixToString, emptyMatrix, clearMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell, findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord, getSelectedByColumnExceptRoot, getSelectedAndSelectable, findNoteByMatrixIndex} from './Resources/matrix.js';
+import { matrixConstructor, matrixToString, emptyMatrix, clearMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell, findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord, getSelectedByColumnExceptRoot, getSelectedAndSelectable, findNoteByMatrixIndex } from './Resources/matrix.js';
 
 const fileInput = document.getElementById('file-input');
 
@@ -401,11 +401,11 @@ function addNote(cell, idCell, columnNumber) {
         removeAll(columnNumber);
     }
     // adding or removing chord tones
-    if(note.selected && note.root != true){
+    if (note.selected && note.root != true) {
         addTone(cell, columnNumber, matrixIndex);
     } else if (note.selectable) {
-            addTone(cell, columnNumber, matrixIndex);
-        }  
+        addTone(cell, columnNumber, matrixIndex);
+    }
 }
 
 /** function that adds the root of a chord on the pianoroll */
@@ -447,10 +447,10 @@ function playAndScroll() {
         if ((maxColumns - columnPlayed - 1) < finalProgression.length) {
             play();
             tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
-        }else{
+        } else {
             const stopButton = document.getElementById("stopButton");
             stopButton.onclick();
-            timeInterval-=25;
+            timeInterval -= 25;
         }
     }
     timeInterval += 25;
@@ -460,7 +460,7 @@ function playAndScroll() {
 function play() {
     const chordPlayed = document.getElementById("chordPlayed");
     //var t = finalProgression[maxColumns - 1 - columnPlayed].note + finalProgression[maxColumns - 1 - columnPlayed].type;
-    var t = 'Degree: '+analysisResults[maxColumns - 1 - columnPlayed].degree + '\n'+analysisResults[maxColumns - 1 - columnPlayed].substitution;
+    var t = 'Degree: ' + analysisResults[maxColumns - 1 - columnPlayed].degree + '\n' + analysisResults[maxColumns - 1 - columnPlayed].substitution;
     const progressionInfo = document.getElementById('progressionInfo');
     let noteSelected = getSelectedByColumn(columnPlayed);
     let notesArray = new Array();
@@ -470,12 +470,12 @@ function play() {
             let octave = noteSelected[index].octave;
             notesArray.push(noteName + octave);
         }
-        if(typeof analysisResults[maxColumns - 1 - columnPlayed].pattern!= 'undefined'){
-            progressionInfo.style.visibility='visible';
-            progressionInfo.textContent=analysisResults[maxColumns - 1 - columnPlayed].pattern;
-        }else{
-            progressionInfo.style.visibility='hidden';
-            progressionInfo.textContent="";
+        if (typeof analysisResults[maxColumns - 1 - columnPlayed].pattern != 'undefined') {
+            progressionInfo.style.visibility = 'visible';
+            progressionInfo.textContent = analysisResults[maxColumns - 1 - columnPlayed].pattern;
+        } else {
+            progressionInfo.style.visibility = 'hidden';
+            progressionInfo.textContent = "";
         }
         chordPlayed.textContent = t;
         if (notesArray.length == 3) {
@@ -761,7 +761,10 @@ muteButton.onclick = function() {
 volumeUpButton.onclick = function() {
     if ((Volume + 1) <= MaxVolume)
         Volume++;
-    else alert("Max Volume Reached");
+    else {
+
+        alert("Max Volume Reached");
+    }
 }
 
 volumeDownButton.onclick = function() {
@@ -870,4 +873,13 @@ document.body.onkeyup = function(e) {
     if (e.keyCode == 32) {
         // eventuale codice spacebar
     }
+}
+
+// on click readme, add infos about the site
+readmeButton.onclick = function() {
+    const readMeSection = document.createElement("div");
+    readMeSection.classList.add("readStyle");
+    readMeSection.setAttribute("id", "readMeSection");
+    const pagina = document.getElementById("pagina");
+    pagina.appendChild(readMeSection);
 }
