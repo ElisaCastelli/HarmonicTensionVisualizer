@@ -440,4 +440,6 @@
             
             .disable {
                 pointer-events: none;
+                background-color: rgb(148, 0, 0);
+                border: 1px solid darkred;
             }

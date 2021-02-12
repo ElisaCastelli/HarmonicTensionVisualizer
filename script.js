@@ -767,6 +767,7 @@ volumeUpButton.onclick = function() {
         document.getElementById("volumeDownButton").classList.remove("disable");
     } else {
         document.getElementById("volumeUpButton").classList.add("disable");
+        document.getElementById("volumeUpButton").classList.add("maxiVolume");
     }
 }
 
