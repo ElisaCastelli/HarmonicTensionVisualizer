@@ -773,7 +773,10 @@ volumeUpButton.onclick = function() {
 volumeDownButton.onclick = function() {
     if ((Volume - 1) >= minVolume)
         Volume--;
-    else alert("Min Volume Reached");
+    else {
+        alert("Min Volume Reached");
+        document.getElementById("volumeDownButton").classList.toggle("disable");
+    }
 }
 
 // cancella tutto il contenuto del piano roll
