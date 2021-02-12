@@ -877,9 +877,17 @@ document.body.onkeyup = function(e) {
 
 // on click readme, add infos about the site
 readmeButton.onclick = function() {
-    const readMeSection = document.createElement("div");
-    readMeSection.classList.add("readStyle");
-    readMeSection.setAttribute("id", "readMeSection");
-    const pagina = document.getElementById("pagina");
-    pagina.appendChild(readMeSection);
+    const contenitore = document.getElementById("readMeSection");
+    if (contenitore == null) {
+        const testo = "bla bla bla";
+        const readMeSection = document.createElement("div");
+        readMeSection.classList.add("readStyle");
+        readMeSection.innerHTML += testo;
+        readMeSection.setAttribute("id", "readMeSection");
+        const pagina = document.getElementById("pagina");
+        pagina.appendChild(readMeSection);
+    } else {
+        const pagina = document.getElementById("readMeSection");
+        pagina.remove();
+    }
 }
