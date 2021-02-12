@@ -749,7 +749,7 @@ downloadButton.onclick = function() {
             let text = matrixToString(finalProgression, maxColumns, cellsNumber);
             downloadFile(fileName, text);
         }else{
-            nameInput.value="Name required!";
+            nameInput.placeholder="Name required!";
         }
     }
 }
