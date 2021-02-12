@@ -766,7 +766,6 @@ volumeUpButton.onclick = function() {
         Volume++;
         document.getElementById("volumeDownButton").classList.remove("disable");
     } else {
-        alert("Max Volume Reached");
         document.getElementById("volumeUpButton").classList.add("disable");
     }
 }
@@ -776,7 +775,6 @@ volumeDownButton.onclick = function() {
         Volume--;
         document.getElementById("volumeUpButton").classList.remove("disable");
     } else {
-        alert("Min Volume Reached");
         document.getElementById("volumeDownButton").classList.add("disable");
     }
 }
