@@ -207,8 +207,15 @@
                 color: rgb(223, 193, 85);
             }
             
-            input {
+            #file-input {
                 display: none;
+            }
+
+            #fileName{
+                width: 92px;
+                top:28px;
+                position: fixed;
+                left: 80%;
             }
             
             #uploadButton {

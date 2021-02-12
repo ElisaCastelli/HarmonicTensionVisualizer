@@ -2,7 +2,7 @@ import {fillMatrix}from './matrix.js';
 import { printSelected, fillFinalProgression, unselectMatrix, selectRoot } from '../script.js';
 
 /** Function used to read the file uploaded */
-export function uploadFile(file) {
+export function uploadFile(file, maxColumns) {
     let textType = /text.*/;
     let matrixString = "";
     let progressionString = "";

@@ -719,15 +719,21 @@ resetButton.onclick = function() {
 
 /** onclick associated with the uploadButton to read a file */
 uploadButton.onchange = function() {
-    uploadFile(fileInput.files[0]);
+    uploadFile(fileInput.files[0], maxColumns);
 }
 
 /** onclick associated with the downloadButton to download a file that contains the chord progression you put inside the pianoroll */
 downloadButton.onclick = function() {
     if (!emptyMatrix()) {
-        let fileName = "MyChordProgression.txt";
-        let text = matrixToString(finalProgression, maxColumns, cellsNumber);
-        downloadFile(fileName, text);
+        const nameInput = document.getElementById("fileName");
+        let fileName = nameInput.value;
+        if(fileName!="" && fileName!="Name required!"){
+            fileName = fileName +".txt";
+            let text = matrixToString(finalProgression, maxColumns, cellsNumber);
+            downloadFile(fileName, text);
+        }else{
+            nameInput.value="Name required!";
+        }
     }
 }
 
