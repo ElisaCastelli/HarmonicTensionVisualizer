@@ -863,6 +863,8 @@ function firstRender() {
         }
         // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
     matrixConstructor(cellsNumber, maxColumns, numOctaves, numOctavesMin, key_color);
+
+    generaReadme();
 }
 
 firstRender();
@@ -884,7 +886,13 @@ document.body.onkeyup = function(e) {
 
 // on click readme, add infos about the site
 // absent the content of the div
-readmeButton.onclick = function() {
+readmeButton.onclick = generaReadme();
+
+GitHubIcon.onclick = function() {
+    window.open("https://github.com/ElisaCastelli/HarmonicTensionVisualizer.git");
+}
+
+function generaReadme() {
     const contenitore = document.getElementById("readMeSection");
     // (contenitore == null)
     {
@@ -903,8 +911,4 @@ readmeButton.onclick = function() {
     // const pagina = document.getElementById("readMeSection");
     // pagina.remove();
     //}
-}
-
-GitHubIcon.onclick = function() {
-    window.open("https://github.com/ElisaCastelli/HarmonicTensionVisualizer.git");
 }
