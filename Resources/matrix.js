@@ -192,8 +192,6 @@ export function emptyMatrix() {
 
 /** Function to fill matrixTable with the content of a file */
 export function fillMatrix(matrixRead) {
-    //let maxColumnIndex = finalProgression.findIndex(x => typeof x == 'undefined');
-    //unselectMatrix(maxColumnIndex);
     let indexMainMatrix = 0;
     for (let index = 0; index < matrixRead.length; index++) {
         if (index % 2 == 0) {

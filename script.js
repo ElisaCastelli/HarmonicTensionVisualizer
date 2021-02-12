@@ -3,7 +3,7 @@
 import { type, allNotes1D, chordBuilder } from './Resources/chordBuilder.js';
 import { tensionChange, start } from './Resources/tensionAnimation.js';
 import { evaluateTension, Chord, ChordPlus, Key } from './Resources/harmonicAnalysis.js';
-import { downloadFile } from './Resources/readFile.js';
+import { uploadFile, downloadFile } from './Resources/readFile.js';
 import { matrixConstructor, matrixToString, emptyMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell, findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord, getSelectedByColumnExceptRoot, getSelectedAndSelectable, findNoteByMatrixIndex } from './Resources/matrix.js';
 
 const fileInput = document.getElementById('file-input');
@@ -131,7 +131,7 @@ function Note(octave, name, column, row, id) {
 }
 
 /** Function to fill the finalProgression array with the one read from a file */
-function fillFinalProgression(progressionRead) {
+export function fillFinalProgression(progressionRead) {
     finalProgression = new Array(maxColumns);
     progressionRead = progressionRead.substring(1, progressionRead.length);
     let indexSpace = 0;
@@ -151,10 +151,11 @@ function fillFinalProgression(progressionRead) {
         progressionRead = progressionRead.slice(indexSpace + 1, progressionRead.length);
         indexProgression++;
     }
+    return finalProgression;
 }
 
 /** Function to select the root of a chord when upload a file  */
-function selectRoot() {
+export function selectRoot() {
     let maxColumnIndex = finalProgression.findIndex(x => typeof x == 'undefined');
     for (let index = 0; index < maxColumnIndex; index++) {
         let chord = finalProgression[index];
@@ -181,7 +182,7 @@ function selectRoot() {
 }
 
 /** Function to unselect all the cells of the table and update the variables of the matrix elements Note */
-function unselectMatrix(lengthChordArray) {
+export function unselectMatrix(lengthChordArray) {
     let index = 0;
     if (lengthChordArray >= 0) {
         for (let indexColumn = maxColumns - 1; indexColumn >= lengthChordArray; indexColumn--) {
@@ -273,7 +274,7 @@ function removeSelectedExceptRoot(columnNumber) {
 }
 
 /** Function to update the visual content of the table based on the update matrixTable */
-function printSelected() {
+export function printSelected() {
     let selectedCells = getAllSelectedId();
     selectedCells.forEach(id => {
         let cell = document.getElementById(id);
@@ -527,37 +528,6 @@ function play() {
     }).toMaster();
 }
 
-/** Function used to read the file uploaded */
-function read(file) {
-    let textType = /text.*/;
-    let matrixString = "";
-    let progressionString = "";
-    if (file.type.match(textType)) {
-        let reader = new FileReader();
-        reader.readAsText(file);
-        reader.onload = function(e) {
-            let text = reader.result;
-            let lastIndex = text.indexOf("\n");
-            matrixString = text.substring(0, lastIndex);
-            fillMatrix(matrixString);
-            printSelected();
-            progressionString = text.substring(lastIndex, text.length);
-            fillFinalProgression(progressionString);
-            selectRoot();
-        }
-    } else {
-        console.log("File not supported!");
-    }
-    let maxIndex = 0;
-    if (finalProgression.length == maxColumns) {
-        maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
-    } else {
-        maxIndex = finalProgression.length;
-    }
-    unselectMatrix(maxIndex);
-}
-
-
 // VIEW
 
 /** Function called the first time the page is loaded to add the left fixed column of the table that shows the corresponding notes to each row*/
@@ -749,7 +719,7 @@ resetButton.onclick = function() {
 
 /** onclick associated with the uploadButton to read a file */
 uploadButton.onchange = function() {
-    read(fileInput.files[0]);
+    uploadFile(fileInput.files[0]);
 }
 
 /** onclick associated with the downloadButton to download a file that contains the chord progression you put inside the pianoroll */
