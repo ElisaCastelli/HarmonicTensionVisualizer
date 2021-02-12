@@ -876,6 +876,7 @@ document.body.onkeyup = function(e) {
 }
 
 // on click readme, add infos about the site
+// absent the content of the div
 readmeButton.onclick = function() {
     const contenitore = document.getElementById("readMeSection");
     if (contenitore == null) {
