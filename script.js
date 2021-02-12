@@ -803,7 +803,7 @@ function firstRender() {
     const divChordPlayed = document.getElementById("chordPlayed");
     const progressionInfo = document.getElementById('progressionInfo');
     divChordPlayed.style.visibility = 'hidden';
-    progressionInfo.style.visibility = 'hidden';
+    //progressionInfo.style.visibility = 'hidden';
     let pianoRollTable = createPianoRoll();
     pianoContainer.appendChild(pianoRollTable);
     let bar = createBar();
