@@ -762,8 +762,8 @@ volumeUpButton.onclick = function() {
     if ((Volume + 1) <= MaxVolume)
         Volume++;
     else {
-
         alert("Max Volume Reached");
+        this.disabled = true;
     }
 }
 
