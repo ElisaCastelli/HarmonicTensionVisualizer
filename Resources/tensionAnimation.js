@@ -41,8 +41,8 @@ function generateData(tension,maxTension) {
 }
 
 function waveColor(tension,maxTension) {
-  let r = 255*(tension/maxTension)
-  let g = 0
+  let r = 255
+  let g = 255 - 255*(tension/maxTension)
   let b = 255 - 255*(tension/maxTension)
   let color = "rgb(" + r + ", " + g + ", " + b + ")"
   ctx.strokeStyle = color;
