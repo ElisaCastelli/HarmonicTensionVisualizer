@@ -108,9 +108,11 @@ export function ChordPlus(note, type, degree, key) {
 	this.substitution = [];
 	this.type_coherent = true;
 	this.degree_coherent = true;
-	this.tension = 1;
 	this.event = "";
 	this.curr_pattern = "";
+	/***/
+	this.tension = 1;
+	this.surprise = "";
 }
 
 export function Key(tonic, scale){
@@ -418,12 +420,14 @@ export function evaluateTension(progression){
 	
 	let tempKeys = [];
 	let temp_deg_progression;
+	let surprise;
 	
 	// search for chords out of key
 	for (let i = 0; i < progression_plus.length; i++) {
 		if (!( progression_plus[i].type_coherent && progression_plus[i].degree_coherent)) {
 			
 			/** OPTION A): CHORD SUBSTITUTION*/
+			surprise = "A";
 			
 			// experimental: discuss it with colleagues!
 			if (["dim", "halfdim", "dim7"].includes(progression_plus[i].type)) {
@@ -435,8 +439,7 @@ export function evaluateTension(progression){
 					tempChord.substitution = progression_plus[i];
 					progression_plus[i] = tempChord;
 					progression_plus[i].event = "dim7 substitution";
-					// add this key to priority_keys
-					// priority_keys.push(tempKeys[0]); ????
+					progression_plus[i].surprise = surprise;
 					continue;
 				}
 			}
@@ -450,12 +453,14 @@ export function evaluateTension(progression){
 					// add this key to priority_keys
 					// priority_keys.push(tempKeys[0]); ????
 					progression_plus[i].event = "tritone substitution";
+					progression_plus[i].surprise = surprise;
 					continue;
 				}
 			}
 			
 			
 			/** OPTION B): MODAL INTERCHANGE */
+			surprise = "B";
 			
 			//reset temp array
 			tempKeys = [];
@@ -505,6 +510,7 @@ export function evaluateTension(progression){
 				// update chord information
 				progression_plus[i].curr_key = tempKeys[0];
 				progression_plus[i].event = "modal interchange: chord borrowed from " + tempKeys[0].tonic + tempKeys[0].scale;
+				progression_plus[i].surprise = surprise;
 				continue;
 			}
 			// note: the choices above are just a convention in order to solve ambiguiti, 
@@ -512,6 +518,7 @@ export function evaluateTension(progression){
 			
 			
 			/** OPTION C): CHANGE OF SCALE */
+			surprise = "C";
 			
 			// check if from this point a new key is possible
 			tempKeys = findKey(progression.slice(i, progression.length));
@@ -541,11 +548,15 @@ export function evaluateTension(progression){
 				// add this key to priority_keys
 				priority_keys.push(tempKeys[0]);
 				progression_plus[i].event = "change of key: " + tempKeys[0].toString();
+				progression_plus[i].surprise = surprise;
 				continue;
 			}
 			
 			/** OPTION D): GENERAL CHORD OUT OF KEY*/
+			surprise = "D";
+			
 			progression_plus[i].event = "out of key";
+			progression_plus[i].surprise = surprise;
 			
 		}
 		
