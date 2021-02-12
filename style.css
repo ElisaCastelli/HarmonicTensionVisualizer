@@ -422,8 +422,9 @@
                 height: 46%;
                 background: rgb(83, 98, 105);
                 border-radius: 10px;
+                border: 1px dotted rgb(223, 193, 85);
                 bottom: 10px;
-                font-size: xx-large;
+                font-size: x-large;
             }
             
             #GitHubIcon {
