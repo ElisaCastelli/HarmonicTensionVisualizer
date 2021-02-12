@@ -616,8 +616,11 @@ export function evaluateTension(progression){
 	
 	/** TENSION PROGRESSION */
 	
+	// TODO: devi gestire tutte le sostituzioni!!!!!!! controlla se c'è, nel caso aggiungi tot intensità oltre a quella della sua funzione, ma come?
+	
+	/** assign tension based on functions*/
+	
 	for (let i = 0; i < progression_plus.length; i++) {
-		
 		if (progression_plus[i].degree_coherent && progression_plus[i].type_coherent) {
 			// tension of first degree
 			if ((progression_plus[i].degree == "I"))
@@ -641,6 +644,8 @@ export function evaluateTension(progression){
 	// sort patterns from longest to shortest
 	progPatterns.sort((a, b) => (a.triad_tension.length > b.triad_tension.length) ? -1 : 1);
 	
+	/**assign tension based on patterns*/
+	
 	// for each chord in the progression
 	for (let i = 0; i < progression_plus.length; i++) {	
 		let found_pattern;
@@ -660,9 +665,6 @@ export function evaluateTension(progression){
 					break;
 				}
 			}
-			
-
-			
 			/** if every chord fits the pattern and length is correct, update ChordPlus and move on*/
 			if (found_pattern && extract.length == progPatterns[p].degrees.length) {
 				console.log("found pattern:", progPatterns[p].name);
