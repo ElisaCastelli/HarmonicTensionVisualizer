@@ -880,7 +880,7 @@ document.body.onkeyup = function(e) {
 readmeButton.onclick = function() {
     const contenitore = document.getElementById("readMeSection");
     if (contenitore == null) {
-        const testo = "bla bla bla";
+        const testo = "Harmonic Tension Visualizer";
         const readMeSection = document.createElement("div");
         readMeSection.classList.add("readStyle");
         readMeSection.innerHTML += testo;
