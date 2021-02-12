@@ -168,8 +168,8 @@ function selectRoot() {
             let col = getCellColumnByIndex(indexMatrix);
             let select = document.getElementById("select" + col);
             select.value = type;
-            const cellRoot = document.getElementById(idRoot);
-            cellRoot.textContent = chord.note + chord.type;
+            let button = document.getElementById("b" + idRoot);
+            button.textContent = note+type;
             let selectableCells = getCellsToMakeSelectable(columnIndex, idRoot);
             if (selectableCells.length > 0) {
                 selectableCells.forEach(cell => {
@@ -225,18 +225,6 @@ function clickableColumn(numCol) {
         unselectCell(indexCell);
     }
 }
-
-/** Function to remove the visual content of a specific column of the table  */
-/*
-function removeAllColor(numColumn) {
-    let columnCell = findCellsByColumn(numColumn);
-    for (let index = 0; index < columnCell.length; index++) {
-        let idCell = columnCell[index].id;
-        let cell = document.getElementById(idCell);
-        cell.classList.remove("selected_background");
-        cell.classList.remove("light_background");
-    }
-}*/
 
 /** Function to clear all notes selected or selectable from a specific column */
 function clearColumn(columnNumber) {
