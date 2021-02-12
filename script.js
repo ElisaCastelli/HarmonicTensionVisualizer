@@ -477,7 +477,8 @@ function playAndScroll() {
 /** Function to play the chord using a Sampler */
 function play() {
     const chordPlayed = document.getElementById("chordPlayed");
-    var t = 'Degree: ' + analysisResults[maxColumns - 1 - columnPlayed].degree + '\n' + analysisResults[maxColumns - 1 - columnPlayed].substitution;
+    var degree = 'Degree: ' + analysisResults[maxColumns - 1 - columnPlayed].degree;
+    var substitution = 'Substitution: \n'+analysisResults[maxColumns - 1 - columnPlayed].substitution;
     const progressionInfo = document.getElementById('progressionInfo');
     let noteSelected = getSelectedByColumn(columnPlayed);
     let notesArray = new Array();
@@ -487,6 +488,11 @@ function play() {
             let octave = noteSelected[index].octave;
             notesArray.push(noteName + octave);
         }
+        if(substitution!=""){
+            const subInfo = document.getElementById("substitutionInfo");
+            subInfo.visibility='visible';
+            subInfo.textContent= substitution;
+        }
         if (analysisResults[maxColumns - 1 - columnPlayed].curr_pattern != "") {
             progressionInfo.style.visibility = 'visible';
             progressionInfo.textContent = analysisResults[maxColumns - 1 - columnPlayed].curr_pattern;
@@ -494,7 +500,7 @@ function play() {
             progressionInfo.style.visibility = 'hidden';
             progressionInfo.textContent = "";
         }
-        chordPlayed.textContent = t;
+        chordPlayed.textContent = degree;
         if (notesArray.length == 3) {
             sampler.triggerAttackRelease([notesArray[0], notesArray[1], notesArray[2]], 2);
         } else if (notesArray.length == 4) {
