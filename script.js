@@ -762,20 +762,22 @@ muteButton.onclick = function() {
 }
 
 volumeUpButton.onclick = function() {
-    if ((Volume + 1) <= MaxVolume)
+    if ((Volume + 1) <= MaxVolume) {
         Volume++;
-    else {
+        document.getElementById("volumeDownButton").classList.remove("disable");
+    } else {
         alert("Max Volume Reached");
-        document.getElementById("volumeUpButton").classList.toggle("disable");
+        document.getElementById("volumeUpButton").classList.add("disable");
     }
 }
 
 volumeDownButton.onclick = function() {
-    if ((Volume - 1) >= minVolume)
+    if ((Volume - 1) >= minVolume) {
         Volume--;
-    else {
+        document.getElementById("volumeUpButton").classList.remove("disable");
+    } else {
         alert("Min Volume Reached");
-        document.getElementById("volumeDownButton").classList.toggle("disable");
+        document.getElementById("volumeDownButton").classList.add("disable");
     }
 }
 
