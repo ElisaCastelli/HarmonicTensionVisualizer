@@ -437,3 +437,7 @@
                 color: rgb(34, 39, 44);
                 background-color: rgba(73, 144, 250, 0.596);
             }
+            
+            .disable {
+                pointer-events: none;
+            }

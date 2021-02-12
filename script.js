@@ -736,7 +736,7 @@ resetButton.onclick = function() {
         firstPlay = true;
         tableBackscroll(0);
         const bar = document.getElementById("scrollingBar");
-        bar.style.left='93px';  
+        bar.style.left = '93px';
         tensionChange(0);
     }
 }
@@ -766,7 +766,7 @@ volumeUpButton.onclick = function() {
         Volume++;
     else {
         alert("Max Volume Reached");
-        this.disabled = true;
+        document.getElementById("volumeUpButton").classList.toggle("disable");
     }
 }
 
