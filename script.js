@@ -893,3 +893,7 @@ readmeButton.onclick = function() {
         pagina.remove();
     }
 }
+
+GitHubIcon.onclick = function() {
+    window.open("https://github.com/ElisaCastelli/HarmonicTensionVisualizer.git");
+}

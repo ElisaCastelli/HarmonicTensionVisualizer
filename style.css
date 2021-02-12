@@ -425,3 +425,12 @@
                 bottom: 10px;
                 font-size: xx-large;
             }
+            
+            #GitHubIcon {
+                left: 45%;
+                bottom: 5px;
+                padding-bottom: 6px;
+                width: 10%;
+                font-size: larger;
+                color: rgb(105, 149, 200);
+            }
