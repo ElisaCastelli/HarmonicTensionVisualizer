@@ -4,7 +4,7 @@ let data = new Array(canvas.width);
 let dataOut = new Array(canvas.width);
 let x = 0;
 let tension = 0;
-let maxTension = 6;
+let maxTension = 10;
 let maxHeight = canvas.height;
 let maxSpeed = 0.03;
 
