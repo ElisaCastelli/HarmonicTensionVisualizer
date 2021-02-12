@@ -890,6 +890,9 @@ readmeButton.onclick = function() {
         const testo = "Harmonic Tension Visualizer.<br> The goal of our project is to analyze a chord sequence, given by the user through an intuitive piano-roll interface, in order to determine the trend of the harmonic tension. Following different criteria, estabilished by us and based on music theory, we assign to each chord a certain level of tension, influenced by:" +
             "<br>-the chord 's composition,<br>-well-known progression patterns,<br>-the harmonic context.";
         const readMeSection = document.createElement("div");
+        const link = document.createElement("a");
+        link.setAttribute("name", "readMe");
+        readMeSection.appendChild(link);
         readMeSection.classList.add("readStyle");
         readMeSection.innerHTML += testo;
         readMeSection.setAttribute("id", "readMeSection");
