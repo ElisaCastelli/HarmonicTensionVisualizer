@@ -74,6 +74,7 @@ Until now, the object has been created, initialized and personalized by modifiyi
 
 ![alt text](./img/03.png)
 
+
 ## Tension graphic representation (canvas e specchietti con degree e pattern)
 
 
