@@ -72,6 +72,7 @@ let sampler = new Tone.Sampler({
     "volume": Volume,
 }).toMaster();
 
+/** Array of notes and respective colors */
 const key_color = [{
         pitch: "C",
         color: "white",
@@ -774,9 +775,11 @@ downloadButton.onclick = function() {
         if (fileName != "" && fileName != "  Name required!") {
             fileName = fileName + ".txt";
             let text = matrixToString(finalProgression, maxColumns, cellsNumber);
+            nameInput.style.border ="";
             downloadFile(fileName, text);
         } else {
             nameInput.placeholder = "  Name required!";
+            nameInput.style.border ="2px solid red";
         }
     }
 }

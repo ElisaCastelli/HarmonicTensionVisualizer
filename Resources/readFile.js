@@ -1,8 +1,9 @@
+/** IMPORT */
+
 import {fillMatrix} from './matrix.js';
 import { printSelected, fillFinalProgression, unselectMatrix, selectRoot } from '../script.js';
 
 /** Function used to read the file uploaded */
-
 export function uploadFile(file, maxColumns) {
     let textType = /text.*/;
     let matrixString = "";
@@ -33,7 +34,7 @@ export function uploadFile(file, maxColumns) {
     unselectMatrix(maxIndex);
 }
 
-/** FUnction used to download the file that contains your progressiom */
+/** Function used to download the file that contains your progressiom */
 export function downloadFile(filename, text) {
     let element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
