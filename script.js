@@ -1,7 +1,7 @@
 // IMPORT
 
 import { type, allNotes1D, chordBuilder } from './Resources/chordBuilder.js';
-import { tensionChange, start , waveColor } from './Resources/tensionAnimation.js';
+import { tensionChange, start, waveColor } from './Resources/tensionAnimation.js';
 import { harmonyAnalysis, Chord, ChordPlus, Key } from './Resources/harmonicAnalysis.js';
 import { uploadFile, downloadFile } from './Resources/readFile.js';
 import { Note, matrixConstructor, matrixToString, emptyMatrix, getIndexSelectedCell, changeSelection, findSameNotes, setSelectableCell, getIdCell, findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord, getSelectedByColumnExceptRoot, getSelectedAndSelectable, findNoteByMatrixIndex, getColumnNotes } from './Resources/matrix.js';
@@ -456,7 +456,7 @@ function resetSelect(columnNumber) {
 function playAndScroll() {
     scroll();
     let maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
-    let progressionAnalyzed =  finalProgression.slice(0, maxIndex);
+    let progressionAnalyzed = finalProgression.slice(0, maxIndex);
     if (timeInterval % timeIntervalMax == 0) {
         if ((maxColumns - columnPlayed - 1) < progressionAnalyzed.length) {
             play();
@@ -777,18 +777,18 @@ downloadButton.onclick = function() {
         if (fileName != "" && fileName != "  Name required!") {
             fileName = fileName + ".txt";
             let text = matrixToString(finalProgression, maxColumns, cellsNumber);
-            nameInput.style.border ="";
+            nameInput.style.border = "";
             downloadFile(fileName, text);
         } else {
             nameInput.placeholder = "  Name required!";
-            nameInput.style.border ="2px solid red";
+            nameInput.style.border = "2px solid red";
         }
     }
 }
 
 /** onclick associated to the increasing of the sound reproduciton and scrolling velocity */
 playFasterButton.onclick = function() {
-    const bar =document.getElementById("scrollingBar");
+    const bar = document.getElementById("scrollingBar");
     if (!modelButton && (bar.style.left == "93px" || bar.style.left == 0)) {
         if (scrollSpeed == 1) {
             scrollSpeed = 2;
@@ -887,7 +887,7 @@ function firstRender() {
         if (checkSelectableByColumn(rightColumn + 1) != undefined) {
             autoFill(rightColumn + 1)
         }
-        
+
         if (!modelButton && !emptyMatrix()) {
             playButton.style.color = 'rgb(245, 125, 27)';
             const tableScroll = document.getElementById("table-scroll");
@@ -960,6 +960,3 @@ function firstRender() {
 }
 
 firstRender();
-
-
-
