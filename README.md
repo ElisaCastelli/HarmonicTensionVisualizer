@@ -5,11 +5,12 @@
 ## Introduction
 
 The goal of our project is to analyze a chord sequence, given by the user through an intuitive piano-roll interface, in order to determine the trend of the harmonic tension. Following different criteria, estabilished by us and based on music theory, we assign to each chord a certain level of tension, influenced by:
-•	the chord's composition,
-•	well-known progression patterns,
-•	the harmonic context
+*	the chord's composition,
+*	well-known progression patterns,
+*	the harmonic context
 After these computations, the results of our analysis are graphically represented with dynamic visual effects while the chord progression is being played.
-Technologies used
+
+## Technologies used
 Our project is a web application completely developed using HTML, JS and CSS. We used HTML in order to define the static interface of the page, CSS to apply some style attributes to the page components and JS to render the dynamic components of the page and manage all the user interactions with the page.
 
 (Sampler da aggiungere come tecnologia usata?)
@@ -60,7 +61,7 @@ At the top of the page the user can find a list of buttons, each one with a spec
 ## Surge
 
 Our project is available on Surge, a free platform that allows you to publish online you web site for free.  
-Try it here(link)!  
+Try it [here](http://harmonytensionvisualizer.surge.sh)!
 
 ## Video demo
 
