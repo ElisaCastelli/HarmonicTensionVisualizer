@@ -650,10 +650,10 @@ function createHeader() {
             option6.text = "7";
             option6.setAttribute("value", "7");
             const option7 = document.createElement("option");
-            option7.text = "Half Diminished";
+            option7.text = "half Dim";
             option7.setAttribute("value", "halfdim");
             const option8 = document.createElement("option");
-            option8.text = "Diminished 7";
+            option8.text = "Dim7";
             option8.setAttribute("value", "dim7");
 
             select.appendChild(option0);
@@ -664,6 +664,7 @@ function createHeader() {
             select.appendChild(option5);
             select.appendChild(option6);
             select.appendChild(option7);
+            select.appendChild(option8);
             select.addEventListener("change", function(event) {
                 let chordType = this.value;
                 removeSelectable(columnNumber);
