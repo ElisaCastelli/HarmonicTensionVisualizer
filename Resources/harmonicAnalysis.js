@@ -659,7 +659,6 @@ export function harmonyAnalysis(progression){
 				continue;
 			}
 			
-			
 			if (tritoneTensions.chords.includes(progression_plus[i].type)) {
 				/** OPTION C): CHANGE OF SCALE */
 				temp = findChangeKey(progression, priority_keys, progression_plus, i);
