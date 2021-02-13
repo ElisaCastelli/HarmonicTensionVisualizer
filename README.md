@@ -13,7 +13,7 @@ After these computations, the results of our analysis are graphically represente
 ## Technologies used
 Our project is a web application completely developed using HTML, JS and CSS. We used HTML in order to define the static interface of the page, CSS to apply some style attributes to the page components and JS to render the dynamic components of the page and manage all the user interactions with the page.
 
-In order to implement audio features, we used an external JS framework named Tone.js. Tone.js is a Web Audio framework for creating  and manipulate dinamically sounds and music in a wab page. The architecture of this framework. On the high-level, Tone offers common DAW (digital audio workstation) features like a global transport for synchronizing and scheduling events as well as prebuilt synths and effects. Additionally, Tone provides high-performance building blocks to create your own synthesizers, effects, and complex control signals.
+In order to implement audio features, we used an external JS framework named Tone.js. It can be defined as a Web Audio framework for creating  and manipulate dinamically sounds and music in a wab page. The architecture of this framework. On the high-level, Tone offers common DAW (digital audio workstation) features like a global transport for synchronizing and scheduling events as well as prebuilt synths and effects. Additionally, Tone provides high-performance building blocks to create your own synthesizers, effects, and complex control signals.
 
 ## User interface
 
