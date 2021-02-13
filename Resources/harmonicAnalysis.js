@@ -278,7 +278,7 @@ function findKey(progression){
 					else if (tonic_index == 0 && (triad_check || quadriad_check)) {
 						tempKey.points += 2;
 					}
-					else if (chord_degree == "V" && progression[chord].type == "7"){
+					else if (chord_degree == "V" && quadriad_check){
 						tempKey.points += 2;
 					}
 					else if (triad_check || quadriad_check){
@@ -505,7 +505,7 @@ function findChangeKey(progression, priority_keys, progression_plus, index){
 	
 	// check if from this point a new key is possible
 	let tempKeys = findKey(progression.slice(index, progression.length));
-	
+	console.log("temp keys:", tempKeys);
 	// in case of multiple keys, check if one of them is inside priority_keys
 	for (let k = 0; k < tempKeys.length; k++) {
 		if (priority_keys.includes(tempKeys[k])) {
@@ -619,7 +619,7 @@ export function harmonyAnalysis(progression){
 		throw "no key was given";
 	}
 	let progression_plus;
-	let tempChord;
+	let temp;
 	
 	/** PHASE 2): choose the key with highest number of correct chords before the first wrong one*/
 	// for each accepted_key
@@ -652,37 +652,51 @@ export function harmonyAnalysis(progression){
 		if (!( progression_plus[i].type_coherent && progression_plus[i].degree_coherent)) {
 			
 			/** OPTION A): CHORD SUBSTITUTION*/
-			tempChord = findSubs(progression, priority_keys, progression_plus[i], i);
-			if (tempChord) {
-				progression_plus[i] = tempChord;
-				priority_keys.push(tempChord.curr_key);
-				continue;
-			}
-			
-			/** OPTION C): CHANGE OF SCALE */
-			progression_plus = findChangeKey(progression, priority_keys, progression_plus, i);
-			if (tempChord) {
-				progression_plus[i] = tempChord;
-				priority_keys.push(tempChord.curr_key);
-				continue;
-			}
-			
-			/** OPTION B): MODAL INTERCHANGE */
-			tempChord = findModalInterchange(progression, priority_keys, progression_plus[i], i);
-			if (tempChord) {
-				progression_plus[i] = tempChord;
-				priority_keys.push(tempChord.curr_key);
+			temp = findSubs(progression, priority_keys, progression_plus[i], i);
+			if (temp) {
+				progression_plus[i] = temp;
+				priority_keys.push(temp.curr_key);
 				continue;
 			}
 			
 			
-			
+			if (tritoneTensions.chords.includes(progression_plus[i].type)) {
+				/** OPTION C): CHANGE OF SCALE */
+				temp = findChangeKey(progression, priority_keys, progression_plus, i);
+				if (temp) {
+					progression_plus = temp;
+					priority_keys.push(temp.curr_key);
+					continue;
+				}
+				
+				/** OPTION B): MODAL INTERCHANGE */
+				temp = findModalInterchange(progression, priority_keys, progression_plus[i], i);
+				if (temp) {
+					progression_plus[i] = temp;
+					priority_keys.push(temp.curr_key);
+					continue;
+				}
+			}
+			else {
+				/** OPTION B): MODAL INTERCHANGE */
+				temp = findModalInterchange(progression, priority_keys, progression_plus[i], i);
+				if (temp) {
+					progression_plus[i] = temp;
+					priority_keys.push(temp.curr_key);
+					continue;
+				}
+				/** OPTION C): CHANGE OF SCALE */
+				temp = findChangeKey(progression, priority_keys, progression_plus, i);
+				if (temp) {
+					progression_plus = temp;
+					priority_keys.push(temp.curr_key);
+					continue;
+				}
+			}
 			/** OPTION D): GENERAL CHORD OUT OF KEY*/
 			progression_plus[i].surprise = "D";
 			progression_plus[i].event = "out of key";
 		}
-		
-		
 	}
 	
 	console.log("progression analyzed: ", progression_plus);
