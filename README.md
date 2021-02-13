@@ -56,12 +56,13 @@ At the top of the page the user can find a list of buttons, each one with a spec
 
 ## Sampler
 
-As previously mentioned, all the audio options and features are realized with Tone.Js. 
+As previously mentioned, all the audio options and features have been realized with Tone.Js. 
 Despite its extreme-intuitivity structure and organization, Tone.js allows to create, develop and then process a wide range of different sounds, each one of them can be affected by some effects.
 Once installed Tone.js (or imported it inside the js file in which you want to use it), it is possibile to create sounds by using synthetizer(FM or AM) by code as follows:
 
 ![alt text](./img/01.png)
 
+Due to the fact that we need a synthetizer able to play multiple notes at the same time instant (simultaneously), we cannot use any monophonic synthetizer available in Tone.Js and implement only a possible polyphonic synthetizer (or a combination of multiple of more of them). A better solution that allows us to personalize the sound produced when every single note has been played, is represented by Tone.Sampler. In order to implement it, it is necessary not only to declaire a "Sampler object" but also to create an association (called binding) between every note available and the sound that the Sampler object has to play. The following piece of code shows exactly how to create a piano Sampler object:
 
 ## Tension graphic representation (canvas e specchietti con degree e pattern)
 
