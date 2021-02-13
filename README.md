@@ -26,6 +26,8 @@ The structure of the project can be divided in three main parts:
 
 ## Piano-roll
 
+![alt text](./img/pianoroll.png)
+
 (This is a dynamic component added when the page is loaded for the first time. It consist of a table of buttons, each one corresponding to a note distributed over 3 octaves, from C2 to B4.)
 Users can enter the chord sequence to analyze using a simple piano-roll interface in a few passages:
 -	select the tonic note of the chord
@@ -34,7 +36,7 @@ Users can enter the chord sequence to analyze using a simple piano-roll interfac
 
 ## Button bar
 
- 
+![alt text](./img/buttonBar.png)
 
 At the top of the page the user can find a list of buttons, each one with a specific function:
 -	Info: brings the user at the bottom of the page where there is a brief description of the project
@@ -49,7 +51,7 @@ At the top of the page the user can find a list of buttons, each one with a spec
 ## Sampler
 
 
-Tension graphic representation (canvas e specchietti con degree e pattern)
+## Tension graphic representation (canvas e specchietti con degree e pattern)
 
 
 ## Harmonic Analysis
