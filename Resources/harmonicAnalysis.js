@@ -400,7 +400,6 @@ function findModalInterchange(progression, priority_keys, chord, index){
 		
 		//for each mode, with same tonic
 		for (let j = index; j < progression.length; j++) {
-			
 			tempChord = getProgDegrees([progression[j]], tempKeys[m]);
 			if (! (tempChord[0].type_coherent && tempChord[0].degree_coherent)) {
 				break;
@@ -433,9 +432,6 @@ function findModalInterchange(progression, priority_keys, chord, index){
 	// if at least one mode is compatible
 	if (tempKeys[0].points > 0) {
 		console.log(progression[index].toString(), "is borrowed from :", tempKeys[0].tonic, tempKeys[0].scale);
-		// add this key to priority_keys
-		priority_keys.push(tempKeys[0]);
-		// update chord information
 		chord.curr_key = tempKeys[0];
 		chord.event = "borrowed from " + tempKeys[0].tonic + tempKeys[0].scale;
 		chord.surprise = surprise;
@@ -477,6 +473,7 @@ function findSubs(progression, priority_keys, chord, index){
 		if (tempChord2) {
 			console.log("like cowboy bebop", tempChord2)
 			chord = tempChord2;
+			chord.surprise = surprise;
 			/*priority_keys.push(tempKeys[0]);*/
 			return chord;
 		}
@@ -488,6 +485,7 @@ function findSubs(progression, priority_keys, chord, index){
 			if (tempChord) {
 				console.log("like have you met miss jones", tempChord);
 				chord = tempChord;
+				chord.surprise = surprise;
 				chord.substitution = sub;
 				return chord;
 			}
@@ -498,54 +496,79 @@ function findSubs(progression, priority_keys, chord, index){
 		return false;
 }
 
+function findChangeKey(progression, priority_keys, chord, index){
+	let surprise = "C";
+	
+	// check if from this point a new key is possible
+	let tempKeys = findKey(progression.slice(index, progression.length));
+	
+	// in case of multiple keys, check if one of them is inside priority_keys
+	for (let k = 0; k < tempKeys.length; k++) {
+		if (priority_keys.includes(tempKeys[k])) {
+			tempKeys[0] = tempKeys[k];
+			break;
+		}
+	}
+	let temp_deg_progression = getProgDegrees(progression.slice(index, progression.length), tempKeys[0]);
+
+	if (tempKeys[0].points > 1) {
+		for (let j = 0; j < progression.length - index; j++) {
+			progression_plus[index + j] = temp_deg_progression[j];
+		}
+		// check also if some previous chords are both in current and original scale
+		temp_deg_progression = getProgDegrees(progression.slice(0, index), tempKeys[0]);
+		for (let j = index - 1; j > 0; j--) {
+			if (temp_deg_progression[j].type_coherent && temp_deg_progression[j].degree_coherent)
+				progression_plus[j] = temp_deg_progression[j];
+			else
+				break;
+		}
+		chord.event = "change of key: " + tempKeys[0].toString();
+		chord.surprise = surprise;
+		return chord;
+	}
+	else
+		return false;
+}
+
 /** Main function*/
 export function evaluateTension(progression){
 
-	/** phase 1): select keys with highest number of compatible chords*/
+	/** PHASE 1): select keys with highest number of compatible chords*/
 	let accepted_keys = findKey(progression); // array with selected keys
-	
 	if (accepted_keys.length == 0) {
 		throw "no key was given";
 	}
-	
 	let progression_plus;
 	let tempChord;
-	/** phase 2): choose the key with highest number of correct chords before the first wrong one*/
+	
+	/** PHASE 2): choose the key with highest number of correct chords before the first wrong one*/
 	// for each accepted_key
 	for (let i = 0; i < accepted_keys.length; i++) {
 		// exception: give priority to major and minor scales
 		if (modes[accepted_keys[i].scale_index].tonal_harmony) {
 			accepted_keys[i].points+= 10;
 		}
-		
 		// estimate relative degrees and coherence of each chord in the progression 
 		progression_plus = getProgDegrees(progression, accepted_keys[i]);
 		
 		//for each chord
 		for (let j = 0; j < progression.length; j++) {
 			// if I find a chord not coherent with the current accepted key
-			if (! (progression_plus[j].type_coherent && progression_plus[j].degree_coherent)){
+			if (! (progression_plus[j].type_coherent && progression_plus[j].degree_coherent))
 				break;
-			}
 			accepted_keys[i].points++;
 		}
 	}
 	accepted_keys.sort((a, b) => (a.points > b.points) ? -1 : 1);
 
-	/** phase 3): analyze each "wrong" chord, with different options*/ 
-	
-	// same operation as before, based on the chosen key
+	/** PHASE 3): analyze each "wrong" chord, based on the chosen key, with different options*/ 
 	progression_plus = getProgDegrees(progression, accepted_keys[0]);
 	
 	// array of all keys that may be found during analysis 
 	let priority_keys = [];
 	priority_keys.push(accepted_keys[0]);
 	
-	let tempKeys = [];
-	let temp_deg_progression;
-	let surprise;
-	
-	// search for chords out of key
 	for (let i = 0; i < progression_plus.length; i++) {
 		if (!( progression_plus[i].type_coherent && progression_plus[i].degree_coherent)) {
 			
@@ -565,48 +588,17 @@ export function evaluateTension(progression){
 				continue;
 			}
 			
-			
 			/** OPTION C): CHANGE OF SCALE */
-			surprise = "C";
-			
-			// check if from this point a new key is possible
-			tempKeys = findKey(progression.slice(i, progression.length));
-			
-			// in case of multiple keys, check if one of them is inside priority_keys
-			for (let k = 0; k < tempKeys.length; k++) {
-				if (priority_keys.includes(tempKeys[k])) {
-					tempKeys[0] = tempKeys[k];
-					break;
-				}
-			}
-			
-			temp_deg_progression = getProgDegrees(progression.slice(i, progression.length), tempKeys[0]);
-
-			if (tempKeys[0].points > 1) {
-				for (let j = 0; j < progression.length - i; j++) {
-					progression_plus[i + j] = temp_deg_progression[j];
-				}
-				// check also if some previous chords are both in current and original scale
-				temp_deg_progression = getProgDegrees(progression.slice(0, i), tempKeys[0]);
-				for (let j = i - 1; j > 0; j--) {
-					if (temp_deg_progression[j].type_coherent && temp_deg_progression[j].degree_coherent)
-						progression_plus[j] = temp_deg_progression[j];
-					else
-						break;
-				}
-				// add this key to priority_keys
-				priority_keys.push(tempKeys[0]);
-				progression_plus[i].event = "change of key: " + tempKeys[0].toString();
-				progression_plus[i].surprise = surprise;
+			tempChord = findChangeKey(progression, priority_keys, progression_plus[i], i);
+			if (tempChord) {
+				progression_plus[i] = tempChord;
+				priority_keys.push(tempChord.curr_key);
 				continue;
 			}
 			
 			/** OPTION D): GENERAL CHORD OUT OF KEY*/
-			surprise = "D";
-			
+			progression_plus[i].surprise = "D";
 			progression_plus[i].event = "out of key";
-			progression_plus[i].surprise = surprise;
-			
 		}
 		
 		
