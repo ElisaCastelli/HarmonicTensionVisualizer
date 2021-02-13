@@ -19,6 +19,10 @@ let finalProgression = new Array(maxColumns);
 let analysisResults = new Array();
 let modelButton = false;
 let firstPlay = true;
+let scrollSpeed = 1;
+let timeIntervalMax =2700;
+let timeIntervalIncrement=25;
+let soundDuration = 2;
 
 
 // creazione synthetizer
@@ -189,6 +193,8 @@ export function unselectMatrix(lengthChordArray) {
             for (let indexRow = (numOctaves * 12) - 1; indexRow >= 0; indexRow--) {
                 emptyCell(index);
                 let idCell = getIdCell(index);
+                let button = document.getElementById("b" + idCell);
+                button.textContent = "";
                 let cell = document.getElementById(idCell);
                 cell.classList.remove("disabled");
                 cell.classList.remove("selected_background");
@@ -342,17 +348,16 @@ function scroll() {
     const bar = document.getElementById("scrollingBar");
     const pianoContainer = document.getElementById("output_block");
     const tableScroll = document.getElementById("table-scroll");
-    let speed = 1;
     let direction = 1;
     let barLeftPos = bar.offsetLeft,
         barRightPos = barLeftPos + bar.offsetWidth;
     let containerWidth = pianoContainer.offsetWidth;
     if (barRightPos < containerWidth / 2) {
-        bar.style.left = (barLeftPos + speed * direction) + 'px';
+        bar.style.left = (barLeftPos + scrollSpeed * direction) + 'px';
     } else if (tableScroll.scrollWidth - tableScroll.scrollLeft > containerWidth) {
-        tableScroll.scrollLeft += speed * direction;
+        tableScroll.scrollLeft += scrollSpeed * direction;
     } else if (barRightPos < tableScroll.offsetWidth) {
-        bar.style.left = (barLeftPos + speed * direction) + 'px';
+        bar.style.left = (barLeftPos + scrollSpeed * direction) + 'px';
     }
 }
 
@@ -461,17 +466,17 @@ function resetSelect(columnNumber) {
 /** Function to alternate the recalling of scroll() and play() functions */
 function playAndScroll() {
     scroll();
-    if (timeInterval % 2700 == 0) {
+    if (timeInterval % timeIntervalMax == 0) {
         if ((maxColumns - columnPlayed - 1) < finalProgression.length) {
             play();
             tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
         } else {
             const stopButton = document.getElementById("stopButton");
             stopButton.onclick();
-            timeInterval -= 25;
+            timeInterval -= timeIntervalIncrement;
         }
     }
-    timeInterval += 25;
+    timeInterval += timeIntervalIncrement;
 }
 
 /** Function to play the chord using a Sampler */
@@ -479,9 +484,8 @@ function play() {
     const chordPlayed = document.getElementById("chordPlayed");
     var degree = 'Degree: ' + analysisResults[maxColumns - 1 - columnPlayed].degree;
     const eventContainer = document.getElementById('eventContainer');
-    var substitution = "";
+    const substitutionContainer = document.getElementById('subInfo');
     const progressionInfo = document.getElementById('progressionInfo');
-    const subInfo = document.getElementById("substitutionInfo");
     let noteSelected = getSelectedByColumn(columnPlayed);
     let notesArray = new Array();
     if (noteSelected != null) {
@@ -490,14 +494,7 @@ function play() {
             let octave = noteSelected[index].octave;
             notesArray.push(noteName + octave);
         }
-        if(analysisResults[maxColumns - 1 - columnPlayed].substitution.length != 0 ){
-            substitution = 'Substitution: \n'+analysisResults[maxColumns - 1 - columnPlayed].substitution.toString();
-            subInfo.style.visibility='visible';
-            subInfo.textContent= substitution;
-        }else{
-            subInfo.style.visibility='hidden';
-            subInfo.textContent= "";
-        }
+        /** Div to visualize event */
         if(analysisResults[maxColumns - 1 - columnPlayed].event!=""){
             eventContainer.style.visibility='visible';
             var text = analysisResults[maxColumns - 1 - columnPlayed].event;
@@ -506,6 +503,16 @@ function play() {
             eventContainer.textContent="";
             eventContainer.style.visibility='hidden';
         }
+        /** Div to visualize substitution */
+        if(analysisResults[maxColumns - 1 - columnPlayed].substitution!=""){
+            substitutionContainer.style.visibility='visible';
+            var text = "Sub: "+analysisResults[maxColumns - 1 - columnPlayed].substitution.toString();
+            substitutionContainer.textContent=text;
+        }else{
+            substitutionContainer.style.visibility='hidden';
+            substitutionContainer.textContent = "";
+        }
+        /** Div to visualize pattern */
         if (analysisResults[maxColumns - 1 - columnPlayed].curr_pattern != "") {
             progressionInfo.style.visibility = 'visible';
             progressionInfo.textContent = analysisResults[maxColumns - 1 - columnPlayed].curr_pattern;
@@ -513,11 +520,12 @@ function play() {
             progressionInfo.style.visibility = 'hidden';
             progressionInfo.textContent = "";
         }
+
         chordPlayed.textContent = degree;
         if (notesArray.length == 3) {
-            sampler.triggerAttackRelease([notesArray[0], notesArray[1], notesArray[2]], 2);
+            sampler.triggerAttackRelease([notesArray[0], notesArray[1], notesArray[2]], soundDuration);
         } else if (notesArray.length == 4) {
-            sampler.triggerAttackRelease([notesArray[0], notesArray[1], notesArray[2], notesArray[3]], 2);
+            sampler.triggerAttackRelease([notesArray[0], notesArray[1], notesArray[2], notesArray[3]], soundDuration);
         }
     }
     notesArray = [];
@@ -779,6 +787,24 @@ downloadButton.onclick = function() {
     }
 }
 
+playFasterButton.onclick = function(){
+    if(!modelButton){
+        if(scrollSpeed==1){
+            scrollSpeed=2;
+            timeIntervalMax=1590;
+            timeIntervalIncrement=30;
+            soundDuration = 1.5;
+            playFasterButton.style.color='rgb(223, 193, 85)';
+        }else{
+            scrollSpeed=1;
+            timeIntervalMax=2700;
+            timeIntervalIncrement=25;
+            soundDuration=2;
+            playFasterButton.style.color='rgb(63, 132, 87)';
+        }
+    }
+    
+}
 
 muteButton.onclick = function() {
     muted = !muted;

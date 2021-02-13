@@ -65,7 +65,7 @@
                 border-radius: 10px;
                 border-color: rgb(73, 94, 104);
                 border: solid 1px;
-                top: 9%;
+                top: 8.5%;
                 left: 50%;
                 text-align: center;
                 font-family: 'Roboto', sans-serif;
@@ -74,53 +74,50 @@
             }
             
             #progressionInfo {
-                position: absolute;
-                height: 40px;
+                position: fixed;
+                height: 20px;
                 width: 100px;
                 background: rgb(117, 130, 136);
                 border-radius: 10px;
                 border-color: rgb(73, 94, 104);
                 border: solid 1px;
-                top: 0px;
-                left: 88%;
+                top: 12%;
+                left: 39.5%;
                 text-align: center;
                 font-family: 'Roboto', sans-serif;
                 font-size: medium;
-                z-index: 110;
-                visibility: hidden;
-            }
-            
-            #substitutionInfo{
-                position: absolute;
-                height: 40px;
-                width: 100px;
-                background: rgb(117, 130, 136);
-                border-radius: 10px;
-                border-color: rgb(73, 94, 104);
-                border: solid 1px;
-                top: 48px;
-                left: 88%;
-                text-align: center;
-                font-family: 'Roboto', sans-serif;
-                font-size: medium;
-                z-index: 110;
                 visibility: hidden;
             }
 
             #eventContainer{
-                position: absolute;
-                height: 76px;
-                width: 123px;
+                position: fixed;
+                height: 20px;
+                width: 180px;
                 background: rgb(117, 130, 136);
                 border-radius: 10px;
                 border-color: rgb(73, 94, 104);
                 border: solid 1px;
-                top: 130px;
-                left: 87.5%;
+                top: 12%;
+                left: 47.25%;
                 text-align: center;
                 font-family: 'Roboto', sans-serif;
                 font-size: medium;
-                z-index: 110;
+                visibility: hidden;
+            }
+
+            #subInfo{
+                position: fixed;
+                height: 20px;
+                width: 120px;
+                background: rgb(117, 130, 136);
+                border-radius: 10px;
+                border-color: rgb(73, 94, 104);
+                border: solid 1px;
+                top: 12%;
+                left: 60.5%;
+                text-align: center;
+                font-family: 'Roboto', sans-serif;
+                font-size: medium;
                 visibility: hidden;
             }
 
@@ -182,19 +179,23 @@
             }
             
             #playButton {
-                left: 33%;
+                left: 29%;
+                text-align: center;
+                position: fixed;
+                top: 25px;
+                color: rgb(63, 132, 87);
+            }
+
+            #playFasterButton{
+                left: 35%;
                 text-align: center;
                 position: fixed;
                 top: 25px;
                 color: rgb(63, 132, 87);
             }
             
-            .playButtonActive {
-                color: rgb(81, 187, 118);
-            }
-            
             #stopButton {
-                left: 39%;
+                left: 41%;
                 text-align: center;
                 position: fixed;
                 top: 25px;
@@ -202,7 +203,7 @@
             }
             
             #rewindButton {
-                left: 45%;
+                left: 47%;
                 top: 25px;
                 position: fixed;
                 text-align: center;
@@ -210,7 +211,7 @@
             }
             
             #muteButton {
-                left: 51%;
+                left: 53%;
                 top: 25px;
                 position: fixed;
                 text-align: center;
@@ -218,7 +219,7 @@
             }
             
             #volumeDownButton {
-                left: 57%;
+                left: 59%;
                 top: 25px;
                 position: fixed;
                 text-align: center;
@@ -226,7 +227,7 @@
             }
             
             #volumeUpButton {
-                left: 63%;
+                left: 65%;
                 top: 25px;
                 position: fixed;
                 text-align: center;
@@ -234,7 +235,7 @@
             }
             
             #resetButton {
-                left: 69%;
+                left: 71%;
                 top: 25px;
                 position: fixed;
                 text-align: center;
