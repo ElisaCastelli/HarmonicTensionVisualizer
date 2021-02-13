@@ -242,6 +242,7 @@ export function printChord(noteArray, octaveNoteSelected, columnNumber) {
         cell.classList.remove('disabled');
     }
 }
+
 /** Function to obtain all the Note of a column with index columnNumber */
 export function getColumnNotes(columnNumber) {
     return matrixTable.filter(x => (x.column == columnNumber));

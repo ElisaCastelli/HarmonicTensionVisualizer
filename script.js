@@ -8,7 +8,7 @@ import { Note, matrixConstructor, matrixToString, emptyMatrix, getIndexSelectedC
 
 const fileInput = document.getElementById('file-input');
 
-/** Model attributes */
+/** MODEL */
 let numOctaves = 3;
 let numOctavesMin = 2;
 let maxColumns = 20;
@@ -196,8 +196,6 @@ export function unselectMatrix(lengthChordArray) {
     }
 }
 
-
-
 /** Function to disable click on a certain given column */
 function unclickableColumn(numCol) {
     let columnCell = findUnselectedCell(numCol);
@@ -236,6 +234,7 @@ function clearColumn(columnNumber) {
     }
 }
 
+/** Function to remove the text from the cells that are the tonic note of the chord */
 function clearRootText(columnNumber) {
     let root = findRootNoteByColumn(columnNumber);
     let idCell = root.id;
@@ -255,6 +254,7 @@ function removeSelectable(columnNumber) {
     }
 }
 
+/** Function to reset the graphic properties of all the selected cells except the root */
 function removeSelectedExceptRoot(columnNumber) {
     let selectedNotes = getSelectedByColumnExceptRoot(columnNumber);
     for (let index = 0; index < selectedNotes.length; index++) {
@@ -323,7 +323,7 @@ function autoFill(columnNumber) {
 }
 
 
-// CONTROLLER
+/**CONTROLLER */
 
 /** Function to move the table scroll in its starting position */
 function tableBackscroll(position) {
@@ -560,7 +560,7 @@ function play() {
     }).toMaster();
 }
 
-// VIEW
+/** VIEW */
 
 /** Function called the first time the page is loaded to add the left fixed column of the table that shows the corresponding notes to each row*/
 function createFixedColumn(scaleNumber, noteNumber) {
@@ -714,7 +714,7 @@ function createBar() {
 }
 
 
-/** Onclick functions */
+/** ONCLICK FUNCTIONS */
 
 /** onclick associated with the div that contains the title to reload the page */
 title_container.onclick = function() {
@@ -780,6 +780,7 @@ downloadButton.onclick = function() {
     }
 }
 
+/** onclick associated to the increasing of the sound reproduciton and scrolling velocity */
 playFasterButton.onclick = function() {
     const bar =document.getElementById("scrollingBar");
     if (!modelButton && (bar.style.left == "93px" || bar.style.left == 0)) {
@@ -800,11 +801,13 @@ playFasterButton.onclick = function() {
 
 }
 
+/** onclick to mute */
 muteButton.onclick = function() {
     muted = !muted;
     Tone.Master.mute = muted;
 }
 
+/** onclick to increase volume */
 volumeUpButton.onclick = function() {
     if ((Volume + 1) <= MaxVolume) {
         Volume++;
@@ -815,6 +818,7 @@ volumeUpButton.onclick = function() {
     }
 }
 
+/** onclick to decrease volume */
 volumeDownButton.onclick = function() {
     if ((Volume - 1) >= minVolume) {
         Volume--;
@@ -822,6 +826,37 @@ volumeDownButton.onclick = function() {
     } else {
         document.getElementById("volumeDownButton").classList.add("disable");
     }
+}
+
+/** on click readme, add infos about the site
+absent the content of the div*/
+readmeButton.onclick = buildReadme();
+
+/** onclick to the external link of github repository */
+GitHubIcon.onclick = function() {
+    window.open("https://github.com/ElisaCastelli/HarmonicTensionVisualizer.git");
+}
+
+/** Function to create readme */
+function buildReadme() {
+    const contenitore = document.getElementById("readMeSection");
+    // (contenitore == null)
+    {
+        const testo = "Harmonic Tension Visualizer.<br> The goal of our project is to analyze a chord sequence, given by the user through an intuitive piano-roll interface, in order to determine the trend of the harmonic tension. Following different criteria, estabilished by us and based on music theory, we assign to each chord a certain level of tension, influenced by:" +
+            "<br>-the chord 's composition,<br>-well-known progression patterns,<br>-the harmonic context.";
+        const readMeSection = document.createElement("div");
+        const link = document.createElement("a");
+        link.setAttribute("name", "readMe");
+        readMeSection.appendChild(link);
+        readMeSection.classList.add("readStyle");
+        readMeSection.innerHTML += testo;
+        readMeSection.setAttribute("id", "readMeSection");
+        const pagina = document.getElementById("pagina");
+        pagina.appendChild(readMeSection);
+    } //else {
+    // const pagina = document.getElementById("readMeSection");
+    // pagina.remove();
+    //}
 }
 
 /** Function called at the first load of the page to add al the graphic elements */
@@ -860,8 +895,8 @@ function firstRender() {
             }
             bar.style.left = lastBarPosition;
             tableBackscroll(lastTableScrollPosition);
-            finalProgression = finalProgression.slice(0, maxIndex);
-            analysisResults = harmonyAnalysis(finalProgression);
+            let progressionToAnalyze = finalProgression.slice(0, maxIndex);
+            analysisResults = harmonyAnalysis(progressionToAnalyze);
             scrollInterval = setInterval(playAndScroll, 25);
             stopButton.onclick = function() {
                 playButton.style.color = 'rgb(63, 132, 87)';
@@ -905,43 +940,10 @@ function firstRender() {
         // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
     matrixConstructor(cellsNumber, maxColumns, numOctaves, numOctavesMin, key_color);
 
-    generaReadme();
+    buildReadme();
 }
 
 firstRender();
 
-// spacebar event
-document.body.onkeyup = function(e) {
-    if (e.keyCode == 32) {
-        // eventuale codice spacebar
-    }
-}
 
-// on click readme, add infos about the site
-// absent the content of the div
-readmeButton.onclick = generaReadme();
 
-GitHubIcon.onclick = function() {
-    window.open("https://github.com/ElisaCastelli/HarmonicTensionVisualizer.git");
-}
-
-function generaReadme() {
-    const contenitore = document.getElementById("readMeSection");
-    // (contenitore == null)
-    {
-        const testo = "Harmonic Tension Visualizer.<br> The goal of our project is to analyze a chord sequence, given by the user through an intuitive piano-roll interface, in order to determine the trend of the harmonic tension. Following different criteria, estabilished by us and based on music theory, we assign to each chord a certain level of tension, influenced by:" +
-            "<br>-the chord 's composition,<br>-well-known progression patterns,<br>-the harmonic context.";
-        const readMeSection = document.createElement("div");
-        const link = document.createElement("a");
-        link.setAttribute("name", "readMe");
-        readMeSection.appendChild(link);
-        readMeSection.classList.add("readStyle");
-        readMeSection.innerHTML += testo;
-        readMeSection.setAttribute("id", "readMeSection");
-        const pagina = document.getElementById("pagina");
-        pagina.appendChild(readMeSection);
-    } //else {
-    // const pagina = document.getElementById("readMeSection");
-    // pagina.remove();
-    //}
-}
