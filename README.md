@@ -48,6 +48,8 @@ At the top of the page the user can find a list of buttons, each one with a spec
 -	Volum down: decreases the volume
 -	Volume up: increases the volume
 -	Reset: cleans the piano-roll content 
+-	Download: to download a .txt file containing the progression you put into the piano roll
+-	Upload: to upload a .txt file you have on your computer that contains a progression you saved
 
 ## Sampler
 
