@@ -72,6 +72,8 @@ Once the all the previous phases has been setted up, it is necessary, as for all
 
 Until now, the object has been created, initialized and personalized by modifiying some attributes. Finally it is also important to play notes and reproduce some sounds when necessary. This can be done by using the triggerAttackRelease() function. Inside the function, you have to insert the list of notes to be played and, as an optional property, it is possible to set the duration of the note in terms of time.  
 
+![alt text](./img/03.png)
+
 ## Tension graphic representation (canvas e specchietti con degree e pattern)
 
 
