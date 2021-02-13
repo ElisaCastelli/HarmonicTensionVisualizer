@@ -402,7 +402,7 @@ function findModalInterchange(progression, priority_keys, chord, index){
 	for (let m = 0; m < modes.length; m++) {
 		// check if the scale is compatible with any other mode
 		tempKeys.push(new Key(chord.curr_key.tonic, modes[m].name));
-		//for each mode, with same tonic
+		//for each chord
 		for (let j = index; j < progression.length; j++) {
 			tempChord = getProgDegrees([progression[j]], tempKeys[m]);
 			if (! (tempChord[0].type_coherent && tempChord[0].degree_coherent)) {
@@ -433,10 +433,11 @@ function findModalInterchange(progression, priority_keys, chord, index){
 			tempKeys[0] = tempKeys[m];
 		}
 	}
-	// if at least one mode is compatible
-	if (tempKeys[0].points > 0) {
+	// review!!!
+	progression = getProgDegrees(progression, tempKeys[0]);
+	chord = progression[index]
+	if (tempKeys[0].points > 0 && chord.degree_coherent && chord.type_coherent) {
 		console.log(progression[index].toString(), "is borrowed from :", tempKeys[0].tonic, tempKeys[0].scale);
-		chord.curr_key = tempKeys[0];
 		chord.event = "borrowed from " + tempKeys[0].tonic + tempKeys[0].scale;
 		chord.surprise = surprise;
 		return chord;
@@ -471,10 +472,18 @@ function findSubs(progression, priority_keys, chord, index){
 	}
 	// test with cowboy bebop: if it works there, it works
 	else if (tempChord.degree_coherent) {
-		let tempChord2 = findModalInterchange(progression, priority_keys, tempChord, index);
-		if (tempChord2) {
-			console.log("substitution of modal interchange", tempChord2)
-			chord = tempChord2;
+		let tempChordSubs = findModalInterchange(progression, priority_keys, tempChord, index);
+		let tempChordOrig = findModalInterchange(progression, priority_keys, tempChord.substitution, index);
+		
+		if (tempChordOrig) {
+			console.log("modal interchange", tempChordOrig)
+			chord = tempChordOrig;
+			chord.surprise = "B";
+			return chord;
+		}
+		else if (tempChordSubs) {
+			console.log("substitution of modal interchange", tempChordSubs)
+			chord = tempChordSubs;
 			chord.surprise = surprise;
 			return chord;
 		}
@@ -648,19 +657,21 @@ export function harmonyAnalysis(progression){
 	for (let i = 0; i < progression_plus.length; i++) {
 		if (!( progression_plus[i].type_coherent && progression_plus[i].degree_coherent)) {
 			
-			/** OPTION A): CHORD SUBSTITUTION*/
-			temp = findSubs(progression, priority_keys, progression_plus[i], i);
-			if (temp) {
-				progression_plus[i] = temp;
-				priority_keys.push(temp.curr_key);
-				continue;
-			}
 			
+			// review!!!
 			if (progression_plus[i].type == "7") {
-				/** OPTION C): CHANGE OF SCALE */
+				/** OPTION C): CHANGE OF SCALE *//*
 				temp = findChangeKey(progression, priority_keys, progression_plus, i);
 				if (temp) {
 					progression_plus = temp;
+					priority_keys.push(temp.curr_key);
+					continue;
+				}*/
+				
+				/** OPTION A): CHORD SUBSTITUTION*/
+				temp = findSubs(progression, priority_keys, progression_plus[i], i);
+				if (temp) {
+					progression_plus[i] = temp;
 					priority_keys.push(temp.curr_key);
 					continue;
 				}
@@ -672,8 +683,24 @@ export function harmonyAnalysis(progression){
 					priority_keys.push(temp.curr_key);
 					continue;
 				}
+				/** OPTION C): CHANGE OF SCALE */
+				temp = findChangeKey(progression, priority_keys, progression_plus, i);
+				if (temp) {
+					progression_plus = temp;
+					priority_keys.push(temp.curr_key);
+					continue;
+				}
 			}
 			else {
+				
+				/** OPTION A): CHORD SUBSTITUTION*/
+				temp = findSubs(progression, priority_keys, progression_plus[i], i);
+				if (temp) {
+					progression_plus[i] = temp;
+					priority_keys.push(temp.curr_key);
+					continue;
+				}
+				
 				/** OPTION B): MODAL INTERCHANGE */
 				temp = findModalInterchange(progression, priority_keys, progression_plus[i], i);
 				if (temp) {
