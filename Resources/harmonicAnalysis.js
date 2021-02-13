@@ -308,11 +308,10 @@ function findKey(progression){
 	// select the key/keys with highest .points value
 	let concurrent_keys = [];
 	
-	for (let i = 0; i < accepted_keys.length; i++) {
-		if (accepted_keys[0].points == accepted_keys[1].points)
-			concurrent_keys.push(accepted_keys.shift());
-		else
-			break;
+	for (let i = 0; i < accepted_keys.length - 1; i++) {
+		concurrent_keys.push(accepted_keys[i]);
+		if (typeof accepted_keys[i + 1].points != undefined && ! accepted_keys[i].points == accepted_keys[i + 1].points)
+			break
 	}
 	concurrent_keys.push(accepted_keys.shift());
 	return concurrent_keys;
@@ -381,7 +380,6 @@ const progPatterns = [{
 function findSecondaryDom(chord1, chord2){
 	let tempProg = [chord1, chord2];
 	let tempKeys = findKey(tempProg);
-	console.log("heyyy", tempKeys[0]);
 	tempProg = getProgDegrees(tempProg, tempKeys[0]);
 	if (tempProg[0].degree == "V" && tempProg[1].degree == "I") {
 		tempProg[0].event = "secondary dominant";
@@ -463,7 +461,6 @@ function findSubs(progression, priority_keys, chord, index){
 	tempChord = tempChord[0];
 	
 	tempChord.substitution = chord;
-	console.log("ciao", tempChord)
 	if (tempChord.type_coherent && tempChord.degree_coherent) {
 		// save original chord and add event
 		chord = tempChord;
@@ -475,19 +472,19 @@ function findSubs(progression, priority_keys, chord, index){
 	else if (tempChord.degree_coherent) {
 		let tempChord2 = findModalInterchange(progression, priority_keys, tempChord, index);
 		if (tempChord2) {
-			console.log("like cowboy bebop", tempChord2)
+			console.log("substitution of modal interchange", tempChord2)
 			chord = tempChord2;
 			chord.surprise = surprise;
 			/*priority_keys.push(tempKeys[0]);*/
 			return chord;
 		}
 		// test with have you met miss jones: if it works there, it works
-		else if (tempChord.type == "7") {
+		else if (tempChord.type == "7" && (index + 1) < progression.length) {
 			// search for secondary dominant
 			let sub = tempChord.substitution;
 			tempChord = findSecondaryDom(new Chord(tempChord.note, tempChord.type), progression[index + 1])
 			if (tempChord) {
-				console.log("like have you met miss jones", tempChord);
+				console.log("substitution of secondary dominant", tempChord);
 				chord = tempChord;
 				chord.surprise = surprise;
 				chord.substitution = sub;
