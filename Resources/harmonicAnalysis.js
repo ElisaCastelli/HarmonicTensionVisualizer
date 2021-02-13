@@ -36,7 +36,7 @@ const allnotes = {
 
 // array of possible modes (for now just modes of major scale)
 const modes = [{
-	name: 'major (Ionian)',
+	name: 'Ionian',
 	intervals: [0, 2, 4, 5, 7, 9, 11],
 	triads: ["", "min", "min", "", "", "min", "dim"],
 	quadriads: ["maj7", "min7", "min7", "maj7", "7", "min7", "halfdim"],
@@ -66,7 +66,7 @@ const modes = [{
 	quadriads: ["7", "min7", "halfdim", "maj7", "min7", "min7", "maj7"],
 	tonal_harmony: false
 }, {
-	name: 'Minor (aeolian)',
+	name: 'Aeolian',
 	intervals: [0, 2, 3, 5, 7, 8, 10],
 	triads: ["min", "dim", "", "min", "min", "", ""],
 	quadriads: ["min7", "halfdim", "maj7", "min7", "min7", "maj7", "7"],
@@ -500,7 +500,7 @@ function findSubs(progression, priority_keys, chord, index){
 		return false;
 }
 
-function findChangeKey(progression, priority_keys, chord, index){
+function findChangeKey(progression, priority_keys, progression_plus, index){
 	let surprise = "C";
 	
 	// check if from this point a new key is possible
@@ -527,93 +527,15 @@ function findChangeKey(progression, priority_keys, chord, index){
 			else
 				break;
 		}
-		chord.event = "change of key: " + tempKeys[0].toString();
-		chord.surprise = surprise;
-		return chord;
+		progression_plus[index].event = "change of key: " + tempKeys[0].toString();
+		progression_plus[index].surprise = surprise;
+		return progression_plus;
 	}
 	else
 		return false;
 }
 
-/** Main function*/
-export function evaluateTension(progression){
-
-	/** PHASE 1): select keys with highest number of compatible chords*/
-	let accepted_keys = findKey(progression); // array with selected keys
-	if (accepted_keys.length == 0) {
-		throw "no key was given";
-	}
-	let progression_plus;
-	let tempChord;
-	
-	/** PHASE 2): choose the key with highest number of correct chords before the first wrong one*/
-	// for each accepted_key
-	for (let i = 0; i < accepted_keys.length; i++) {
-		// exception: give priority to major and minor scales
-		if (modes[accepted_keys[i].scale_index].tonal_harmony) {
-			accepted_keys[i].points+= 10;
-		}
-		// estimate relative degrees and coherence of each chord in the progression 
-		progression_plus = getProgDegrees(progression, accepted_keys[i]);
-		
-		//for each chord
-		for (let j = 0; j < progression.length; j++) {
-			// if I find a chord not coherent with the current accepted key
-			if (! (progression_plus[j].type_coherent && progression_plus[j].degree_coherent))
-				break;
-			accepted_keys[i].points++;
-		}
-	}
-	accepted_keys.sort((a, b) => (a.points > b.points) ? -1 : 1);
-
-	/** PHASE 3): analyze each "wrong" chord, based on the chosen key, with different options*/ 
-	progression_plus = getProgDegrees(progression, accepted_keys[0]);
-	
-	// array of all keys that may be found during analysis 
-	let priority_keys = [];
-	priority_keys.push(accepted_keys[0]);
-	
-	for (let i = 0; i < progression_plus.length; i++) {
-		if (!( progression_plus[i].type_coherent && progression_plus[i].degree_coherent)) {
-			
-			/** OPTION A): CHORD SUBSTITUTION*/
-			tempChord = findSubs(progression, priority_keys, progression_plus[i], i);
-			if (tempChord) {
-				progression_plus[i] = tempChord;
-				priority_keys.push(tempChord.curr_key);
-				continue;
-			}
-			
-			/** OPTION B): MODAL INTERCHANGE */
-			tempChord = findModalInterchange(progression, priority_keys, progression_plus[i], i);
-			if (tempChord) {
-				progression_plus[i] = tempChord;
-				priority_keys.push(tempChord.curr_key);
-				continue;
-			}
-			
-			/** OPTION C): CHANGE OF SCALE */
-			tempChord = findChangeKey(progression, priority_keys, progression_plus[i], i);
-			if (tempChord) {
-				progression_plus[i] = tempChord;
-				priority_keys.push(tempChord.curr_key);
-				continue;
-			}
-			
-			/** OPTION D): GENERAL CHORD OUT OF KEY*/
-			progression_plus[i].surprise = "D";
-			progression_plus[i].event = "out of key";
-		}
-		
-		
-	}
-	
-	console.log("progression analyzed: ", progression_plus);
-	
-	/** TENSION PROGRESSION */
-	
-	// TODO: devi gestire tutte le sostituzioni!!!!!!! controlla se c'è, nel caso aggiungi tot intensità oltre a quella della sua funzione, ma come?
-	
+function evaluateTension(progression_plus){
 	/** assign tension based on functions*/
 	let temp_index;
 	for (let i = 0; i < progression_plus.length; i++) {
@@ -685,37 +607,93 @@ export function evaluateTension(progression){
 		}
 		
 	}
-	// console.log(progression_plus[0].tension);
 	return progression_plus;
 }
 
-// test progression, try the chords you like
-/*
-const progression = [];
+/** Main function*/
+export function harmonyAnalysis(progression){
 
-try {
-	progression.push(new Chord('F', 'maj7'));
-	progression.push(new Chord('F', 'maj7'));
-	progression.push(new Chord('F', 'maj7'));
-	progression.push(new Chord('G', 'min'));
-	progression.push(new Chord('A', 'min'));
-	progression.push(new Chord('D', '7'));
-	progression.push(new Chord('G', 'maj7'));
-	progression.push(new Chord('A', 'min'));
-	progression.push(new Chord('G', 'maj7'));
+	/** PHASE 1): select keys with highest number of compatible chords*/
+	let accepted_keys = findKey(progression); // array with selected keys
+	if (accepted_keys.length == 0) {
+		throw "no key was given";
+	}
+	let progression_plus;
+	let tempChord;
+	
+	/** PHASE 2): choose the key with highest number of correct chords before the first wrong one*/
+	// for each accepted_key
+	for (let i = 0; i < accepted_keys.length; i++) {
+		// exception: give priority to major and minor scales
+		if (modes[accepted_keys[i].scale_index].tonal_harmony) {
+			accepted_keys[i].points+= 10;
+		}
+		// estimate relative degrees and coherence of each chord in the progression 
+		progression_plus = getProgDegrees(progression, accepted_keys[i]);
+		
+		//for each chord
+		for (let j = 0; j < progression.length; j++) {
+			// if I find a chord not coherent with the current accepted key
+			if (! (progression_plus[j].type_coherent && progression_plus[j].degree_coherent))
+				break;
+			accepted_keys[i].points++;
+		}
+	}
+	accepted_keys.sort((a, b) => (a.points > b.points) ? -1 : 1);
 
-} catch (e) {
-	console.error(e);
+	/** PHASE 3): analyze each "wrong" chord, based on the chosen key, with different options*/ 
+	progression_plus = getProgDegrees(progression, accepted_keys[0]);
+	
+	// array of all keys that may be found during analysis 
+	let priority_keys = [];
+	priority_keys.push(accepted_keys[0]);
+	
+	for (let i = 0; i < progression_plus.length; i++) {
+		if (!( progression_plus[i].type_coherent && progression_plus[i].degree_coherent)) {
+			
+			/** OPTION A): CHORD SUBSTITUTION*/
+			tempChord = findSubs(progression, priority_keys, progression_plus[i], i);
+			if (tempChord) {
+				progression_plus[i] = tempChord;
+				priority_keys.push(tempChord.curr_key);
+				continue;
+			}
+			
+			/** OPTION C): CHANGE OF SCALE */
+			progression_plus = findChangeKey(progression, priority_keys, progression_plus, i);
+			if (tempChord) {
+				progression_plus[i] = tempChord;
+				priority_keys.push(tempChord.curr_key);
+				continue;
+			}
+			
+			/** OPTION B): MODAL INTERCHANGE */
+			tempChord = findModalInterchange(progression, priority_keys, progression_plus[i], i);
+			if (tempChord) {
+				progression_plus[i] = tempChord;
+				priority_keys.push(tempChord.curr_key);
+				continue;
+			}
+			
+			
+			
+			/** OPTION D): GENERAL CHORD OUT OF KEY*/
+			progression_plus[i].surprise = "D";
+			progression_plus[i].event = "out of key";
+		}
+		
+		
+	}
+	
+	console.log("progression analyzed: ", progression_plus);
+	
+	/** TENSION PROGRESSION */
+	progression_plus = evaluateTension(progression_plus);
+	
+	return progression_plus;
+	
 }
 
-console.log('\n ACCEPTED KEYS:\n', findKey(progression));
-try {
-	console.log("Progression degrees and tension array:\n", evaluateTension(progression));
-} catch (e) {
-	console.error(e);
-}
-
-*/
 // Harmony analysis
 // - quadriadi + tese di triadi
 // - raggruppare pattern per scala?
