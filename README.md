@@ -70,7 +70,7 @@ Tone.js allows us to set and personalize further the sound of the Sampler object
 
 Once the all the previous phases has been setted up, it is necessary, as for all the web-audio frameworks, to connect the Sampler object to the output channel: this operation can be done by the command toMaster();. It is important to remark that this command must be placed only after the other parameters and settings have been created, as a conclusion of all the processes of the audio object.
 
-Until now, the object has been created, initialized and personalized by modifiying some attributes. Finally it is also important to play notes and reproduce some sounds when necessary. This can be done by using the #triggerAttackRelease()# function
+Until now, the object has been created, initialized and personalized by modifiying some attributes. Finally it is also important to play notes and reproduce some sounds when necessary. This can be done by using the triggerAttackRelease() function. Inside the function, you have to insert the list of notes to be played and, as an optional property, it is possible to set the duration of the note in terms of time.  
 
 ## Tension graphic representation (canvas e specchietti con degree e pattern)
 
