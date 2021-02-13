@@ -4,11 +4,11 @@ import { type, allNotes1D, chordBuilder } from './Resources/chordBuilder.js';
 import { tensionChange, start } from './Resources/tensionAnimation.js';
 import { harmonyAnalysis, Chord, ChordPlus, Key } from './Resources/harmonicAnalysis.js';
 import { uploadFile, downloadFile } from './Resources/readFile.js';
-import { matrixConstructor, matrixToString, emptyMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell, findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord, getSelectedByColumnExceptRoot, getSelectedAndSelectable, findNoteByMatrixIndex, getColumnNotes } from './Resources/matrix.js';
+import { Note, matrixConstructor, matrixToString, emptyMatrix, getIndexSelectedCell, changeSelection, findSameNotes, setSelectableCell, getIdCell, findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord, getSelectedByColumnExceptRoot, getSelectedAndSelectable, findNoteByMatrixIndex, getColumnNotes } from './Resources/matrix.js';
 
 const fileInput = document.getElementById('file-input');
 
-// MODEL
+/** Model attributes */
 let numOctaves = 3;
 let numOctavesMin = 2;
 let maxColumns = 20;
@@ -25,7 +25,7 @@ let timeIntervalIncrement = 25;
 let soundDuration = 2;
 
 
-// creazione synthetizer
+/** Synth builder */
 let muted = false;
 let minVolume = -8;
 let MaxVolume = -4;
@@ -122,18 +122,6 @@ const key_color = [{
     }
 ];
 
-// costruttore Note
-function Note(octave, name, column, row, id) {
-    this.octave = octave;
-    this.name = name;
-    this.column = column;
-    this.row = row;
-    this.id = id;
-    let selected = false;
-    let selectable = false;
-    let root = false;
-}
-
 /** Function to fill the finalProgression array with the one read from a file */
 export function fillFinalProgression(progressionRead) {
     finalProgression = new Array(maxColumns);
@@ -191,7 +179,7 @@ export function unselectMatrix(lengthChordArray) {
     if (lengthChordArray >= 0) {
         for (let indexColumn = maxColumns - 1; indexColumn >= lengthChordArray; indexColumn--) {
             for (let indexRow = (numOctaves * 12) - 1; indexRow >= 0; indexRow--) {
-                emptyCell(index);
+                unselectCell(index);
                 let idCell = getIdCell(index);
                 let button = document.getElementById("b" + idCell);
                 button.textContent = "";
@@ -506,7 +494,7 @@ function play() {
         /** Div to visualize substitution */
         if (analysisResults[maxColumns - 1 - columnPlayed].substitution != "") {
             substitutionContainer.style.visibility = 'visible';
-            var text = "Sub: " + analysisResults[maxColumns - 1 - columnPlayed].substitution.toString();
+            var text = "Sub: " + analysisResults[maxColumns - 1 - columnPlayed].toString();
             substitutionContainer.textContent = text;
         } else {
             substitutionContainer.style.visibility = 'hidden';

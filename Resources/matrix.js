@@ -1,10 +1,12 @@
+/** IMPORT */
 import { type, allNotes1D, chordBuilder } from './chordBuilder.js';
 import { printSelectable } from '../script.js';
 
-let matrixTable = new Array();;
+/** array that contains the unrolled matrix corresponding to the table */
+let matrixTable = new Array();
 
-// costruttore Note
-function Note(octave, name, column, row, id) {
+/** Note used to contain information about a single cell and the note associated with it */
+export function Note(octave, name, column, row, id) {
     this.octave = octave;
     this.name = name;
     this.column = column;
@@ -15,7 +17,7 @@ function Note(octave, name, column, row, id) {
     let root = false;
 }
 
-/** Function to create for the first time matrixTable */
+/** Function to create for the first time the array matrixTable */
 export function matrixConstructor(cellsNumber, maxColumns, numOctaves, numOctavesMin, key_color) {
     let octaveNumber = 0;
     let noteNumber = 0;
@@ -35,23 +37,28 @@ export function matrixConstructor(cellsNumber, maxColumns, numOctaves, numOctave
     return matrixTable;
 }
 
-export function getMatrix() {
-    return matrixTable;
-}
-
+/** Function to obtain the id of a cell by the index */
 export function getIdCell(index) {
     return matrixTable[index].id;
 }
 
+/** Function  to obtain the index of a cell by the id*/
+export function getIndexCellById(id) {
+    return matrixTable.findIndex(x => (x.id == id));
+}
+
+/** Function to obtain the column number of a cell by the index */
 export function getCellColumnByIndex(indexCell) {
     return matrixTable[indexCell].column;
 }
 
+/** Function to obtain the index of selected cell by note and column number infromation */
 export function getIndexSelectedCell(note, columnIndex) {
     return matrixTable.findIndex(x => x.name == note && x.column == columnIndex && x.selected == true);
 }
 
-export function emptyCell(index) {
+/** Function to clean the content of a Note cell in matrix */
+export function unselectCell(index) {
     if (matrixTable[index].selected == true) {
         matrixTable[index].selected = false;
     }
@@ -63,43 +70,37 @@ export function emptyCell(index) {
     }
 }
 
+/** Function to obtain an array of unselected Note by the column number */
 export function findUnselectedCell(numCol) {
     return matrixTable.filter(x => (x.column == numCol && x.selected == false));
 }
 
+/** Function to obtain an array of all the Note of a column by the column number */
 export function findCellsByColumn(numCol) {
     return matrixTable.filter(x => x.column == numCol);
 }
 
-export function getIndexCellById(id) {
-    return matrixTable.findIndex(x => (x.id == id));
-}
-
+/** Function to change to true the selected field of a Note by its index */
 export function setSelectableCell(indexCell) {
     matrixTable[indexCell].selectable = true;
 }
 
-export function unselectCell(indexCell) {
-    if (matrixTable[indexCell].selected) {
-        matrixTable[indexCell].selected = false;
-    }
-    if (matrixTable[indexCell].root) {
-        matrixTable[indexCell].root = false;
-    }
-}
-
+/** Function to obtain an array of all the selected cells in the column with number columnNumber */
 export function getSelectedByColumn(columNumber) {
     return matrixTable.filter(x => (x.column == columNumber && x.selected == true));
 }
 
+/** Function to obtain an array of all the selected cells (except the root one) in the column with number columnNumber */
 export function getSelectedByColumnExceptRoot(columNumber) {
     return matrixTable.filter(x => (x.column == columNumber && x.selected == true && x.root != true));
 }
 
+/** Function to obtain an array of all the selected and selectable cells in the column with number columnNumber*/
 export function getSelectedAndSelectable(columNumber) {
     return matrixTable.filter(x => (x.column == columNumber && (x.selected == true || x.selectable == true)));
 }
 
+/** Function to obtain an array with the index of all the cells selected */
 export function getAllSelectedId() {
     let selectedId = [];
     matrixTable.forEach(element => {
@@ -110,19 +111,22 @@ export function getAllSelectedId() {
     return selectedId;
 }
 
+/** Function to obtain an array of all the selectable cells in the column with number columnNumber */
 export function getSelectableByColumn(columnNumber) {
     return matrixTable.filter(x => (x.column == columnNumber && x.selectable == true));
 }
 
+/** Function to to check in there's at least one cell selectable in the column with number columnNumber  */
 export function checkSelectableByColumn(columnNumber) {
     return matrixTable.find(x => (x.column == columnNumber && x.selectable == true));
 }
 
+/** Function to obtain an array of cells that are selected but that are not the root in a specific column */
 export function getCellsToMakeSelectable(columNumber, idRoot) {
     return matrixTable.filter(x => x.column == columNumber && x.selected == true && x.id != idRoot);
 }
 
-
+/** Function to change the selected boolean attribute of a cell by index */
 export function changeSelection(cellIndex) {
     if (matrixTable[cellIndex].selected == true) {
         matrixTable[cellIndex].selected = false;
@@ -131,26 +135,30 @@ export function changeSelection(cellIndex) {
     }
 }
 
+/** Function to obtain cells in the column with index columnNumber that corresponds to the */
 export function findSameNotes(columnNumber, cellIndex) {
     return matrixTable.filter(x => (x.column == columnNumber && x.name == matrixTable[cellIndex].name));
 }
 
-
+/** Function to obtain the Note with the field root true between all the Note elements of a certain column */
 export function findRootNoteByColumn(columnNumber) {
     return matrixTable.find(x => (x.column == columnNumber && x.selected == true && x.root == true));
 }
 
+/** Function to set true the field root of a certain Note element */
 export function addRootCell(cellIndex) {
     matrixTable[cellIndex].selected = true;
     matrixTable[cellIndex].root = true;
 }
 
+/** Function to obtain all the Note elements with a certain name in the column of the table with index columnNumber */
 export function findNoteByNameAndColumn(name, columnNumber) {
     return matrixTable.filter(x => (x.name == name && x.column == columnNumber));
 }
 
+/** Function to obtain a certain Note by itsown index*/
 export function findNoteByMatrixIndex(matrixIndex) {
-    return matrixTable[matrixIndex]
+    return matrixTable[matrixIndex];
 }
 
 /** Function to convert finalProgression into a String in order to write it on a text file */
@@ -180,7 +188,7 @@ export function matrixToString(finalProgression, maxColumns, cellsNumber) {
 }
 
 
-/* Function to check if matrixTable is still empty*/
+/* Function to check if matrixTable is still empty */
 export function emptyMatrix() {
     let filledCells = matrixTable.filter(x => x.selected == true);
     if (filledCells.length == 0) {
@@ -234,7 +242,7 @@ export function printChord(noteArray, octaveNoteSelected, columnNumber) {
         cell.classList.remove('disabled');
     }
 }
-
+/** Function to obtain all the Note of a column with index columnNumber */
 export function getColumnNotes(columnNumber) {
     return matrixTable.filter(x => (x.column == columnNumber));
 }
