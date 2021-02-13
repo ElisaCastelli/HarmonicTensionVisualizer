@@ -2,7 +2,7 @@
 
 *Currently in Development*
 
-##Introduction
+## Introduction
 
 The goal of our project is to analyze a chord sequence, given by the user through an intuitive piano-roll interface, in order to determine the trend of the harmonic tension. Following different criteria, estabilished by us and based on music theory, we assign to each chord a certain level of tension, influenced by:
 •	the chord's composition,
@@ -14,7 +14,7 @@ Our project is a web application completely developed using HTML, JS and CSS. We
 
 (Sampler da aggiungere come tecnologia usata?)
 
-##User interface
+## User interface
 
 The structure of the project can be divided in three main parts:
 
@@ -22,7 +22,7 @@ The structure of the project can be divided in three main parts:
 -	button bar 
 -	tension graphic representation
 
-##Piano-roll
+## Piano-roll
 
 (This is a dynamic component added when the page is loaded for the first time. It consist of a table of buttons, each one corresponding to a note distributed over 3 octaves, from C2 to B4.)
 Users can enter the chord sequence to analyze using a simple piano-roll interface in a few passages:
@@ -30,7 +30,7 @@ Users can enter the chord sequence to analyze using a simple piano-roll interfac
 -	select the type of the chord: triads(minor, major, diminished) or quadriad (major7, minor7, 7, diminished, half diminished)
 -	complete the chord manually choosing between the possible notes selectable shown graphically or click the next tonic note in the next column to complete the previous chord automatically (collegamento con chordBuilder.js)
 
-##Button bar
+## Button bar
 
  
 
@@ -44,25 +44,25 @@ At the top of the page the user can find a list of buttons, each one with a spec
 -	Volume up: increases the volume
 -	Reset: cleans the piano-roll content 
 
-##Sampler
+## Sampler
 
 
 Tension graphic representation (canvas e specchietti con degree e pattern)
 
 
-##Harmonic Analysis
+## Harmonic Analysis
 
 
-##Surge
+## Surge
 
 Our project is available on Surge, a free platform that allows you to publish online you web site for free.  
 Try it here(link)!  
 
-##Video demo
+## Video demo
 
 Here(link) you can find a short video demo 
 
-##Group components:
+## Group components:
 •	Francesco Zumerle
 •	Hakim El Achak
 •	Elisa Castelli
