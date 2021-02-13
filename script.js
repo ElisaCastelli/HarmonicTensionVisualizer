@@ -1,7 +1,7 @@
 // IMPORT
 
 import { type, allNotes1D, chordBuilder } from './Resources/chordBuilder.js';
-import { tensionChange, start } from './Resources/tensionAnimation.js';
+import { tensionChange, start , waveColor } from './Resources/tensionAnimation.js';
 import { harmonyAnalysis, Chord, ChordPlus, Key } from './Resources/harmonicAnalysis.js';
 import { uploadFile, downloadFile } from './Resources/readFile.js';
 import { Note, matrixConstructor, matrixToString, emptyMatrix, getIndexSelectedCell, changeSelection, findSameNotes, setSelectableCell, getIdCell, findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord, getSelectedByColumnExceptRoot, getSelectedAndSelectable, findNoteByMatrixIndex, getColumnNotes } from './Resources/matrix.js';
@@ -461,6 +461,7 @@ function playAndScroll() {
         if ((maxColumns - columnPlayed - 1) < progressionAnalyzed.length) {
             play();
             tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
+            waveColor(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].surprise);
         } else {
             const stopButton = document.getElementById("stopButton");
             stopButton.onclick();
@@ -759,6 +760,7 @@ resetButton.onclick = function() {
         const stopButton = document.getElementById('stopButton');
         stopButton.style.color = 'rgb(63, 132, 87)';
         tensionChange(0);
+        waveColor(0);
     }
 }
 
@@ -867,6 +869,7 @@ function buildReadme() {
 function firstRender() {
     start;
     tensionChange(0);
+    waveColor(0);
     const pianoContainer = document.getElementById("output_block");
     const playButton = document.getElementById("playButton");
     const stopButton = document.getElementById("stopButton");
@@ -919,6 +922,7 @@ function firstRender() {
                 tableScroll.style.overflowX = 'auto';
                 clearInterval(scrollInterval);
                 tensionChange(0);
+                waveColor(0);
             }
         };
     }
@@ -936,6 +940,7 @@ function firstRender() {
             timeInterval = 0;
             clearInterval(scrollInterval);
             tensionChange(0);
+            waveColor(0);
             firstPlay = true;
             const progressionInfo = document.getElementById('progressionInfo');
             progressionInfo.textContent = "";

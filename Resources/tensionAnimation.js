@@ -8,6 +8,8 @@ let maxTension = 10;
 let maxHeight = canvas.height;
 let maxSpeed = 0.03;
 
+ctx.strokeStyle = 'white';
+
 function tensionChange(finalTension) {
   let initialTension = tension
   let diff = (finalTension-initialTension)/30
@@ -37,12 +39,24 @@ function generateData(tension,maxTension) {
   return dataOut;
 }
 
-function waveColor(tension,maxTension) {
-  let r = 255
+export function waveColor(surprise , tension , maxTension) {
+  /*let r = 255
   let g = 255 //- 255*(tension/maxTension)
   let b = 255 //- 255*(tension/maxTension)
   let color = "rgb(" + r + ", " + g + ", " + b + ")"
-  ctx.strokeStyle = color;
+  ctx.strokeStyle = color; */ 
+
+  if (surprise == 0) {
+    ctx.strokeStyle = "white"
+  } else if (surprise == "A") {
+    ctx.strokeStyle = "blue"
+  } else if (surprise == "B") {
+    ctx.strokeStyle = "green"
+  } else if (surprise == "C") {
+    ctx.strokeStyle = "purple"
+  } else if (surprise == "D") {
+    ctx.strokeStyle = "red"
+  }
 }
 
 function draw() {
