@@ -15,6 +15,7 @@
 </head>
 
 <body>
+	<a name="top"></a>
     <script src="https://unpkg.com/tone@13.8.25/build/Tone.js"></script>
     <!-- partial:index.partial.html -->
     <div id="pagina">
@@ -23,7 +24,9 @@
             <div id="title_container">
                 HARMONIC VISUALIZER
             </div>
-            <div id="playButton" class="scrollButton" ><i class="fas fa-play"></i></div>
+            <a href="#top">
+            	<div id="playButton" class="scrollButton" ><i class="fas fa-play"></i></div>
+            </a>
             <div id="playFasterButton" class="scrollButton" ><i class="fas fa-times"></i>2</div>
             <div id="stopButton" class="scrollButton" ><i class="fas fa-pause"></i></div>
             <div id="rewindButton" class="scrollButton" ><i class="fas fa-stop"></i></div>
@@ -34,7 +37,8 @@
             <input id="fileName" type="text" placeholder="  Document title" >
             <div id="downloadButton" class="scrollButton"><i class="fas fa-file-download"></i></div>
             <div id="readmeButton" class="scrollButton">
-                <a href="#readMe"><i class="fas fa-question-circle"></i></a></div>
+                <a href="#readMe"><i class="fas fa-question-circle"></i></a>
+            </div>
             <div id="uploadButton" class="scrollButton">
                 <label for="file-input"><i class="fas fa-folder-open"></i></label>
                 <input type="file" id="file-input" accept="text/txt">
