@@ -212,6 +212,7 @@ export function fillMatrix(matrixRead) {
     return matrixTable;
 }
 
+/** Function to identify the slectable notes of a chord and visualize them when the root is selected after the chord type */
 export function rootAfterChordType(matrixIndex, columnNumber) {
     let noteSelected = matrixTable[matrixIndex];
     if (noteSelected != null) {
@@ -225,6 +226,7 @@ export function rootAfterChordType(matrixIndex, columnNumber) {
     }
 }
 
+/** Function used to automatically visualize the selected notes when autofill is activated */
 export function printChord(noteArray, octaveNoteSelected, columnNumber) {
     for (let index = 0; index < noteArray.length; index++) {
         if (index > 0) {
