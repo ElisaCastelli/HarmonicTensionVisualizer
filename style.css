@@ -353,7 +353,7 @@
             
             .light_background {
                 /*background-color: rgba(160, 223, 179, 0.377);*/
-                background-color:rgb(245, 125, 27);
+                background-color:rgba(252, 126, 23, 0.575);
             }
             
             .mainTable fixedColumn {
