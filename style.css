@@ -82,11 +82,11 @@
                 border-color: rgb(73, 94, 104);
                 border: solid 1px;
                 top: 12%;
-                left: 39.5%;
+                left: 50%;
                 text-align: center;
                 font-family: 'Roboto', sans-serif;
                 font-size: medium;
-                visibility: hidden;
+                visibility: hidden; 
             }
 
             #eventContainer{
@@ -184,7 +184,9 @@
                 position: fixed;
                 top: 25px;
                 color: rgb(63, 132, 87);
+                
             }
+
 
             #playFasterButton{
                 left: 35%;
@@ -277,10 +279,6 @@
                 color: rgb(223, 193, 85);
             }
             
-            .clickedBarButton {
-                color: rgb(160, 223, 179);
-            }
-            
             .white {
                 background: rgb(68, 96, 109);
             }
@@ -346,7 +344,7 @@
             }
             
             .selected_background {
-                background-color: #f44336;
+                background-color:rgb(245, 125, 27);
             }
 
             .highlighted_column{
@@ -354,7 +352,8 @@
             }
             
             .light_background {
-                background-color: rgba(160, 223, 179, 0.377);
+                /*background-color: rgba(160, 223, 179, 0.377);*/
+                background-color:rgb(245, 125, 27);
             }
             
             .mainTable fixedColumn {
@@ -408,11 +407,12 @@
             
             .scrollingBar {
                 position: relative;
-                background: rgb(63, 132, 87);
-                height: 88%;
+                /*background: rgb(63, 132, 87);*/
+                background-color: aliceblue;
+                height: 80%;
                 width: 5px;
                 left: 93px;
-                top: -91.5%;
+                top: -88%;
                 box-shadow: black 0px 2px 5px 0px;
                 z-index: 90;
                 border-radius: 10px;

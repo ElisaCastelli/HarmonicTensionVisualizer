@@ -763,6 +763,10 @@ resetButton.onclick = function() {
         const eventContainer = document.getElementById('eventContainer');
         eventContainer.textContent="";
         eventContainer.style.visibility='hidden';
+        const substitutionContainer = document.getElementById('subInfo');
+        substitutionContainer.style.visibility="hidden";
+        const stopButton = document.getElementById('stopButton');
+        stopButton.style.color='rgb(63, 132, 87)';
         tensionChange(0);
     }
 }
@@ -794,7 +798,7 @@ playFasterButton.onclick = function(){
             timeIntervalMax=1590;
             timeIntervalIncrement=30;
             soundDuration = 1.5;
-            playFasterButton.style.color='#f44336';
+            playFasterButton.style.color='rgb(245, 125, 27)';
         }else{
             scrollSpeed=1;
             timeIntervalMax=2700;
@@ -830,27 +834,13 @@ volumeDownButton.onclick = function() {
     }
 }
 
-// cancella tutto il contenuto del piano roll
-/*function refresh() {
-    matrixTable = [];
-    timeInterval = 0;
-    tableBackscroll(0);
-    columnPlayed = maxColumns - 1;
-    finalProgression = [];
-    analysisResults = [];
-    bar.style.left = '93px';
-    const pianoContainer = document.getElementById("output_block");
-    while (pianoContainer.lastChild) {
-        pianoContainer.removeChild(pianoContainer.lastChild);
-    }
-}*/
-
 /** Function called at the first load of the page to add al the graphic elements */
 function firstRender() {
     start;
     tensionChange(0);
     const pianoContainer = document.getElementById("output_block");
     const playButton = document.getElementById("playButton");
+    const stopButton = document.getElementById("stopButton");
     const divChordPlayed = document.getElementById("chordPlayed");
     let pianoRollTable = createPianoRoll();
     pianoContainer.appendChild(pianoRollTable);
@@ -861,6 +851,7 @@ function firstRender() {
     pianoContainer.appendChild(bar);
     playButton.onclick = function() {
         if (!modelButton && !emptyMatrix()) {
+            playButton.style.color='rgb(245, 125, 27)';
             const tableScroll = document.getElementById("table-scroll");
             modelButton = true;
             divChordPlayed.style.visibility = 'visible';
@@ -868,6 +859,8 @@ function firstRender() {
             if (firstPlay) {
                 lastBarPosition = '93px';
                 lastTableScrollPosition = 0;
+            }else{
+                stopButton.style.color='rgb(63, 132, 87)';
             }
             tableScroll.style.overflowX = 'hidden';
             if (finalProgression.length == maxColumns) {
@@ -881,6 +874,8 @@ function firstRender() {
             analysisResults = evaluateTension(finalProgression);
             scrollInterval = setInterval(playAndScroll, 25);
             stopButton.onclick = function() {
+                playButton.style.color='rgb(63, 132, 87)';
+                stopButton.style.color='rgb(245, 125, 27)';
                 lastBarPosition = bar.style.left;
                 lastTableScrollPosition = tableScroll.style.scrollLeft;
                 modelButton = false;
@@ -906,6 +901,8 @@ function firstRender() {
             clearInterval(scrollInterval);
             tensionChange(0);
             firstPlay = true;
+            stopButton.style.color='rgb(63, 132, 87)';
+            playButton.style.color='rgb(63, 132, 87)';
         }
         // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
     matrixConstructor(cellsNumber, maxColumns, numOctaves, numOctavesMin, key_color);
