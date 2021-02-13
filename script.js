@@ -2,7 +2,7 @@
 
 import { type, allNotes1D, chordBuilder } from './Resources/chordBuilder.js';
 import { tensionChange, start } from './Resources/tensionAnimation.js';
-import { evaluateTension, Chord, ChordPlus, Key } from './Resources/harmonicAnalysis.js';
+import { harmonyAnalysis, Chord, ChordPlus, Key } from './Resources/harmonicAnalysis.js';
 import { uploadFile, downloadFile } from './Resources/readFile.js';
 import { matrixConstructor, matrixToString, emptyMatrix, getIndexSelectedCell, fillMatrix, emptyCell, changeSelection, findSameNotes, setSelectableCell, getIdCell, findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord, getSelectedByColumnExceptRoot, getSelectedAndSelectable, findNoteByMatrixIndex, getColumnNotes } from './Resources/matrix.js';
 
@@ -872,7 +872,7 @@ function firstRender() {
             bar.style.left = lastBarPosition;
             tableBackscroll(lastTableScrollPosition);
             finalProgression = finalProgression.slice(0, maxIndex);
-            analysisResults = evaluateTension(finalProgression);
+            analysisResults = harmonyAnalysis(finalProgression);
             scrollInterval = setInterval(playAndScroll, 25);
             stopButton.onclick = function() {
                 playButton.style.color='rgb(63, 132, 87)';
