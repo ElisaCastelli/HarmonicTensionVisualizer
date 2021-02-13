@@ -203,8 +203,11 @@ function getProgDegrees(progression, key){
 	let progression_plus = [];
 	let triad_check;
 	let quadriad_check;
+	let temp;
 	for (let i = 0; i < progression.length; i++) {
-		progression_plus[i] = new ChordPlus(progression[i].note, progression[i].type, getDegree(progression[i], key), key);
+		// to avoid errors with ChordPlus
+		temp = new Chord(progression[i].note, progression[i].type);
+		progression_plus.push( new ChordPlus(progression[i].note, progression[i].type, getDegree(temp, key), key));
 
 		if (progression_plus[i].degree.includes("#") || progression_plus[i].degree.includes("b")) {
 			progression_plus[i].degree_coherent = false;
@@ -380,13 +383,14 @@ const progPatterns = [{
 function findSecondaryDom(chord1, chord2){
 	let tempProg = [chord1, chord2];
 	let tempKeys = findKey(tempProg);
-	tempProg = getProgDegrees(tempProg, tempKeys[0]);
-	if (tempProg[0].degree == "V" && tempProg[1].degree == "I") {
-		tempProg[0].event = "secondary dominant";
-		return tempProg[0];
+	for (let i = 0; i < tempKeys.length; i++) {
+		tempProg = getProgDegrees(tempProg, tempKeys[i]);
+		if (tempProg[0].degree == "V" && tempProg[1].degree == "I") {
+			tempProg[0].event = "secondary dominant " + tempKeys[i];
+			return tempProg[0];
+		}
 	}
-	else
-		return false;
+	return false;
 }
 
 function findModalInterchange(progression, priority_keys, chord, index){
@@ -396,10 +400,8 @@ function findModalInterchange(progression, priority_keys, chord, index){
 	
 	//for each mode, with same tonic
 	for (let m = 0; m < modes.length; m++) {
-		
 		// check if the scale is compatible with any other mode
 		tempKeys.push(new Key(chord.curr_key.tonic, modes[m].name));
-		
 		//for each mode, with same tonic
 		for (let j = index; j < progression.length; j++) {
 			tempChord = getProgDegrees([progression[j]], tempKeys[m]);
@@ -447,8 +449,7 @@ function findModalInterchange(progression, priority_keys, chord, index){
 function findSubs(progression, priority_keys, chord, index){
 	let surprise = "A";
 	let tempChord;
-	
-	// experimental: discuss it with colleagues!
+	// gereralization of music theory
 	if (["dim", "halfdim", "dim7"].includes(chord.type))
 		tempChord = diminishedDomSub(chord);
 	else if (chord.type == "7")
@@ -477,19 +478,19 @@ function findSubs(progression, priority_keys, chord, index){
 			chord.surprise = surprise;
 			return chord;
 		}
-		// test with have you met miss jones: if it works there, it works
-		else if (tempChord.type == "7" && (index + 1) < progression.length) {
-			// search for secondary dominant
-			let sub = tempChord.substitution;
-			tempChord = findSecondaryDom(new Chord(tempChord.note, tempChord.type), progression[index + 1])
-			if (tempChord) {
-				console.log("substitution of secondary dominant", tempChord);
-				chord = tempChord;
-				chord.surprise = surprise;
-				chord.substitution = sub;
-				return chord;
-			}
+	// test with have you met miss jones: if it works there, it works
+	else if (tempChord.type == "7" && (index + 1) < progression.length) {
+		// search for secondary dominant
+		let sub = tempChord.substitution;
+		tempChord = findSecondaryDom(new Chord(tempChord.note, tempChord.type), progression[index + 1])
+		if (tempChord) {
+			console.log("substitution of secondary dominant", tempChord);
+			chord = tempChord;
+			chord.surprise = surprise;
+			chord.substitution = sub;
+			return chord;
 		}
+	}
 	}
 	
 	else
@@ -655,7 +656,7 @@ export function harmonyAnalysis(progression){
 				continue;
 			}
 			
-			if (tritoneTensions.chords.includes(progression_plus[i].type)) {
+			if (progression_plus[i].type == "7") {
 				/** OPTION C): CHANGE OF SCALE */
 				temp = findChangeKey(progression, priority_keys, progression_plus, i);
 				if (temp) {
