@@ -92,13 +92,13 @@
             #eventContainer{
                 position: fixed;
                 height: 20px;
-                width: 180px;
+                width: 23%;
                 background: rgb(117, 130, 136);
                 border-radius: 10px;
                 border-color: rgb(73, 94, 104);
                 border: solid 1px;
                 top: 12%;
-                left: 47.25%;
+                left: 29%;
                 text-align: center;
                 font-family: 'Roboto', sans-serif;
                 font-size: medium;
@@ -108,13 +108,13 @@
             #subInfo{
                 position: fixed;
                 height: 20px;
-                width: 120px;
+                width: 17%;
                 background: rgb(117, 130, 136);
                 border-radius: 10px;
                 border-color: rgb(73, 94, 104);
                 border: solid 1px;
                 top: 12%;
-                left: 60.5%;
+                left: 59%;
                 text-align: center;
                 font-family: 'Roboto', sans-serif;
                 font-size: medium;
@@ -346,7 +346,7 @@
             }
             
             .selected_background {
-                background-color: rgb(223, 193, 85);
+                background-color: #f44336;
             }
 
             .highlighted_column{

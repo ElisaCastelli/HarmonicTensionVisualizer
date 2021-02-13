@@ -794,7 +794,7 @@ playFasterButton.onclick = function(){
             timeIntervalMax=1590;
             timeIntervalIncrement=30;
             soundDuration = 1.5;
-            playFasterButton.style.color='rgb(223, 193, 85)';
+            playFasterButton.style.color='#f44336';
         }else{
             scrollSpeed=1;
             timeIntervalMax=2700;
