@@ -8,9 +8,6 @@ let maxTension = 10;
 let maxHeight = canvas.height;
 let maxSpeed = 0.03;
 
-//ctx.fillStyle = 'LightSlateGrey';
-//ctx.fillStyle = 'rgb(64,75,80)';
-
 function tensionChange(finalTension) {
   let initialTension = tension
   let diff = (finalTension-initialTension)/30
@@ -29,7 +26,7 @@ function generateData(tension,maxTension) {
   
   // crea l'array contenente il valore della funzione seno
   for (let i=0 ; i<data.length ; i++) {
-    data[i] = ( ((maxHeight/2)*(tension/maxTension) ) * Math.sin( 10*(tension/maxTension)*Math.PI * (i/data.length) + x )) // modificare il primo valore del seno per modificare il numero di periodi
+    data[i] = ( ((maxHeight/2)*(tension/maxTension) ) * Math.sin( 6*(tension/maxTension)*Math.PI * (i/data.length) + x )) // modificare il primo valore del seno per modificare il numero di periodi
   }
 
   // applica una hanning window al seno
@@ -42,8 +39,8 @@ function generateData(tension,maxTension) {
 
 function waveColor(tension,maxTension) {
   let r = 255
-  let g = 255 - 255*(tension/maxTension)
-  let b = 255 - 255*(tension/maxTension)
+  let g = 255 //- 255*(tension/maxTension)
+  let b = 255 //- 255*(tension/maxTension)
   let color = "rgb(" + r + ", " + g + ", " + b + ")"
   ctx.strokeStyle = color;
 }
