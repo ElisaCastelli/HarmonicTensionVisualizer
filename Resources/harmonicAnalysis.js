@@ -251,7 +251,6 @@ function findKey(progression){
 			// check that the chord is inside the scale "tonic.note modes[scale]"
 			for (let chord = 0; chord < progression.length; chord++) {
 				// evaluate interval with current tonic hypothesis
-				console.log("heeee", progression[chord])
 				curr_interval = progression[chord].getTonicInterval(tonic);
 				
 				// check if the interval between the two chords is contained in the scale
@@ -381,7 +380,6 @@ const progPatterns = [{
 function findSecondaryDom(chord1, chord2){
 	let tempProg = [chord1, chord2];
 	let tempKeys = findKey(tempProg);
-	console.log("heyyy", tempKeys[0]);
 	tempProg = getProgDegrees(tempProg, tempKeys[0]);
 	if (tempProg[0].degree == "V" && tempProg[1].degree == "I") {
 		tempProg[0].event = "secondary dominant";
@@ -463,7 +461,6 @@ function findSubs(progression, priority_keys, chord, index){
 	tempChord = tempChord[0];
 	
 	tempChord.substitution = chord;
-	console.log("ciao", tempChord)
 	if (tempChord.type_coherent && tempChord.degree_coherent) {
 		// save original chord and add event
 		chord = tempChord;
@@ -475,7 +472,7 @@ function findSubs(progression, priority_keys, chord, index){
 	else if (tempChord.degree_coherent) {
 		let tempChord2 = findModalInterchange(progression, priority_keys, tempChord, index);
 		if (tempChord2) {
-			console.log("like cowboy bebop", tempChord2)
+			console.log("substitution of modal interchange", tempChord2)
 			chord = tempChord2;
 			chord.surprise = surprise;
 			/*priority_keys.push(tempKeys[0]);*/
@@ -485,10 +482,9 @@ function findSubs(progression, priority_keys, chord, index){
 		else if (tempChord.type == "7" && (index + 1) < progression.length) {
 			// search for secondary dominant
 			let sub = tempChord.substitution;
-			console.log("heueld", progression[index + 1])
 			tempChord = findSecondaryDom(new Chord(tempChord.note, tempChord.type), progression[index + 1])
 			if (tempChord) {
-				console.log("like have you met miss jones", tempChord);
+				console.log("substitution of secondary dominant", tempChord);
 				chord = tempChord;
 				chord.surprise = surprise;
 				chord.substitution = sub;
