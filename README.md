@@ -45,8 +45,8 @@ At the top of the page the user can find a list of buttons, each one with a spec
 -	Pause: stops the reproduction
 -	Rewind: brings back the reproduction at the starting point
 -	Volume mute: mutes the volume 
--	Volum down: decreases the volume
--	Volume up: increases the volume
+-	Volum down: decreases the volume (untile a min volume value threshold)
+-	Volume up: increases the volume (until a max volume threshold)
 -	Reset: cleans the piano-roll content 
 -	Download: to download a .txt file containing the progression you put into the piano roll
 -	Upload: to upload a .txt file you have on your computer that contains a progression you saved
