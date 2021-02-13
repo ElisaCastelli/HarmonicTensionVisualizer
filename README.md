@@ -66,6 +66,10 @@ Due to the fact that we need a synthetizer able to play multiple notes at the sa
 
 ![alt text](./img/02.png)
 
+Tone.js allows us to set and personalize further the sound of the Sampler object by using the set parameter: inside it you can specify options and values to be set such as Volume, Attack, Sustain, Release, detune, and other musical options that can be applied to the instrument.
+
+
+
 ## Tension graphic representation (canvas e specchietti con degree e pattern)
 
 
