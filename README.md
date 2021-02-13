@@ -11,9 +11,11 @@ The goal of our project is to analyze a chord sequence, given by the user throug
 After these computations, the results of our analysis are graphically represented with dynamic visual effects while the chord progression is being played.
 
 ## Technologies used
-Our project is a web application completely developed using HTML, JS and CSS. We used HTML in order to define the static interface of the page, CSS to apply some style attributes to the page components and JS to render the dynamic components of the page and manage all the user interactions with the page.
+Our project is a web application completely developed using HTML, JS and CSS. We used HTML in order to define the static interface and structure of the page, CSS to apply some style attributes to the page components and JS to render the dynamic components of the page and manage all the user interactions with the page.
 
-In order to implement audio features, we used an external JS framework named Tone.js. It can be defined as a Web Audio framework for creating and manipulate dinamically sounds and music in a web page. Thanks to the high semplicity of the architecture of this framework, it is possible to create web based audio applications. On the high-level, Tone offers common DAW (digital audio workstation) features like a global transport for synchronizing and scheduling events as well as prebuilt synths and effects. Additionally, Tone provides high-performance building blocks to create your own synthesizers, effects, and complex control signals.
+In order to implement audio features, we used an external JS framework named Tone.js. It can be defined as a Web Audio framework for creating and manipulate dynamically sounds and music in a web page. Thanks to the high semplicity of this kind of framework-architecture, it is possible to create web-based audio applications. On the high-level, Tone offers common DAW (digital audio workstation) features like a global transport for synchronizing and scheduling events as well as prebuilt synths and effects. Additionally, Tone provides high-performance building blocks to create your own synthesizers, effects, and complex control signals.
+
+In particular, we made use of Tone.Sampler that allows to combine different samples in a single complex instrument.
 
 ## User interface
 

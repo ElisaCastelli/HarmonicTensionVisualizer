@@ -20,8 +20,8 @@ let analysisResults = new Array();
 let modelButton = false;
 let firstPlay = true;
 let scrollSpeed = 1;
-let timeIntervalMax =2700;
-let timeIntervalIncrement=25;
+let timeIntervalMax = 2700;
+let timeIntervalIncrement = 25;
 let soundDuration = 2;
 
 
@@ -174,7 +174,7 @@ export function selectRoot() {
             let select = document.getElementById("select" + col);
             select.value = type;
             let button = document.getElementById("b" + idRoot);
-            button.textContent = note+type;
+            button.textContent = note + type;
             let selectableCells = getCellsToMakeSelectable(columnIndex, idRoot);
             if (selectableCells.length > 0) {
                 selectableCells.forEach(cell => {
@@ -387,13 +387,13 @@ function addNote(cell, idCell, columnNumber) {
     let note = findNoteByMatrixIndex(matrixIndex);
     let findRoot = findRootNoteByColumn(columnNumber);
     let rightColumn = maxColumns - 1 - finalProgression.findIndex(x => typeof x == 'undefined');
-    
+
     // condition to fill the columns in order
-    if ( findRootNoteByColumn(columnNumber) != undefined || columnNumber == (maxColumns-1) || columnNumber == rightColumn){
+    if (findRootNoteByColumn(columnNumber) != undefined || columnNumber == (maxColumns - 1) || columnNumber == rightColumn) {
 
         // autofill the previous column in fundamental position if there are still selectable notes
         if (columnNumber != (maxColumns - 1)) {
-            for (let columnIndex = maxColumns-1 ; columnIndex >= rightColumn ; columnIndex--) {
+            for (let columnIndex = maxColumns - 1; columnIndex >= rightColumn; columnIndex--) {
                 if (checkSelectableByColumn(columnIndex) != undefined && columnNumber != columnIndex) {
                     autoFill(columnIndex);
                 }
@@ -423,7 +423,7 @@ function addNote(cell, idCell, columnNumber) {
             let idCell = notes[index].id;
             let cell = document.getElementById(idCell);
             cell.classList.add("highlighted_column");
-            setTimeout( function() { cell.classList.remove("highlighted_column")} , 1000);
+            setTimeout(function() { cell.classList.remove("highlighted_column") }, 1000);
         }
     }
 }
@@ -495,21 +495,21 @@ function play() {
             notesArray.push(noteName + octave);
         }
         /** Div to visualize event */
-        if(analysisResults[maxColumns - 1 - columnPlayed].event!=""){
-            eventContainer.style.visibility='visible';
+        if (analysisResults[maxColumns - 1 - columnPlayed].event != "") {
+            eventContainer.style.visibility = 'visible';
             var text = analysisResults[maxColumns - 1 - columnPlayed].event;
-            eventContainer.textContent=text;
-        }else{
-            eventContainer.textContent="";
-            eventContainer.style.visibility='hidden';
+            eventContainer.textContent = text;
+        } else {
+            eventContainer.textContent = "";
+            eventContainer.style.visibility = 'hidden';
         }
         /** Div to visualize substitution */
-        if(analysisResults[maxColumns - 1 - columnPlayed].substitution!=""){
-            substitutionContainer.style.visibility='visible';
-            var text = "Sub: "+analysisResults[maxColumns - 1 - columnPlayed].substitution.toString();
-            substitutionContainer.textContent=text;
-        }else{
-            substitutionContainer.style.visibility='hidden';
+        if (analysisResults[maxColumns - 1 - columnPlayed].substitution != "") {
+            substitutionContainer.style.visibility = 'visible';
+            var text = "Sub: " + analysisResults[maxColumns - 1 - columnPlayed].substitution.toString();
+            substitutionContainer.textContent = text;
+        } else {
+            substitutionContainer.style.visibility = 'hidden';
             substitutionContainer.textContent = "";
         }
         /** Div to visualize pattern */
@@ -669,9 +669,9 @@ function createHeader() {
                 let chordType = this.value;
                 removeSelectable(columnNumber);
                 removeSelectedExceptRoot(columnNumber);
-                if (chordType == "default"){
+                if (chordType == "default") {
                     clearRootText(columnNumber);
-                } 
+                }
                 if (chordType != "default") {
                     chordTypeSelected(columnNumber, chordType);
                 }
@@ -759,15 +759,15 @@ resetButton.onclick = function() {
         const bar = document.getElementById("scrollingBar");
         bar.style.left = '93px';
         const progressionInfo = document.getElementById('progressionInfo');
-        progressionInfo.textContent="";
-        progressionInfo.style.visibility='hidden';
+        progressionInfo.textContent = "";
+        progressionInfo.style.visibility = 'hidden';
         const eventContainer = document.getElementById('eventContainer');
-        eventContainer.textContent="";
-        eventContainer.style.visibility='hidden';
+        eventContainer.textContent = "";
+        eventContainer.style.visibility = 'hidden';
         const substitutionContainer = document.getElementById('subInfo');
-        substitutionContainer.style.visibility="hidden";
+        substitutionContainer.style.visibility = "hidden";
         const stopButton = document.getElementById('stopButton');
-        stopButton.style.color='rgb(63, 132, 87)';
+        stopButton.style.color = 'rgb(63, 132, 87)';
         tensionChange(0);
     }
 }
@@ -782,33 +782,33 @@ downloadButton.onclick = function() {
     if (!emptyMatrix()) {
         const nameInput = document.getElementById("fileName");
         let fileName = nameInput.value;
-        if(fileName!="" && fileName!="Name required!"){
-            fileName = fileName +".txt";
+        if (fileName != "" && fileName != "Name required!") {
+            fileName = fileName + ".txt";
             let text = matrixToString(finalProgression, maxColumns, cellsNumber);
             downloadFile(fileName, text);
-        }else{
-            nameInput.placeholder="Name required!";
+        } else {
+            nameInput.placeholder = "Name required!";
         }
     }
 }
 
-playFasterButton.onclick = function(){
-    if(!modelButton){
-        if(scrollSpeed==1){
-            scrollSpeed=2;
-            timeIntervalMax=1590;
-            timeIntervalIncrement=30;
+playFasterButton.onclick = function() {
+    if (!modelButton) {
+        if (scrollSpeed == 1) {
+            scrollSpeed = 2;
+            timeIntervalMax = 1590;
+            timeIntervalIncrement = 30;
             soundDuration = 1.5;
-            playFasterButton.style.color='rgb(245, 125, 27)';
-        }else{
-            scrollSpeed=1;
-            timeIntervalMax=2700;
-            timeIntervalIncrement=25;
-            soundDuration=2;
-            playFasterButton.style.color='rgb(63, 132, 87)';
+            playFasterButton.style.color = 'rgb(245, 125, 27)';
+        } else {
+            scrollSpeed = 1;
+            timeIntervalMax = 2700;
+            timeIntervalIncrement = 25;
+            soundDuration = 2;
+            playFasterButton.style.color = 'rgb(63, 132, 87)';
         }
     }
-    
+
 }
 
 muteButton.onclick = function() {
@@ -852,7 +852,7 @@ function firstRender() {
     pianoContainer.appendChild(bar);
     playButton.onclick = function() {
         if (!modelButton && !emptyMatrix()) {
-            playButton.style.color='rgb(245, 125, 27)';
+            playButton.style.color = 'rgb(245, 125, 27)';
             const tableScroll = document.getElementById("table-scroll");
             modelButton = true;
             divChordPlayed.style.visibility = 'visible';
@@ -860,8 +860,8 @@ function firstRender() {
             if (firstPlay) {
                 lastBarPosition = '93px';
                 lastTableScrollPosition = 0;
-            }else{
-                stopButton.style.color='rgb(63, 132, 87)';
+            } else {
+                stopButton.style.color = 'rgb(63, 132, 87)';
             }
             tableScroll.style.overflowX = 'hidden';
             if (finalProgression.length == maxColumns) {
@@ -875,8 +875,8 @@ function firstRender() {
             analysisResults = harmonyAnalysis(finalProgression);
             scrollInterval = setInterval(playAndScroll, 25);
             stopButton.onclick = function() {
-                playButton.style.color='rgb(63, 132, 87)';
-                stopButton.style.color='rgb(245, 125, 27)';
+                playButton.style.color = 'rgb(63, 132, 87)';
+                stopButton.style.color = 'rgb(245, 125, 27)';
                 lastBarPosition = bar.style.left;
                 lastTableScrollPosition = tableScroll.style.scrollLeft;
                 modelButton = false;
@@ -902,8 +902,8 @@ function firstRender() {
             clearInterval(scrollInterval);
             tensionChange(0);
             firstPlay = true;
-            stopButton.style.color='rgb(63, 132, 87)';
-            playButton.style.color='rgb(63, 132, 87)';
+            stopButton.style.color = 'rgb(63, 132, 87)';
+            playButton.style.color = 'rgb(63, 132, 87)';
         }
         // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
     matrixConstructor(cellsNumber, maxColumns, numOctaves, numOctavesMin, key_color);
