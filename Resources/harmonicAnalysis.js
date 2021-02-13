@@ -251,6 +251,7 @@ function findKey(progression){
 			// check that the chord is inside the scale "tonic.note modes[scale]"
 			for (let chord = 0; chord < progression.length; chord++) {
 				// evaluate interval with current tonic hypothesis
+				console.log("heeee", progression[chord])
 				curr_interval = progression[chord].getTonicInterval(tonic);
 				
 				// check if the interval between the two chords is contained in the scale
@@ -308,11 +309,10 @@ function findKey(progression){
 	// select the key/keys with highest .points value
 	let concurrent_keys = [];
 	
-	for (let i = 0; i < accepted_keys.length; i++) {
-		if (accepted_keys[0].points == accepted_keys[1].points)
-			concurrent_keys.push(accepted_keys.shift());
-		else
-			break;
+	for (let i = 0; i < accepted_keys.length - 1; i++) {
+		concurrent_keys.push(accepted_keys[i]);
+		if (typeof accepted_keys[i + 1].points != undefined && ! accepted_keys[i].points == accepted_keys[i + 1].points)
+			break
 	}
 	concurrent_keys.push(accepted_keys.shift());
 	return concurrent_keys;
@@ -482,9 +482,10 @@ function findSubs(progression, priority_keys, chord, index){
 			return chord;
 		}
 		// test with have you met miss jones: if it works there, it works
-		else if (tempChord.type == "7") {
+		else if (tempChord.type == "7" && (index + 1) < progression.length) {
 			// search for secondary dominant
 			let sub = tempChord.substitution;
+			console.log("heueld", progression[index + 1])
 			tempChord = findSecondaryDom(new Chord(tempChord.note, tempChord.type), progression[index + 1])
 			if (tempChord) {
 				console.log("like have you met miss jones", tempChord);
