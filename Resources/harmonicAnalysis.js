@@ -475,7 +475,6 @@ function findSubs(progression, priority_keys, chord, index){
 			console.log("substitution of modal interchange", tempChord2)
 			chord = tempChord2;
 			chord.surprise = surprise;
-			/*priority_keys.push(tempKeys[0]);*/
 			return chord;
 		}
 		// test with have you met miss jones: if it works there, it works
