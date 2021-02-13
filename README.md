@@ -60,7 +60,7 @@ At the top of the page the user can find a list of buttons, each one with a spec
 ## Surge
 
 Our project is available on Surge, a free platform that allows you to publish online you web site for free.  
-Try it ![here](http://harmonytensionvisualizer.surge.sh)!
+Try it [here](http://harmonytensionvisualizer.surge.sh)!
 
 ## Video demo
 
