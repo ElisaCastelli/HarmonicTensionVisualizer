@@ -61,6 +61,7 @@ Despite its extreme-intuitivity structure and organization, Tone.js allows to cr
 Once installed Tone.js (or imported it inside the js file in which you want to use it), it is possibile to create sounds by using synthetizer(FM or AM) by code as follows:
 ![alt text](./img/01.png)
 
+
 ## Tension graphic representation (canvas e specchietti con degree e pattern)
 
 
