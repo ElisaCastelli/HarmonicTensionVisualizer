@@ -16,6 +16,8 @@ Our project is a web application completely developed using HTML, JS and CSS. We
 
 ## User interface
 
+![alt text] (./img/example.png)
+
 The structure of the project can be divided in three main parts:
 
 -	piano-roll
