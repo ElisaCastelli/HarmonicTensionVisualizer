@@ -15,7 +15,7 @@ Our project is a web application completely developed using HTML, JS and CSS. We
 
 In order to implement audio features, we used an external JS framework named Tone.js. It can be defined as a Web Audio framework for creating and manipulate dynamically sounds and music in a web page. Thanks to the high semplicity of this kind of framework-architecture, it is possible to create web-based audio applications. On the high-level, Tone offers common DAW (digital audio workstation) features like a global transport for synchronizing and scheduling events as well as prebuilt synths and effects. Additionally, Tone provides high-performance building blocks to create your own synthesizers, effects, and complex control signals.
 
-In particular, we made use of Tone.Sampler that allows to combine different samples in a single complex instrument.
+In particular, we made use of Tone.Sampler that allows to combine different samples into a single more complex instrument (a piano in our case).
 
 ## User interface
 
