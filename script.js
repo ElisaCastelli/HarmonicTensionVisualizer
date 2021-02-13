@@ -454,8 +454,10 @@ function resetSelect(columnNumber) {
 /** Function to alternate the recalling of scroll() and play() functions */
 function playAndScroll() {
     scroll();
+    let maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
+    let progressionAnalyzed =  finalProgression.slice(0, maxIndex);
     if (timeInterval % timeIntervalMax == 0) {
-        if ((maxColumns - columnPlayed - 1) < finalProgression.length) {
+        if ((maxColumns - columnPlayed - 1) < progressionAnalyzed.length) {
             play();
             tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
         } else {
@@ -713,7 +715,6 @@ function createBar() {
     return bar;
 }
 
-
 /** ONCLICK FUNCTIONS */
 
 /** onclick associated with the div that contains the title to reload the page */
@@ -888,11 +889,12 @@ function firstRender() {
                 stopButton.style.color = 'rgb(63, 132, 87)';
             }
             tableScroll.style.overflowX = 'hidden';
-            if (finalProgression.length == maxColumns) {
+            /*if (finalProgression.length == maxColumns) {
                 maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
             } else {
                 maxIndex = finalProgression.length;
-            }
+            }*/
+            maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
             bar.style.left = lastBarPosition;
             tableBackscroll(lastTableScrollPosition);
             let progressionToAnalyze = finalProgression.slice(0, maxIndex);
