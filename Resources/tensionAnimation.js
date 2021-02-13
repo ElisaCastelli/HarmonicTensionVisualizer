@@ -46,7 +46,7 @@ export function waveColor(surprise , tension , maxTension) {
   let color = "rgb(" + r + ", " + g + ", " + b + ")"
   ctx.strokeStyle = color; */ 
 
-  if (surprise == 0) {
+  if (surprise == "") {
     ctx.strokeStyle = "white"
   } else if (surprise == "A") {
     ctx.strokeStyle = "blue"
