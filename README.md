@@ -13,7 +13,7 @@ After these computations, the results of our analysis are graphically represente
 ## Technologies used
 Our project is a web application completely developed using HTML, JS and CSS. We used HTML in order to define the static interface of the page, CSS to apply some style attributes to the page components and JS to render the dynamic components of the page and manage all the user interactions with the page.
 
-(Sampler da aggiungere come tecnologia usata?)
+In order to implement audio features, we used an external JS framework named Tone.js
 
 ## User interface
 
