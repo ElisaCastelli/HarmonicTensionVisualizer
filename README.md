@@ -21,11 +21,12 @@ In particular, we made use of Tone.Sampler that allows to combine different samp
 
 ![alt text](./img/example.png)
 
-The structure of the project can be divided in three main parts:
+The structure of the project can be divided into four main parts:
 
 -	piano-roll
 -	button bar 
 -	tension graphic representation
+- readme
 
 ## Piano-roll
 
@@ -54,6 +55,10 @@ At the top of the page the user can find a list of buttons, each one with a spec
 -	Upload: to upload a .txt file you have on your computer that contains a progression you saved
 
 ## Sampler
+
+As previously mentioned, all the audio options and features are realized with Tone.Js. 
+Despite its extreme intuitivity structure and organization, Tone.js allows to create, develop and then process a wide range of different sounds, each one of them can be affected by 
+a some effects. 
 
 
 ## Tension graphic representation (canvas e specchietti con degree e pattern)
