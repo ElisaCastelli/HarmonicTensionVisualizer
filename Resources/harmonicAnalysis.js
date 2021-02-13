@@ -318,8 +318,7 @@ function findKey(progression){
 	return concurrent_keys;
 }
 
-// needs to distinguish between triad and quadriad
-// maybe quadriads add a +1 to tension?? maybe it's not that simple
+/**consts containing tensions and patterns*/
 const diatonicFunction = [{
 	name: "tonic",
 	degrees: [/*"I",*/ "III", "VI"],
@@ -336,6 +335,11 @@ const diatonicFunction = [{
 	triad_tension: 7,
 	quadriad_tension: 9
 }];
+
+const tritoneTensions = {
+	chords: ["7", "dim", "halfdim", "dim7"],
+	tension: [8, 9, 7, 10]
+}
 
 const progPatterns = [{
 	name: "dominant resolution",
@@ -604,32 +608,41 @@ export function evaluateTension(progression){
 		
 	}
 	
-	console.log(progression_plus);
+	console.log("progression analyzed: ", progression_plus);
 	
 	/** TENSION PROGRESSION */
 	
 	// TODO: devi gestire tutte le sostituzioni!!!!!!! controlla se c'è, nel caso aggiungi tot intensità oltre a quella della sua funzione, ma come?
 	
 	/** assign tension based on functions*/
-	
+	let temp_index;
 	for (let i = 0; i < progression_plus.length; i++) {
 		if (progression_plus[i].degree_coherent && progression_plus[i].type_coherent) {
-			// tension of first degree
+			/** tension of first degree: minimum */
 			if ((progression_plus[i].degree == "I"))
 				progression_plus[i].tension = triads.includes(progression_plus[i].type) ? 1 : 2;
-			// only for major scale, diatonic substitutions
+			/** only for major scale, tension based on diatonic substitutions */
 			else if (progression_plus[i].curr_key.name == modes[0].name) {
 				for (let j = 0; j < diatonicFunction.length; j++)
 					progression_plus[i].tension = 
 						triads.includes(progression_plus[i].type) ? diatonicFunction[j].triad_tension : diatonicFunction[j].quadriad_tension;
 			}
-			// for other scales, every chord that is not tonic, there is a little constant tension
+			/** for other scales, every chord that is not tonic has a little constant tension */
 			else if (progression_plus[i].degree != "I")
 				progression_plus[i].tension = 3;
 		}
 		// assign high tension to chords that contain tritone
-		else if (["7", "dim", "halfdim", "dim7"].includes(progression_plus[i].type))
-			progression_plus[i].tension = 7;
+		else if (tritoneTensions.chords.includes(progression_plus[i].type)){
+			if (progression_plus[i].substitution != "") {
+				temp_index = tritoneTensions.chords.indexOf(progression_plus[i].substitution.type);
+				if (temp_index >= 0)
+					progression_plus[i].tension = tritoneTensions.tension[temp_index];
+			}
+			else {
+				temp_index = tritoneTensions.chords.indexOf(progression_plus[i].type);
+				progression_plus[i].tension = tritoneTensions.tension[temp_index];
+			}
+		}
 	}
 	
 	
