@@ -782,18 +782,19 @@ downloadButton.onclick = function() {
     if (!emptyMatrix()) {
         const nameInput = document.getElementById("fileName");
         let fileName = nameInput.value;
-        if (fileName != "" && fileName != "Name required!") {
+        if (fileName != "" && fileName != "  Name required!") {
             fileName = fileName + ".txt";
             let text = matrixToString(finalProgression, maxColumns, cellsNumber);
             downloadFile(fileName, text);
         } else {
-            nameInput.placeholder = "Name required!";
+            nameInput.placeholder = "  Name required!";
         }
     }
 }
 
 playFasterButton.onclick = function() {
-    if (!modelButton) {
+    const bar =document.getElementById("scrollingBar");
+    if (!modelButton && (bar.style.left == "93px" || bar.style.left == 0)) {
         if (scrollSpeed == 1) {
             scrollSpeed = 2;
             timeIntervalMax = 1590;
@@ -902,6 +903,14 @@ function firstRender() {
             clearInterval(scrollInterval);
             tensionChange(0);
             firstPlay = true;
+            const progressionInfo = document.getElementById('progressionInfo');
+            progressionInfo.textContent = "";
+            progressionInfo.style.visibility = 'hidden';
+            const eventContainer = document.getElementById('eventContainer');
+            eventContainer.textContent = "";
+            eventContainer.style.visibility = 'hidden';
+            const substitutionContainer = document.getElementById('subInfo');
+            substitutionContainer.style.visibility = "hidden";
             stopButton.style.color = 'rgb(63, 132, 87)';
             playButton.style.color = 'rgb(63, 132, 87)';
         }
