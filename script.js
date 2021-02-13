@@ -879,6 +879,12 @@ function firstRender() {
     let scrollInterval;
     pianoContainer.appendChild(bar);
     playButton.onclick = function() {
+        // autofill last column if it's not complete
+        let rightColumn = maxColumns - 1 - finalProgression.findIndex(x => typeof x == 'undefined');
+        if (checkSelectableByColumn(rightColumn + 1) != undefined) {
+            autoFill(rightColumn + 1)
+        }
+        
         if (!modelButton && !emptyMatrix()) {
             playButton.style.color = 'rgb(245, 125, 27)';
             const tableScroll = document.getElementById("table-scroll");
