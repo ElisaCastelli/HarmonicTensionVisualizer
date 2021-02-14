@@ -454,7 +454,6 @@ function resetSelect(columnNumber) {
 
 /** Function to alternate the recalling of scroll() and play() functions */
 function playAndScroll() {
-    scroll();
     let maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
     let progressionAnalyzed = finalProgression.slice(0, maxIndex);
     if (timeInterval % timeIntervalMax == 0) {
@@ -467,6 +466,8 @@ function playAndScroll() {
             stopButton.onclick();
             timeInterval -= timeIntervalIncrement;
         }
+    }else{
+        scroll();
     }
     timeInterval += timeIntervalIncrement;
 }
