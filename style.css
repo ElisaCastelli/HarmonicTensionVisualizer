@@ -506,6 +506,9 @@
                 padding-left: 1%;
                 padding-right: 1%;
                 margin: 10px;
+                border: 2px solid #dfc155;
+                border-radius: 10px;
+                box-shadow: black -2px 3px 6px -1px;
             }
             
             #GitHubIcon {

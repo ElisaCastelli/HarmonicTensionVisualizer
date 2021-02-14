@@ -815,11 +815,11 @@ function buildReadme() {
     {
         const testo = "<h1>HOW TO USE IT:</h1>In order to analyze a chord progression you have to fill the piano roll with the chords that compose it. " +
             "Starting from the first column, select the tonic note clicking on the corresponding cell and, using the drop-down"+
-            " menu options, choose the type of chord you want.<br>"+
+            " menu options, choose the type of chord you want.<br><br>"+
             "Then, you will see some cells becoming orange: they represent the other selectable notes of the chord. "+
-            "You can choose to select them manually, or you can just move on to the next chord, while the program selects them automatically.<br>"+
-            "After filling the piano roll with all the chords you want, you can use \"play\", \"play faster\", \"stop\" and \"rewind\" buttons on the top of the page to listen to your progression and visualize the analysis the program computed on it. <br>"+
-            "You can download your progression, by clicking on the top right of the page on the \"download\" button."+
+            "You can choose to select them manually, or you can just move on to the next chord, while the program selects them automatically.<br><br>"+
+            "After filling the piano roll with all the chords you want, you can use \"play\", \"play faster\", \"pause\" and \"rewind\" buttons on the top of the page to listen to your progression and visualize the analysis the program computed on it.<br><br>"+
+            "You can download your progression, by clicking on the top right of the page on the \"download\" button. "+
             "In order to load a saved progression, click on the \"folder\" button to upload it from your PC.<br><br>"+
             "For more information about the project, check it out on Github:";
 
