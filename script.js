@@ -2,7 +2,8 @@
 
 import { type, allNotes1D, chordBuilder } from './Resources/chordBuilder.js';
 import { tensionChange, start, waveColor } from './Resources/tensionAnimation.js';
-import { harmonyAnalysis, Chord, ChordPlus, Key } from './Resources/harmonicAnalysis.js';
+import { harmonyAnalysis } from './Resources/harmonicAnalysis.js';
+import { Chord, ChordPlus, Key } from './Resources/harmonicAnalysisFunctions.js';
 import { uploadFile, downloadFile } from './Resources/readFile.js';
 import { Note, matrixConstructor, matrixToString, emptyMatrix, getIndexSelectedCell, changeSelection, findSameNotes, setSelectableCell, getIdCell, findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord, getSelectedByColumnExceptRoot, getSelectedAndSelectable, findNoteByMatrixIndex, getColumnNotes } from './Resources/matrix.js';
 
