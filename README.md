@@ -89,11 +89,18 @@ Additionally, the results of the harmonic analysis of the progression such as th
 
 
 ## Harmonic Analysis
+First of all, this project does not intend to analyze faultlessly every possible chord progression given by the user. 
+Instead, we tried to build a versatile algorithm that works well with progressions with a small amount of "harmonic alterations" (that will be discussed below).
+The main function, contained in `harmonicAnalysis.js`, is executed every time the PLAY button is clicked. It can be dividen in 4 parts:
+### Phase 1
+### Phase 2
+### Phase 3
+### Phase 4
 
 
 ## Surge
 
-Our project is available on Surge, a free platform that allows you to publish online you web site for free.  
+Our project is online on Surge, a free platform that allows you to publish online you web site for free.  
 Try it [here](http://harmonytensionvisualizer.surge.sh)!
 
 ## Video demo
