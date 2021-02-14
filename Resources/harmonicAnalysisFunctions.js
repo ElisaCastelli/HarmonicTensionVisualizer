@@ -133,6 +133,10 @@ Key.prototype.toString = function(){
 	return this.tonic + " " + this.scale;
 }
 
+Key.prototype.equalTo = function(other){
+	return this.tonic == other.tonic && this.scale == other.scale;
+}
+
 /** support function, used to evaluate sum of Array values with reduce()*/
 function arraySum(total, num) {
 	return total + num;
@@ -365,7 +369,7 @@ const progPatterns = [{
 }];
 
 /** finds secondary dominant resolution*/
-function findSecondaryDom(chord1, chord2){
+export function findSecondaryDom(chord1, chord2){
 	let tempProg = [chord1, chord2];
 	let tempKeys = findKey(tempProg);
 	for (let i = 0; i < tempKeys.length; i++) {
@@ -377,6 +381,7 @@ function findSecondaryDom(chord1, chord2){
 	}
 	return false;
 }
+
 
 /** finds if a chord is borrowed from a parallel mode (modal interchange) */
 export function findModalInterchange(progression, priority_keys, chord, index){
@@ -484,6 +489,7 @@ export function findSubs(progression, priority_keys, chord, index){
 			chord = tempChord;
 			chord.surprise = surprise;
 			chord.substitution = sub;
+			chord.curr_pattern = "dominant resolution";
 			return chord;
 		}
 	}
@@ -496,18 +502,22 @@ export function findSubs(progression, priority_keys, chord, index){
 /** check if from this point a new key is possible */
 export function findChangeKey(progression, priority_keys, progression_plus, index){
 	let surprise = "C";
+	let curr_key = progression_plus[index].curr_key;
 	let tempKeys = findKey(progression.slice(index, progression.length));
 	console.log("temp keys:", tempKeys);
 	// in case of multiple keys, check if one of them is inside priority_keys
 	for (let k = 0; k < tempKeys.length; k++) {
 		if (priority_keys.includes(tempKeys[k])) {
 			tempKeys[0] = tempKeys[k];
-			break;
+		}
+		// if one possible key is the current one, there is no change of key
+		if (tempKeys[k].equalTo(curr_key)) {
+			return false;
 		}
 	}
 	let temp_deg_progression = getProgDegrees(progression.slice(index, progression.length), tempKeys[0]);
 
-	if (tempKeys[0].points > 1) {
+	if (tempKeys[0].points > 0) {
 		for (let j = 0; j < progression.length - index; j++) {
 			progression_plus[index + j] = temp_deg_progression[j];
 		}
