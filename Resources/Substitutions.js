@@ -1,4 +1,4 @@
-import { Chord, ChordPlus } from './harmonyAnalysis_functions.js';
+import { Chord, ChordPlus } from './harmonicAnalysis_functions.js';
 import { allNotes1D } from './chordBuilder.js';
 
 // permette di ritrovare l'accordo originale della sostituzione di dominante diminuita

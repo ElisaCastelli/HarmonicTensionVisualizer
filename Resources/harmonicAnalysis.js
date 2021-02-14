@@ -1,4 +1,4 @@
-import { findKey, modes, getProgDegrees, findSubs, findModalInterchange, findChangeKey, evaluateTension } from './harmonyAnalysis_functions';
+import { findKey, modes, getProgDegrees, findSubs, findModalInterchange, findChangeKey, evaluateTension } from './harmonicAnalysis_functions';
 
 /** OVERVIEW:
  *
@@ -120,9 +120,5 @@ export function harmonyAnalysis(progression) {
 
 // NOTES
 // - raggruppare pattern per scala?
-// - diatonicFunction solo controllo per scala maggiore	FATTO
 // - harmony analysis cambia pattern/sostituzioni considerate in base a a scala
-// - pattern cambiano tensione in base a triade o quadriade (II V I triade è meno teso della corrispondente quadriade)
-// - cerca sostituzioni e interscambi modali FATTO
-// - se arrivo da un 2, il 5 è potenziato di tensione	FATTO
 // - dovrei fare modo di non controllare i gradi assoluti, ma solo il rapporto tra toniche IMPORTANTE
