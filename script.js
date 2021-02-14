@@ -522,7 +522,7 @@ function play() {
     }
     notesArray = [];
     columnPlayed--;
-    sampler = new Tone.Sampler({
+    /*sampler = new Tone.Sampler({
         "C2": "./piano/C2.mp3",
         "C#2": "./piano/Cs2.mp3",
         "D2": "./piano/D2.mp3",
@@ -561,7 +561,7 @@ function play() {
         "B4": "./piano/B4.mp3",
     }).set({
         "volume": Volume,
-    }).toMaster();
+    }).toMaster();*/
 }
 
 /** VIEW */
