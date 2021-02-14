@@ -344,7 +344,7 @@ function scroll() {
     if (barRightPos < containerWidth / 2) {
         bar.style.left = (barLeftPos + scrollSpeed * direction) + 'px';
     } else if (tableScroll.scrollWidth - tableScroll.scrollLeft > containerWidth) {
-        tableScroll.scrollLeft += scrollSpeed * direction;
+        tableScroll.scrollLeft = tabelScroll.scrollLeft + scrollSpeed * direction;
     } else if (barRightPos < tableScroll.offsetWidth) {
         bar.style.left = (barLeftPos + scrollSpeed * direction) + 'px';
     }
@@ -767,6 +767,12 @@ resetButton.onclick = function() {
 /** onclick associated with the uploadButton to read a file */
 uploadButton.onchange = function() {
     uploadFile(fileInput.files[0], maxColumns);
+    fileInput.files[0].value = null;
+}
+
+/** Button to reset input onchange */
+uploadButton.onclick = function(){
+    this.value = "";
 }
 
 /** onclick associated with the downloadButton to download a file that contains the chord progression you put inside the pianoroll */
@@ -911,7 +917,7 @@ function firstRender() {
             tableBackscroll(lastTableScrollPosition);
             let progressionToAnalyze = finalProgression.slice(0, maxIndex);
             analysisResults = harmonyAnalysis(progressionToAnalyze);
-            scrollInterval = setInterval(playAndScroll, 25);
+            scrollInterval = setInterval(playAndScroll, timeIntervalIncrement);
             stopButton.onclick = function() {
                 playButton.style.color = 'rgb(63, 132, 87)';
                 stopButton.style.color = 'rgb(245, 125, 27)';
