@@ -46,6 +46,7 @@ export function harmonyAnalysis(progression) {
 		if (!(progression_plus[i].type_coherent && progression_plus[i].degree_coherent)) {
 
 			if (progression_plus[i].type == "7") {
+				
 				/** OPTION D): SECONDARY DOMINANT */ 
 				if (i + 1 < progression_plus.length) {
 					temp = findSecondaryDom(progression[i], progression[i + 1]);
@@ -60,7 +61,6 @@ export function harmonyAnalysis(progression) {
 						continue;
 					}
 				}
-				// yeah funziona, ora manca: 
 				
 				/** OPTION A): CHORD SUBSTITUTION*/
 				temp = findSubs(progression, priority_keys, progression_plus[i], i);
@@ -77,13 +77,6 @@ export function harmonyAnalysis(progression) {
 				temp = findModalInterchange(progression, priority_keys, progression_plus[i], i);
 				if (temp) {
 					progression_plus[i] = temp;
-					priority_keys.push(temp.curr_key);
-					continue;
-				}
-				/** OPTION C): CHANGE OF SCALE */
-				temp = findChangeKey(progression, priority_keys, progression_plus, i);
-				if (temp) {
-					progression_plus = temp;
 					priority_keys.push(temp.curr_key);
 					continue;
 				}
@@ -105,14 +98,16 @@ export function harmonyAnalysis(progression) {
 					priority_keys.push(temp.curr_key);
 					continue;
 				}
-				/** OPTION C): CHANGE OF SCALE */
-				temp = findChangeKey(progression, priority_keys, progression_plus, i);
-				if (temp) {
-					progression_plus = temp;
-					priority_keys.push(temp.curr_key);
-					continue;
-				}
+				
 			}
+			/** OPTION C): CHANGE OF SCALE */
+			temp = findChangeKey(progression, priority_keys, progression_plus, i);
+			if (temp) {
+				progression_plus = temp;
+				priority_keys.push(temp.curr_key);
+				continue;
+			}
+
 			/** OPTION E): GENERAL CHORD OUT OF KEY*/
 			progression_plus[i].surprise = "D";
 			progression_plus[i].event = "out of key";
