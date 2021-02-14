@@ -500,17 +500,17 @@
             }
             
             .readStyle {
-                width: 98%;
+                width: 96.5%;
                 position: absolute;
                 top: 102%;
                 left: 1%;
                 height: 48%;
                 background: rgb(83, 98, 105);
                 border-radius: 10px;
-                border: 1px dotted rgb(223, 193, 85);
+                border: 2px dotted rgb(223, 193, 85);
                 bottom: 10px;
                 font-size: large;
-                text-align: initial;
+                padding: 0 10px 0 10px;
             }
             
             #GitHubIcon {
