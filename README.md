@@ -28,15 +28,15 @@ The structure of the project can be divided into four main parts:
 -	tension graphic representation
 -   readme
 
-## Piano-roll
+## Piano roll
 
 ![alt text](./img/pianoroll.png)
 
-(This is a dynamic component added when the page is loaded for the first time. It consists of a table of buttons, each one corresponding to a note distributed over 3 octaves, from C2 to B4.)
-Users can enter the chord sequence to analyze using a simple piano-roll interface in a few passages:
+This is a dynamic component added when the page is loaded for the first time. It consists of a table of buttons, each one corresponding to a note distributed over 3 octaves, from C2 to B4.
+Users can enter the chord sequence to analyze using this simple piano-roll interface in a few passages:
 -	select the tonic note of the chord
 -	select the type of the chord: triads(minor, major, diminished) or quadriad (major7, minor7, 7, diminished, half diminished)
--	complete the chord manually choosing between the possible notes selectable shown graphically or click the next tonic note in the next column to complete the previous chord automatically in its fundamental position (collegamento con chordBuilder.js)
+-	complete the chord manually choosing between the possible notes selectable shown graphically or click the next tonic note in the next column to complete the previous chord automatically in its fundamental position
 
 ## Button bar
 
@@ -45,6 +45,7 @@ Users can enter the chord sequence to analyze using a simple piano-roll interfac
 At the top of the page the user can find a list of buttons, each one with a specific function:
 -	Info: brings the user at the bottom of the page where there is a brief description of the project
 -	Play: begins the reproduction of the chord sequence, the scrolling of the piano-roll, the analysis of the harmonic tension and the visualization of the computation results
+- Play faster: doubles the reproduction speed
 -	Pause: stops the reproduction
 -	Rewind: brings back the reproduction at the starting point
 -	Volume mute: mutes the volume 
@@ -89,11 +90,18 @@ Additionally, the results of the harmonic analysis of the progression such as th
 
 
 ## Harmonic Analysis
+First of all, this project does not intend to analyze faultlessly every possible chord progression given by the user. 
+Instead, we tried to build a versatile algorithm that works well with progressions with a small amount of "harmonic alterations" (that will be discussed below).
+The main function, contained in `harmonicAnalysis.js`, is executed every time the PLAY button is clicked. It can be dividen in 4 parts:
+### Phase 1
+### Phase 2
+### Phase 3
+### Phase 4
 
 
 ## Surge
 
-Our project is available on Surge, a free platform that allows you to publish online you web site for free.  
+Our project is online on Surge, a free platform that allows you to publish online your web site for free.  
 Try it [here](http://harmonytensionvisualizer.surge.sh)!
 
 ## Video demo

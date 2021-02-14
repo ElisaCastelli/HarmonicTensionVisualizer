@@ -459,7 +459,6 @@ function playAndScroll() {
         if ((maxColumns - columnPlayed - 1) < progressionAnalyzed.length) {
             play();
             tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
-            waveColor(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].surprise);
         } else {
             const stopButton = document.getElementById("stopButton");
             stopButton.onclick();
@@ -474,12 +473,16 @@ function playAndScroll() {
 function play() {
     const createchordPlayed = document.createElement("div");
     createchordPlayed.setAttribute("id", "chordPlayed");
+    createchordPlayed.setAttribute("id", "eventContainer");
     const createeventContainer = document.createElement("div");
     createeventContainer.setAttribute("id", "eventContainer");
+    createeventContainer.classList.add("info_divs")
     const createsubstitutionContainer = document.createElement("div");
     createsubstitutionContainer.setAttribute("id", "substitutionContainer");
+    createsubstitutionContainer.classList.add("info_divs")
     const createprogressionInfo = document.createElement("div");
     createprogressionInfo.setAttribute("id", "progressionInfo");
+    createprogressionInfo.classList.add("info_divs")
     const info = document.getElementById("info");
     var degree = 'Degree: ' + analysisResults[maxColumns - 1 - columnPlayed].degree;
 
@@ -759,7 +762,7 @@ resetButton.onclick = function() {
             info.removeChild(eventContainer);
         }
         //eventContainer.style.visibility = 'hidden';
-        const substitutionContainer = document.getElementById('subInfo');
+        const substitutionContainer = document.getElementById('substitutionContainer');
         if ( substitutionContainer != null) {
             substitutionContainer.textContent = "";
             info.removeChild(substitutionContainer);
@@ -768,14 +771,13 @@ resetButton.onclick = function() {
         const stopButton = document.getElementById('stopButton');
         stopButton.style.color = 'rgb(63, 132, 87)';
         tensionChange(0);
-        waveColor(0);
     }
 }
 
 /** onclick associated with the uploadButton to read a file */
 uploadButton.onchange = function() {
     uploadFile(fileInput.files[0], maxColumns);
-    fileInput.files[0].value = null;
+    fileInput.value = null;
 }
 
 /** Button to reset input onchange */
@@ -902,13 +904,13 @@ function buildReadme() {
 function firstRender() {
     start;
     tensionChange(0);
-    waveColor(0);
     const pianoContainer = document.getElementById("output_block");
     const playButton = document.getElementById("playButton");
     const stopButton = document.getElementById("stopButton");
     //const divChordPlayed = document.getElementById("chordPlayed");
     const createchordPlayed = document.createElement("div");
     createchordPlayed.setAttribute("id", "chordPlayed");
+    createchordPlayed.classList.add("info_divs")
     const info = document.getElementById("info");
     let pianoRollTable = createPianoRoll();
     pianoContainer.appendChild(pianoRollTable);
@@ -954,7 +956,6 @@ function firstRender() {
                 tableScroll.style.overflowX = 'auto';
                 clearInterval(scrollInterval);
                 tensionChange(0);
-                waveColor(0);
             }
         };
     }
@@ -976,7 +977,6 @@ function firstRender() {
             timeInterval = 0;
             clearInterval(scrollInterval);
             tensionChange(0);
-            waveColor(0);
             firstPlay = true;
             const progressionInfo = document.getElementById('progressionInfo');
             if (progressionInfo != null){
@@ -990,11 +990,10 @@ function firstRender() {
                 info.removeChild(eventContainer);
             }
             //eventContainer.style.visibility = 'hidden';
-            const substitutionContainer = document.getElementById('subInfo');
+            const substitutionContainer = document.getElementById('substitutionContainer');
             if (substitutionContainer != null) {
                 substitutionContainer.textContent = "";
                 info.removeChild(substitutionContainer);
-
             }
             //substitutionContainer.style.visibility = "hidden";
             stopButton.style.color = 'rgb(63, 132, 87)';
