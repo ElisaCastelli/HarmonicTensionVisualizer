@@ -60,6 +60,7 @@ export function harmonyAnalysis(progression) {
 						continue;
 					}
 				}
+				// yeah funziona, ora manca: 
 				
 				/** OPTION A): CHORD SUBSTITUTION*/
 				temp = findSubs(progression, priority_keys, progression_plus[i], i);
