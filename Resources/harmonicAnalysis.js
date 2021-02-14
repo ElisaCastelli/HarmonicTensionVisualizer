@@ -1,8 +1,5 @@
 import { findKey, modes, getProgDegrees, findSubs, findSecondaryDom, findModalInterchange, findChangeKey, evaluateTension } from './harmonicAnalysisFunctions.js';
 
-/** OVERVIEW:
- *
- */
 
 /** Main function*/
 export function harmonyAnalysis(progression) {
@@ -43,64 +40,45 @@ export function harmonyAnalysis(progression) {
 	priority_keys.push(accepted_keys[0]);
 
 	for (let i = 0; i < progression_plus.length; i++) {
+
+		// if the chord is wrong: two possible 
 		if (!(progression_plus[i].type_coherent && progression_plus[i].degree_coherent)) {
 
-			if (progression_plus[i].type == "7") {
-				
-				/** OPTION D): SECONDARY DOMINANT */ 
-				if (i + 1 < progression_plus.length) {
-					temp = findSecondaryDom(progression[i], progression[i + 1]);
-					if (temp) {
-						progression_plus[i] = temp;
-						priority_keys.push(temp.curr_key);
-						if (!(progression_plus[i + 1].type_coherent && progression_plus[i + 1].degree_coherent)) {
-							temp = getProgDegrees([progression[i + 1]], temp.curr_key);
-							temp = temp[0];
-							progression_plus[i + 1] = temp;
-						}
-						continue;
+			/** OPTION A): SECONDARY DOMINANT */ 
+			if (progression_plus[i].type == "7" && i + 1 < progression_plus.length) {
+				temp = findSecondaryDom(progression[i], progression[i + 1]);
+				if (temp) {
+					progression_plus[i] = temp;
+					priority_keys.push(temp.curr_key);
+					if (!(progression_plus[i + 1].type_coherent && progression_plus[i + 1].degree_coherent)) {
+						temp = getProgDegrees([progression[i + 1]], temp.curr_key);
+						temp = temp[0];
+						progression_plus[i + 1] = temp;
 					}
-				}
-				
-				/** OPTION A): CHORD SUBSTITUTION*/
-				temp = findSubs(progression, priority_keys, progression_plus[i], i);
-				if (temp.curr_pattern == "dominant resolution") {
-					console.log("situazione da definire")
-				}
-				else if (temp) {
-					progression_plus[i] = temp;
-					priority_keys.push(temp.curr_key);
-					continue;
-				}
-
-				/** OPTION B): MODAL INTERCHANGE */
-				temp = findModalInterchange(progression, priority_keys, progression_plus[i], i);
-				if (temp) {
-					progression_plus[i] = temp;
-					priority_keys.push(temp.curr_key);
 					continue;
 				}
 			}
-			else {
-
-				/** OPTION A): CHORD SUBSTITUTION*/
-				temp = findSubs(progression, priority_keys, progression_plus[i], i);
-				if (temp) {
-					progression_plus[i] = temp;
-					priority_keys.push(temp.curr_key);
-					continue;
-				}
-
-				/** OPTION B): MODAL INTERCHANGE */
-				temp = findModalInterchange(progression, priority_keys, progression_plus[i], i);
-				if (temp) {
-					progression_plus[i] = temp;
-					priority_keys.push(temp.curr_key);
-					continue;
-				}
 				
+			/** OPTION B): CHORD SUBSTITUTION*/
+			temp = findSubs(progression, priority_keys, progression_plus[i], i);
+			if (temp.curr_pattern == "dominant resolution") {
+				console.log("situazione da definire")
 			}
-			/** OPTION C): CHANGE OF SCALE */
+			else if (temp) {
+				progression_plus[i] = temp;
+				priority_keys.push(temp.curr_key);
+				continue;
+			}
+
+			/** OPTION C): MODAL INTERCHANGE */
+			temp = findModalInterchange(progression, priority_keys, progression_plus[i], i);
+			if (temp) {
+				progression_plus[i] = temp;
+				priority_keys.push(temp.curr_key);
+				continue;
+			}
+	
+			/** OPTION D): CHANGE OF SCALE */
 			temp = findChangeKey(progression, priority_keys, progression_plus, i);
 			if (temp) {
 				progression_plus = temp;
@@ -116,7 +94,7 @@ export function harmonyAnalysis(progression) {
 
 	console.log("progression analyzed: ", progression_plus);
 
-	/** TENSION PROGRESSION */
+	/** PHASE 4): assign tension to each chord */
 	progression_plus = evaluateTension(progression_plus);
 
 	return progression_plus;

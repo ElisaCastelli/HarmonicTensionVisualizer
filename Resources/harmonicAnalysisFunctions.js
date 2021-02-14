@@ -177,7 +177,6 @@ function getDegree(chord, key){
 		else
 			return degrees[temp_degree].concat("b");
 	}
-	//console.log(chord_deg_index);
 	return degrees[chord_deg_index];
 }
 
