@@ -3,7 +3,7 @@
 import { type, allNotes1D, chordBuilder } from './Resources/chordBuilder.js';
 import { tensionChange, start, waveColor } from './Resources/tensionAnimation.js';
 import { harmonyAnalysis } from './Resources/harmonicAnalysis.js';
-import { Chord, ChordPlus, Key } from './Resources/harmonicAnalysisFunctions.js';
+import { Chord, ChordPlus, getProgDegrees, Key } from './Resources/harmonicAnalysisFunctions.js';
 import { uploadFile, downloadFile } from './Resources/readFile.js';
 import { Note, matrixConstructor, matrixToString, emptyMatrix, getIndexSelectedCell, changeSelection, findSameNotes, setSelectableCell, getIdCell, findRootNoteByColumn, unselectCell, getAllSelectedId, getIndexCellById, getSelectedByColumn, getCellColumnByIndex, addRootCell, findNoteByNameAndColumn, getSelectableByColumn, checkSelectableByColumn, findCellsByColumn, findUnselectedCell, getCellsToMakeSelectable, rootAfterChordType, printChord, getSelectedByColumnExceptRoot, getSelectedAndSelectable, findNoteByMatrixIndex, getColumnNotes } from './Resources/matrix.js';
 
@@ -472,11 +472,22 @@ function playAndScroll() {
 
 /** Function to play the chord using a Sampler */
 function play() {
-    const chordPlayed = document.getElementById("chordPlayed");
+    const createchordPlayed = document.createElement("div");
+    createchordPlayed.setAttribute("id", "chordPlayed");
+    const createeventContainer = document.createElement("div");
+    createeventContainer.setAttribute("id", "eventContainer");
+    const createsubstitutionContainer = document.createElement("div");
+    createsubstitutionContainer.setAttribute("id", "substitutionContainer");
+    const createprogressionInfo = document.createElement("div");
+    createprogressionInfo.setAttribute("id", "progressionInfo");
+    const info = document.getElementById("info");
     var degree = 'Degree: ' + analysisResults[maxColumns - 1 - columnPlayed].degree;
+
+    /*const chordPlayed = document.getElementById("chordPlayed");
     const eventContainer = document.getElementById('eventContainer');
     const substitutionContainer = document.getElementById('subInfo');
-    const progressionInfo = document.getElementById('progressionInfo');
+    const progressionInfo = document.getElementById('progressionInfo');*/
+
     let noteSelected = getSelectedByColumn(columnPlayed);
     let notesArray = new Array();
     if (noteSelected != null) {
@@ -486,30 +497,49 @@ function play() {
             notesArray.push(noteName + octave);
         }
         /** Div to visualize event */
-        if (analysisResults[maxColumns - 1 - columnPlayed].event != "") {
-            eventContainer.style.visibility = 'visible';
+        if (analysisResults[maxColumns - 1 - columnPlayed].event != "" && document.getElementById("eventContainer") == null) {
+            /*eventContainer.style.visibility = 'visible';*/
+            info.appendChild(createeventContainer)
+            let eventContainer = document.getElementById("eventContainer");
             var text = analysisResults[maxColumns - 1 - columnPlayed].event;
             eventContainer.textContent = text;
         } else {
-            eventContainer.textContent = "";
-            eventContainer.style.visibility = 'hidden';
+            let eventContainer = document.getElementById("eventContainer");
+            if(eventContainer != null){
+                eventContainer.textContent = "";
+                /*eventContainer.style.visibility = 'hidden';*/
+                info.removeChild(eventContainer);
+            }
         }
         /** Div to visualize substitution */
-        if (analysisResults[maxColumns - 1 - columnPlayed].substitution != "") {
-            substitutionContainer.style.visibility = 'visible';
+        if (analysisResults[maxColumns - 1 - columnPlayed].substitution != "" && document.getElementById("substitutionContainer") == null) {
+            /*substitutionContainer.style.visibility = 'visible';*/
+            info.appendChild(createsubstitutionContainer);
+            let substitutionContainer = document.getElementById("substitutionContainer");
             var text = "Sub: " + analysisResults[maxColumns - 1 - columnPlayed].toString();
             substitutionContainer.textContent = text;
         } else {
-            substitutionContainer.style.visibility = 'hidden';
-            substitutionContainer.textContent = "";
+            /*substitutionContainer.style.visibility = 'hidden';*/
+            let substitutionContainer = document.getElementById("substitutionContainer");
+            if (substitutionContainer != null) {
+                substitutionContainer.textContent = "";
+                info.removeChild(substitutionContainer);
+            }
+
         }
         /** Div to visualize pattern */
-        if (analysisResults[maxColumns - 1 - columnPlayed].curr_pattern != "") {
-            progressionInfo.style.visibility = 'visible';
+        if (analysisResults[maxColumns - 1 - columnPlayed].curr_pattern != "" && document.getElementById("progressionInfo") == null) {
+            /*progressionInfo.style.visibility = 'visible';*/
+            info.appendChild(createprogressionInfo);
+            let progressionInfo = document.getElementById("progressionInfo");
             progressionInfo.textContent = analysisResults[maxColumns - 1 - columnPlayed].curr_pattern;
         } else {
-            progressionInfo.style.visibility = 'hidden';
-            progressionInfo.textContent = "";
+            /*progressionInfo.style.visibility = 'hidden';*/
+            let progressionInfo = document.getElementById("progressionInfo");
+            if ( progressionInfo != null) {
+                progressionInfo.textContent = "";
+                info.removeChild(progressionInfo);
+            }
         }
 
         chordPlayed.textContent = degree;
@@ -693,8 +723,11 @@ resetButton.onclick = function() {
             lengthChordArray = finalProgression.length;
         }
         const chordPlayed = document.getElementById("chordPlayed");
-        chordPlayed.textContent = "";
-        chordPlayed.style.visibility = "hidden";
+        if (chordPlayed != null) {
+            chordPlayed.textContent = "";
+            info.removeChild(chordPlayed);
+        }
+        //chordPlayed.style.visibility = "hidden";
         for (let indexColumn = maxColumns - 1; indexColumn > ((maxColumns - 1) - lengthChordArray); indexColumn--) {
             clearRootText(indexColumn);
         }
@@ -709,13 +742,23 @@ resetButton.onclick = function() {
         const bar = document.getElementById("scrollingBar");
         bar.style.left = '93px';
         const progressionInfo = document.getElementById('progressionInfo');
-        progressionInfo.textContent = "";
-        progressionInfo.style.visibility = 'hidden';
+        if ( progressionInfo != null) {
+            progressionInfo.textContent = "";
+            info.removeChild(progressionInfo);
+        }
+        //progressionInfo.style.visibility = 'hidden';
         const eventContainer = document.getElementById('eventContainer');
-        eventContainer.textContent = "";
-        eventContainer.style.visibility = 'hidden';
+        if ( eventContainer != null) {
+            eventContainer.textContent = "";
+            info.removeChild(eventContainer);
+        }
+        //eventContainer.style.visibility = 'hidden';
         const substitutionContainer = document.getElementById('subInfo');
-        substitutionContainer.style.visibility = "hidden";
+        if ( substitutionContainer != null) {
+            substitutionContainer.textContent = "";
+            info.removeChild(substitutionContainer);
+        }
+        //substitutionContainer.style.visibility = "hidden";
         const stopButton = document.getElementById('stopButton');
         stopButton.style.color = 'rgb(63, 132, 87)';
         tensionChange(0);
@@ -857,7 +900,10 @@ function firstRender() {
     const pianoContainer = document.getElementById("output_block");
     const playButton = document.getElementById("playButton");
     const stopButton = document.getElementById("stopButton");
-    const divChordPlayed = document.getElementById("chordPlayed");
+    //const divChordPlayed = document.getElementById("chordPlayed");
+    const createchordPlayed = document.createElement("div");
+    createchordPlayed.setAttribute("id", "chordPlayed");
+    const info = document.getElementById("info");
     let pianoRollTable = createPianoRoll();
     pianoContainer.appendChild(pianoRollTable);
     let bar = createBar();
@@ -876,7 +922,8 @@ function firstRender() {
             playButton.style.color = 'rgb(245, 125, 27)';
             const tableScroll = document.getElementById("table-scroll");
             modelButton = true;
-            divChordPlayed.style.visibility = 'visible';
+            //divChordPlayed.style.visibility = 'visible';
+            info.appendChild(createchordPlayed);
             let maxIndex = 0;
             if (firstPlay) {
                 lastBarPosition = '93px';
@@ -911,9 +958,13 @@ function firstRender() {
             tableBackscroll(0);
             tableScroll.style.overflowX = 'auto';
             bar.style.left = '93px';
-            const chordPlayed = document.getElementById("chordPlayed");
-            chordPlayed.textContent = "";
-            chordPlayed.style.visibility = "hidden";
+            //const chordPlayed = document.getElementById("chordPlayed");
+            let chordPlayed = document.getElementById("chordPlayed");
+            if (chordPlayed != null) {
+                chordPlayed.textContent = "";
+                info.removeChild(chordPlayed);
+            }
+            //chordPlayed.style.visibility = "hidden";
             modelButton = false;
             columnPlayed = maxColumns - 1;
             timeInterval = 0;
@@ -922,13 +973,24 @@ function firstRender() {
             waveColor(0);
             firstPlay = true;
             const progressionInfo = document.getElementById('progressionInfo');
-            progressionInfo.textContent = "";
-            progressionInfo.style.visibility = 'hidden';
+            if (progressionInfo != null){
+                progressionInfo.textContent = "";
+                info.removeChild(progressionInfo);
+            }
+            //progressionInfo.style.visibility = 'hidden';
             const eventContainer = document.getElementById('eventContainer');
-            eventContainer.textContent = "";
-            eventContainer.style.visibility = 'hidden';
+            if (eventContainer != null) {
+                eventContainer.textContent = "";
+                info.removeChild(eventContainer);
+            }
+            //eventContainer.style.visibility = 'hidden';
             const substitutionContainer = document.getElementById('subInfo');
-            substitutionContainer.style.visibility = "hidden";
+            if (substitutionContainer != null) {
+                substitutionContainer.textContent = "";
+                info.removeChild(substitutionContainer);
+
+            }
+            //substitutionContainer.style.visibility = "hidden";
             stopButton.style.color = 'rgb(63, 132, 87)';
             playButton.style.color = 'rgb(63, 132, 87)';
         }
