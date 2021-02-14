@@ -466,9 +466,8 @@ function playAndScroll() {
             stopButton.onclick();
             timeInterval -= timeIntervalIncrement;
         }
-    }else{
-        scroll();
     }
+    scroll();
     timeInterval += timeIntervalIncrement;
 }
 
@@ -799,8 +798,8 @@ playFasterButton.onclick = function() {
     if (!modelButton && (bar.style.left == "93px" || bar.style.left == 0)) {
         if (scrollSpeed == 1) {
             scrollSpeed = 2;
-            timeIntervalMax = 1590;
-            timeIntervalIncrement = 30;
+            timeIntervalMax = 1350;
+            timeIntervalIncrement = 25;
             soundDuration = 1.5;
             playFasterButton.style.color = 'rgb(245, 125, 27)';
         } else {
