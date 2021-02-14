@@ -536,14 +536,12 @@ function play() {
             /*progressionInfo.style.visibility = 'visible';*/
             if (document.getElementById("progressionInfo") == null){
                 info.appendChild(createprogressionInfo);
-                console.log(analysisResults[maxColumns - 1 - columnPlayed].curr_pattern)
                 let progressionInfo = document.getElementById("progressionInfo");
                 progressionInfo.textContent = analysisResults[maxColumns - 1 - columnPlayed].curr_pattern;
             }
         } else {
             /*progressionInfo.style.visibility = 'hidden';*/
             let progressionInfo = document.getElementById("progressionInfo");
-            console.log(analysisResults[maxColumns - 1 - columnPlayed].curr_pattern)
             if ( progressionInfo != null) {
                 progressionInfo.textContent = "";
                 info.removeChild(progressionInfo);
