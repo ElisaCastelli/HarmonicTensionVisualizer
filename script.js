@@ -831,6 +831,16 @@ function buildReadme() {
         readMeSection.classList.add("readStyle");
         readMeSection.innerHTML += testo;
         readMeSection.setAttribute("id", "readMeSection");
+        const gitIcon = document.createElement("div");
+        gitIcon.setAttribute("id", "GitHubIcon");
+        gitIcon.classList.add("bottom_bar");
+        gitIcon.classList.add("scrollButton");
+        const icon = document.createElement("i");
+        icon.setAttribute("id", "git");
+        icon.classList.add("fab");
+        icon.classList.add("fa-github");
+        gitIcon.appendChild(icon);
+        readMeSection.appendChild(gitIcon);
         const pagina = document.getElementById("pagina");
         pagina.appendChild(readMeSection);
     } //else {
