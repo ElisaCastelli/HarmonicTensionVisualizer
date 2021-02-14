@@ -39,14 +39,14 @@ function generateData(tension,maxTension) {
   return dataOut;
 }
 
-export function waveColor(surprise , tension , maxTension) {
-  /*let r = 255
-  let g = 255 //- 255*(tension/maxTension)
-  let b = 255 //- 255*(tension/maxTension)
+export function waveColor(tension , maxTension) {
+  let r = 255
+  let g = 255 - 255*(tension/maxTension)
+  let b = 255 - 255*(tension/maxTension)
   let color = "rgb(" + r + ", " + g + ", " + b + ")"
-  ctx.strokeStyle = color; */ 
+  ctx.strokeStyle = color; 
 
-  if (surprise == "") {
+  /*if (surprise == "") {
     ctx.strokeStyle = "white"
   } else if (surprise == "A") {
     ctx.strokeStyle = "blue"
@@ -56,7 +56,7 @@ export function waveColor(surprise , tension , maxTension) {
     ctx.strokeStyle = "purple"
   } else if (surprise == "D") {
     ctx.strokeStyle = "red"
-  }
+  }*/
 }
 
 function draw() {

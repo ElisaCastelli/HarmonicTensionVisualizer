@@ -104,7 +104,7 @@
 
             .info_divs {
                 position: relative;
-                background: rgb(223 193 85);
+                background: rgb(165 179 186);
                 border-radius: 5px;
                 border-color: rgb(73, 94, 104);
                 /*border: solid 1px;*/
@@ -112,6 +112,7 @@
                 font-size: medium;
                 box-shadow: 0px 1px 6px;
             }
+            
             #progressionInfo {
                 width: 28%;
                 /*font-family: 'Roboto', sans-serif;*/

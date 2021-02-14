@@ -459,7 +459,6 @@ function playAndScroll() {
         if ((maxColumns - columnPlayed - 1) < progressionAnalyzed.length) {
             play();
             tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
-            waveColor(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].surprise);
         } else {
             const stopButton = document.getElementById("stopButton");
             stopButton.onclick();
@@ -772,7 +771,6 @@ resetButton.onclick = function() {
         const stopButton = document.getElementById('stopButton');
         stopButton.style.color = 'rgb(63, 132, 87)';
         tensionChange(0);
-        waveColor(0);
     }
 }
 
@@ -906,7 +904,6 @@ function buildReadme() {
 function firstRender() {
     start;
     tensionChange(0);
-    waveColor(0);
     const pianoContainer = document.getElementById("output_block");
     const playButton = document.getElementById("playButton");
     const stopButton = document.getElementById("stopButton");
@@ -959,7 +956,6 @@ function firstRender() {
                 tableScroll.style.overflowX = 'auto';
                 clearInterval(scrollInterval);
                 tensionChange(0);
-                waveColor(0);
             }
         };
     }
@@ -981,7 +977,6 @@ function firstRender() {
             timeInterval = 0;
             clearInterval(scrollInterval);
             tensionChange(0);
-            waveColor(0);
             firstPlay = true;
             const progressionInfo = document.getElementById('progressionInfo');
             if (progressionInfo != null){
