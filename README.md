@@ -92,13 +92,14 @@ First of all, this project does not intend to analyze faultlessly every possible
 Instead, we tried to build a versatile algorithm that works well with progressions with a small amount of "harmonic alterations" (that will be discussed below).
 The main function, contained in `harmonicAnalysis.js`, is executed every time the PLAY button is clicked. It can be dividen in 4 parts:
 #### Phase 1: select keys with highest number of compatible chords
-
+...
 #### Phase 2: choose the key with highest number of correct chords before the first wrong one
-
+...
 #### Phase 3: analyze each "wrong" chord, based on the chosen key, with different options
-
+![alt text](./img/main_algorithm_example.png)
+...
 #### Phase 4: assign tension to each chord
-
+...
 
 ## Surge
 
