@@ -777,7 +777,7 @@ resetButton.onclick = function() {
 /** onclick associated with the uploadButton to read a file */
 uploadButton.onchange = function() {
     uploadFile(fileInput.files[0], maxColumns);
-    fileInput.files[0].value = null;
+    fileInput.value = null;
 }
 
 /** Button to reset input onchange */
