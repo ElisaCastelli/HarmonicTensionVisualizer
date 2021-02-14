@@ -1,20 +1,11 @@
+import { findKey, modes, getProgDegrees, findSubs, findModalInterchange, findChangeKey, evaluateTension } from './harmonyAnalysis_functions';
+
 /** OVERVIEW:
- * 
+ *
  */
 
-// Harmony analysis
-// - quadriadi + tese di triadi
-// - raggruppare pattern per scala?
-// - diatonicFunction solo controllo per scala maggiore	FATTO
-// - harmony analysis cambia pattern/sostituzioni considerate in base a a scala
-// - pattern cambiano tensione in base a triade o quadriade (II V I triade è meno teso della corrispondente quadriade)
-// - cerca sostituzioni e interscambi modali FATTO
-// - se arrivo da un 2, il 5 è potenziato di tensione	FATTO
-// - dovrei fare modo di non controllare i gradi assoluti, ma solo il rapporto tra toniche IMPORTANTE
-
-
 /** Main function*/
-export function harmonyAnalysis(progression){
+export function harmonyAnalysis(progression) {
 
 	/** PHASE 1): select keys with highest number of compatible chords*/
 	let accepted_keys = findKey(progression); // array with selected keys
@@ -23,48 +14,47 @@ export function harmonyAnalysis(progression){
 	}
 	let progression_plus;
 	let temp;
-	
+
 	/** PHASE 2): choose the key with highest number of correct chords before the first wrong one*/
 	// for each accepted_key
 	for (let i = 0; i < accepted_keys.length; i++) {
 		// exception: give priority to major and minor scales
 		if (modes[accepted_keys[i].scale_index].tonal_harmony) {
-			accepted_keys[i].points+= 10;
+			accepted_keys[i].points += 10;
 		}
 		// estimate relative degrees and coherence of each chord in the progression 
 		progression_plus = getProgDegrees(progression, accepted_keys[i]);
-		
+
 		//for each chord
 		for (let j = 0; j < progression.length; j++) {
 			// if I find a chord not coherent with the current accepted key
-			if (! (progression_plus[j].type_coherent && progression_plus[j].degree_coherent))
+			if (!(progression_plus[j].type_coherent && progression_plus[j].degree_coherent))
 				break;
 			accepted_keys[i].points++;
 		}
 	}
 	accepted_keys.sort((a, b) => (a.points > b.points) ? -1 : 1);
 
-	/** PHASE 3): analyze each "wrong" chord, based on the chosen key, with different options*/ 
+	/** PHASE 3): analyze each "wrong" chord, based on the chosen key, with different options*/
 	progression_plus = getProgDegrees(progression, accepted_keys[0]);
-	
+
 	// array of all keys that may be found during analysis 
 	let priority_keys = [];
 	priority_keys.push(accepted_keys[0]);
-	
+
 	for (let i = 0; i < progression_plus.length; i++) {
-		if (!( progression_plus[i].type_coherent && progression_plus[i].degree_coherent)) {
-			
-			
+		if (!(progression_plus[i].type_coherent && progression_plus[i].degree_coherent)) {
+
+
 			// review!!!
 			if (progression_plus[i].type == "7") {
-				/** OPTION C): CHANGE OF SCALE *//*
+				/** OPTION C): CHANGE OF SCALE */ /*
 				temp = findChangeKey(progression, priority_keys, progression_plus, i);
 				if (temp) {
 					progression_plus = temp;
 					priority_keys.push(temp.curr_key);
 					continue;
 				}*/
-				
 				/** OPTION A): CHORD SUBSTITUTION*/
 				temp = findSubs(progression, priority_keys, progression_plus[i], i);
 				if (temp) {
@@ -72,7 +62,7 @@ export function harmonyAnalysis(progression){
 					priority_keys.push(temp.curr_key);
 					continue;
 				}
-				
+
 				/** OPTION B): MODAL INTERCHANGE */
 				temp = findModalInterchange(progression, priority_keys, progression_plus[i], i);
 				if (temp) {
@@ -89,7 +79,7 @@ export function harmonyAnalysis(progression){
 				}
 			}
 			else {
-				
+
 				/** OPTION A): CHORD SUBSTITUTION*/
 				temp = findSubs(progression, priority_keys, progression_plus[i], i);
 				if (temp) {
@@ -97,7 +87,7 @@ export function harmonyAnalysis(progression){
 					priority_keys.push(temp.curr_key);
 					continue;
 				}
-				
+
 				/** OPTION B): MODAL INTERCHANGE */
 				temp = findModalInterchange(progression, priority_keys, progression_plus[i], i);
 				if (temp) {
@@ -118,615 +108,21 @@ export function harmonyAnalysis(progression){
 			progression_plus[i].event = "out of key";
 		}
 	}
-	
+
 	console.log("progression analyzed: ", progression_plus);
-	
+
 	/** TENSION PROGRESSION */
 	progression_plus = evaluateTension(progression_plus);
-	
+
 	return progression_plus;
-	
-}
-
-// patterns for accepted chords
-const note_notation = /^[A-G][#b]?$/;
-const type_notation = /^(min|dim|aug|maj7|min7|7|halfdim|dim7)?$/;
-
-import { diminishedDomSub, tritoneSub } from './Substitutions.js';
-
-const degrees = ["I", "II", "III", "IV", "V", "VI", "VII"];
-const triads = ["", "min", "dim", "aug"];
-const quadriads = ["maj7", "min7", "7", "halfdim", "dim7"];
-
-// object containing notes at corresponding index, used for extracting value
-const allnotes = {
-	norm: ["C", "", "D", "", "E", "F", "", "G", "", "A", "", "B"],
-	sharp: ["", "C#", "", "D#", "", "", "F#", "", "G#", "", "A#", ""],
-	flat: ["", "Db", "", "Eb", "", "", "Gb", "", "Ab", "", "Bb", ""],
-	letters: ["C", "D", "E", "F", "G", "A", "B"]
-};
-
-
-// array of possible modes (for now just modes of major scale)
-const modes = [{
-	name: 'Ionian',
-	intervals: [0, 2, 4, 5, 7, 9, 11],
-	triads: ["", "min", "min", "", "", "min", "dim"],
-	quadriads: ["maj7", "min7", "min7", "maj7", "7", "min7", "halfdim"],
-	tonal_harmony: true
-}, {
-	name: 'Dorian',
-	intervals: [0, 2, 3, 5, 7, 9, 10],
-	triads: ["min", "min", "", "", "min", "dim", ""],
-	quadriads: ["min7", "min7", "maj7", "7", "min7", "halfdim", "maj7"],
-	tonal_harmony: false
-}, {
-	name: 'Phrygian',
-	intervals: [0, 1, 3, 5, 7, 8, 10],
-	triads: ["min", "", "", "min", "dim", "", "min"],
-	quadriads: ["min7", "maj7", "7", "min7", "halfdim", "maj7", "min7"],
-	tonal_harmony: false
-}, {
-	name: 'Lydian',
-	intervals: [0, 2, 4, 6, 7, 9, 11],
-	triads: ["", "", "min", "dim", "", "min", "min"],
-	quadriads: ["maj7", "7", "min7", "halfdim", "maj7", "min7", "min7"],
-	tonal_harmony: false
-}, {
-	name: 'Mixolydian',
-	intervals: [0, 2, 4, 5, 7, 9, 10],
-	triads: ["", "min", "dim", "", "min", "min", ""],
-	quadriads: ["7", "min7", "halfdim", "maj7", "min7", "min7", "maj7"],
-	tonal_harmony: false
-}, {
-	name: 'Aeolian',
-	intervals: [0, 2, 3, 5, 7, 8, 10],
-	triads: ["min", "dim", "", "min", "min", "", ""],
-	quadriads: ["min7", "halfdim", "maj7", "min7", "min7", "maj7", "7"],
-	tonal_harmony: true
-}, {
-	name: 'Locrian',
-	intervals: [0, 1, 3, 5, 6, 8, 10],
-	triads: ["dim", "", "min", "min", "", "", "min"],
-	quadriads: ["halfdim", "maj7", "min7", "min7", "maj7", "7", "min7"],
-	tonal_harmony: false
-}];
-//every mode of major scale could be generated by a function 
-//instead of writing it down
-
-function arraySum(total, num) {
-	return total + num;
-} 
-
-/** Chord prototype*/
-export function Chord(note, type) {
-	this.note = note;
-	this.type = type || '';
-	if (! note_notation.test(this.note)) {
-		throw "note is not valid: " + note;
-	}
-	if (! type_notation.test(this.type)) {
-		throw "type is not valid: " + type;
-	} 
-	
-}
-/** ChordPlus prototype:
- * Contains additional information obtained during the analysis*/
-export function ChordPlus(note, type, degree, key) {
-	this.note = note;
-	this.type = type;
-	this.degree = degree;
-	this.curr_key = key;
-	
-	this.substitution = "";
-	this.type_coherent = true;
-	this.degree_coherent = true;
-	this.event = "";
-	this.curr_pattern = "";
-	/**Values for visual representation*/
-	this.tension = 1;
-	this.surprise = "";
-}
-
-export function Key(tonic, scale){
-	this.tonic = tonic;
-	this.scale = scale;
-	
-	this.scale_index = getScaleIndex(scale);
-	this.points = 0;
-}
-
-//vedi sopra, defining getAbsValue Method of Chord
-Chord.prototype.getAbsValue = function(){
-	let value = allnotes.norm.indexOf(this.note);
-	if (value < 0)
-		value = allnotes.flat.indexOf(this.note);
-	if (value < 0)
-		value = allnotes.sharp.indexOf(this.note);	
-	return value;
-}
-// get the value of a note, relative to the tonic
-Chord.prototype.getTonicInterval = function(tonic){
-	let value = this.getAbsValue();
-	let shift = tonic.getAbsValue();
-	if (shift != 0)
-		value = value - shift >= 0 ? value - shift : value - shift + 12;
-	return value;
-}
-
-Chord.prototype.toString = function(){
-	return this.note.concat(this.type);
-}
-
-ChordPlus.prototype.toString = function(){
-	return this.note.concat(this.type);
-}
-
-// grado e sostisuzione
-ChordPlus.prototype.printEvent = function(){
-	return this.event;
-}
-// pattern 
-ChordPlus.prototype.printPattern = function(){
-	return this.note.concat(this.type);
-}
-
-Key.prototype.toString = function(){
-	return this.tonic.concat(this.scale);
-}
-
-function getScaleIndex(scale_name){
-	for (var i = 0; i < modes.length; i++) {
-		if (modes[i].name == scale_name) {
-			return i;
-		}
-	}
-}
-
-function getDegree(chord, key){
-	if (key == null) {
-		throw "no key was given";
-		return 0;
-	}
-	let curr_interval = chord.getTonicInterval(new Chord(key.tonic));
-	let chord_deg_index = modes[key.scale_index].intervals.indexOf(curr_interval);
-	// if note out of scale
-	if (chord_deg_index < 0){
-		let chord_letter = chord.note.charAt(0);
-		let tonic_letter = key.tonic.charAt(0);
-		let temp_degree = allnotes.letters.indexOf(chord_letter) - allnotes.letters.indexOf(tonic_letter);
-		// if the difference returns a negative value
-		if (temp_degree < 0) {
-			//set the real degree value
-			temp_degree = Math.abs(temp_degree) + 1;
-			//get the reciprocal interval, then remove the 1 added before
-			temp_degree = 9 - temp_degree - 1;
-		}
-		let temp_interval = modes[key.scale_index].intervals[temp_degree];
-		if (temp_interval + 1 == curr_interval)
-			return degrees[temp_degree].concat("#");
-		else
-			return degrees[temp_degree].concat("b");
-	}
-	//console.log(chord_deg_index);
-	return degrees[chord_deg_index];
-}
-
-function getProgDegrees(progression, key){
-	let progression_plus = [];
-	let triad_check;
-	let quadriad_check;
-	let temp;
-	for (let i = 0; i < progression.length; i++) {
-		// to avoid errors with ChordPlus
-		temp = new Chord(progression[i].note, progression[i].type);
-		progression_plus.push( new ChordPlus(progression[i].note, progression[i].type, getDegree(temp, key), key));
-
-		if (progression_plus[i].degree.includes("#") || progression_plus[i].degree.includes("b")) {
-			progression_plus[i].degree_coherent = false;
-		}
-		// check if the degree type is different from its scale
-		triad_check = modes[key.scale_index].triads[degrees.indexOf(progression_plus[i].degree)] == progression[i].type;
-		quadriad_check = modes[key.scale_index].quadriads[degrees.indexOf(progression_plus[i].degree)] == progression[i].type;
-		if (! (triad_check || quadriad_check)) {
-			progression_plus[i].type_coherent = false;
-		}
-	}
-	return progression_plus;
-}
-
-function findKey(progression){
-	// variable for saving the current tonic hypothesis
-	let tonic;
-	// variable for storing every interval between a chord and the current tonic
-	let curr_interval;
-	
-	// each accepted key will gain or lose points according to different parameters (number of substitutions, kind of substitutions, ...)
-	let accepted_keys = [];
-	let tempKey;
-	
-	let chord_deg_index;
-	let chord_degree;
-	let triad_check;
-	let quadriad_check;
-	/**I need at least one I chord to accept a key*/
-	let firstDegreePresent;
-	
-	// for every possible tonic in the progression
-	for (let tonic_index = 0; tonic_index < progression.length; tonic_index++) {
-		// saving the current tonic
-		tonic = progression[tonic_index];
-		
-		// for every scale known by the program
-		for (let scale = 0; scale < modes.length; scale++) {
-			
-			// reset the counter
-			tempKey = new Key(tonic.note, modes[scale].name);
-			firstDegreePresent = false;
-			
-			// check that the chord is inside the scale "tonic.note modes[scale]"
-			for (let chord = 0; chord < progression.length; chord++) {
-				// evaluate interval with current tonic hypothesis
-				curr_interval = progression[chord].getTonicInterval(tonic);
-				
-				// check if the interval between the two chords is contained in the scale
-				if (modes[scale].intervals.includes(curr_interval)){
-					
-					// get the chord degree (real degree = chord_deg_index + 1, 
-					// because array indexing starts from 0, while chord degrees start from 1)
-					chord_deg_index = modes[scale].intervals.indexOf(curr_interval);
-					chord_degree = degrees[chord_deg_index];
-					
-					// check if the type of the chord is equal to the triad or quadriad of the current scale
-					triad_check = modes[scale].triads[chord_deg_index] == progression[chord].type;
-					quadriad_check = modes[scale].quadriads[chord_deg_index] == progression[chord].type;
-					// point assignment
-					
-					/** TWO HYPOTHESIS:
-					 * 1): tonic probably is at beginning of the progression
-					 * 2): I degrees increase probability that current key is correct
-					 * 3): dominant chords do the same*/
-					if (chord_degree == "I" && (triad_check || quadriad_check)){
-						//console.log(progression[chord].toString(), "is tonic of", tempKey.toString())
-						firstDegreePresent = true;
-						tempKey.points += 2;
-					}
-					else if (tonic_index == 0 && (triad_check || quadriad_check)) {
-						tempKey.points += 2;
-					}
-					else if (chord_degree == "V" && quadriad_check){
-						tempKey.points += 2;
-					}
-					else if (triad_check || quadriad_check){
-						tempKey.points++;
-					}
-				}
-				// should I put here check for substitutions????????????????????????????????
-				
-			}
-			// if I have already saved the current key, merge the occourrences and sum points
-			if (firstDegreePresent) {
-				accepted_keys.push(tempKey);
-				// merge duplicate occourrences of keys
-				for (let i = 0; i < accepted_keys.length - 1; i++) {
-					if (tempKey.tonic == accepted_keys[i].tonic && tempKey.scale == accepted_keys[i].scale){
-						accepted_keys[i].points += tempKey.points;
-						accepted_keys.pop();
-						break;
-					}
-				}
-			}
-			
-		}
-	}
-	// sort accepted_keys based on points
-	accepted_keys.sort((a, b) => (a.points > b.points) ? -1 : 1);
-	// select the key/keys with highest .points value
-	let concurrent_keys = [];
-	
-	for (let i = 0; i < accepted_keys.length - 1; i++) {
-		concurrent_keys.push(accepted_keys[i]);
-		if (typeof accepted_keys[i + 1].points != undefined && ! accepted_keys[i].points == accepted_keys[i + 1].points)
-			break
-	}
-	concurrent_keys.push(accepted_keys.shift());
-	return concurrent_keys;
-}
-
-/**consts containing tensions and patterns*/
-const diatonicFunction = [{
-	name: "tonic",
-	degrees: [/*"I",*/ "III", "VI"],
-	triad_tension: 2,
-	quadriad_tension: 3
-}, {
-	name: "subdominant",
-	degrees: ["II", "IV"],
-	triad_tension: 4,
-	quadriad_tension: 5
-}, {
-	name: "dominant",
-	degrees: ["V", "VII"],
-	triad_tension: 7,
-	quadriad_tension: 9
-}];
-
-const tritoneTensions = {
-	chords: ["7", "dim", "halfdim", "dim7"],
-	tension: [8, 9, 7, 10]
-}
-
-const progPatterns = [{
-	name: "dominant resolution",
-	degrees: ["V", "I"],
-	triads: ["", ""],
-	quadriads: ["7", "maj7"],
-	triad_tension: [7, 1],
-	quadriad_tension: [9, 1]
-}, {
-	name: "II-V-I resolution",
-	degrees: ["II", "V", "I"],
-	triads: ['min', "", ""],
-	quadriads: ["min7", "7", "maj7"],
-	triad_tension: [4, 7, 1],
-	quadriad_tension: [5, 10, 1]
-}, {
-	name: "II-V movement",
-	degrees: ["II", "V"],
-	triads: ['min', ""],
-	quadriads: ["min7", "7"],
-	triad_tension: [4, 7],
-	quadriad_tension: [5, 10]
-}, {
-	name: "V of V",
-	degrees: ["V", "V"],
-	triads: ["", ""],
-	quadriads: ["7", "7"],
-	triad_tension: [7, 7],
-	quadriad_tension: [9, 9]
-}, {//come metterlo giù se non voglio controllare il grado?
-	name: "maj7 -> 7",
-	degrees: ["VIb" || "V#", "V"],
-	triads: ["", ""],
-	quadriads: ["maj7", "7"],
-	triad_tension: [4, 8],
-	quadriad_tension: [5, 10]
-}];
-
-function findSecondaryDom(chord1, chord2){
-	let tempProg = [chord1, chord2];
-	let tempKeys = findKey(tempProg);
-	for (let i = 0; i < tempKeys.length; i++) {
-		tempProg = getProgDegrees(tempProg, tempKeys[i]);
-		if (tempProg[0].degree == "V" && tempProg[1].degree == "I") {
-			tempProg[0].event = "secondary dominant " + tempKeys[i];
-			return tempProg[0];
-		}
-	}
-	return false;
-}
-
-function findModalInterchange(progression, priority_keys, chord, index){
-	let surprise = "B";
-	let tempChord;
-	let tempKeys = [];
-	
-	//for each mode, with same tonic
-	for (let m = 0; m < modes.length; m++) {
-		// check if the scale is compatible with any other mode
-		tempKeys.push(new Key(chord.curr_key.tonic, modes[m].name));
-		//for each chord
-		for (let j = index; j < progression.length; j++) {
-			tempChord = getProgDegrees([progression[j]], tempKeys[m]);
-			if (! (tempChord[0].type_coherent && tempChord[0].degree_coherent)) {
-				break;
-			}
-			//give points for each compatible chord
-			tempKeys[m].points++;
-		}
-	}
-	
-	//sort by points
-	tempKeys.sort((a, b) => (a.points > b.points) ? -1 : 1);
-	/** if multiple modes with same points:
-	 * 1): check if any of them is inside priority_keys
-	 * 2): sort by mode similarity*/
-	let keyIntervalsSum = modes[chord.curr_key.scale_index].intervals.reduce(arraySum);
-	for (let m = 0; m < tempKeys.length; m++) {
-		if (tempKeys[m].points < tempKeys[0].points) {
-			break;
-		}
-		if (priority_keys.includes(tempKeys[m])) {
-			tempKeys[0] = tempKeys[m];
-			break;
-		}
-		// choose the scale that has less differences (b or #) compared to the original mode
-		else if(Math.abs(modes[tempKeys[m].scale_index].intervals.reduce(arraySum) - keyIntervalsSum) <
-				Math.abs(modes[tempKeys[0].scale_index].intervals.reduce(arraySum) - keyIntervalsSum)){
-			tempKeys[0] = tempKeys[m];
-		}
-	}
-	// review!!!
-	progression = getProgDegrees(progression, tempKeys[0]);
-	chord = progression[index]
-	if (tempKeys[0].points > 0 && chord.degree_coherent && chord.type_coherent) {
-		console.log(progression[index].toString(), "is borrowed from :", tempKeys[0].tonic, tempKeys[0].scale);
-		chord.event = "borrowed from " + tempKeys[0].tonic + tempKeys[0].scale;
-		chord.surprise = surprise;
-		return chord;
-	}
-	else
-		return false;
 
 }
 
-function findSubs(progression, priority_keys, chord, index){
-	let surprise = "A";
-	let tempChord;
-	// gereralization of music theory
-	if (["dim", "halfdim", "dim7"].includes(chord.type))
-		tempChord = diminishedDomSub(chord);
-	else if (chord.type == "7")
-		tempChord = tritoneSub(chord);
-	else
-		return false;
-	
-	// check if it is coherent with the current key
-	tempChord = getProgDegrees([tempChord], chord.curr_key);
-	tempChord = tempChord[0];
-	
-	tempChord.substitution = chord;
-	if (tempChord.type_coherent && tempChord.degree_coherent) {
-		// save original chord and add event
-		chord = tempChord;
-		chord.event = "substitution";
-		chord.surprise = surprise;
-		return chord;
-	}
-	// test with cowboy bebop: if it works there, it works
-	else if (tempChord.degree_coherent) {
-		let tempChordSubs = findModalInterchange(progression, priority_keys, tempChord, index);
-		let tempChordOrig = findModalInterchange(progression, priority_keys, tempChord.substitution, index);
-		
-		if (tempChordOrig) {
-			console.log("modal interchange", tempChordOrig)
-			chord = tempChordOrig;
-			chord.surprise = "B";
-			return chord;
-		}
-		else if (tempChordSubs) {
-			console.log("substitution of modal interchange", tempChordSubs)
-			chord = tempChordSubs;
-			chord.surprise = surprise;
-			return chord;
-		}
-	// test with have you met miss jones: if it works there, it works
-	else if (tempChord.type == "7" && (index + 1) < progression.length) {
-		// search for secondary dominant
-		let sub = tempChord.substitution;
-		tempChord = findSecondaryDom(new Chord(tempChord.note, tempChord.type), progression[index + 1])
-		if (tempChord) {
-			console.log("substitution of secondary dominant", tempChord);
-			chord = tempChord;
-			chord.surprise = surprise;
-			chord.substitution = sub;
-			return chord;
-		}
-	}
-	}
-	
-	else
-		return false;
-}
-
-function findChangeKey(progression, priority_keys, progression_plus, index){
-	let surprise = "C";
-	
-	// check if from this point a new key is possible
-	let tempKeys = findKey(progression.slice(index, progression.length));
-	console.log("temp keys:", tempKeys);
-	// in case of multiple keys, check if one of them is inside priority_keys
-	for (let k = 0; k < tempKeys.length; k++) {
-		if (priority_keys.includes(tempKeys[k])) {
-			tempKeys[0] = tempKeys[k];
-			break;
-		}
-	}
-	let temp_deg_progression = getProgDegrees(progression.slice(index, progression.length), tempKeys[0]);
-
-	if (tempKeys[0].points > 1) {
-		for (let j = 0; j < progression.length - index; j++) {
-			progression_plus[index + j] = temp_deg_progression[j];
-		}
-		// check also if some previous chords are both in current and original scale
-		temp_deg_progression = getProgDegrees(progression.slice(0, index), tempKeys[0]);
-		for (let j = index - 1; j > 0; j--) {
-			if (temp_deg_progression[j].type_coherent && temp_deg_progression[j].degree_coherent)
-				progression_plus[j] = temp_deg_progression[j];
-			else
-				break;
-		}
-		progression_plus[index].event = "change of key: " + tempKeys[0].toString();
-		progression_plus[index].surprise = surprise;
-		return progression_plus;
-	}
-	else
-		return false;
-}
-
-function evaluateTension(progression_plus){
-	/** assign tension based on functions*/
-	let temp_index;
-	for (let i = 0; i < progression_plus.length; i++) {
-		if (progression_plus[i].degree_coherent && progression_plus[i].type_coherent) {
-			/** tension of first degree: minimum */
-			if ((progression_plus[i].degree == "I"))
-				progression_plus[i].tension = triads.includes(progression_plus[i].type) ? 1 : 2;
-			/** only for major scale, tension based on diatonic substitutions */
-			else if (progression_plus[i].curr_key.name == modes[0].name) {
-				for (let j = 0; j < diatonicFunction.length; j++)
-					progression_plus[i].tension = 
-						triads.includes(progression_plus[i].type) ? diatonicFunction[j].triad_tension : diatonicFunction[j].quadriad_tension;
-			}
-			/** for other scales, every chord that is not tonic has a little constant tension */
-			else if (progression_plus[i].degree != "I")
-				progression_plus[i].tension = 3;
-		}
-		// assign high tension to chords that contain tritone
-		else if (tritoneTensions.chords.includes(progression_plus[i].type)){
-			if (progression_plus[i].substitution != "") {
-				temp_index = tritoneTensions.chords.indexOf(progression_plus[i].substitution.type);
-				if (temp_index >= 0)
-					progression_plus[i].tension = tritoneTensions.tension[temp_index];
-			}
-			else {
-				temp_index = tritoneTensions.chords.indexOf(progression_plus[i].type);
-				progression_plus[i].tension = tritoneTensions.tension[temp_index];
-			}
-		}
-	}
-	
-	
-	// sort patterns from longest to shortest
-	progPatterns.sort((a, b) => (a.triad_tension.length > b.triad_tension.length) ? -1 : 1);
-	
-	/**assign tension based on patterns*/
-	
-	// for each chord in the progression
-	for (let i = 0; i < progression_plus.length; i++) {	
-		let found_pattern;
-		let extract;
-		// for each tension pattern 
-		for (let p = 0; p < progPatterns.length; p++) {
-			extract = progression_plus.slice(i, i + progPatterns[p].degrees.length);
-			found_pattern = true;
-			// check every following chord that could belong to the current pattern
-			for (let j = 0; j < extract.length; j++) {
-				if (extract[j].degree == progPatterns[p].degrees[j] && 
-						(extract[j].type == progPatterns[p].triads[j] || 
-						extract[j].type == progPatterns[p].quadriads[j])) {
-				}
-				else {
-					found_pattern = false;
-					break;
-				}
-			}
-			/** if every chord fits the pattern and length is correct, update ChordPlus and move on*/
-			if (found_pattern && extract.length == progPatterns[p].degrees.length) {
-				console.log("found pattern:", progPatterns[p].name);
-				/** substitute tension values, choosing between triad and quadriad values  */
-				for (let j = i; j < i + progPatterns[p].degrees.length && j < progression_plus.length; j++) {
-					progression_plus[j].tension = progression_plus[j].type == 
-						progPatterns[p].triads[j - i] ? progPatterns[p].triad_tension[j - i] : progPatterns[p].quadriad_tension[j - i];
-					progression_plus[j].curr_pattern = progPatterns[p].name;
-				}
-				i += progPatterns[p].degrees.length;
-				break;
-			}
-		}
-		
-	}
-	return progression_plus;
-}
-
-
+// NOTES
+// - raggruppare pattern per scala?
+// - diatonicFunction solo controllo per scala maggiore	FATTO
+// - harmony analysis cambia pattern/sostituzioni considerate in base a a scala
+// - pattern cambiano tensione in base a triade o quadriade (II V I triade è meno teso della corrispondente quadriade)
+// - cerca sostituzioni e interscambi modali FATTO
+// - se arrivo da un 2, il 5 è potenziato di tensione	FATTO
+// - dovrei fare modo di non controllare i gradi assoluti, ma solo il rapporto tra toniche IMPORTANTE
