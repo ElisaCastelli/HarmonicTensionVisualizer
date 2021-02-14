@@ -497,12 +497,14 @@ function play() {
             notesArray.push(noteName + octave);
         }
         /** Div to visualize event */
-        if (analysisResults[maxColumns - 1 - columnPlayed].event != "" && document.getElementById("eventContainer") == null) {
+        if (analysisResults[maxColumns - 1 - columnPlayed].event != "") {
             /*eventContainer.style.visibility = 'visible';*/
-            info.appendChild(createeventContainer)
-            let eventContainer = document.getElementById("eventContainer");
-            var text = analysisResults[maxColumns - 1 - columnPlayed].event;
-            eventContainer.textContent = text;
+            if (document.getElementById("eventContainer") == null){
+                info.appendChild(createeventContainer)
+                let eventContainer = document.getElementById("eventContainer");
+                var text = analysisResults[maxColumns - 1 - columnPlayed].event;
+                eventContainer.textContent = text;
+            }
         } else {
             let eventContainer = document.getElementById("eventContainer");
             if(eventContainer != null){
@@ -512,12 +514,14 @@ function play() {
             }
         }
         /** Div to visualize substitution */
-        if (analysisResults[maxColumns - 1 - columnPlayed].substitution != "" && document.getElementById("substitutionContainer") == null) {
-            /*substitutionContainer.style.visibility = 'visible';*/
-            info.appendChild(createsubstitutionContainer);
-            let substitutionContainer = document.getElementById("substitutionContainer");
-            var text = "Sub: " + analysisResults[maxColumns - 1 - columnPlayed].toString();
-            substitutionContainer.textContent = text;
+        if (analysisResults[maxColumns - 1 - columnPlayed].substitution != "") {
+            if (document.getElementById("substitutionContainer") == null) {
+                /*substitutionContainer.style.visibility = 'visible';*/
+                info.appendChild(createsubstitutionContainer);
+                let substitutionContainer = document.getElementById("substitutionContainer");
+                var text = "Sub: " + analysisResults[maxColumns - 1 - columnPlayed].toString();
+                substitutionContainer.textContent = text;
+            }
         } else {
             /*substitutionContainer.style.visibility = 'hidden';*/
             let substitutionContainer = document.getElementById("substitutionContainer");
@@ -528,14 +532,18 @@ function play() {
 
         }
         /** Div to visualize pattern */
-        if (analysisResults[maxColumns - 1 - columnPlayed].curr_pattern != "" && document.getElementById("progressionInfo") == null) {
+        if (analysisResults[maxColumns - 1 - columnPlayed].curr_pattern != "") {
             /*progressionInfo.style.visibility = 'visible';*/
-            info.appendChild(createprogressionInfo);
-            let progressionInfo = document.getElementById("progressionInfo");
-            progressionInfo.textContent = analysisResults[maxColumns - 1 - columnPlayed].curr_pattern;
+            if (document.getElementById("progressionInfo") == null){
+                info.appendChild(createprogressionInfo);
+                console.log(analysisResults[maxColumns - 1 - columnPlayed].curr_pattern)
+                let progressionInfo = document.getElementById("progressionInfo");
+                progressionInfo.textContent = analysisResults[maxColumns - 1 - columnPlayed].curr_pattern;
+            }
         } else {
             /*progressionInfo.style.visibility = 'hidden';*/
             let progressionInfo = document.getElementById("progressionInfo");
+            console.log(analysisResults[maxColumns - 1 - columnPlayed].curr_pattern)
             if ( progressionInfo != null) {
                 progressionInfo.textContent = "";
                 info.removeChild(progressionInfo);
