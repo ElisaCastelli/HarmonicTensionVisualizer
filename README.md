@@ -1,7 +1,5 @@
 # Harmonic Tension Visualizer
 
-*Currently in Development*
-
 ## Introduction
 
 The goal of our project is to analyze a chord sequence, given by the user through an intuitive piano-roll interface, in order to determine the trend of the harmonic tension. Following different criteria, estabilished by us and based on music theory, we assign to each chord a certain level of tension, influenced by:
@@ -93,10 +91,13 @@ Additionally, the results of the harmonic analysis of the progression such as th
 First of all, this project does not intend to analyze faultlessly every possible chord progression given by the user. 
 Instead, we tried to build a versatile algorithm that works well with progressions with a small amount of "harmonic alterations" (that will be discussed below).
 The main function, contained in `harmonicAnalysis.js`, is executed every time the PLAY button is clicked. It can be dividen in 4 parts:
-### Phase 1
-### Phase 2
-### Phase 3
-### Phase 4
+#### Phase 1: select keys with highest number of compatible chords
+
+#### Phase 2: choose the key with highest number of correct chords before the first wrong one
+
+#### Phase 3: analyze each "wrong" chord, based on the chosen key, with different options
+
+#### Phase 4: assign tension to each chord
 
 
 ## Surge
@@ -105,7 +106,7 @@ Our project is online on Surge, a free platform that allows you to publish onlin
 Try it [here](http://harmonytensionvisualizer.surge.sh)!
 
 ## Video demo
-
+*coming soon*
 Here(link) you can find a short video demo 
 
 ## Group components:
