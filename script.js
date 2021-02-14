@@ -816,7 +816,7 @@ function buildReadme() {
             "Starting from the first column, select the tonic note clicking on the corresponding cell and, using the drop-down"+
             " menu options, choose the type of chord you want.<br>"+
             "Once selected the type of chord from the menu, you will see some cells becoming orange that represent the other selectable notes of the chord. "+
-            "You can choose if complete manually the chord, clicking the single notes one by one or complete it automatically just selecting the tonic note of the following chord in the next column.<br>"+
+            "You can choose if complete manually the chord, clicking the single notes one by one or complete it automatically, in its fundamental position, just selecting the tonic note of the following chord in the next column.<br>"+
             "After filling the piano roll with all the chords you want, you can use play, play faster, stop and rewind buttons on the top of the page to listen to your progression and visualize the analysis the program compute on it. <br>"+
             "Warning: remember to not leave any columns empty!<br><br>"+
             "If you want to save your progression on your computer in order to use it later, on the top right of the page you can find a button to download a .txt file."+
