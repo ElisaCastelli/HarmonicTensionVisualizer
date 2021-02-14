@@ -192,9 +192,7 @@ export function unselectMatrix(lengthChordArray) {
             }
             resetSelect(indexColumn);
         }
-    } else {
-        // se sono selezionate note singole
-    }
+    } 
 }
 
 /** Function to disable click on a certain given column */
@@ -522,46 +520,6 @@ function play() {
     }
     notesArray = [];
     columnPlayed--;
-    /*sampler = new Tone.Sampler({
-        "C2": "./piano/C2.mp3",
-        "C#2": "./piano/Cs2.mp3",
-        "D2": "./piano/D2.mp3",
-        "D#2": "./piano/Ds2.mp3",
-        "E2": "./piano/E2.mp3",
-        "F2": "./piano/F2.mp3",
-        "F#2": "./piano/Fs2.mp3",
-        "G2": "./piano/G2.mp3",
-        "G#2": "./piano/Gs2.mp3",
-        "A2": "./piano/A2.mp3",
-        "A#2": "./piano/As2.mp3",
-        "B2": "./piano/B2.mp3",
-        "C3": "./piano/C3.mp3",
-        "C#3": "./piano/Cs3.mp3",
-        "D3": "./piano/D3.mp3",
-        "D#3": "./piano/Ds3.mp3",
-        "E3": "./piano/E3.mp3",
-        "F3": "./piano/F3.mp3",
-        "F#3": "./piano/Fs3.mp3",
-        "G3": "./piano/G3.mp3",
-        "G#3": "./piano/Gs3.mp3",
-        "A3": "./piano/A3.mp3",
-        "A#3": "./piano/As3.mp3",
-        "B3": "./piano/B3.mp3",
-        "C4": "./piano/C4.mp3",
-        "C#4": "./piano/Cs4.mp3",
-        "D4": "./piano/D4.mp3",
-        "D#4": "./piano/Ds4.mp3",
-        "E4": "./piano/E4.mp3",
-        "F4": "./piano/F4.mp3",
-        "F#4": "./piano/Fs4.mp3",
-        "G4": "./piano/G4.mp3",
-        "G#4": "./piano/Gs4.mp3",
-        "A4": "./piano/A4.mp3",
-        "A#4": "./piano/As4.mp3",
-        "B4": "./piano/B4.mp3",
-    }).set({
-        "volume": Volume,
-    }).toMaster();*/
 }
 
 /** VIEW */
@@ -907,11 +865,6 @@ function firstRender() {
                 stopButton.style.color = 'rgb(63, 132, 87)';
             }
             tableScroll.style.overflowX = 'hidden';
-            /*if (finalProgression.length == maxColumns) {
-                maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
-            } else {
-                maxIndex = finalProgression.length;
-            }*/
             maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
             bar.style.left = lastBarPosition;
             tableBackscroll(lastTableScrollPosition);
@@ -922,7 +875,7 @@ function firstRender() {
                 playButton.style.color = 'rgb(63, 132, 87)';
                 stopButton.style.color = 'rgb(245, 125, 27)';
                 lastBarPosition = bar.style.left;
-                lastTableScrollPosition = tableScroll.style.scrollLeft;
+                lastTableScrollPosition = tableScroll.scrollLeft;
                 modelButton = false;
                 firstPlay = false;
                 tableScroll.style.overflowX = 'auto';
@@ -962,7 +915,6 @@ function firstRender() {
         // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
     matrixConstructor(cellsNumber, maxColumns, numOctaves, numOctavesMin, key_color);
 
-    /*buildReadme();*/
 }
 
 firstRender();
