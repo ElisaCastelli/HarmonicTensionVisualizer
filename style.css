@@ -21,6 +21,10 @@
                 font-family: 'Varela Round', sans-serif;
                 font-size: large;
             }
+
+            h1{
+                font-size: x-large; 
+            }
             
             #pagina {
                 position: absolute;
@@ -500,21 +504,22 @@
                 position: absolute;
                 top: 102%;
                 left: 1%;
-                height: 46%;
+                height: 48%;
                 background: rgb(83, 98, 105);
                 border-radius: 10px;
                 border: 1px dotted rgb(223, 193, 85);
                 bottom: 10px;
                 font-size: large;
+                text-align: initial;
             }
             
             #GitHubIcon {
                 left: 45%;
-                bottom: 5px;
+                bottom: 15px;
                 width: 10%;
                 font-size: larger;
                 color: rgb(34, 39, 44);
-                background-color: rgba(73, 144, 250, 0.596);
+                background-color: rgba(91, 154, 248, 0.596);
             }
             
             .disable {

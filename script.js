@@ -812,8 +812,18 @@ function buildReadme() {
     const contenitore = document.getElementById("readMeSection");
     // (contenitore == null)
     {
-        const testo = "Harmonic Tension Visualizer.<br> The goal of our project is to analyze a chord sequence, given by the user through an intuitive piano-roll interface, in order to determine the trend of the harmonic tension. Following different criteria, estabilished by us and based on music theory, we assign to each chord a certain level of tension, influenced by:" +
-            "<br>-the chord 's composition,<br>-well-known progression patterns,<br>-the harmonic context.";
+        const testo = "<h1>HOW TO USE IT:</h1>In order to analyze a chord progression you have to fill the piano roll with the chords that compose it. " +
+            "Starting from the first column, select the tonic note clicking on the corresponding cell and, using the drop-down"+
+            " menu options, choose the type of chord you want.<br>"+
+            "Once selected the type of chord from the menu, you will see some cells becoming orange that represent the other selectable notes of the chord. "+
+            "You can choose if complete manually the chord, clicking the single notes one by one or complete it automatically just selecting the tonic note of the following chord in the next column.<br>"+
+            "After filling the piano roll with all the chords you want, you can use play, play faster, stop and rewind buttons on the top of the page to listen to your progression and visualize the analysis the program compute on it. <br>"+
+            "Warning: remember to not leave any columns empty!<br><br>"+
+            "If you want to save your progression on your computer in order to use it later, on the top right of the page you can find a button to download a .txt file."+
+            "Instead if you want to fill the piano roll with a progression you have on a downloaded file, you have to use the button to upload it.<br><br>"+
+            "In order to have more informations, check it out on Github:";
+
+        
         const readMeSection = document.createElement("div");
         const link = document.createElement("a");
         link.setAttribute("name", "readMe");
