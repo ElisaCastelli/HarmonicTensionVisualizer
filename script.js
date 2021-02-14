@@ -816,13 +816,12 @@ function buildReadme() {
         const testo = "<h1>HOW TO USE IT:</h1>In order to analyze a chord progression you have to fill the piano roll with the chords that compose it. " +
             "Starting from the first column, select the tonic note clicking on the corresponding cell and, using the drop-down"+
             " menu options, choose the type of chord you want.<br>"+
-            "Once selected the type of chord from the menu, you will see some cells becoming orange that represent the other selectable notes of the chord. "+
-            "You can choose if complete manually the chord, clicking the single notes one by one or complete it automatically, in its fundamental position, just selecting the tonic note of the following chord in the next column.<br>"+
-            "After filling the piano roll with all the chords you want, you can use play, play faster, stop and rewind buttons on the top of the page to listen to your progression and visualize the analysis the program compute on it. <br>"+
-            "Warning: remember to not leave any columns empty!<br><br>"+
-            "If you want to save your progression on your computer in order to use it later, on the top right of the page you can find a button to download a .txt file."+
-            "Instead if you want to fill the piano roll with a progression you have on a downloaded file, you have to use the button to upload it.<br><br>"+
-            "In order to have more informations, check it out on Github:";
+            "Then, you will see some cells becoming orange: they represent the other selectable notes of the chord. "+
+            "You can choose to select them manually, or you can just move on to the next chord, while the program selects them automatically.<br>"+
+            "After filling the piano roll with all the chords you want, you can use \"play\", \"play faster\", \"stop\" and \"rewind\" buttons on the top of the page to listen to your progression and visualize the analysis the program computed on it. <br>"+
+            "You can download your progression, by clicking on the top right of the page on the \"download\" button."+
+            "In order to load a saved progression, click on the \"folder\" button to upload it from your PC.<br><br>"+
+            "For more information about the project, check it out on Github:";
 
         
         const readMeSection = document.createElement("div");
