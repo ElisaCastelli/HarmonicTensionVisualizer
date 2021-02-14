@@ -344,7 +344,7 @@ function scroll() {
     if (barRightPos < containerWidth / 2) {
         bar.style.left = (barLeftPos + scrollSpeed * direction) + 'px';
     } else if (tableScroll.scrollWidth - tableScroll.scrollLeft > containerWidth) {
-        tableScroll.scrollLeft += scrollSpeed * direction;
+        tableScroll.scrollLeft = tableScroll.scrollLeft + scrollSpeed * direction;
     } else if (barRightPos < tableScroll.offsetWidth) {
         bar.style.left = (barLeftPos + scrollSpeed * direction) + 'px';
     }
@@ -572,7 +572,7 @@ function createFixedColumn(scaleNumber, noteNumber) {
     fixedColumn.classList.add("leftstop");
     let color = key_color[noteNumber].color;
     fixedColumn.classList.add(color);
-    let label = key_color[noteNumber].pitch + " " + scaleNumber;
+    let label = key_color[noteNumber].pitch + scaleNumber;
     let divLabel = document.createElement("div");
     var t = document.createTextNode(label);
     divLabel.appendChild(t);
@@ -956,7 +956,7 @@ function firstRender() {
         // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
     matrixConstructor(cellsNumber, maxColumns, numOctaves, numOctavesMin, key_color);
 
-    buildReadme();
+    /*buildReadme();*/
 }
 
 firstRender();
