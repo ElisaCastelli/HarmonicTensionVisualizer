@@ -86,18 +86,10 @@
             }
             
             #chordPlayed {
-                position: relative;
-                width: 14%;
-                background: rgb(117, 130, 136);
-                border-radius: 5px;
-                border-color: rgb(73, 94, 104);
-                border: solid 1px;
+                width: 12%;
                 margin: auto;
-                text-align: center;
                 /*font-family: 'Roboto', sans-serif;*/
-                font-size: medium;
                 margin-bottom: 2px;
-                box-shadow: 0px 1px 6px;
             }
             
             #info {
@@ -110,50 +102,34 @@
                 text-align: center;
             }
 
-            #progressionInfo {
+            .info_divs {
                 position: relative;
-                width: 30%;
-                background: rgb(117, 130, 136);
+                background: rgb(223 193 85);
                 border-radius: 5px;
                 border-color: rgb(73, 94, 104);
-                border: solid 1px;
+                /*border: solid 1px;*/
                 text-align: center;
-                /*font-family: 'Roboto', sans-serif;*/
                 font-size: medium;
-                display: inline-block;
                 box-shadow: 0px 1px 6px;
-                margin-left: 2px;
+            }
+            #progressionInfo {
+                width: 28%;
+                /*font-family: 'Roboto', sans-serif;*/
+                display: inline-block;
+                margin-left: 4px;
             }
             
             #eventContainer {
-                position: relative;
-                width: 30%;
-                background: rgb(117, 130, 136);
-                border-radius: 5px;
-                border-color: rgb(73, 94, 104);
-                border: solid 1px;
-                text-align: center;
+                width: 28%;
                 /*font-family: 'Roboto', sans-serif;*/
-                font-size: medium;
                 display: inline-block;
-                box-shadow: 0px 1px 6px;
             }
             
             #substitutionContainer {
-                position: relative;
-                width: 30%;
-                background: rgb(117, 130, 136);
-                border-radius: 5px;
-                border-color: rgb(73, 94, 104);
-                border: solid 1px;
-                text-align: center;
+                width: 28%;
                 /*font-family: 'Roboto', sans-serif;*/
-                font-size: medium;
                 display: inline-block;
-                box-shadow: 0px 1px 6px;
-                margin-left: 2px;
-
-
+                margin-left: 4px;
             }
             
             canvas {

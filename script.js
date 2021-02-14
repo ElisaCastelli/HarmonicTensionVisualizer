@@ -474,12 +474,16 @@ function playAndScroll() {
 function play() {
     const createchordPlayed = document.createElement("div");
     createchordPlayed.setAttribute("id", "chordPlayed");
+    createchordPlayed.setAttribute("id", "eventContainer");
     const createeventContainer = document.createElement("div");
     createeventContainer.setAttribute("id", "eventContainer");
+    createeventContainer.classList.add("info_divs")
     const createsubstitutionContainer = document.createElement("div");
     createsubstitutionContainer.setAttribute("id", "substitutionContainer");
+    createsubstitutionContainer.classList.add("info_divs")
     const createprogressionInfo = document.createElement("div");
     createprogressionInfo.setAttribute("id", "progressionInfo");
+    createprogressionInfo.classList.add("info_divs")
     const info = document.getElementById("info");
     var degree = 'Degree: ' + analysisResults[maxColumns - 1 - columnPlayed].degree;
 
@@ -759,7 +763,7 @@ resetButton.onclick = function() {
             info.removeChild(eventContainer);
         }
         //eventContainer.style.visibility = 'hidden';
-        const substitutionContainer = document.getElementById('subInfo');
+        const substitutionContainer = document.getElementById('substitutionContainer');
         if ( substitutionContainer != null) {
             substitutionContainer.textContent = "";
             info.removeChild(substitutionContainer);
@@ -909,6 +913,7 @@ function firstRender() {
     //const divChordPlayed = document.getElementById("chordPlayed");
     const createchordPlayed = document.createElement("div");
     createchordPlayed.setAttribute("id", "chordPlayed");
+    createchordPlayed.classList.add("info_divs")
     const info = document.getElementById("info");
     let pianoRollTable = createPianoRoll();
     pianoContainer.appendChild(pianoRollTable);
@@ -990,11 +995,10 @@ function firstRender() {
                 info.removeChild(eventContainer);
             }
             //eventContainer.style.visibility = 'hidden';
-            const substitutionContainer = document.getElementById('subInfo');
+            const substitutionContainer = document.getElementById('substitutionContainer');
             if (substitutionContainer != null) {
                 substitutionContainer.textContent = "";
                 info.removeChild(substitutionContainer);
-
             }
             //substitutionContainer.style.visibility = "hidden";
             stopButton.style.color = 'rgb(63, 132, 87)';
