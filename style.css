@@ -362,7 +362,8 @@
             }
             
             .selected_background {
-                background-color: rgb(245, 125, 27);
+                /*background-color: rgb(245, 125, 27);*/
+                background-color: rgb(223, 193, 85);
             }
             
             .highlighted_column {
@@ -371,7 +372,7 @@
             
             .light_background {
                 /*background-color: rgba(160, 223, 179, 0.377);*/
-                background-color: rgba(252, 126, 23, 0.575);
+                background-color: rgba(242, 243, 171, 0.616);
             }
             
             .mainTable fixedColumn {
@@ -537,7 +538,7 @@
                 font-weight: semi-bold;
                 font-size: x-large;
                 border-radius: 3px;
-                cursor: pointer;
+                /*cursor: pointer;*/
                 text-align: center;
                 z-index: 100;
                 border: none;
