@@ -1,4 +1,4 @@
-import { findKey, modes, getProgDegrees, findSubs, findModalInterchange, findChangeKey, evaluateTension } from './harmonicAnalysis_functions';
+import { findKey, modes, getProgDegrees, findSubs, findModalInterchange, findChangeKey, evaluateTension } from './harmonicAnalysisFunctions.js';
 
 /** OVERVIEW:
  *

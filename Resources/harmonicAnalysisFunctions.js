@@ -371,7 +371,7 @@ function findSecondaryDom(chord1, chord2){
 	for (let i = 0; i < tempKeys.length; i++) {
 		tempProg = getProgDegrees(tempProg, tempKeys[i]);
 		if (tempProg[0].degree == "V" && tempProg[1].degree == "I") {
-			tempProg[0].event = "secondary dominant " + tempKeys[i];
+			tempProg[0].event = "secondary dominant " + tempKeys[i].toString();
 			return tempProg[0];
 		}
 	}
