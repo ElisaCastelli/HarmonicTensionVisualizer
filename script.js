@@ -344,7 +344,6 @@ function scroll() {
     if (barRightPos < containerWidth / 2) {
         bar.style.left = (barLeftPos + scrollSpeed * direction) + 'px';
     } else if (tableScroll.scrollWidth - tableScroll.scrollLeft > containerWidth) {
-        console.log(tableScroll.scrollLeft);
         tableScroll.scrollLeft = Math.ceil(tableScroll.scrollLeft + scrollSpeed * direction);
     } else if (barRightPos < tableScroll.offsetWidth) {
         bar.style.left = (barLeftPos + scrollSpeed * direction) + 'px';
