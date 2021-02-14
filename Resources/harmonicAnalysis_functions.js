@@ -423,8 +423,8 @@ export function findModalInterchange(progression, priority_keys, chord, index){
 	progression = getProgDegrees(progression, tempKeys[0]);
 	chord = progression[index]
 	if (tempKeys[0].points > 0 && chord.degree_coherent && chord.type_coherent) {
-		console.log(progression[index].toString(), "is borrowed from :", tempKeys[0].tonic, tempKeys[0].scale);
-		chord.event = "borrowed from " + tempKeys[0].tonic + tempKeys[0].scale;
+		console.log(progression[index].toString(), "is borrowed from :", tempKeys[0].toString());
+		chord.event = "borrowed from " + tempKeys[0].toString();
 		chord.surprise = surprise;
 		return chord;
 	}
