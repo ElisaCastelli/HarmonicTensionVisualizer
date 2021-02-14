@@ -186,11 +186,17 @@ export function getProgDegrees(progression, key){
 	let triad_check;
 	let quadriad_check;
 	let temp;
+	// for a single input
+	if (progression.length === undefined) {
+		temp = [];
+		temp.push(progression);
+		progression = temp;
+	}
 	for (let i = 0; i < progression.length; i++) {
 		// to avoid errors with ChordPlus
 		temp = new Chord(progression[i].note, progression[i].type);
-		progression_plus.push( new ChordPlus(progression[i].note, progression[i].type, getDegree(temp, key), key));
-
+		progression_plus.push( new ChordPlus(temp.note, temp.type, getDegree(temp, key), key));
+		console.log("allora: ", temp, progression_plus)
 		if (progression_plus[i].degree.includes("#") || progression_plus[i].degree.includes("b")) {
 			progression_plus[i].degree_coherent = false;
 		}

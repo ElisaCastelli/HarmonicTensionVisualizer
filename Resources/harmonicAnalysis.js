@@ -41,7 +41,7 @@ export function harmonyAnalysis(progression) {
 
 	for (let i = 0; i < progression_plus.length; i++) {
 
-		// if the chord is wrong: two possible 
+		// if the chord is wrong:
 		if (!(progression_plus[i].type_coherent && progression_plus[i].degree_coherent)) {
 
 			/** OPTION A): SECONDARY DOMINANT */ 
@@ -61,7 +61,7 @@ export function harmonyAnalysis(progression) {
 				
 			/** OPTION B): CHORD SUBSTITUTION*/
 			temp = findSubs(progression, priority_keys, progression_plus[i], i);
-			if (temp.curr_pattern == "dominant resolution") {
+			if (temp && temp.curr_pattern == "dominant resolution") {
 				console.log("situazione da definire")
 			}
 			else if (temp) {
@@ -89,6 +89,22 @@ export function harmonyAnalysis(progression) {
 			/** OPTION E): GENERAL CHORD OUT OF KEY*/
 			progression_plus[i].surprise = "D";
 			progression_plus[i].event = "out of key";
+		}
+	}
+
+	/**PHASE 3b: check again all the chords that are still out of key*/
+	for (let i = 0; i < progression_plus.length; i++) {
+		if (!(progression_plus[i].type_coherent && progression_plus[i].degree_coherent)) {
+			/**try the key of the following chord */
+			console.log("da qua!")
+			temp = getProgDegrees(progression[i], progression_plus[i + 1].curr_key);
+			temp = temp[0];
+			console.log(temp)
+			if (temp) {
+				
+				progression_plus[i] = temp;
+				continue;
+			}
 		}
 	}
 
