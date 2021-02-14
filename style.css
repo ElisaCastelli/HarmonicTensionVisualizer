@@ -479,14 +479,7 @@
             }
             
             .bottom_bar {
-                position: relative;
-                display: inline-block;
-                width: 33%;
-                bottom: 60%;
-                top: 10px;
-                vertical-align: middle;
-                text-align: center;
-                /*font-family: 'Roboto', sans-serif;*/
+                position:relative;
                 font-weight: semi-bold;
                 font-size: xx-large;
             }
@@ -500,23 +493,25 @@
             }
             
             .readStyle {
-                width: 96.5%;
+                width: 98%;
                 position: absolute;
-                top: 102%;
+                top: 101%;
                 left: 1%;
-                height: 48%;
+                height: 50.5%;
                 background: rgb(83, 98, 105);
                 border-radius: 10px;
                 border: 2px dotted rgb(223, 193, 85);
                 bottom: 10px;
                 font-size: large;
-                padding: 0 10px 0 10px;
+                /*padding: 0 10px 0 10px;*/
+                display: block;
+                overflow: auto;
             }
             
             #GitHubIcon {
+                bottom: 5%;
                 left: 45%;
-                bottom: 15px;
-                width: 10%;
+                width: 5%;
                 font-size: larger;
                 color: rgb(34, 39, 44);
                 background-color: rgba(91, 154, 248, 0.596);
