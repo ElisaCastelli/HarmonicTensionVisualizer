@@ -6,6 +6,7 @@ The goal of our project is to analyze a chord sequence, given by the user throug
 *	the chord's composition,
 *	well-known progression patterns,
 *	the harmonic context
+
 After these computations, the results of our analysis are graphically represented with dynamic visual effects while the chord progression is being played.
 
 ## Technologies used
@@ -21,10 +22,10 @@ In particular, we made use of Tone.Sampler that allows to combine different samp
 
 The structure of the project can be divided into four main parts:
 
--	piano-roll
+-	piano roll
 -	button bar 
 -	tension graphic representation
--   readme
+-  readme
 
 ## Piano roll
 
