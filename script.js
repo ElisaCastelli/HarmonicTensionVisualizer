@@ -173,12 +173,12 @@ export function selectRoot() {
             select.value = type;
             let button = document.getElementById("b" + idRoot);
             button.textContent = note + type;
-            let selectableCells = getCellsToMakeSelectable(columnIndex, idRoot);
+            /*let selectableCells = getCellsToMakeSelectable(columnIndex, idRoot);
             if (selectableCells.length > 0) {
                 selectableCells.forEach(cell => {
                     setSelectableCell(cellsNumber - cell.id);
                 });
-            }
+            }*/
         }
     }
 }
