@@ -409,7 +409,7 @@ export function findSecondaryDom(chord1, chord2){
 		tempProg = getProgDegrees(tempProg, tempKeys[i]);
 		if (tempProg[0].degree == "V" && tempProg[1].degree == "I") {
 			console.log("heyyy", chord1, chord2)
-			if (chord2.curr_key.scale == "Aeolian") {	// verifica se necessario modificare altri parametri
+			if (chord2.curr_key.scale 	== "Aeolian") {	// verifica se necessario modificare altri parametri
 				tempProg[0].event = "dominant of " + tempProg[1].toString();
 			} else {
 				tempProg[0].event = "secondary dominant of " + tempProg[1].toString();
@@ -477,8 +477,9 @@ export function findModalInterchange(progression, priority_keys, chord, index){
 }
 
 /** finds if a chord is a substitution of anothe chord, compatible with current scale*/
-export function findSubs(progression, priority_keys, chord, index){
+export function findSubs(progression, priority_keys, progression_plus, index){
 	let surprise = "A";
+	let chord = progression_plus[index];
 	let tempChord;
 	// gereralization of music theory
 	if (["dim", "halfdim", "dim7"].includes(chord.type))
@@ -521,7 +522,7 @@ export function findSubs(progression, priority_keys, chord, index){
 	else if (tempChord.type == "7" && (index + 1) < progression.length) {
 		// search for secondary dominant
 		let sub = tempChord.substitution;
-		tempChord = findSecondaryDom(new Chord(tempChord.note, tempChord.type), progression[index + 1])
+		tempChord = findSecondaryDom(new ChordPlus(tempChord.note, tempChord.type, progression_plus[index].curr_key), progression_plus[index + 1])
 		if (tempChord) {
 			console.log("substitution of secondary dominant", tempChord);
 			chord = tempChord;

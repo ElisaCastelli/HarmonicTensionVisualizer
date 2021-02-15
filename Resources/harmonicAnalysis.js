@@ -17,7 +17,7 @@ export function harmonyAnalysis(progression) {
 	for (let i = 0; i < accepted_keys.length; i++) {
 		// exception: give priority to major and minor scales
 		if (modes[accepted_keys[i].scale_index].tonal_harmony) {
-			accepted_keys[i].points += 10;
+			accepted_keys[i].points += 100;	//revisiona
 		}
 		// estimate relative degrees and coherence of each chord in the progression 
 		progression_plus = getProgDegrees(progression, accepted_keys[i]);
@@ -34,7 +34,7 @@ export function harmonyAnalysis(progression) {
 
 	/** PHASE 3): analyze each "wrong" chord, based on the chosen key, with different options*/
 	progression_plus = getProgDegrees(progression, accepted_keys[0]);
-
+	console.log("hey", accepted_keys);
 	// array of all keys that may be found during analysis 
 	let priority_keys = [];
 	priority_keys.push(accepted_keys[0]);
@@ -46,7 +46,7 @@ export function harmonyAnalysis(progression) {
 
 			/** OPTION A): SECONDARY DOMINANT */ 
 			if (progression_plus[i].type == "7" && i + 1 < progression_plus.length) {
-				temp = findSecondaryDom(progression[i], progression[i + 1]);
+				temp = findSecondaryDom(progression_plus[i], progression_plus[i + 1]);
 				if (temp) {
 					progression_plus[i] = temp;
 					progression_plus[i].surprise = "A";
@@ -62,7 +62,7 @@ export function harmonyAnalysis(progression) {
 			}
 				
 			/** OPTION B): CHORD SUBSTITUTION*/
-			temp = findSubs(progression, priority_keys, progression_plus[i], i);
+			temp = findSubs(progression, priority_keys, progression_plus, i);
 			if (temp && temp.curr_pattern == "dominant resolution") {
 				console.log("situazione da definire") //da togliere, già gestito prima
 			}
