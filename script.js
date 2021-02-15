@@ -869,7 +869,7 @@ function buildReadme() {
             "You can choose to select them manually, or you can just move on to the next chord, while the program selects them automatically.<br><br>"+
             "After filling the piano roll with all the chords you want, you can use \"play\", \"play faster\", \"pause\" and \"rewind\" buttons on the top of the page to listen to your progression and visualize the analysis the program computed on it.<br><br>"+
             "You can download your progression, by clicking on the top right of the page on the \"download\" button. "+
-            "In order to load a saved progression, click on the \"folder\" button to upload it from your PC.<br><br>"+
+            "In order to upload a saved progression, click on the \"folder\" button.<br><br>"+
             "For more information about the project, check it out on Github:";
 
         
