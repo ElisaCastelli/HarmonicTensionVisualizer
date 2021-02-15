@@ -886,12 +886,13 @@ effectButton.onclick = function(){
         document.getElementById("effectDropDown").style.visibility = 'visible';
     }
 }
+
 /** Onclick to manage choose delay effect */
 delayOpt.onclick = function(){
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(delay);
-    delay.wet.value=0;
-    selectedEffect();
+    /*delay.wet.value=0;
+    selectedEffect();*/
 }
 
 /** Onclick to manage choose distortion effect */
@@ -899,8 +900,8 @@ distortionOpt.onclick = function(){
     sampler.disconnect();
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(dist);
-    dist.wet.value=0;
-    selectedEffect();
+    /*dist.wet.value=0;
+    selectedEffect();*/
 }
 
 /** Onclick to manage choose pingpong delay effect */
@@ -908,8 +909,8 @@ pingpongOpt.onclick = function(){
     sampler.disconnect();
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(pingDelay);
-    pingDelay.wet.value=0;
-    selectedEffect();
+    /*pingDelay.wet.value=0;
+    selectedEffect();*/
 }
 
 /** Onclick to manage choose phaser effect */
@@ -917,8 +918,8 @@ phaserOpt.onclick = function(){
     sampler.disconnect();
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(phaser);
-    phaser.wet.value=0;
-    selectedEffect();
+    /*phaser.wet.value=0;
+    selectedEffect();*/
 }
 
 /** Onclick to manage choose feedback delay effect */
@@ -926,8 +927,8 @@ feedBackOpt.onclick = function(){
     sampler.disconnect();
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(feedbackDelay);
-    feedbackDelay.wet.value=0;
-    selectedEffect();
+    /*feedbackDelay.wet.value=0;
+    selectedEffect();*/
 }
 
 
