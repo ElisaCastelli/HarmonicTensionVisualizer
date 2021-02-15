@@ -23,7 +23,7 @@ In particular, we made use of Tone.Sampler that allows to combine different samp
 The structure of the project can be divided into four main parts:
 
 -	piano roll
--	button bar 
+-	toolbar
 -	tension graphic representation
 -  readme
 
@@ -37,7 +37,7 @@ Users can enter the chord sequence to analyze using this simple piano-roll inter
 -	select the type of the chord: triads(minor, major, diminished) or quadriad (major7, minor7, 7, diminished, half diminished)
 -	complete the chord manually choosing between the possible notes selectable shown graphically or click the next tonic note in the next column to complete the previous chord automatically in its fundamental position
 
-## Button bar
+## Toolbar
 
 ![alt text](./img/buttonBar.png)
 
@@ -57,7 +57,7 @@ At the top of the page the user can find a list of buttons, each one with a spec
 ## Sampler
 
 As previously mentioned, all the audio options and features have been realized with Tone.Js. 
-Despite its extreme-intuitivity structure and organization, Tone.js allows to create, develop and then process a wide range of different sounds, each one of them can be affected by some effects.
+Despite its extreme-intuitivity structure and organization, Tone.js allows to create, develop and then process a wide range of different sounds.Also,every sound created can be affected by some effects.
 Once installed Tone.js (or imported it inside the js file in which you want to use it), it is possibile to create sounds by using synthetizer(FM or AM) by code as follows:
 
 ![alt text](./img/01.png)
