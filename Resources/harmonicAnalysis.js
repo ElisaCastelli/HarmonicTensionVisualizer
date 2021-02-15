@@ -9,36 +9,16 @@ export function harmonyAnalysis(progression) {
 	if (accepted_keys.length == 0) {
 		throw "no key was given";
 	}
+
 	let progression_plus;
 	let temp;
-	console.log("key partenza: ", accepted_keys, accepted_keys.length)
-
-	/** PHASE 2): choose the key with highest number of correct chords before the first wrong one*/
-	// for each accepted_key
-	for (let i = 0; i < accepted_keys.length-1; i++) {
-		// exception: give priority to major and minor scales
-		if (modes[accepted_keys[i].scale_index].tonal_harmony) {
-			accepted_keys[i].points += 100;	//revisiona
-		}
-		// estimate relative degrees and coherence of each chord in the progression 
-		progression_plus = getProgDegrees(progression, accepted_keys[i]);
-
-		//for each chord
-		for (let j = 0; j < progression.length; j++) {
-			// if I find a chord not coherent with the current accepted key
-			if (!(progression_plus[j].type_coherent && progression_plus[j].degree_coherent))
-				break;
-			accepted_keys[i].points++;
-		}
-	}
-	accepted_keys.sort((a, b) => (a.points > b.points) ? -1 : 1);
-
-	console.log("keys that will be tested: ", accepted_keys);
 	let priority_keys;
 	let finalProg = progression_plus;
 	let finalKey;
+	accepted_keys.sort((a, b) => (a.points > b.points) ? -1 : 1);
+	console.log("keys that will be tested: ", accepted_keys);
 
-	/** PHASE 3): analyze each possible key, counting the effective number of wrong notes found*/
+	/** PHASE 2): analyze each possible key, counting the effective number of wrong notes found*/
 	for (let k = 0; k < accepted_keys.length; k++) {
 		progression_plus = getProgDegrees(progression, accepted_keys[k]);
 		accepted_keys[k].points = 0;
@@ -110,7 +90,7 @@ export function harmonyAnalysis(progression) {
 			}
 		}
 
-		/**PHASE 3b: check again all the chords that are still out of key*/
+		/**PHASE 2b: check again all the chords that are still out of key*/
 		for (let i = 0; i < progression_plus.length; i++) {
 			// rivaluta if, prima era generico e sistemava più robe, prova a rimetterlo ma escludere tritoni
 			if (progression_plus[i].event == "out of key") {
@@ -140,14 +120,9 @@ export function harmonyAnalysis(progression) {
 	accepted_keys.sort((a, b) => (a.points < b.points) ? -1 : 1);
 	console.log("tested keys: ", accepted_keys)
 
-	/** PHASE 4): assign tension to each chord */
+	/** PHASE 3): assign tension to each chord */
 	finalProg = evaluateTension(finalProg);
 	console.log("progression analyzed: ", finalProg);
 	return finalProg;
 
 }
-
-// NOTES
-// - raggruppare pattern per scala?
-// - harmony analysis cambia pattern/sostituzioni considerate in base a a scala
-// - dovrei fare modo di non controllare i gradi assoluti, ma solo il rapporto tra toniche IMPORTANTE
