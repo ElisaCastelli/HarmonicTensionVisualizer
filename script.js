@@ -847,7 +847,11 @@ playFasterButton.onclick = function() {
 
 /** onclick to mute */
 muteButton.onclick = function() {
+    muteButton.classList.remove("disable");
     muted = !muted;
+    if(muted){
+        muteButton.classList.add("disable");
+    }
     Tone.Master.mute = muted;
 }
 
@@ -892,6 +896,11 @@ effectButton.onclick = function(){
 /** Onclick to manage choose distortion effect */
 distortionOpt.onclick = function(){
     effect = 1;
+    if(effect == 3){
+        sampler.disconnect(feedbackDelay);
+    }else if(effect == 2){
+        sampler.disconnect(phaser);
+    }
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(dist);
     selectedEffect();
@@ -900,6 +909,11 @@ distortionOpt.onclick = function(){
 /** Onclick to manage choose phaser effect */
 phaserOpt.onclick = function(){
     effect = 2;
+    if(effect == 3){
+        sampler.disconnect(feedbackDelay);
+    }else if(effect == 1){
+        sampler.disconnect(dist);
+    }
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(phaser);
     selectedEffect();
@@ -908,6 +922,11 @@ phaserOpt.onclick = function(){
 /** Onclick to manage choose feedback delay effect */
 feedBackOpt.onclick = function(){
     effect = 3;
+    if(effect == 2){
+        sampler.disconnect(phaser);
+    }else if(effect == 1){
+        sampler.disconnect(dist);
+    }
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(feedbackDelay);
     selectedEffect();

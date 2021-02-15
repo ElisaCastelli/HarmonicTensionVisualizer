@@ -490,7 +490,8 @@
                 height: 50.5%;
                 background: rgb(83, 98, 105);
                 border-radius: 10px;
-                border: 2px dotted rgb(223, 193, 85);
+                /*border: 2px dotted rgb(223, 193, 85);*/
+                border: 2px solid white;
                 bottom: 10px;
                 font-size: large;
                 display: block;
@@ -498,7 +499,6 @@
                 padding-left: 1%;
                 padding-right: 1%;
                 margin: 10px;
-                border: 2px solid #dfc155;
                 border-radius: 10px;
                 box-shadow: black -2px 3px 6px -1px;
             }
@@ -513,13 +513,10 @@
             }
             
             .disable {
-                pointer-events: none;
                 background: rgb(226, 22, 50);
                 border: 1px solid black;
             }
 
-        
-              
             .dropdown-content {
                 visibility: hidden;
                 position: absolute;
