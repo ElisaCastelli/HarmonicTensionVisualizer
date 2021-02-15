@@ -96,14 +96,15 @@ This function receives an array of `Chord` objects, inserted by the user with th
 For each chord in the progression and for each scale (only modes of Ionian scale), a temporary `Key` is created. Every Iteration, the Key gains points for every compatible chord (e.g. in A Major, Bmin is a compatible chord, while Bb is not). Ad the end of the cycles, only the keys with more points are selected and will be used in Phase 2.
 #### Phase 2: analyze "wrong" chords
 ![alt text](./img/main_algorithm_example.png)
-For every selected key, each wrong chord is analyzed with different hypothesis, based on musical theory:
+For every selected key, each wrong (not coherent with current key) chord is analyzed with different hypothesis, based on musical theory:
 - Secondary dominant
 - Chord substitution
 - modal interchange
 - change of key
-- out of key
+- part of a pattern
+- out of key (no hypothesis accepted)
 
-Every Iteration, an analyzed progression, containing `ChordPlus` elements, is grenerated.
+Every Iteration an analyzed progression, containing `ChordPlus` elements, is grenerated.
 If a wrong chord is NOT identified as a Chord sustitution, the current Key gets a penalty. The key with less penalties will be chosen.
 #### Phase 3: assign tension, find patterns
 With the analysis based on the chosen key, each chord is given a standard tension, based on:
