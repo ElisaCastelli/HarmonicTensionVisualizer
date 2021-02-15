@@ -739,9 +739,9 @@ function removeSelectedEffect(indexElement) {
         element = document.getElementById("tremoloOpt");
     } else if (indexElement == 3) {
         element = document.getElementById("feedBackOpt");
-    } else if (indexElement == 4) {
+    }else if(indexElement == 4){
         element = document.getElementById("VibratoOpt");
-    } else if (indexElement == 5) {
+    }else if(indexElement == 5){
         element = document.getElementById("ChorusOpt");
     }
     element.classList.remove("effectSelected");
@@ -925,8 +925,8 @@ distortionOpt.onclick = function() {
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(dist);
     distortionOpt.classList.add("effectSelected");
-    selectedEffect();
     effect = 1;
+    selectedEffect();
 }
 
 /** Onclick to manage choose tremolo effect */
@@ -948,8 +948,8 @@ tremoloOpt.onclick = function() {
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(tremolo);
     tremoloOpt.classList.add("effectSelected");
-    selectedEffect();
     effect = 2;
+    selectedEffect();
 }
 
 /** Onclick to manage choose feedback delay effect */
@@ -971,8 +971,8 @@ feedBackOpt.onclick = function() {
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(feedbackDelay);
     feedBackOpt.classList.add("effectSelected");
-    selectedEffect();
     effect = 3;
+    selectedEffect();
 }
 
 VibratoOpt.onclick = function() {
@@ -993,8 +993,9 @@ VibratoOpt.onclick = function() {
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(vibrato);
     VibratoOpt.classList.add("effectSelected");
-    selectedEffect();
     effect = 4;
+    selectedEffect();
+    
 }
 
 
@@ -1016,8 +1017,9 @@ ChorusOpt.onclick = function() {
         document.getElementById("effectDropDown").style.visibility = 'hidden';
         sampler.connect(chorus);
         ChorusOpt.classList.add("effectSelected");
-        selectedEffect();
         effect = 5;
+        selectedEffect();
+        
     }
     /** Onclick to reset audio effects */
 noEffect.onclick = function() {
