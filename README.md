@@ -103,13 +103,14 @@ For every selected key, each wrong chord is analyzed with different hypothesis, 
 - change of key
 - out of key
 
+Every Iteration, an analyzed progression, containing `ChordPlus` elements, is grenerated.
 If a wrong chord is NOT identified as a Chord sustitution, the current Key gets a penalty. The key with less penalties will be chosen.
 #### Phase 3: assign tension, find patterns
 With the analysis based on the chosen key, each chord is given a standard tension, based on:
-- Chord's function: In a major scale, chords can be groupes as tonic (I, III, VI), subdominant (II, IV) and dominant (V, VII)
+- Chord's function: In a major scale, chords can be groupes as tonic (I, III, VI), subdominant (II, IV) and dominant (V, VII). Each group creates a different level of tension.
 - Chord's composition: e.g. chords with tritone intervals create high tension
 
-Ther, each pattern (V-I, II-V-I, ...) tested in every possible position: if some chords satisfy the pattern's conditions, their information is updated.
+Then, each pattern (V-I, II-V-I, ...) in tested on every possible position: if some chords satisfy the pattern's conditions, their information is updated.
 Finally, the analyzed progression is returned.
 ## Surge
 
