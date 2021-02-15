@@ -74,6 +74,28 @@ let sampler = new Tone.Sampler({
     "volume": Volume,
 }).toMaster();
 
+//const dist = new Tone.Distortion(0.4).toMaster();
+// sampler.connect(dist);
+
+//const delay = new Tone.Delay(1.5).toMaster();
+//sampler.connect(delay);
+
+//const pingpongDelay = new Tone.PingPongDelay(0.5).toMaster();
+// sampler.connect(pingpongDelay);
+
+//let phaser = new Tone.Phaser({
+//  "frequency": 10,
+// "octaves": -2,
+// "baseFrequency": 800
+// }).toMaster();
+
+// sampler.connect(phaser);
+//let feedbackDelay = new Tone.FeedbackDelay("4n", 0.5).toMaster();
+// sampler.connect(feedbackDelay);
+
+var freeverb = new Tone.Freeverb().toMaster();
+freeverb.dampening.value = 1000;
+
 
 /** Array of notes and respective colors */
 const key_color = [{
