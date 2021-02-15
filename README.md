@@ -95,7 +95,7 @@ The main function, contained in `harmonicAnalysis.js`, is executed every time th
 This function receives an array of `Chord` objects, inserted by the user with the [piano Roll](./README.md#Piano-roll). 
 For each chord in the progression and for each scale (only modes of Ionian scale), a temporary `Key` is created. Every Iteration, the Key gains points for every compatible chord (e.g. in A Major, Bmin is a compatible chord, while Bb is not). Ad the end of the cycles, only the keys with more points are selected and will be used in Phase 2.
 #### Phase 2: analyze "wrong" chords
-![alt text](./img/main_algorithm_example.png)
+![alt text](./img/harmonyAnalysis_example.png)
 For every selected key, each wrong (not coherent with current key) chord is analyzed with different hypothesis, based on musical theory:
 - Secondary dominant
 - Chord substitution
