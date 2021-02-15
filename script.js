@@ -74,6 +74,7 @@ let sampler = new Tone.Sampler({
     "volume": Volume,
 }).toMaster();
 
+
 /** Array of notes and respective colors */
 const key_color = [{
         pitch: "C",
@@ -309,6 +310,7 @@ function chordTypeSelected(columnNumber, chordType) {
     }
 }
 
+/** Function to autofill the notes in the piano roll */
 function autoFill(columnNumber) {
     let root = findRootNoteByColumn(columnNumber);
     let rootName = root.name;
