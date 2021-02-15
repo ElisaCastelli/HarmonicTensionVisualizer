@@ -72,7 +72,7 @@ let sampler = new Tone.Sampler({
     "A#4": "./piano/As4.mp3",
     "B4": "./piano/B4.mp3",
 }).set({
-    "volume": -8,
+    "volume": -10,
 
 }).toMaster();
 let dist = new Tone.Distortion(0.1).toMaster();
