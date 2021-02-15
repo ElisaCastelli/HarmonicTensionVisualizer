@@ -318,14 +318,14 @@ export function findKey(progression){
 		}
 	}
 	// sort accepted_keys based on points
+	console.log("y", accepted_keys, concurrent_keys);
 	accepted_keys.sort((a, b) => (a.points > b.points) ? -1 : 1);
 	// select the key/keys with highest .points value
 	for (let i = 0; i < accepted_keys.length - 1; i++) {
 		concurrent_keys.push(accepted_keys[i]);
-		if (typeof accepted_keys[i + 1].points != undefined && ! accepted_keys[i].points >= accepted_keys[i + 1].points)
+		if (accepted_keys[i + 1] != undefined && ! accepted_keys[i].points <= accepted_keys[i + 1].points)
 			break;
 	}
-	concurrent_keys.push(accepted_keys.shift());
 	return concurrent_keys;
 }
 

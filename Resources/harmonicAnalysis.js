@@ -11,6 +11,7 @@ export function harmonyAnalysis(progression) {
 	}
 	let progression_plus;
 	let temp;
+	console.log("key partenza: ", accepted_keys, accepted_keys.length)
 
 	/** PHASE 2): choose the key with highest number of correct chords before the first wrong one*/
 	// for each accepted_key
@@ -135,7 +136,7 @@ export function harmonyAnalysis(progression) {
 			finalProg = progression_plus;
 		}
 	}
-
+	console.log("tested keys: ", accepted_keys)
 	accepted_keys.sort((a, b) => (a.points < b.points) ? -1 : 1);
 	console.log("tested keys: ", accepted_keys)
 
