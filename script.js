@@ -739,6 +739,10 @@ function removeSelectedEffect(indexElement) {
         element = document.getElementById("tremoloOpt");
     } else if (indexElement == 3) {
         element = document.getElementById("feedBackOpt");
+    } else if (indexElement == 4) {
+        element = document.getElementById("VibratoOpt");
+    } else if (indexElement == 5) {
+        element = document.getElementById("ChorusOpt");
     }
     element.classList.remove("effectSelected");
 }
@@ -988,7 +992,7 @@ VibratoOpt.onclick = function() {
     }
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(vibrato);
-    feedBackOpt.classList.add("effectSelected");
+    VibratoOpt.classList.add("effectSelected");
     selectedEffect();
     effect = 4;
 }
@@ -1011,7 +1015,7 @@ ChorusOpt.onclick = function() {
         }
         document.getElementById("effectDropDown").style.visibility = 'hidden';
         sampler.connect(chorus);
-        feedBackOpt.classList.add("effectSelected");
+        ChorusOpt.classList.add("effectSelected");
         selectedEffect();
         effect = 5;
     }
