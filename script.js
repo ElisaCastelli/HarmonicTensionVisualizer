@@ -74,7 +74,7 @@ let sampler = new Tone.Sampler({
     "volume": Volume,
 }).toMaster();
 
-const dist= new Tone.Distortion(0.8).toMaster();
+const dist= new Tone.Distortion(0.1).toMaster();
 const delay= new Tone.Delay(1.5).toMaster();
 const pingDelay= new Tone.PingPongDelay(0.7).toMaster();
 let phaser = new Tone.Phaser({
@@ -891,8 +891,7 @@ effectButton.onclick = function(){
 delayOpt.onclick = function(){
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(delay);
-    /*delay.wet.value=0;
-    selectedEffect();*/
+    selectedEffect();
 }
 
 /** Onclick to manage choose distortion effect */
@@ -900,8 +899,7 @@ distortionOpt.onclick = function(){
     sampler.disconnect();
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(dist);
-    /*dist.wet.value=0;
-    selectedEffect();*/
+    selectedEffect();
 }
 
 /** Onclick to manage choose pingpong delay effect */
@@ -909,8 +907,7 @@ pingpongOpt.onclick = function(){
     sampler.disconnect();
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(pingDelay);
-    /*pingDelay.wet.value=0;
-    selectedEffect();*/
+    selectedEffect();
 }
 
 /** Onclick to manage choose phaser effect */
@@ -918,8 +915,7 @@ phaserOpt.onclick = function(){
     sampler.disconnect();
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(phaser);
-    /*phaser.wet.value=0;
-    selectedEffect();*/
+    selectedEffect();
 }
 
 /** Onclick to manage choose feedback delay effect */
@@ -927,13 +923,15 @@ feedBackOpt.onclick = function(){
     sampler.disconnect();
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(feedbackDelay);
-    /*feedbackDelay.wet.value=0;
-    selectedEffect();*/
+    selectedEffect();
 }
 
 noEffect.onclick = function(){
-    Tone.Master.dispose();
-    //sampler.toMaster();
+    sampler.disconnect(delay);
+    sampler.disconnect(dist);
+    sampler.disconnect(feedbackDelay);
+    sampler.disconnect(phaser);
+    sampler.disconnect(pingDelay);
     document.getElementById("effectDropDown").style.visibility = 'hidden';
 }
 
