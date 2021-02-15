@@ -179,7 +179,7 @@ export function selectRoot() {
 export function unselectMatrix(lengthChordArray) {
     let index = 0;
     if (lengthChordArray >= 0) {
-        for (let indexColumn = maxColumns - 1 ; indexColumn >= (maxColumns - lengthChordArray) ; indexColumn--) {
+        for (let indexColumn = maxColumns - 1; indexColumn >= (maxColumns - lengthChordArray); indexColumn--) {
             for (let indexRow = (numOctaves * 12) - 1; indexRow >= 0; indexRow--) {
                 unselectCell(index);
                 let idCell = getIdCell(index);
@@ -193,7 +193,7 @@ export function unselectMatrix(lengthChordArray) {
             }
             resetSelect(indexColumn);
         }
-    } 
+    }
 }
 
 /** Function to disable click on a certain given column */
@@ -497,7 +497,7 @@ function play() {
         /** Div to visualize event */
         if (analysisResults[maxColumns - 1 - columnPlayed].event != "") {
             /*eventContainer.style.visibility = 'visible';*/
-            if (document.getElementById("eventContainer") == null){
+            if (document.getElementById("eventContainer") == null) {
                 info.appendChild(createeventContainer)
             }
             let eventContainer = document.getElementById("eventContainer");
@@ -505,7 +505,7 @@ function play() {
             eventContainer.textContent = text;
         } else {
             let eventContainer = document.getElementById("eventContainer");
-            if(eventContainer != null){
+            if (eventContainer != null) {
                 eventContainer.textContent = "";
                 /*eventContainer.style.visibility = 'hidden';*/
                 info.removeChild(eventContainer);
@@ -533,7 +533,7 @@ function play() {
         /** Div to visualize pattern */
         if (analysisResults[maxColumns - 1 - columnPlayed].curr_pattern != "") {
             /*progressionInfo.style.visibility = 'visible';*/
-            if (document.getElementById("progressionInfo") == null){
+            if (document.getElementById("progressionInfo") == null) {
                 info.appendChild(createprogressionInfo);
             }
             let progressionInfo = document.getElementById("progressionInfo");
@@ -541,7 +541,7 @@ function play() {
         } else {
             /*progressionInfo.style.visibility = 'hidden';*/
             let progressionInfo = document.getElementById("progressionInfo");
-            if ( progressionInfo != null) {
+            if (progressionInfo != null) {
                 progressionInfo.textContent = "";
                 info.removeChild(progressionInfo);
             }
@@ -747,19 +747,19 @@ resetButton.onclick = function() {
         const bar = document.getElementById("scrollingBar");
         bar.style.left = '93px';
         const progressionInfo = document.getElementById('progressionInfo');
-        if ( progressionInfo != null) {
+        if (progressionInfo != null) {
             progressionInfo.textContent = "";
             info.removeChild(progressionInfo);
         }
         //progressionInfo.style.visibility = 'hidden';
         const eventContainer = document.getElementById('eventContainer');
-        if ( eventContainer != null) {
+        if (eventContainer != null) {
             eventContainer.textContent = "";
             info.removeChild(eventContainer);
         }
         //eventContainer.style.visibility = 'hidden';
         const substitutionContainer = document.getElementById('substitutionContainer');
-        if ( substitutionContainer != null) {
+        if (substitutionContainer != null) {
             substitutionContainer.textContent = "";
             info.removeChild(substitutionContainer);
         }
@@ -779,7 +779,7 @@ uploadButton.onchange = function() {
 }
 
 /** Button to reset input onchange */
-uploadButton.onclick = function(){
+uploadButton.onclick = function() {
     this.value = "";
 }
 
@@ -863,16 +863,16 @@ function buildReadme() {
     // (contenitore == null)
     {
         const testo = "<h1>HOW TO USE IT:</h1>In order to analyze a chord progression you have to fill the piano roll with the chords that compose it. " +
-            "Starting from the first column, select the tonic note clicking on the corresponding cell and, using the drop-down"+
-            " menu options, choose the type of chord you want.<br><br>"+
-            "Then, you will see some cells becoming orange: they represent the other selectable notes of the chord. "+
-            "You can choose to select them manually, or you can just move on to the next chord, while the program selects them automatically.<br><br>"+
-            "After filling the piano roll with all the chords you want, you can use \"play\", \"play faster\", \"pause\" and \"rewind\" buttons on the top of the page to listen to your progression and visualize the analysis the program computed on it.<br><br>"+
-            "You can download your progression, by clicking on the top right of the page on the \"download\" button. "+
-            "In order to upload a saved progression, click on the \"folder\" button.<br><br>"+
+            "Starting from the first column, select the tonic note clicking on the corresponding cell and, using the drop-down" +
+            " menu options, choose the type of chord you want.<br><br>" +
+            "Then, you will see some cells becoming orange: they represent the other selectable notes of the chord. " +
+            "You can choose to select them manually, or you can just move on to the next chord, while the program selects them automatically.<br><br>" +
+            "After filling the piano roll with all the chords you want, you can use \"play\", \"play faster\", \"pause\" and \"rewind\" buttons on the top of the page to listen to your progression and visualize the analysis the program computed on it.<br><br>" +
+            "You can download your progression, by clicking on the top right of the page on the \"download\" button. " +
+            "In order to upload a saved progression, click on the \"folder\" button.<br><br>" +
             "For more information about the project, check it out on Github:";
 
-        
+
         const readMeSection = document.createElement("div");
         const link = document.createElement("a");
         link.setAttribute("name", "readMe");
@@ -918,8 +918,8 @@ function firstRender() {
     let scrollInterval;
     pianoContainer.appendChild(bar);
     playButton.onclick = function() {
-        if (document.readyState === 'ready' || document.readyState === 'complete'){
-        // autofill last column if it's not complete
+        if (document.readyState === 'ready' || document.readyState === 'complete') {
+            // autofill last column if it's not complete
             let rightColumn = maxColumns - 1 - finalProgression.findIndex(x => typeof x == 'undefined');
             if (checkSelectableByColumn(rightColumn + 1) != undefined) {
                 autoFill(rightColumn + 1)
@@ -958,7 +958,7 @@ function firstRender() {
                 }
             };
         }
-        
+
     }
 
     rewindButton.onclick = function() {
@@ -980,7 +980,7 @@ function firstRender() {
             tensionChange(0);
             firstPlay = true;
             const progressionInfo = document.getElementById('progressionInfo');
-            if (progressionInfo != null){
+            if (progressionInfo != null) {
                 progressionInfo.textContent = "";
                 info.removeChild(progressionInfo);
             }
