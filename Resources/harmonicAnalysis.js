@@ -74,9 +74,7 @@ export function harmonyAnalysis(progression) {
 					console.log("situazione da definire") //da togliere, già gestito prima
 				}
 				if (temp) {
-					
 					progression_plus[i] = temp;
-					console.log("ohilà", progression_plus[i], temp)
 					priority_keys.push(temp.curr_key);
 					continue;
 				}
@@ -118,7 +116,6 @@ export function harmonyAnalysis(progression) {
 				/**try the key of the following chord */
 				temp = getProgDegrees(progression_plus[i], progression_plus[i + 1].curr_key);
 				temp = temp[0];
-				console.log(temp)
 				if (temp) {
 					progression_plus[i] = temp;
 					continue;
@@ -140,7 +137,7 @@ export function harmonyAnalysis(progression) {
 	}
 
 	accepted_keys.sort((a, b) => (a.points < b.points) ? -1 : 1);
-	console.log("allore: ", accepted_keys)
+	console.log("tested keys: ", accepted_keys)
 
 	/** PHASE 4): assign tension to each chord */
 	finalProg = evaluateTension(finalProg);

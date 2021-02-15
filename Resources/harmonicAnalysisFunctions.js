@@ -422,7 +422,6 @@ export function findSecondaryDom(chord1, chord2){
 	for (let i = 0; i < tempKeys.length; i++) {
 		tempProg = getProgDegrees(tempProg, tempKeys[i]);
 		if (tempProg[0].degree == "V" && tempProg[1].degree == "I") {
-			console.log("heyyy", chord1, chord2)
 			if (chord2.curr_key.scale 	== "Aeolian") {	// verifica se necessario modificare altri parametri
 				tempProg[0].event = "dominant of " + tempProg[1].toString();
 			} else {
@@ -651,10 +650,8 @@ export function evaluateTension(progression_plus){
 			}
 			else {
 				tmp = MajPatterns[p].degrees[0];
-				console.log("hh", MajPatterns[p].degrees[0])
 				tmp = allnotes.degrees.indexOf(tmp);
 				temp_index = extract[0].getAbsValue() - tmp >= 0 ? extract[0].getAbsValue() - tmp : extract[0].getAbsValue() - tmp + 12;
-				console.log("hey", extract[0].getAbsValue(), tmp)
 				temp_tonic = new Chord(String(allNotes1D[temp_index]));
 			}
 			temp_key = new Key(temp_tonic.note, modes[0].name);
