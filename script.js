@@ -77,9 +77,8 @@ let sampler = new Tone.Sampler({
 }).toMaster();
 let dist = new Tone.Distortion(0.1).toMaster();
 let feedbackDelay = new Tone.FeedbackDelay("4n", 0.5).toMaster();
-let tremolo = new Tone.Tremolo(10).toMaster();
 let vibrato = new Tone.Vibrato(3, 0.1).connect(Tone.Master);
-let chorus = new Tone.Chorus(0, 2, 1).connect(Tone.Master);
+
 
 /** Array of notes and respective colors */
 const key_color = [{
@@ -389,7 +388,7 @@ function addNote(cell, idCell, columnNumber) {
     //let reverseFinalProgression = [].concat(finalProgression).reverse();
     if (columnNumber != maxColumns - 1) {
         let i = 0;
-        while ( findRootNoteByColumn(i) == undefined) {
+        while (findRootNoteByColumn(i) == undefined) {
             i++;
         }
         var lastColumn = i;
@@ -399,7 +398,7 @@ function addNote(cell, idCell, columnNumber) {
 
 
     // condition to fill the columns in order
-    if ( (findRootNoteByColumn(columnNumber) != undefined && lastChordType != "default") || columnNumber == (maxColumns - 1) || columnNumber == rightColumn) {
+    if ((findRootNoteByColumn(columnNumber) != undefined && lastChordType != "default") || columnNumber == (maxColumns - 1) || columnNumber == rightColumn) {
 
         // autofill the previous column in fundamental position if there are still selectable notes
         if (columnNumber != (maxColumns - 1)) {
@@ -749,14 +748,10 @@ function removeSelectedEffect(indexElement) {
     let element;
     if (indexElement == 1) {
         element = document.getElementById("distortionOpt");
-    } else if (indexElement == 2) {
-        element = document.getElementById("tremoloOpt");
     } else if (indexElement == 3) {
         element = document.getElementById("feedBackOpt");
     } else if (indexElement == 4) {
         element = document.getElementById("VibratoOpt");
-    } else if (indexElement == 5) {
-        element = document.getElementById("ChorusOpt");
     }
     element.classList.remove("effectSelected");
 }
@@ -775,7 +770,7 @@ resetButton.onclick = function() {
         if (finalProgression.length == maxColumns) {
             let reverseFinalProgression = [].concat(finalProgression).reverse();
             let emptyvalues = reverseFinalProgression.findIndex(x => typeof x != 'undefined');
-            lengthChordArray = finalProgression.length - emptyvalues ;
+            lengthChordArray = finalProgression.length - emptyvalues;
         } else {
             lengthChordArray = finalProgression.length;
         }
@@ -925,18 +920,12 @@ effectButton.onclick = function() {
 
 /** Onclick to manage choose distortion effect */
 distortionOpt.onclick = function() {
-    if (effect == 2) {
-        removeSelectedEffect(2);
-        sampler.disconnect(tremolo);
-    } else if (effect == 3) {
+    if (effect == 3) {
         removeSelectedEffect(5);
         sampler.disconnect(feedbackDelay);
     } else if (effect == 4) {
         removeSelectedEffect(4);
         sampler.disconnect(vibrato);
-    } else if (effect == 5) {
-        removeSelectedEffect(5);
-        sampler.disconnect(chorus);
     }
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(dist);
@@ -946,40 +935,13 @@ distortionOpt.onclick = function() {
 }
 
 /** Onclick to manage choose tremolo effect */
-tremoloOpt.onclick = function() {
-
-    if (effect == 3) {
-        removeSelectedEffect(3);
-        sampler.disconnect(feedbackDelay);
-    } else if (effect == 1) {
-        removeSelectedEffect(1);
-        sampler.disconnect(dist);
-    } else if (effect == 4) {
-        removeSelectedEffect(4);
-        sampler.disconnect(vibrato);
-    } else if (effect == 5) {
-        removeSelectedEffect(5);
-        sampler.disconnect(chorus);
-    }
-    document.getElementById("effectDropDown").style.visibility = 'hidden';
-    sampler.connect(tremolo);
-    tremoloOpt.classList.add("effectSelected");
-    selectedEffect();
-    effect = 2;
-}
 
 /** Onclick to manage choose feedback delay effect */
 feedBackOpt.onclick = function() {
 
-    if (effect == 2) {
-        removeSelectedEffect(2);
-        sampler.disconnect(tremolo);
-    } else if (effect == 1) {
+    if (effect == 1) {
         removeSelectedEffect(1);
         sampler.disconnect(dist);
-    } else if (effect == 5) {
-        removeSelectedEffect(5);
-        sampler.disconnect(chorus);
     } else if (effect == 4) {
         removeSelectedEffect(4);
         sampler.disconnect(vibrato);
@@ -993,18 +955,12 @@ feedBackOpt.onclick = function() {
 
 VibratoOpt.onclick = function() {
 
-    if (effect == 2) {
-        removeSelectedEffect(2);
-        sampler.disconnect(tremolo);
-    } else if (effect == 1) {
+    if (effect == 1) {
         removeSelectedEffect(1);
         sampler.disconnect(dist);
     } else if (effect == 3) {
         removeSelectedEffect(3);
         sampler.disconnect(feedbackDelay);
-    } else if (effect == 5) {
-        removeSelectedEffect(5);
-        sampler.disconnect(chorus);
     }
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(vibrato);
@@ -1014,27 +970,7 @@ VibratoOpt.onclick = function() {
 }
 
 
-ChorusOpt.onclick = function() {
 
-    if (effect == 2) {
-        removeSelectedEffect(2);
-        sampler.disconnect(tremolo);
-    } else if (effect == 1) {
-        removeSelectedEffect(1);
-        sampler.disconnect(dist);
-    } else if (effect == 3) {
-        removeSelectedEffect(3);
-        sampler.disconnect(feedbackDelay);
-    } else if (effect == 4) {
-        removeSelectedEffect(4);
-        sampler.disconnect(vibrato);
-    }
-    document.getElementById("effectDropDown").style.visibility = 'hidden';
-    sampler.connect(chorus);
-    ChorusOpt.classList.add("effectSelected");
-    selectedEffect();
-    effect = 5;
-}
 
 /** Onclick to reset audio effects */
 noEffect.onclick = function() {
@@ -1042,10 +978,6 @@ noEffect.onclick = function() {
         sampler.disconnect(dist);
         removeSelectedEffect(1);
         effect = 0;
-    } else if (effect == 2) {
-        sampler.disconnect(tremolo);
-        removeSelectedEffect(2);
-        effect = 0;
     } else if (effect == 3) {
         sampler.disconnect(feedbackDelay);
         feedBackOpt.classList.remove("effectSelected");
@@ -1055,11 +987,6 @@ noEffect.onclick = function() {
         sampler.disconnect(vibrato);
         feedBackOpt.classList.remove("effectSelected");
         removeSelectedEffect(4);
-        effect = 0;
-    } else if (effect == 5) {
-        sampler.disconnect(chorus);
-        feedBackOpt.classList.remove("effectSelected");
-        removeSelectedEffect(5);
         effect = 0;
     }
     document.getElementById("effectDropDown").style.visibility = 'hidden';
