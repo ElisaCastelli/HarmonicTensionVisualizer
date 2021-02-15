@@ -245,9 +245,11 @@ function clearColumn(columnNumber) {
 /** Function to remove the text from the cells that are the tonic note of the chord */
 function clearRootText(columnNumber) {
     let root = findRootNoteByColumn(columnNumber);
-    let idCell = root.id;
-    let button = document.getElementById("b" + idCell);
-    button.textContent = "";
+    if (root != undefined) {
+        let idCell = root.id;
+        let button = document.getElementById("b" + idCell);
+        button.textContent = "";
+    }
 }
 
 /** Function to remove the visual content associated to the selectable cells of a specific column of the table  */
@@ -384,9 +386,20 @@ function addNote(cell, idCell, columnNumber) {
     let note = findNoteByMatrixIndex(matrixIndex);
     let findRoot = findRootNoteByColumn(columnNumber);
     let rightColumn = maxColumns - 1 - finalProgression.findIndex(x => typeof x == 'undefined');
+    //let reverseFinalProgression = [].concat(finalProgression).reverse();
+    if (columnNumber != maxColumns - 1) {
+        let i = 0;
+        while ( findRootNoteByColumn(i) == undefined) {
+            i++;
+        }
+        var lastColumn = i;
+        var lastSelect = document.getElementById("select" + lastColumn);
+        var lastChordType = lastSelect.value;
+    }
+
 
     // condition to fill the columns in order
-    if (findRootNoteByColumn(columnNumber) != undefined || columnNumber == (maxColumns - 1) || columnNumber == rightColumn) {
+    if ( (findRootNoteByColumn(columnNumber) != undefined && lastChordType != "default") || columnNumber == (maxColumns - 1) || columnNumber == rightColumn) {
 
         // autofill the previous column in fundamental position if there are still selectable notes
         if (columnNumber != (maxColumns - 1)) {
@@ -760,7 +773,9 @@ resetButton.onclick = function() {
     if (!modelButton) {
         let lengthChordArray = 0;
         if (finalProgression.length == maxColumns) {
-            lengthChordArray = finalProgression.findIndex(x => typeof x == 'undefined');
+            let reverseFinalProgression = [].concat(finalProgression).reverse();
+            let emptyvalues = reverseFinalProgression.findIndex(x => typeof x != 'undefined');
+            lengthChordArray = finalProgression.length - emptyvalues ;
         } else {
             lengthChordArray = finalProgression.length;
         }
