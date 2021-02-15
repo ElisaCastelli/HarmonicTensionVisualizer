@@ -77,7 +77,7 @@ let sampler = new Tone.Sampler({
 let dist = new Tone.Distortion(0.1).toMaster();
 let feedbackDelay = new Tone.FeedbackDelay("4n", 0.5).toMaster();
 let tremolo = new Tone.Tremolo(10).toMaster();
-let vibrato = new Tone.Vibrato(4, 0.5).connect(Tone.Master);
+let vibrato = new Tone.Vibrato(3, 0.1).connect(Tone.Master);
 let chorus = new Tone.Chorus(0, 2, 1).connect(Tone.Master);
 
 /** Array of notes and respective colors */
