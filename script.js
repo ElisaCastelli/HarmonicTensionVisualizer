@@ -1027,14 +1027,6 @@ noEffect.onclick = function() {
     unselectedEffect();
 }
 
-window.onclick = function(){
-    const effectDropDown = document.getElementById("effectDropDown");
-    if(effectDropDown.style.visibility == "visible"){
-        effectDropDown.style.visibility ="hidden";
-    }
-}
-
-
 /** Function to create readme */
 function buildReadme() {
     const contenitore = document.getElementById("readMeSection");
