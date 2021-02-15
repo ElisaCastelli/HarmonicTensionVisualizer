@@ -14,7 +14,7 @@ export function harmonyAnalysis(progression) {
 
 	/** PHASE 2): choose the key with highest number of correct chords before the first wrong one*/
 	// for each accepted_key
-	for (let i = 0; i < accepted_keys.length; i++) {
+	for (let i = 0; i < accepted_keys.length-1; i++) {
 		// exception: give priority to major and minor scales
 		if (modes[accepted_keys[i].scale_index].tonal_harmony) {
 			accepted_keys[i].points += 100;	//revisiona
