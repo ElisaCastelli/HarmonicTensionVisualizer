@@ -936,7 +936,6 @@ distortionOpt.onclick = function() {
     effect = 1;
 }
 
-/** Onclick to manage choose tremolo effect */
 
 /** Onclick to manage choose feedback delay effect */
 feedBackOpt.onclick = function() {
@@ -955,6 +954,8 @@ feedBackOpt.onclick = function() {
     effect = 2;
 }
 
+
+/** Onclick to manage choose vibrato effect */
 VibratoOpt.onclick = function() {
 
     if (effect == 1) {
@@ -970,8 +971,6 @@ VibratoOpt.onclick = function() {
     selectedEffect();
     effect = 3;
 }
-
-
 
 
 /** Onclick to reset audio effects */
