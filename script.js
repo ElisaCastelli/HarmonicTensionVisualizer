@@ -1058,42 +1058,58 @@ function firstRender() {
         if (document.readyState === 'ready' || document.readyState === 'complete') {
             // autofill last column if it's not complete
             let rightColumn = maxColumns - 1 - finalProgression.findIndex(x => typeof x == 'undefined');
-            if (checkSelectableByColumn(rightColumn + 1) != undefined) {
-                autoFill(rightColumn + 1)
+            let reverseFinalProgression = [].concat(finalProgression).reverse();
+            let emptyvalues = reverseFinalProgression.findIndex(x => typeof x != 'undefined');
+            let lengthChordArray = finalProgression.length - emptyvalues ;
+            for (let index = 0; index < lengthChordArray; index++) {
+                if (checkSelectableByColumn(maxColumns - 1 - index) != undefined) {
+                    autoFill(maxColumns - 1 - index)
+                }
             }
-
-            if (!modelButton && !emptyMatrix()) {
-                playButton.style.color = 'rgb(245, 125, 27)';
-                const tableScroll = document.getElementById("table-scroll");
-                modelButton = true;
-                //divChordPlayed.style.visibility = 'visible';
-                info.appendChild(createchordPlayed);
-                let maxIndex = 0;
-                if (firstPlay) {
-                    lastBarPosition = '93px';
-                    lastTableScrollPosition = 0;
-                } else {
-                    stopButton.style.color = 'rgb(63, 132, 87)';
-                }
-                tableScroll.style.overflowX = 'hidden';
-                maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
-                bar.style.left = lastBarPosition;
-                tableBackscroll(lastTableScrollPosition);
-                let progressionToAnalyze = finalProgression.slice(0, maxIndex);
-                analysisResults = harmonyAnalysis(progressionToAnalyze);
-                scrollInterval = setInterval(playAndScroll, timeIntervalIncrement);
-                stopButton.onclick = function() {
-                    playButton.style.color = 'rgb(63, 132, 87)';
-                    stopButton.style.color = 'rgb(245, 125, 27)';
-                    lastBarPosition = bar.style.left;
-                    lastTableScrollPosition = tableScroll.scrollLeft;
-                    modelButton = false;
-                    firstPlay = false;
-                    tableScroll.style.overflowX = 'auto';
-                    clearInterval(scrollInterval);
-                    tensionChange(0);
-                }
-            };
+            
+            if (maxColumns - rightColumn < lengthChordArray) {
+                let notes = getColumnNotes(rightColumn);
+                alert("please fill the highlighted column first");
+                for (let index = 0; index < notes.length; index++) {
+                    let idCell = notes[index].id;
+                    let cell = document.getElementById(idCell);
+                    cell.classList.add("highlighted_column");
+                    setTimeout(function() { cell.classList.remove("highlighted_column") }, 1000);
+                    }
+            } else {
+                if (!modelButton && !emptyMatrix()) {
+                    playButton.style.color = 'rgb(245, 125, 27)';
+                    const tableScroll = document.getElementById("table-scroll");
+                    modelButton = true;
+                    //divChordPlayed.style.visibility = 'visible';
+                    info.appendChild(createchordPlayed);
+                    let maxIndex = 0;
+                    if (firstPlay) {
+                        lastBarPosition = '93px';
+                        lastTableScrollPosition = 0;
+                    } else {
+                        stopButton.style.color = 'rgb(63, 132, 87)';
+                    }
+                    tableScroll.style.overflowX = 'hidden';
+                    maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
+                    bar.style.left = lastBarPosition;
+                    tableBackscroll(lastTableScrollPosition);
+                    let progressionToAnalyze = finalProgression.slice(0, maxIndex);
+                    analysisResults = harmonyAnalysis(progressionToAnalyze);
+                    scrollInterval = setInterval(playAndScroll, timeIntervalIncrement);
+                    stopButton.onclick = function() {
+                        playButton.style.color = 'rgb(63, 132, 87)';
+                        stopButton.style.color = 'rgb(245, 125, 27)';
+                        lastBarPosition = bar.style.left;
+                        lastTableScrollPosition = tableScroll.scrollLeft;
+                        modelButton = false;
+                        firstPlay = false;
+                        tableScroll.style.overflowX = 'auto';
+                        clearInterval(scrollInterval);
+                        tensionChange(0);
+                    }
+                };
+            }
         }
 
     }
