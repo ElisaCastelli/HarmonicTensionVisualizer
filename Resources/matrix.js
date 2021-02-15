@@ -230,7 +230,7 @@ export function rootAfterChordType(matrixIndex, columnNumber) {
 export function printChord(noteArray, octaveNoteSelected, columnNumber) {
     for (let index = 0; index < noteArray.length; index++) {
         if (index > 0) {
-            if (allNotes1D.indexOf(noteArray[index]) < allNotes1D.indexOf(noteArray[index - 1] && octaveNoteSelected < 4)) {
+            if ((allNotes1D.indexOf(noteArray[index]) < allNotes1D.indexOf(noteArray[index - 1])) && (octaveNoteSelected < 4))  {
                 octaveNoteSelected += 1
             }
         }
