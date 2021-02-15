@@ -179,7 +179,7 @@ export function selectRoot() {
 export function unselectMatrix(lengthChordArray) {
     let index = 0;
     if (lengthChordArray >= 0) {
-        for (let indexColumn = maxColumns - 1; indexColumn >= maxColumns - lengthChordArray; indexColumn--) {
+        for (let indexColumn = maxColumns - 1 ; indexColumn >= (maxColumns - lengthChordArray) ; indexColumn--) {
             for (let indexRow = (numOctaves * 12) - 1; indexRow >= 0; indexRow--) {
                 unselectCell(index);
                 let idCell = getIdCell(index);
