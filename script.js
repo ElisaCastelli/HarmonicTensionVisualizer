@@ -778,6 +778,8 @@ resetButton.onclick = function() {
 
 /** onclick associated with the uploadButton to read a file */
 uploadButton.onchange = function() {
+    let maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
+    unselectMatrix(maxIndex);
     uploadFile(fileInput.files[0], maxColumns);
     fileInput.value = null;
 }

@@ -9,6 +9,7 @@ export function uploadFile(file, maxColumns) {
     let matrixString = "";
     let progressionString = "";
     let finalProgression =[];
+
     if (file.type.match(textType)) {
         let reader = new FileReader();
         reader.readAsText(file);
@@ -25,13 +26,7 @@ export function uploadFile(file, maxColumns) {
     } else {
         console.log("File not supported!");
     }
-    let maxIndex = 0;
-    if (finalProgression.length == maxColumns) {
-        maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
-    } else {
-        maxIndex = finalProgression.length;
-    }
-    unselectMatrix(maxIndex);
+    
 }
 
 /** Function used to download the file that contains your progressiom */
