@@ -897,12 +897,15 @@ effectButton.onclick = function(){
 distortionOpt.onclick = function(){
     effect = 1;
     if(effect == 3){
+        removeSelectedEffect(3);
         sampler.disconnect(feedbackDelay);
     }else if(effect == 2){
+        removeSelectedEffect(2);
         sampler.disconnect(phaser);
     }
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(dist);
+    distortionOpt.classList.add("effectSelected");
     selectedEffect();
 }
 
@@ -910,12 +913,15 @@ distortionOpt.onclick = function(){
 phaserOpt.onclick = function(){
     effect = 2;
     if(effect == 3){
+        removeSelectedEffect(3);
         sampler.disconnect(feedbackDelay);
     }else if(effect == 1){
+        removeSelectedEffect(1);
         sampler.disconnect(dist);
     }
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(phaser);
+    phaserOpt.classList.add("effectSelected");
     selectedEffect();
 }
 
@@ -923,12 +929,15 @@ phaserOpt.onclick = function(){
 feedBackOpt.onclick = function(){
     effect = 3;
     if(effect == 2){
+        removeSelectedEffect(2);
         sampler.disconnect(phaser);
     }else if(effect == 1){
+        removeSelectedEffect(1);
         sampler.disconnect(dist);
     }
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(feedbackDelay);
+    feedBackOpt.classList.add("effectSelected");
     selectedEffect();
 }
 
@@ -936,17 +945,34 @@ feedBackOpt.onclick = function(){
 noEffect.onclick = function(){
     if(effect == 1){
         sampler.disconnect(dist);
+        removeSelectedEffect(1);
         effect = 0;
     }else if(effect == 2){
         sampler.disconnect(phaser);
+        removeSelectedEffect(2);
         effect = 0;
     }else if(effect == 3){
         sampler.disconnect(feedbackDelay);
+        feedBackOpt.classList.remove("effectSelected");
+        removeSelectedEffect(3);
         effect = 0;
     }
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     unselectedEffect();
 }
+
+function removeSelectedEffect(indexElement){
+    let element;
+    if(indexElement == 1){
+        element = document.getElementById("distortionOpt");
+    }else if(indexElement == 2){
+        element = document.getElementById("phaserOpt");
+    }else if(indexElement == 3){
+        element = document.getElementById("feedBackOpt");
+    }
+    element.classList.remove("effectSelected");
+}
+
 
 /** Function to create readme */
 function buildReadme() {

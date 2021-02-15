@@ -540,6 +540,11 @@
                 background-color: rgba(91, 154, 248, 0.596);
             }
 
+            .effectSelected{
+                background-color: rgba(11, 58, 129, 0.596);
+                color: white;
+            }
+
             .show {
                 visibility: visible;
                 display: block;
