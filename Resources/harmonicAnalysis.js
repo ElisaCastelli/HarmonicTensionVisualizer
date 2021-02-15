@@ -51,9 +51,6 @@ export function harmonyAnalysis(progression) {
 					
 				/** OPTION B): CHORD SUBSTITUTION*/
 				temp = findSubs(progression, priority_keys, progression_plus, i);
-				if (temp && temp.curr_pattern == "dominant resolution") {
-					console.log("situazione da definire") //da togliere, già gestito prima
-				}
 				if (temp) {
 					progression_plus[i] = temp;
 					priority_keys.push(temp.curr_key);
