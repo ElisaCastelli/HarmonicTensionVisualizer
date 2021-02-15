@@ -285,8 +285,6 @@ export function findKey(progression){
 						tempKey.points++;
 					}
 				}
-				// should I put here check for substitutions????????????????????????????????
-				
 			}
 			// if I have already saved the current key, merge the occourrences and sum points
 			if (firstDegreePresent) {
@@ -405,12 +403,16 @@ const MajPatterns = [{
 
 /** finds secondary dominant resolution*/
 export function findSecondaryDom(chord1, chord2){
-	let tempProg = [chord1, chord2];
+	let tempProg = [new Chord(chord1.note, chord1.type) , new Chord(chord2.note, chord2.type)];
 	let tempKeys = findKey(tempProg);
 	for (let i = 0; i < tempKeys.length; i++) {
 		tempProg = getProgDegrees(tempProg, tempKeys[i]);
 		if (tempProg[0].degree == "V" && tempProg[1].degree == "I") {
-			tempProg[0].event = "secondary dominant of " + tempProg[1].toString();
+			if (chord2.curr_key == "Aeolian") {	// verifica se necessario modificare altri parametri
+				tempProg[0].event = "dominant of " + tempProg[1].toString();
+			} else {
+				tempProg[0].event = "secondary dominant of " + tempProg[1].toString();
+			}
 			return tempProg[0];
 		}
 	}
@@ -592,7 +594,7 @@ export function evaluateTension(progression_plus){
 				progression_plus[i].tension = modal_tension;
 		}
 		// assign high tension to chords that contain tritone
-		else if (tritoneTensions.chords.includes(progression_plus[i].type)){
+		if (tritoneTensions.chords.includes(progression_plus[i].type)){
 			if (progression_plus[i].substitution != "") {
 				temp_index = tritoneTensions.chords.indexOf(progression_plus[i].substitution.type);
 				if (temp_index >= 0)
@@ -659,7 +661,9 @@ export function evaluateTension(progression_plus){
 					progression_plus[j].tension = progression_plus[j].type == 
 						MajPatterns[p].triads[j - i] ? MajPatterns[p].triad_tension[j - i] : MajPatterns[p].quadriad_tension[j - i];
 					progression_plus[j].curr_pattern = MajPatterns[p].name;
-					progression_plus[j].degree = MajPatterns[p].degrees[j - i];
+					if (!(progression_plus[j].type_coherent && progression_plus[j].degree_coherent)) {
+						progression_plus[j].degree = MajPatterns[p].degrees[j - i];
+					}
 				}
 				i += MajPatterns[p].degrees.length - 1;//revisiona
 				break;
