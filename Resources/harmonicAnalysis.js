@@ -32,89 +32,120 @@ export function harmonyAnalysis(progression) {
 	}
 	accepted_keys.sort((a, b) => (a.points > b.points) ? -1 : 1);
 
-	/** PHASE 3): analyze each "wrong" chord, based on the chosen key, with different options*/
-	progression_plus = getProgDegrees(progression, accepted_keys[0]);
-	console.log("hey", accepted_keys);
-	// array of all keys that may be found during analysis 
-	let priority_keys = [];
-	priority_keys.push(accepted_keys[0]);
+	console.log("keys that will be tested: ", accepted_keys);
+	let priority_keys;
+	let finalProg = progression_plus;
+	let finalKey;
 
-	for (let i = 0; i < progression_plus.length; i++) {
+	/** PHASE 3): analyze each possible key, counting the effective number of wrong notes found*/
+	for (let k = 0; k < accepted_keys.length; k++) {
+		progression_plus = getProgDegrees(progression, accepted_keys[k]);
+		accepted_keys[k].points = 0;
+		priority_keys = [];
+		priority_keys.push(accepted_keys[0]);
 
-		// if the chord is wrong:
-		if (!(progression_plus[i].type_coherent && progression_plus[i].degree_coherent)) {
+		/** analyze each "wrong" chord, based on the chosen key, with different options*/
+		for (let i = 0; i < progression_plus.length; i++) {
 
-			/** OPTION A): SECONDARY DOMINANT */ 
-			if (progression_plus[i].type == "7" && i + 1 < progression_plus.length) {
-				temp = findSecondaryDom(progression_plus[i], progression_plus[i + 1]);
+			// if the chord is wrong:
+			if (!(progression_plus[i].type_coherent && progression_plus[i].degree_coherent)) {
+
+				/** OPTION A): SECONDARY DOMINANT */ 
+				if (progression_plus[i].type == "7" && i + 1 < progression_plus.length) {
+					temp = findSecondaryDom(progression_plus[i], progression_plus[i + 1]);
+					if (temp) {
+						accepted_keys[k].points++;
+						progression_plus[i] = temp;
+						progression_plus[i].surprise = "A";
+						priority_keys.push(temp.curr_key);
+						if (!(progression_plus[i + 1].type_coherent && progression_plus[i + 1].degree_coherent)) {
+							temp = getProgDegrees([progression[i + 1]], temp.curr_key);
+							temp = temp[0];
+							progression_plus[i + 1] = temp;
+							progression_plus[i + 1].surprise = "A";
+						}
+						continue;
+					}
+				}
+					
+				/** OPTION B): CHORD SUBSTITUTION*/
+				temp = findSubs(progression, priority_keys, progression_plus, i);
+				if (temp && temp.curr_pattern == "dominant resolution") {
+					console.log("situazione da definire") //da togliere, già gestito prima
+				}
+				if (temp) {
+					
+					progression_plus[i] = temp;
+					console.log("ohilà", progression_plus[i], temp)
+					priority_keys.push(temp.curr_key);
+					continue;
+				}
+
+				/** OPTION C): MODAL INTERCHANGE */
+				temp = findModalInterchange(progression, priority_keys, progression_plus[i], i);
 				if (temp) {
 					progression_plus[i] = temp;
-					progression_plus[i].surprise = "A";
 					priority_keys.push(temp.curr_key);
-					if (!(progression_plus[i + 1].type_coherent && progression_plus[i + 1].degree_coherent)) {
-						temp = getProgDegrees([progression[i + 1]], temp.curr_key);
-						temp = temp[0];
-						progression_plus[i + 1] = temp;
-						progression_plus[i + 1].surprise = "A";
-					}
+					accepted_keys[k].points++;
+					continue;
+				}
+		
+				/** OPTION D): CHANGE OF SCALE */
+				temp = findChangeKey(progression, priority_keys, progression_plus, i);
+				if (temp) {
+					progression_plus = temp;
+					priority_keys.push(temp.curr_key);
+					accepted_keys[k].points++;
+					continue;
+				}
+
+				/** OPTION E): GENERAL CHORD OUT OF KEY*/
+				progression_plus[i].surprise = "D";
+				progression_plus[i].event = "out of key";
+				accepted_keys[k].points++;
+				continue;
+			}
+			// if first chord is in key and is tonic, give priority
+			if (i == 0 && progression_plus[i].tonic == "I") {
+				accepted_keys[k].points--;
+			}
+		}
+
+		/**PHASE 3b: check again all the chords that are still out of key*/
+		for (let i = 0; i < progression_plus.length; i++) {
+			// rivaluta if, prima era generico e sistemava più robe, prova a rimetterlo ma escludere tritoni
+			if (progression_plus[i].event == "out of key") {
+				/**try the key of the following chord */
+				temp = getProgDegrees(progression_plus[i], progression_plus[i + 1].curr_key);
+				temp = temp[0];
+				console.log(temp)
+				if (temp) {
+					progression_plus[i] = temp;
 					continue;
 				}
 			}
-				
-			/** OPTION B): CHORD SUBSTITUTION*/
-			temp = findSubs(progression, priority_keys, progression_plus, i);
-			if (temp && temp.curr_pattern == "dominant resolution") {
-				console.log("situazione da definire") //da togliere, già gestito prima
-			}
-			if (temp) {
-				
-				progression_plus[i] = temp;
-				console.log("ohilà", progression_plus[i], temp)
-				priority_keys.push(temp.curr_key);
-				continue;
-			}
-
-			/** OPTION C): MODAL INTERCHANGE */
-			temp = findModalInterchange(progression, priority_keys, progression_plus[i], i);
-			if (temp) {
-				progression_plus[i] = temp;
-				priority_keys.push(temp.curr_key);
-				continue;
-			}
-	
-			/** OPTION D): CHANGE OF SCALE */
-			temp = findChangeKey(progression, priority_keys, progression_plus, i);
-			if (temp) {
-				progression_plus = temp;
-				priority_keys.push(temp.curr_key);
-				continue;
-			}
-
-			/** OPTION E): GENERAL CHORD OUT OF KEY*/
-			progression_plus[i].surprise = "D";
-			progression_plus[i].event = "out of key";
+		}
+		if (k == 0) {
+			finalKey = accepted_keys[k];
+			finalProg = progression_plus;
+		} else if (accepted_keys[k].points < finalKey.points){
+			finalKey = accepted_keys[k];
+			finalProg = progression_plus;
+		} else if (accepted_keys[k].points == finalKey.points && 
+			modes[accepted_keys[k].scale_index].tonal_harmony &&
+			! modes[finalKey.scale_index].tonal_harmony) {
+			finalKey = accepted_keys[k];
+			finalProg = progression_plus;
 		}
 	}
 
-	/**PHASE 3b: check again all the chords that are still out of key*/
-	for (let i = 0; i < progression_plus.length; i++) {
-		// rivaluta if, prima era generico e sistemava più robe, prova a rimetterlo ma escludere tritoni
-		if (progression_plus[i].event == "out of key") {
-			/**try the key of the following chord */
-			temp = getProgDegrees(progression_plus[i], progression_plus[i + 1].curr_key);
-			temp = temp[0];
-			console.log(temp)
-			if (temp) {
-				progression_plus[i] = temp;
-				continue;
-			}
-		}
-	}
+	accepted_keys.sort((a, b) => (a.points < b.points) ? -1 : 1);
+	console.log("allore: ", accepted_keys)
 
 	/** PHASE 4): assign tension to each chord */
-	progression_plus = evaluateTension(progression_plus);
-	console.log("progression analyzed: ", progression_plus);
-	return progression_plus;
+	finalProg = evaluateTension(finalProg);
+	console.log("progression analyzed: ", finalProg);
+	return finalProg;
 
 }
 

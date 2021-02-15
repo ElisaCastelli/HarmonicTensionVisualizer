@@ -228,7 +228,9 @@ export function findKey(progression){
 	
 	// each accepted key will gain or lose points according to different parameters (number of substitutions, kind of substitutions, ...)
 	let accepted_keys = [];
+	let concurrent_keys = [];
 	let tempKey;
+	let flag;
 	
 	let chord_deg_index;
 	let chord_degree;
@@ -248,6 +250,7 @@ export function findKey(progression){
 			// reset the counter
 			tempKey = new Key(tonic.note, modes[scale].name);
 			firstDegreePresent = false;
+			flag = false;
 			
 			// check that the chord is inside the scale "tonic.note modes[scale]"
 			for (let chord = 0; chord < progression.length; chord++) {
@@ -273,6 +276,9 @@ export function findKey(progression){
 					 * 3): dominant chords do the same*/
 					if (tonic_index == 0 && (triad_check || quadriad_check)) {
 						tempKey.points += 2;
+						if (chord == 0) {
+							flag = true;
+						}
 					}
 					else if (chord_degree == "I" && (triad_check || quadriad_check)){
 						firstDegreePresent = true;
@@ -293,10 +299,20 @@ export function findKey(progression){
 				for (let i = 0; i < accepted_keys.length - 1; i++) {
 					if (tempKey.tonic == accepted_keys[i].tonic && tempKey.scale == accepted_keys[i].scale){
 						accepted_keys[i].points += tempKey.points;
+						tempKey = accepted_keys[i];
 						accepted_keys.pop();
 						break;
 					}
 				}
+			}
+			if (flag) {
+				for (let index = 0; index < concurrent_keys.length; index++) {
+					if (concurrent_keys[index].equalTo(tempKey)) {
+						concurrent_keys.splice(index, 1);
+						break;
+					}
+				}
+				concurrent_keys.push(tempKey);
 			}
 			
 		}
@@ -304,12 +320,10 @@ export function findKey(progression){
 	// sort accepted_keys based on points
 	accepted_keys.sort((a, b) => (a.points > b.points) ? -1 : 1);
 	// select the key/keys with highest .points value
-	let concurrent_keys = [];
-	
 	for (let i = 0; i < accepted_keys.length - 1; i++) {
 		concurrent_keys.push(accepted_keys[i]);
-		if (typeof accepted_keys[i + 1].points != undefined && ! accepted_keys[i].points == accepted_keys[i + 1].points)
-			break
+		if (typeof accepted_keys[i + 1].points != undefined && ! accepted_keys[i].points >= accepted_keys[i + 1].points)
+			break;
 	}
 	concurrent_keys.push(accepted_keys.shift());
 	return concurrent_keys;
