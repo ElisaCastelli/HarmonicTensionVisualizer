@@ -409,7 +409,7 @@ const MajPatterns = [{
 }, {//come metterlo giù se non voglio controllare il grado?
 	name: "maj7 -> 7",
 	degrees: ["V#", "V"], // come fare?
-	triads: ["", ""],
+	triads: ["n", "n"],
 	quadriads: ["maj7", "7"],
 	triad_tension: [4, 8],
 	quadriad_tension: [5, 10]
