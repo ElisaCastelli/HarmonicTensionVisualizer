@@ -96,7 +96,7 @@
                 margin: auto;
                 position: relative;
                 top: 55%;
-                left: 3%;
+                left: 0%;
                 height: 20px;
                 width: 60%;
                 text-align: center;
@@ -191,7 +191,7 @@
             }
             
             #playButton {
-                left: 29%;
+                left: 28%;
                 text-align: center;
                 position: fixed;
                 top: 25px;
@@ -199,7 +199,7 @@
             }
             
             #playFasterButton {
-                left: 35%;
+                left: 33.5%;
                 text-align: center;
                 position: fixed;
                 top: 25px;
@@ -208,7 +208,7 @@
             }
             
             #stopButton {
-                left: 41%;
+                left: 39%;
                 text-align: center;
                 position: fixed;
                 top: 25px;
@@ -216,15 +216,23 @@
             }
             
             #rewindButton {
-                left: 47%;
+                left: 44.5%;
                 top: 25px;
                 position: fixed;
                 text-align: center;
                 color: rgb(63, 132, 87);
             }
             
+            #effectButton{
+                left: 50%;
+                top: 25px;
+                position: fixed;
+                text-align: center;
+                color: rgb(63, 132, 87);
+            }
+
             #muteButton {
-                left: 53%;
+                left: 55.5%;
                 top: 25px;
                 position: fixed;
                 text-align: center;
@@ -232,7 +240,7 @@
             }
             
             #volumeDownButton {
-                left: 59%;
+                left: 61%;
                 top: 25px;
                 position: fixed;
                 text-align: center;
@@ -240,7 +248,7 @@
             }
             
             #volumeUpButton {
-                left: 65%;
+                left: 66.5%;
                 top: 25px;
                 position: fixed;
                 text-align: center;
@@ -248,7 +256,7 @@
             }
             
             #resetButton {
-                left: 71%;
+                left: 72%;
                 top: 25px;
                 position: fixed;
                 text-align: center;
@@ -508,6 +516,36 @@
                 pointer-events: none;
                 background: rgb(226, 22, 50);
                 border: 1px solid black;
+            }
+
+        
+              
+            .dropdown-content {
+                visibility: hidden;
+                position: absolute;
+                top:58px;
+                left:48%;
+                cursor: pointer;
+                background-color: #f1f1f1;
+                min-width: 120px;
+                overflow: auto;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                z-index: 110;
+            }
+
+            .dropdown-content div {
+                color: black;
+                padding: 12px 16px;
+                cursor: pointer;
+                display: block;
+            }
+            .dropdown-content div:hover {
+                background-color: rgba(91, 154, 248, 0.596);
+            }
+
+            .show {
+                visibility: visible;
+                display: block;
             }
             
             a {
