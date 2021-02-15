@@ -387,7 +387,7 @@ function addNote(cell, idCell, columnNumber) {
     let findRoot = findRootNoteByColumn(columnNumber);
     let rightColumn = maxColumns - 1 - finalProgression.findIndex(x => typeof x == 'undefined');
     //let reverseFinalProgression = [].concat(finalProgression).reverse();
-    if (columnNumber != maxColumns - 1) {
+    if (rightColumn != maxColumns - 1) {
         let i = 0;
         while (findRootNoteByColumn(i) == undefined) {
             i++;
