@@ -822,6 +822,10 @@ resetButton.onclick = function() {
 
 /** onclick associated with the uploadButton to read a file */
 uploadButton.onchange = function() {
+    const bar = document.getElementById("scrollingBar");
+    bar.style.left = '93px';
+    tableBackscroll(0);
+    
     let maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
     unselectMatrix(maxIndex);
     uploadFile(fileInput.files[0], maxColumns);
