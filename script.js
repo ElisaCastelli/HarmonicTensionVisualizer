@@ -77,13 +77,11 @@ let sampler = new Tone.Sampler({
 const dist= new Tone.Distortion(0.8).toMaster();
 const delay= new Tone.Delay(1.5).toMaster();
 const pingDelay= new Tone.PingPongDelay(0.7).toMaster();
-const pitch= new Tone.PitchShift(-5,5).toMaster();
 let phaser = new Tone.Phaser({
     "frequency": 10,
     "octaves": -2,
     "baseFrequency": 400
 }).toMaster();
-
 let feedbackDelay = new Tone.FeedbackDelay("4n", 0.5).toMaster();
 
 
@@ -194,7 +192,7 @@ export function selectRoot() {
 export function unselectMatrix(lengthChordArray) {
     let index = 0;
     if (lengthChordArray >= 0) {
-        for (let indexColumn = maxColumns - 1; indexColumn >= (maxColumns - lengthChordArray); indexColumn--) {
+        for (let indexColumn = maxColumns - 1; indexColumn >= (maxColumns - lengthChordArray -1); indexColumn--) {
             for (let indexRow = (numOctaves * 12) - 1; indexRow >= 0; indexRow--) {
                 unselectCell(index);
                 let idCell = getIdCell(index);
