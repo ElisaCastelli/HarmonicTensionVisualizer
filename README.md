@@ -110,7 +110,7 @@ With the analysis based on the chosen key, each chord is given a standard tensio
 - Chord's function: In a major scale, chords can be groupes as tonic (I, III, VI), subdominant (II, IV) and dominant (V, VII). Each group creates a different level of tension.
 - Chord's composition: e.g. chords with tritone intervals create high tension
 
-Then, each pattern (V-I, II-V-I, ...) in tested on every possible position: if some chords satisfy the pattern's conditions, their information is updated.
+Then, each pattern (V-I, II-V-I, ...) is tested on every possible position: if some chords satisfy the pattern's conditions, their information is updated.
 Finally, the analyzed progression is returned.
 ## Surge
 
