@@ -93,7 +93,7 @@ First of all, this project does not intend to analyze faultlessly every possible
 Instead, we tried to build a versatile algorithm that works well with progressions with a small amount of "harmonic alterations" (that will be discussed below).
 The main function, contained in `harmonicAnalysis.js`, is executed every time the PLAY button is clicked. It can be dividen in 4 parts:
 #### Phase 1: estimate possible keys
-This function receives an array of `Chord` objects, inserted by the user with the [piano Roll]() 
+This function receives an array of `Chord` objects, inserted by the user with the [piano Roll](./README.md#PianoRoll) 
 For each chord contained in the progression given by the user, create a temporary Key with every possible scale (Just modes of Ionian scale)
 ...
 #### Phase 2: for each selected key, analyze each "wrong" chord, with different options
