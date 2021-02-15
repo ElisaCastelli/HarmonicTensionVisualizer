@@ -27,10 +27,11 @@ let soundDuration = 2;
 
 
 /** Synth builder */
-let muted = false;
-let minVolume = -8;
-let MaxVolume = -4;
-let Volume = (MaxVolume + minVolume) / 2;
+// define properties of toolbar
+let muted = false; // muted in order to activate and deactivate the sound
+let minVolume = -8; // minimum volume
+let MaxVolume = -4; // maximum volume ( so it doesn't distort the final output sound)
+let Volume = (MaxVolume + minVolume) / 2; // every time you click on volume up/ volume down, it will decrease ( or increase ) the volume of 0.2 
 
 let sampler = new Tone.Sampler({
     "C2": "./piano/C2.mp3",
