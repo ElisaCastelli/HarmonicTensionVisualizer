@@ -752,7 +752,6 @@ resetButton.onclick = function() {
             chordPlayed.textContent = "";
             info.removeChild(chordPlayed);
         }
-        //chordPlayed.style.visibility = "hidden";
         for (let indexColumn = maxColumns - 1; indexColumn > ((maxColumns - 1) - lengthChordArray); indexColumn--) {
             clearRootText(indexColumn);
         }
@@ -771,21 +770,24 @@ resetButton.onclick = function() {
             progressionInfo.textContent = "";
             info.removeChild(progressionInfo);
         }
-        //progressionInfo.style.visibility = 'hidden';
+        
         const eventContainer = document.getElementById('eventContainer');
         if (eventContainer != null) {
             eventContainer.textContent = "";
             info.removeChild(eventContainer);
         }
-        //eventContainer.style.visibility = 'hidden';
+        
         const substitutionContainer = document.getElementById('substitutionContainer');
         if (substitutionContainer != null) {
             substitutionContainer.textContent = "";
             info.removeChild(substitutionContainer);
         }
-        //substitutionContainer.style.visibility = "hidden";
+        
         const stopButton = document.getElementById('stopButton');
         stopButton.style.color = 'rgb(63, 132, 87)';
+
+        
+
         tensionChange(0);
     }
 }
@@ -929,6 +931,12 @@ feedBackOpt.onclick = function(){
     selectedEffect();*/
 }
 
+noEffect.onclick = function(){
+    Tone.Master.dispose();
+    //sampler.toMaster();
+    document.getElementById("effectDropDown").style.visibility = 'hidden';
+}
+
 
 /** Function to create readme */
 function buildReadme() {
@@ -1039,13 +1047,11 @@ function firstRender() {
             tableBackscroll(0);
             tableScroll.style.overflowX = 'auto';
             bar.style.left = '93px';
-            //const chordPlayed = document.getElementById("chordPlayed");
             let chordPlayed = document.getElementById("chordPlayed");
             if (chordPlayed != null) {
                 chordPlayed.textContent = "";
                 info.removeChild(chordPlayed);
             }
-            //chordPlayed.style.visibility = "hidden";
             modelButton = false;
             columnPlayed = maxColumns - 1;
             timeInterval = 0;
@@ -1057,21 +1063,20 @@ function firstRender() {
                 progressionInfo.textContent = "";
                 info.removeChild(progressionInfo);
             }
-            //progressionInfo.style.visibility = 'hidden';
             const eventContainer = document.getElementById('eventContainer');
             if (eventContainer != null) {
                 eventContainer.textContent = "";
                 info.removeChild(eventContainer);
             }
-            //eventContainer.style.visibility = 'hidden';
             const substitutionContainer = document.getElementById('substitutionContainer');
             if (substitutionContainer != null) {
                 substitutionContainer.textContent = "";
                 info.removeChild(substitutionContainer);
             }
-            //substitutionContainer.style.visibility = "hidden";
             stopButton.style.color = 'rgb(63, 132, 87)';
             playButton.style.color = 'rgb(63, 132, 87)';
+
+            
         }
         // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
     matrixConstructor(cellsNumber, maxColumns, numOctaves, numOctavesMin, key_color);
