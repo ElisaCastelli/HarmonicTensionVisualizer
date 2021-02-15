@@ -72,7 +72,7 @@ let sampler = new Tone.Sampler({
     "A#4": "./piano/As4.mp3",
     "B4": "./piano/B4.mp3",
 }).set({
-    "volume": 8,
+    "volume": -8,
 }).toMaster();
 
 let dist= new Tone.Distortion(0.1).toMaster();
@@ -82,8 +82,6 @@ let phaser = new Tone.Phaser({
     "baseFrequency": 400
 }).toMaster();
 let feedbackDelay = new Tone.FeedbackDelay("4n", 0.5).toMaster();
-
-
 
 /** Array of notes and respective colors */
 const key_color = [{
