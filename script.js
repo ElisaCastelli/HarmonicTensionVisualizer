@@ -889,7 +889,6 @@ effectButton.onclick = function() {
 
 /** Onclick to manage choose distortion effect */
 distortionOpt.onclick = function() {
-    effect = 1;
     if (effect == 3) {
         removeSelectedEffect(3);
         sampler.disconnect(feedbackDelay);
@@ -901,11 +900,12 @@ distortionOpt.onclick = function() {
     sampler.connect(dist);
     distortionOpt.classList.add("effectSelected");
     selectedEffect();
+    effect = 1;
 }
 
 /** Onclick to manage choose tremolo effect */
 tremoloOpt.onclick = function() {
-    effect = 2;
+    
     if (effect == 3) {
         removeSelectedEffect(3);
         sampler.disconnect(feedbackDelay);
@@ -917,11 +917,12 @@ tremoloOpt.onclick = function() {
     sampler.connect(tremolo);
     tremoloOpt.classList.add("effectSelected");
     selectedEffect();
+    effect = 2;
 }
 
 /** Onclick to manage choose feedback delay effect */
 feedBackOpt.onclick = function() {
-    effect = 3;
+    
     if (effect == 2) {
         removeSelectedEffect(2);
         sampler.disconnect(tremolo);
@@ -933,6 +934,7 @@ feedBackOpt.onclick = function() {
     sampler.connect(feedbackDelay);
     feedBackOpt.classList.add("effectSelected");
     selectedEffect();
+    effect = 3;
 }
 
 /** Onclick to reset audio effects */
