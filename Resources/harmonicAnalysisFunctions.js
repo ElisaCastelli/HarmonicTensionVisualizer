@@ -14,7 +14,7 @@ const allnotes = {
 	norm: ["C", "", "D", "", "E", "F", "", "G", "", "A", "", "B"],
 	sharp: ["", "C#", "", "D#", "", "", "F#", "", "G#", "", "A#", ""],
 	flat: ["", "Db", "", "Eb", "", "", "Gb", "", "Ab", "", "Bb", ""],
-	degrees: ["I", "", "II", "", "III", "IV", "", "V", "", "VI", "", "VII"],
+	degrees: ["I", "I#", "II", "II#", "III", "IV", "IV#", "V", "V#", "VI", "VI#", "VII"],
 	letters: ["C", "D", "E", "F", "G", "A", "B"]
 };
 
@@ -346,7 +346,7 @@ const tritoneTensions = {
 const MajPatterns = [{
 	name: "dominant resolution",
 	degrees: ["V", "I"],
-	triads: ["", ""],
+	triads: ["n", ""],
 	quadriads: ["7", "maj7"],
 	triad_tension: [7, 1],
 	quadriad_tension: [9, 1]
@@ -636,8 +636,10 @@ export function evaluateTension(progression_plus){
 			}
 			else {
 				tmp = MajPatterns[p].degrees[0];
+				console.log("hh", MajPatterns[p].degrees[0])
 				tmp = allnotes.degrees.indexOf(tmp);
 				temp_index = extract[0].getAbsValue() - tmp >= 0 ? extract[0].getAbsValue() - tmp : extract[0].getAbsValue() - tmp + 12;
+				console.log("hey", extract[0].getAbsValue(), tmp)
 				temp_tonic = new Chord(String(allNotes1D[temp_index]));
 			}
 			temp_key = new Key(temp_tonic.note, modes[0].name);
