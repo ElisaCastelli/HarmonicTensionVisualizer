@@ -749,9 +749,9 @@ function removeSelectedEffect(indexElement) {
     let element;
     if (indexElement == 1) {
         element = document.getElementById("distortionOpt");
-    } else if (indexElement == 3) {
+    } else if (indexElement == 2) {
         element = document.getElementById("feedBackOpt");
-    } else if (indexElement == 4) {
+    } else if (indexElement == 3) {
         element = document.getElementById("VibratoOpt");
     }
     element.classList.remove("effectSelected");
@@ -921,11 +921,11 @@ effectButton.onclick = function() {
 
 /** Onclick to manage choose distortion effect */
 distortionOpt.onclick = function() {
-    if (effect == 3) {
-        removeSelectedEffect(5);
+    if (effect == 2) {
+        removeSelectedEffect(2);
         sampler.disconnect(feedbackDelay);
-    } else if (effect == 4) {
-        removeSelectedEffect(4);
+    } else if (effect == 3) {
+        removeSelectedEffect(3);
         sampler.disconnect(vibrato);
     }
     document.getElementById("effectDropDown").style.visibility = 'hidden';
@@ -943,15 +943,15 @@ feedBackOpt.onclick = function() {
     if (effect == 1) {
         removeSelectedEffect(1);
         sampler.disconnect(dist);
-    } else if (effect == 4) {
-        removeSelectedEffect(4);
+    } else if (effect == 3) {
+        removeSelectedEffect(3);
         sampler.disconnect(vibrato);
     }
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(feedbackDelay);
     feedBackOpt.classList.add("effectSelected");
     selectedEffect();
-    effect = 3;
+    effect = 2;
 }
 
 VibratoOpt.onclick = function() {
@@ -959,15 +959,15 @@ VibratoOpt.onclick = function() {
     if (effect == 1) {
         removeSelectedEffect(1);
         sampler.disconnect(dist);
-    } else if (effect == 3) {
-        removeSelectedEffect(3);
+    } else if (effect == 2) {
+        removeSelectedEffect(2);
         sampler.disconnect(feedbackDelay);
     }
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(vibrato);
     VibratoOpt.classList.add("effectSelected");
     selectedEffect();
-    effect = 4;
+    effect = 3;
 }
 
 
@@ -979,15 +979,15 @@ noEffect.onclick = function() {
         sampler.disconnect(dist);
         removeSelectedEffect(1);
         effect = 0;
-    } else if (effect == 3) {
+    } else if (effect == 2) {
         sampler.disconnect(feedbackDelay);
         feedBackOpt.classList.remove("effectSelected");
-        removeSelectedEffect(3);
+        removeSelectedEffect(2);
         effect = 0;
-    } else if (effect == 4) {
+    } else if (effect == 3) {
         sampler.disconnect(vibrato);
         feedBackOpt.classList.remove("effectSelected");
-        removeSelectedEffect(4);
+        removeSelectedEffect(3);
         effect = 0;
     }
     document.getElementById("effectDropDown").style.visibility = 'hidden';
