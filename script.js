@@ -24,14 +24,15 @@ let scrollSpeed = 1;
 let timeIntervalMax = 2700;
 let timeIntervalIncrement = 25;
 let soundDuration = 2;
+let effect=0;
 
 
 /** Synth builder */
 // define properties of toolbar
 let muted = false; // muted in order to activate and deactivate the sound
-let minVolume = -8; // minimum volume
-let MaxVolume = -4; // maximum volume ( so it doesn't distort the final output sound)
-let Volume = (MaxVolume + minVolume) / 2; // every time you click on volume up/ volume down, it will decrease ( or increase ) the volume of 0.2 
+//let minVolume = -8; // minimum volume
+//let MaxVolume = -4; // maximum volume ( so it doesn't distort the final output sound)
+//let Volume = (MaxVolume + minVolume) / 2; // every time you click on volume up/ volume down, it will decrease ( or increase ) the volume of 0.2 
 
 let sampler = new Tone.Sampler({
     "C2": "./piano/C2.mp3",
@@ -71,12 +72,10 @@ let sampler = new Tone.Sampler({
     "A#4": "./piano/As4.mp3",
     "B4": "./piano/B4.mp3",
 }).set({
-    "volume": Volume,
+    "volume": 8,
 }).toMaster();
 
-const dist= new Tone.Distortion(0.1).toMaster();
-const delay= new Tone.Delay(1.5).toMaster();
-const pingDelay= new Tone.PingPongDelay(0.7).toMaster();
+let dist= new Tone.Distortion(0.1).toMaster();
 let phaser = new Tone.Phaser({
     "frequency": 10,
     "octaves": -2,
@@ -577,6 +576,11 @@ function selectedEffect(){
     effectButton.style.color = 'rgb(245, 125, 27)';
 }
 
+function unselectedEffect(){
+    const effectButton = document.getElementById("effectButton");
+    effectButton.style.color = 'rgb(63, 132, 87)';
+}
+
 
 /** VIEW */
 
@@ -850,7 +854,7 @@ muteButton.onclick = function() {
 }
 
 /** onclick to increase volume */
-volumeUpButton.onclick = function() {
+/*volumeUpButton.onclick = function() {
     if ((Volume + 1) <= MaxVolume) {
         Volume++;
         document.getElementById("volumeDownButton").classList.remove("disable");
@@ -858,17 +862,17 @@ volumeUpButton.onclick = function() {
         document.getElementById("volumeUpButton").classList.add("disable");
         document.getElementById("volumeUpButton").classList.add("maxiVolume");
     }
-}
+}*/
 
 /** onclick to decrease volume */
-volumeDownButton.onclick = function() {
+/*volumeDownButton.onclick = function() {
     if ((Volume - 1) >= minVolume) {
         Volume--;
         document.getElementById("volumeUpButton").classList.remove("disable");
     } else {
         document.getElementById("volumeDownButton").classList.add("disable");
     }
-}
+}*/
 
 /** on click readme, add infos about the site
 absent the content of the div*/
@@ -887,32 +891,17 @@ effectButton.onclick = function(){
     }
 }
 
-/** Onclick to manage choose delay effect */
-delayOpt.onclick = function(){
-    document.getElementById("effectDropDown").style.visibility = 'hidden';
-    sampler.connect(delay);
-    selectedEffect();
-}
-
 /** Onclick to manage choose distortion effect */
 distortionOpt.onclick = function(){
-    sampler.disconnect();
+    effect = 1;
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(dist);
     selectedEffect();
 }
 
-/** Onclick to manage choose pingpong delay effect */
-pingpongOpt.onclick = function(){
-    sampler.disconnect();
-    document.getElementById("effectDropDown").style.visibility = 'hidden';
-    sampler.connect(pingDelay);
-    selectedEffect();
-}
-
 /** Onclick to manage choose phaser effect */
 phaserOpt.onclick = function(){
-    sampler.disconnect();
+    effect = 2;
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(phaser);
     selectedEffect();
@@ -920,21 +909,27 @@ phaserOpt.onclick = function(){
 
 /** Onclick to manage choose feedback delay effect */
 feedBackOpt.onclick = function(){
-    sampler.disconnect();
+    effect = 3;
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(feedbackDelay);
     selectedEffect();
 }
 
+/** Onclick to reset audio effects */
 noEffect.onclick = function(){
-    sampler.disconnect(delay);
-    sampler.disconnect(dist);
-    sampler.disconnect(feedbackDelay);
-    sampler.disconnect(phaser);
-    sampler.disconnect(pingDelay);
+    if(effect == 1){
+        sampler.disconnect(dist);
+        effect = 0;
+    }else if(effect == 2){
+        sampler.disconnect(phaser);
+        effect = 0;
+    }else if(effect == 3){
+        sampler.disconnect(feedbackDelay);
+        effect = 0;
+    }
     document.getElementById("effectDropDown").style.visibility = 'hidden';
+    unselectedEffect();
 }
-
 
 /** Function to create readme */
 function buildReadme() {

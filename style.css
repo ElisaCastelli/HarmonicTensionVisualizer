@@ -191,7 +191,7 @@
             }
             
             #playButton {
-                left: 28%;
+                left: 33%;
                 text-align: center;
                 position: fixed;
                 top: 25px;
@@ -199,7 +199,7 @@
             }
             
             #playFasterButton {
-                left: 33.5%;
+                left: 38.5%;
                 text-align: center;
                 position: fixed;
                 top: 25px;
@@ -208,7 +208,7 @@
             }
             
             #stopButton {
-                left: 39%;
+                left: 44%;
                 text-align: center;
                 position: fixed;
                 top: 25px;
@@ -216,7 +216,7 @@
             }
             
             #rewindButton {
-                left: 44.5%;
+                left: 49.5%;
                 top: 25px;
                 position: fixed;
                 text-align: center;
@@ -224,7 +224,7 @@
             }
             
             #effectButton{
-                left: 50%;
+                left: 55%;
                 top: 25px;
                 position: fixed;
                 text-align: center;
@@ -232,7 +232,7 @@
             }
 
             #muteButton {
-                left: 55.5%;
+                left: 60.5%;
                 top: 25px;
                 position: fixed;
                 text-align: center;
@@ -256,7 +256,7 @@
             }
             
             #resetButton {
-                left: 72%;
+                left: 66%;
                 top: 25px;
                 position: fixed;
                 text-align: center;
