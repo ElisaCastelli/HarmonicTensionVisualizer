@@ -74,27 +74,18 @@ let sampler = new Tone.Sampler({
     "volume": Volume,
 }).toMaster();
 
-//const dist = new Tone.Distortion(0.4).toMaster();
-// sampler.connect(dist);
+const dist= new Tone.Distortion(0.8).toMaster();
+const delay= new Tone.Delay(1.5).toMaster();
+const pingDelay= new Tone.PingPongDelay(0.7).toMaster();
+const pitch= new Tone.PitchShift(-5,5).toMaster();
+let phaser = new Tone.Phaser({
+    "frequency": 10,
+    "octaves": -2,
+    "baseFrequency": 400
+}).toMaster();
 
-//const delay = new Tone.Delay(1.5).toMaster();
-//sampler.connect(delay);
+let feedbackDelay = new Tone.FeedbackDelay("4n", 0.5).toMaster();
 
-//const pingpongDelay = new Tone.PingPongDelay(0.5).toMaster();
-// sampler.connect(pingpongDelay);
-
-//let phaser = new Tone.Phaser({
-//  "frequency": 10,
-// "octaves": -2,
-// "baseFrequency": 800
-// }).toMaster();
-
-// sampler.connect(phaser);
-//let feedbackDelay = new Tone.FeedbackDelay("4n", 0.5).toMaster();
-// sampler.connect(feedbackDelay);
-
-var freeverb = new Tone.Freeverb().toMaster();
-freeverb.dampening.value = 1000;
 
 
 /** Array of notes and respective colors */
@@ -583,6 +574,12 @@ function play() {
     columnPlayed--;
 }
 
+function selectedEffect(){
+    const effectButton = document.getElementById("effectButton");
+    effectButton.style.color = 'rgb(245, 125, 27)';
+}
+
+
 /** VIEW */
 
 /** Function called the first time the page is loaded to add the left fixed column of the table that shows the corresponding notes to each row*/
@@ -881,6 +878,58 @@ readmeButton.onclick = buildReadme();
 GitHubIcon.onclick = function() {
     window.open("https://github.com/ElisaCastelli/HarmonicTensionVisualizer.git");
 }
+
+effectButton.onclick = function(){
+    if(document.getElementById("effectDropDown").style.visibility == 'visible'){
+        document.getElementById("effectDropDown").style.visibility = 'hidden';
+    }else{
+        document.getElementById("effectDropDown").style.visibility = 'visible';
+    }
+}
+/** Onclick to manage choose delay effect */
+delayOpt.onclick = function(){
+    document.getElementById("effectDropDown").style.visibility = 'hidden';
+    sampler.connect(delay);
+    delay.wet.value=0;
+    selectedEffect();
+}
+
+/** Onclick to manage choose distortion effect */
+distortionOpt.onclick = function(){
+    sampler.disconnect();
+    document.getElementById("effectDropDown").style.visibility = 'hidden';
+    sampler.connect(dist);
+    dist.wet.value=0;
+    selectedEffect();
+}
+
+/** Onclick to manage choose pingpong delay effect */
+pingpongOpt.onclick = function(){
+    sampler.disconnect();
+    document.getElementById("effectDropDown").style.visibility = 'hidden';
+    sampler.connect(pingDelay);
+    pingDelay.wet.value=0;
+    selectedEffect();
+}
+
+/** Onclick to manage choose phaser effect */
+phaserOpt.onclick = function(){
+    sampler.disconnect();
+    document.getElementById("effectDropDown").style.visibility = 'hidden';
+    sampler.connect(phaser);
+    phaser.wet.value=0;
+    selectedEffect();
+}
+
+/** Onclick to manage choose feedback delay effect */
+feedBackOpt.onclick = function(){
+    sampler.disconnect();
+    document.getElementById("effectDropDown").style.visibility = 'hidden';
+    sampler.connect(feedbackDelay);
+    feedbackDelay.wet.value=0;
+    selectedEffect();
+}
+
 
 /** Function to create readme */
 function buildReadme() {
