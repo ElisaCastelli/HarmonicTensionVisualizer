@@ -1,7 +1,7 @@
 // IMPORT
 
 import { type, allNotes1D, chordBuilder } from './Resources/chordBuilder.js';
-import { tensionChange, start, waveColor } from './Resources/tensionAnimation.js';
+import { tensionChange, start } from './Resources/tensionAnimation.js';
 import { harmonyAnalysis } from './Resources/harmonicAnalysis.js';
 import { Chord, ChordPlus, getProgDegrees, Key } from './Resources/harmonicAnalysisFunctions.js';
 import { uploadFile, downloadFile } from './Resources/readFile.js';
@@ -499,15 +499,16 @@ function play() {
             let octave = noteSelected[index].octave;
             notesArray.push(noteName + octave);
         }
+
         /** Div to visualize event */
         if (analysisResults[maxColumns - 1 - columnPlayed].event != "") {
             /*eventContainer.style.visibility = 'visible';*/
             if (document.getElementById("eventContainer") == null){
                 info.appendChild(createeventContainer)
-                let eventContainer = document.getElementById("eventContainer");
-                var text = analysisResults[maxColumns - 1 - columnPlayed].event;
-                eventContainer.textContent = text;
             }
+            let eventContainer = document.getElementById("eventContainer");
+            var text = analysisResults[maxColumns - 1 - columnPlayed].event;
+            eventContainer.textContent = text;
         } else {
             let eventContainer = document.getElementById("eventContainer");
             if(eventContainer != null){
@@ -516,15 +517,16 @@ function play() {
                 info.removeChild(eventContainer);
             }
         }
+
         /** Div to visualize substitution */
         if (analysisResults[maxColumns - 1 - columnPlayed].substitution != "") {
             if (document.getElementById("substitutionContainer") == null) {
                 /*substitutionContainer.style.visibility = 'visible';*/
                 info.appendChild(createsubstitutionContainer);
-                let substitutionContainer = document.getElementById("substitutionContainer");
-                var text = "Sub: " + analysisResults[maxColumns - 1 - columnPlayed].toString();
-                substitutionContainer.textContent = text;
             }
+            let substitutionContainer = document.getElementById("substitutionContainer");
+            var text = "Sub: " + analysisResults[maxColumns - 1 - columnPlayed].toString();
+            substitutionContainer.textContent = text;
         } else {
             /*substitutionContainer.style.visibility = 'hidden';*/
             let substitutionContainer = document.getElementById("substitutionContainer");
@@ -532,16 +534,16 @@ function play() {
                 substitutionContainer.textContent = "";
                 info.removeChild(substitutionContainer);
             }
-
         }
+
         /** Div to visualize pattern */
         if (analysisResults[maxColumns - 1 - columnPlayed].curr_pattern != "") {
             /*progressionInfo.style.visibility = 'visible';*/
             if (document.getElementById("progressionInfo") == null){
                 info.appendChild(createprogressionInfo);
-                let progressionInfo = document.getElementById("progressionInfo");
-                progressionInfo.textContent = analysisResults[maxColumns - 1 - columnPlayed].curr_pattern;
             }
+            let progressionInfo = document.getElementById("progressionInfo");
+            progressionInfo.textContent = analysisResults[maxColumns - 1 - columnPlayed].curr_pattern;
         } else {
             /*progressionInfo.style.visibility = 'hidden';*/
             let progressionInfo = document.getElementById("progressionInfo");

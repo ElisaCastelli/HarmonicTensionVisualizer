@@ -39,7 +39,7 @@ function generateData(tension,maxTension) {
   return dataOut;
 }
 
-export function waveColor(tension , maxTension) {
+function waveColor(tension , maxTension) {
   let r = 255
   let g = 255 - 255*(tension/maxTension)
   let b = 255 - 255*(tension/maxTension)
