@@ -408,7 +408,8 @@ export function findSecondaryDom(chord1, chord2){
 	for (let i = 0; i < tempKeys.length; i++) {
 		tempProg = getProgDegrees(tempProg, tempKeys[i]);
 		if (tempProg[0].degree == "V" && tempProg[1].degree == "I") {
-			if (chord2.curr_key == "Aeolian") {	// verifica se necessario modificare altri parametri
+			console.log("heyyy", chord1, chord2)
+			if (chord2.curr_key.scale == "Aeolian") {	// verifica se necessario modificare altri parametri
 				tempProg[0].event = "dominant of " + tempProg[1].toString();
 			} else {
 				tempProg[0].event = "secondary dominant of " + tempProg[1].toString();
