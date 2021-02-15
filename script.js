@@ -825,17 +825,14 @@ uploadButton.onchange = function() {
     const bar = document.getElementById("scrollingBar");
     bar.style.left = '93px';
     tableBackscroll(0);
-    
     let maxIndex = finalProgression.findIndex(x => typeof x == 'undefined');
     unselectMatrix(maxIndex);
     uploadFile(fileInput.files[0], maxColumns);
     fileInput.value = null;
 }
 
-/** Button to reset input onchange */
-uploadButton.onclick = function() {
-    this.value = "";
-}
+
+
 
 /** onclick associated with the downloadButton to download a file that contains the chord progression you put inside the pianoroll */
 downloadButton.onclick = function() {
@@ -939,7 +936,6 @@ distortionOpt.onclick = function() {
     effect = 1;
 }
 
-/** Onclick to manage choose tremolo effect */
 
 /** Onclick to manage choose feedback delay effect */
 feedBackOpt.onclick = function() {
@@ -958,6 +954,8 @@ feedBackOpt.onclick = function() {
     effect = 2;
 }
 
+
+/** Onclick to manage choose vibrato effect */
 VibratoOpt.onclick = function() {
 
     if (effect == 1) {
@@ -973,8 +971,6 @@ VibratoOpt.onclick = function() {
     selectedEffect();
     effect = 3;
 }
-
-
 
 
 /** Onclick to reset audio effects */
@@ -1114,9 +1110,17 @@ function firstRender() {
                     }
                 };
             }
+            /** Button to reset input onchange */
+            uploadButton.onclick = function() {
+                this.value = "";
+                const stopButton = document.getElementById('stopButton');
+                stopButton.onclick();
+            }
         }
 
     }
+
+    
 
     rewindButton.onclick = function() {
             const tableScroll = document.getElementById("table-scroll");
