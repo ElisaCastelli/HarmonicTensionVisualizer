@@ -57,7 +57,7 @@ At the top of the page the user can find a list of buttons, each one with a spec
 ## Sampler
 
 As previously mentioned, all the audio options and features have been realized with Tone.Js. 
-Despite its extreme-intuitivity structure and organization, Tone.js allows to create, develop and then process a wide range of different sounds, each one of them can be affected by some effects.
+Despite its extreme-intuitivity structure and organization, Tone.js allows to create, develop and then process a wide range of different sounds.Also,every sound created can be affected by some effects.
 Once installed Tone.js (or imported it inside the js file in which you want to use it), it is possibile to create sounds by using synthetizer(FM or AM) by code as follows:
 
 ![alt text](./img/01.png)
