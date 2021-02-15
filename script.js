@@ -727,6 +727,19 @@ function createBar() {
     return bar;
 }
 
+/** Function to print selected effect */
+function removeSelectedEffect(indexElement) {
+    let element;
+    if (indexElement == 1) {
+        element = document.getElementById("distortionOpt");
+    } else if (indexElement == 2) {
+        element = document.getElementById("tremoloOpt");
+    } else if (indexElement == 3) {
+        element = document.getElementById("feedBackOpt");
+    }
+    element.classList.remove("effectSelected");
+}
+
 /** ONCLICK FUNCTIONS */
 
 /** onclick associated with the div that contains the title to reload the page */
@@ -957,16 +970,11 @@ noEffect.onclick = function() {
     unselectedEffect();
 }
 
-function removeSelectedEffect(indexElement) {
-    let element;
-    if (indexElement == 1) {
-        element = document.getElementById("distortionOpt");
-    } else if (indexElement == 2) {
-        element = document.getElementById("tremoloOpt");
-    } else if (indexElement == 3) {
-        element = document.getElementById("feedBackOpt");
+window.onclick = function(){
+    const effectDropDown = document.getElementById("effectDropDown");
+    if(effectDropDown.style.visibility == "visible"){
+        effectDropDown.style.visibility ="hidden";
     }
-    element.classList.remove("effectSelected");
 }
 
 
