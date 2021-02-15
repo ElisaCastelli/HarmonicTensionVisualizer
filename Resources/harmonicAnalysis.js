@@ -49,11 +49,13 @@ export function harmonyAnalysis(progression) {
 				temp = findSecondaryDom(progression[i], progression[i + 1]);
 				if (temp) {
 					progression_plus[i] = temp;
+					progression_plus[i].surprise = "A";
 					priority_keys.push(temp.curr_key);
 					if (!(progression_plus[i + 1].type_coherent && progression_plus[i + 1].degree_coherent)) {
 						temp = getProgDegrees([progression[i + 1]], temp.curr_key);
 						temp = temp[0];
 						progression_plus[i + 1] = temp;
+						progression_plus[i + 1].surprise = "A";
 					}
 					continue;
 				}
@@ -62,10 +64,12 @@ export function harmonyAnalysis(progression) {
 			/** OPTION B): CHORD SUBSTITUTION*/
 			temp = findSubs(progression, priority_keys, progression_plus[i], i);
 			if (temp && temp.curr_pattern == "dominant resolution") {
-				console.log("situazione da definire")
+				console.log("situazione da definire") //da togliere, già gestito prima
 			}
-			else if (temp) {
+			if (temp) {
+				
 				progression_plus[i] = temp;
+				console.log("ohilà", progression_plus[i], temp)
 				priority_keys.push(temp.curr_key);
 				continue;
 			}
@@ -94,25 +98,22 @@ export function harmonyAnalysis(progression) {
 
 	/**PHASE 3b: check again all the chords that are still out of key*/
 	for (let i = 0; i < progression_plus.length; i++) {
-		if (!(progression_plus[i].type_coherent && progression_plus[i].degree_coherent)) {
+		// rivaluta if, prima era generico e sistemava più robe, prova a rimetterlo ma escludere tritoni
+		if (progression_plus[i].event == "out of key") {
 			/**try the key of the following chord */
-			console.log("da qua!")
-			temp = getProgDegrees(progression[i], progression_plus[i + 1].curr_key);
+			temp = getProgDegrees(progression_plus[i], progression_plus[i + 1].curr_key);
 			temp = temp[0];
 			console.log(temp)
 			if (temp) {
-				
 				progression_plus[i] = temp;
 				continue;
 			}
 		}
 	}
 
-	console.log("progression analyzed: ", progression_plus);
-
 	/** PHASE 4): assign tension to each chord */
 	progression_plus = evaluateTension(progression_plus);
-
+	console.log("progression analyzed: ", progression_plus);
 	return progression_plus;
 
 }

@@ -1,3 +1,4 @@
+import { allNotes1D } from './chordBuilder.js';
 import { diminishedDomSub, tritoneSub } from './Substitutions.js';
 
 /**  patterns for accepted chords*/
@@ -8,11 +9,12 @@ const degrees = ["I", "II", "III", "IV", "V", "VI", "VII"];
 const triads = ["", "min", "dim", "aug"];
 const quadriads = ["maj7", "min7", "7", "halfdim", "dim7"];
 
-/** All notes, with index associated to interval with C*/
+/** All notes, with index associated to interval with C */
 const allnotes = {
 	norm: ["C", "", "D", "", "E", "F", "", "G", "", "A", "", "B"],
 	sharp: ["", "C#", "", "D#", "", "", "F#", "", "G#", "", "A#", ""],
 	flat: ["", "Db", "", "Eb", "", "", "Gb", "", "Ab", "", "Bb", ""],
+	degrees: ["I", "", "II", "", "III", "IV", "", "V", "", "VI", "", "VII"],
 	letters: ["C", "D", "E", "F", "G", "A", "B"]
 };
 
@@ -127,6 +129,14 @@ Chord.prototype.toString = function(){
 ChordPlus.prototype.toString = function(){
 	return this.note.concat(this.type);
 }
+ChordPlus.prototype.getAbsValue = function(){
+	let value = allnotes.norm.indexOf(this.note);
+	if (value < 0)
+		value = allnotes.flat.indexOf(this.note);
+	if (value < 0)
+		value = allnotes.sharp.indexOf(this.note);	
+	return value;
+}
 
 /**returns string of current Key */
 Key.prototype.toString = function(){
@@ -196,7 +206,6 @@ export function getProgDegrees(progression, key){
 		// to avoid errors with ChordPlus
 		temp = new Chord(progression[i].note, progression[i].type);
 		progression_plus.push( new ChordPlus(temp.note, temp.type, getDegree(temp, key), key));
-		console.log("allora: ", temp, progression_plus)
 		if (progression_plus[i].degree.includes("#") || progression_plus[i].degree.includes("b")) {
 			progression_plus[i].degree_coherent = false;
 		}
@@ -336,7 +345,7 @@ const tritoneTensions = {
 }
 
 /** Well known progression Patterns */
-const progPatterns = [{
+const MajPatterns = [{
 	name: "dominant resolution",
 	degrees: ["V", "I"],
 	triads: ["", ""],
@@ -351,22 +360,43 @@ const progPatterns = [{
 	triad_tension: [4, 7, 1],
 	quadriad_tension: [5, 10, 1]
 }, {
-	name: "II-V movement",
+	name: "II-V pattern",
 	degrees: ["II", "V"],
 	triads: ['min', ""],
 	quadriads: ["min7", "7"],
 	triad_tension: [4, 7],
 	quadriad_tension: [5, 10]
 }, {
+	name: "I-VI-II-V pattern",
+	degrees: ["I", "VI", "II", "V"],
+	triads: ["", "min", "min", ""],
+	quadriads: ["maj7", "min7", "min7", "7"],
+	triad_tension: [1, 2, 4, 7],	// da ascoltare e discutere con gruppo
+	quadriad_tension: [2, 3, 5, 9] // da ascoltare e discutere con gruppo
+}, {
+	name: "III-VI-II-V pattern",
+	degrees: ["III", "VI", "II", "V"],
+	triads: ["min", "min", "min", ""],
+	quadriads: ["min7", "min7", "min7", "7"],
+	triad_tension: [2, 2, 4, 7],	// da ascoltare e discutere con gruppo
+	quadriad_tension: [3, 3, 5, 9] // da ascoltare e discutere con gruppo
+}, {
+	name: "I-II-III-IV pattern",
+	degrees: ["I", "II", "III", "IV"],
+	triads: ["", "min", "min", ""],
+	quadriads: ["maj7", "min7", "min7", "maj7"],
+	triad_tension: [1, 3, 2, 4],	// da ascoltare e discutere con gruppo
+	quadriad_tension: [2, 4, 3, 5] // da ascoltare e discutere con gruppo
+}, {
 	name: "V of V",
-	degrees: ["V", "V"],
-	triads: ["", ""],
+	degrees: ["V", "I"],
+	triads: ["n", "n"],
 	quadriads: ["7", "7"],
 	triad_tension: [7, 7],
 	quadriad_tension: [9, 9]
 }, {//come metterlo giù se non voglio controllare il grado?
 	name: "maj7 -> 7",
-	degrees: ["VIb" || "V#", "V"], // come fare?
+	degrees: ["V#", "V"], // come fare?
 	triads: ["", ""],
 	quadriads: ["maj7", "7"],
 	triad_tension: [4, 8],
@@ -493,7 +523,7 @@ export function findSubs(progression, priority_keys, chord, index){
 			console.log("substitution of secondary dominant", tempChord);
 			chord = tempChord;
 			chord.surprise = surprise;
-			chord.substitution = sub;
+			chord.substitution = sub;	// forse inutile, controlla quando il sole è sorto grazie
 			chord.curr_pattern = "dominant resolution";
 			return chord;
 		}
@@ -577,23 +607,44 @@ export function evaluateTension(progression_plus){
 	
 	
 	// sort patterns from longest to shortest
-	progPatterns.sort((a, b) => (a.triad_tension.length > b.triad_tension.length) ? -1 : 1);
+	MajPatterns.sort((a, b) => (a.triad_tension.length > b.triad_tension.length) ? -1 : 1);
 	
 	/**assign tension based on patterns*/
-	
+	let found_pattern;
+	let extract;
+	let temp_tonic;
+	let temp_key;
+	let tmp;
 	// for each chord in the progression
 	for (let i = 0; i < progression_plus.length; i++) {	
-		let found_pattern;
-		let extract;
+		
 		// for each tension pattern 
-		for (let p = 0; p < progPatterns.length; p++) {
-			extract = progression_plus.slice(i, i + progPatterns[p].degrees.length);
+		for (let p = 0; p < MajPatterns.length; p++) {
+			extract = progression_plus.slice(i, i + MajPatterns[p].degrees.length);
 			found_pattern = true;
+			if (extract.length != MajPatterns[p].degrees.length) {
+				continue;
+			}
+
+			// evaluate relative degrees to pattern
+			if (MajPatterns[p].degrees.includes("I")) {
+				tmp = MajPatterns[p].degrees.indexOf("I");
+				temp_tonic = extract[tmp];
+			}
+			else {
+				tmp = MajPatterns[p].degrees[0];
+				tmp = allnotes.degrees.indexOf(tmp);
+				temp_index = extract[0].getAbsValue() - tmp >= 0 ? extract[0].getAbsValue() - tmp : extract[0].getAbsValue() - tmp + 12;
+				temp_tonic = new Chord(String(allNotes1D[temp_index]));
+			}
+			temp_key = new Key(temp_tonic.note, modes[0].name);
+			extract = getProgDegrees(extract, temp_key);
+
 			// check every following chord that could belong to the current pattern
 			for (let j = 0; j < extract.length; j++) {
-				if (extract[j].degree == progPatterns[p].degrees[j] && 
-						(extract[j].type == progPatterns[p].triads[j] || 
-						extract[j].type == progPatterns[p].quadriads[j])) {
+				if (extract[j].degree == MajPatterns[p].degrees[j] && 
+						(extract[j].type == MajPatterns[p].triads[j] || 
+						extract[j].type == MajPatterns[p].quadriads[j])) {
 				}
 				else {
 					found_pattern = false;
@@ -601,15 +652,16 @@ export function evaluateTension(progression_plus){
 				}
 			}
 			/** if every chord fits the pattern and length is correct, update ChordPlus and move on*/
-			if (found_pattern && extract.length == progPatterns[p].degrees.length) {
-				console.log("found pattern:", progPatterns[p].name);
+			if (found_pattern && extract.length == MajPatterns[p].degrees.length) {
+				console.log("found pattern:", MajPatterns[p].name);
 				/** substitute tension values, choosing between triad and quadriad values  */
-				for (let j = i; j < i + progPatterns[p].degrees.length && j < progression_plus.length; j++) {
+				for (let j = i; j < i + MajPatterns[p].degrees.length && j < progression_plus.length; j++) {
 					progression_plus[j].tension = progression_plus[j].type == 
-						progPatterns[p].triads[j - i] ? progPatterns[p].triad_tension[j - i] : progPatterns[p].quadriad_tension[j - i];
-					progression_plus[j].curr_pattern = progPatterns[p].name;
+						MajPatterns[p].triads[j - i] ? MajPatterns[p].triad_tension[j - i] : MajPatterns[p].quadriad_tension[j - i];
+					progression_plus[j].curr_pattern = MajPatterns[p].name;
+					progression_plus[j].degree = MajPatterns[p].degrees[j - i];
 				}
-				i += progPatterns[p].degrees.length;
+				i += MajPatterns[p].degrees.length - 1;//revisiona
 				break;
 			}
 		}
