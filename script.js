@@ -905,12 +905,18 @@ effectButton.onclick = function() {
 
 /** Onclick to manage choose distortion effect */
 distortionOpt.onclick = function() {
-    if (effect == 3) {
-        removeSelectedEffect(3);
-        sampler.disconnect(feedbackDelay);
-    } else if (effect == 2) {
+    if (effect == 2) {
         removeSelectedEffect(2);
         sampler.disconnect(tremolo);
+    } else if (effect == 3) {
+        removeSelectedEffect(5);
+        sampler.disconnect(feedbackDelay);
+    } else if (effect == 4) {
+        removeSelectedEffect(4);
+        sampler.disconnect(vibrato);
+    } else if (effect == 5) {
+        removeSelectedEffect(5);
+        sampler.disconnect(chorus);
     }
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(dist);
@@ -928,6 +934,12 @@ tremoloOpt.onclick = function() {
     } else if (effect == 1) {
         removeSelectedEffect(1);
         sampler.disconnect(dist);
+    } else if (effect == 4) {
+        removeSelectedEffect(4);
+        sampler.disconnect(vibrato);
+    } else if (effect == 5) {
+        removeSelectedEffect(5);
+        sampler.disconnect(chorus);
     }
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(tremolo);
@@ -945,6 +957,12 @@ feedBackOpt.onclick = function() {
     } else if (effect == 1) {
         removeSelectedEffect(1);
         sampler.disconnect(dist);
+    } else if (effect == 5) {
+        removeSelectedEffect(5);
+        sampler.disconnect(chorus);
+    } else if (effect == 4) {
+        removeSelectedEffect(4);
+        sampler.disconnect(vibrato);
     }
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(feedbackDelay);
