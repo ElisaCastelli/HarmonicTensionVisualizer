@@ -23,7 +23,7 @@ let firstPlay = true;
 let scrollSpeed = 1;
 let timeIntervalMax = 2700;
 let timeIntervalIncrement = 25;
-let soundDuration = 2;
+let soundDuration = 3;
 let effect = 0;
 
 
@@ -73,6 +73,7 @@ let sampler = new Tone.Sampler({
     "B4": "./piano/B4.mp3",
 }).set({
     "volume": -8,
+
 }).toMaster();
 let dist = new Tone.Distortion(0.1).toMaster();
 let feedbackDelay = new Tone.FeedbackDelay("4n", 0.5).toMaster();
@@ -739,9 +740,9 @@ function removeSelectedEffect(indexElement) {
         element = document.getElementById("tremoloOpt");
     } else if (indexElement == 3) {
         element = document.getElementById("feedBackOpt");
-    }else if(indexElement == 4){
+    } else if (indexElement == 4) {
         element = document.getElementById("VibratoOpt");
-    }else if(indexElement == 5){
+    } else if (indexElement == 5) {
         element = document.getElementById("ChorusOpt");
     }
     element.classList.remove("effectSelected");
@@ -925,8 +926,8 @@ distortionOpt.onclick = function() {
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(dist);
     distortionOpt.classList.add("effectSelected");
-    effect = 1;
     selectedEffect();
+    effect = 1;
 }
 
 /** Onclick to manage choose tremolo effect */
@@ -948,8 +949,8 @@ tremoloOpt.onclick = function() {
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(tremolo);
     tremoloOpt.classList.add("effectSelected");
-    effect = 2;
     selectedEffect();
+    effect = 2;
 }
 
 /** Onclick to manage choose feedback delay effect */
@@ -971,8 +972,8 @@ feedBackOpt.onclick = function() {
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(feedbackDelay);
     feedBackOpt.classList.add("effectSelected");
-    effect = 3;
     selectedEffect();
+    effect = 3;
 }
 
 VibratoOpt.onclick = function() {
@@ -993,35 +994,34 @@ VibratoOpt.onclick = function() {
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(vibrato);
     VibratoOpt.classList.add("effectSelected");
-    effect = 4;
     selectedEffect();
-    
+    effect = 4;
 }
 
 
 ChorusOpt.onclick = function() {
 
-        if (effect == 2) {
-            removeSelectedEffect(2);
-            sampler.disconnect(tremolo);
-        } else if (effect == 1) {
-            removeSelectedEffect(1);
-            sampler.disconnect(dist);
-        } else if (effect == 3) {
-            removeSelectedEffect(3);
-            sampler.disconnect(feedbackDelay);
-        } else if (effect == 4) {
-            removeSelectedEffect(4);
-            sampler.disconnect(vibrato);
-        }
-        document.getElementById("effectDropDown").style.visibility = 'hidden';
-        sampler.connect(chorus);
-        ChorusOpt.classList.add("effectSelected");
-        effect = 5;
-        selectedEffect();
-        
+    if (effect == 2) {
+        removeSelectedEffect(2);
+        sampler.disconnect(tremolo);
+    } else if (effect == 1) {
+        removeSelectedEffect(1);
+        sampler.disconnect(dist);
+    } else if (effect == 3) {
+        removeSelectedEffect(3);
+        sampler.disconnect(feedbackDelay);
+    } else if (effect == 4) {
+        removeSelectedEffect(4);
+        sampler.disconnect(vibrato);
     }
-    /** Onclick to reset audio effects */
+    document.getElementById("effectDropDown").style.visibility = 'hidden';
+    sampler.connect(chorus);
+    ChorusOpt.classList.add("effectSelected");
+    selectedEffect();
+    effect = 5;
+}
+
+/** Onclick to reset audio effects */
 noEffect.onclick = function() {
     if (effect == 1) {
         sampler.disconnect(dist);
