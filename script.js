@@ -24,7 +24,7 @@ let scrollSpeed = 1;
 let timeIntervalMax = 2700;
 let timeIntervalIncrement = 25;
 let soundDuration = 2;
-let effect=0;
+let effect = 0;
 
 
 /** Synth builder */
@@ -74,15 +74,9 @@ let sampler = new Tone.Sampler({
 }).set({
     "volume": -8,
 }).toMaster();
-
-let dist= new Tone.Distortion(0.1).toMaster();
-let phaser = new Tone.Phaser({
-    "frequency": 10,
-    "octaves": -2,
-    "baseFrequency": 400
-}).toMaster();
+let dist = new Tone.Distortion(0.1).toMaster();
 let feedbackDelay = new Tone.FeedbackDelay("4n", 0.5).toMaster();
-
+let tremolo = new Tone.Tremolo(10).toMaster();
 /** Array of notes and respective colors */
 const key_color = [{
         pitch: "C",
@@ -189,7 +183,7 @@ export function selectRoot() {
 export function unselectMatrix(lengthChordArray) {
     let index = 0;
     if (lengthChordArray >= 0) {
-        for (let indexColumn = maxColumns - 1; indexColumn >= (maxColumns - lengthChordArray -1); indexColumn--) {
+        for (let indexColumn = maxColumns - 1; indexColumn >= (maxColumns - lengthChordArray - 1); indexColumn--) {
             for (let indexRow = (numOctaves * 12) - 1; indexRow >= 0; indexRow--) {
                 unselectCell(index);
                 let idCell = getIdCell(index);
@@ -569,12 +563,12 @@ function play() {
     columnPlayed--;
 }
 
-function selectedEffect(){
+function selectedEffect() {
     const effectButton = document.getElementById("effectButton");
     effectButton.style.color = 'rgb(245, 125, 27)';
 }
 
-function unselectedEffect(){
+function unselectedEffect() {
     const effectButton = document.getElementById("effectButton");
     effectButton.style.color = 'rgb(63, 132, 87)';
 }
@@ -772,23 +766,23 @@ resetButton.onclick = function() {
             progressionInfo.textContent = "";
             info.removeChild(progressionInfo);
         }
-        
+
         const eventContainer = document.getElementById('eventContainer');
         if (eventContainer != null) {
             eventContainer.textContent = "";
             info.removeChild(eventContainer);
         }
-        
+
         const substitutionContainer = document.getElementById('substitutionContainer');
         if (substitutionContainer != null) {
             substitutionContainer.textContent = "";
             info.removeChild(substitutionContainer);
         }
-        
+
         const stopButton = document.getElementById('stopButton');
         stopButton.style.color = 'rgb(63, 132, 87)';
 
-        
+
 
         tensionChange(0);
     }
@@ -849,7 +843,7 @@ playFasterButton.onclick = function() {
 muteButton.onclick = function() {
     muteButton.classList.remove("disable");
     muted = !muted;
-    if(muted){
+    if (muted) {
         muteButton.classList.add("disable");
     }
     Tone.Master.mute = muted;
@@ -885,23 +879,23 @@ GitHubIcon.onclick = function() {
     window.open("https://github.com/ElisaCastelli/HarmonicTensionVisualizer.git");
 }
 
-effectButton.onclick = function(){
-    if(document.getElementById("effectDropDown").style.visibility == 'visible'){
+effectButton.onclick = function() {
+    if (document.getElementById("effectDropDown").style.visibility == 'visible') {
         document.getElementById("effectDropDown").style.visibility = 'hidden';
-    }else{
+    } else {
         document.getElementById("effectDropDown").style.visibility = 'visible';
     }
 }
 
 /** Onclick to manage choose distortion effect */
-distortionOpt.onclick = function(){
+distortionOpt.onclick = function() {
     effect = 1;
-    if(effect == 3){
+    if (effect == 3) {
         removeSelectedEffect(3);
         sampler.disconnect(feedbackDelay);
-    }else if(effect == 2){
+    } else if (effect == 2) {
         removeSelectedEffect(2);
-        sampler.disconnect(phaser);
+        sampler.disconnect(tremolo);
     }
     document.getElementById("effectDropDown").style.visibility = 'hidden';
     sampler.connect(dist);
@@ -909,29 +903,29 @@ distortionOpt.onclick = function(){
     selectedEffect();
 }
 
-/** Onclick to manage choose phaser effect */
-phaserOpt.onclick = function(){
+/** Onclick to manage choose tremolo effect */
+tremoloOpt.onclick = function() {
     effect = 2;
-    if(effect == 3){
+    if (effect == 3) {
         removeSelectedEffect(3);
         sampler.disconnect(feedbackDelay);
-    }else if(effect == 1){
+    } else if (effect == 1) {
         removeSelectedEffect(1);
         sampler.disconnect(dist);
     }
     document.getElementById("effectDropDown").style.visibility = 'hidden';
-    sampler.connect(phaser);
-    phaserOpt.classList.add("effectSelected");
+    sampler.connect(tremolo);
+    tremoloOpt.classList.add("effectSelected");
     selectedEffect();
 }
 
 /** Onclick to manage choose feedback delay effect */
-feedBackOpt.onclick = function(){
+feedBackOpt.onclick = function() {
     effect = 3;
-    if(effect == 2){
+    if (effect == 2) {
         removeSelectedEffect(2);
-        sampler.disconnect(phaser);
-    }else if(effect == 1){
+        sampler.disconnect(tremolo);
+    } else if (effect == 1) {
         removeSelectedEffect(1);
         sampler.disconnect(dist);
     }
@@ -942,16 +936,16 @@ feedBackOpt.onclick = function(){
 }
 
 /** Onclick to reset audio effects */
-noEffect.onclick = function(){
-    if(effect == 1){
+noEffect.onclick = function() {
+    if (effect == 1) {
         sampler.disconnect(dist);
         removeSelectedEffect(1);
         effect = 0;
-    }else if(effect == 2){
-        sampler.disconnect(phaser);
+    } else if (effect == 2) {
+        sampler.disconnect(tremolo);
         removeSelectedEffect(2);
         effect = 0;
-    }else if(effect == 3){
+    } else if (effect == 3) {
         sampler.disconnect(feedbackDelay);
         feedBackOpt.classList.remove("effectSelected");
         removeSelectedEffect(3);
@@ -961,13 +955,13 @@ noEffect.onclick = function(){
     unselectedEffect();
 }
 
-function removeSelectedEffect(indexElement){
+function removeSelectedEffect(indexElement) {
     let element;
-    if(indexElement == 1){
+    if (indexElement == 1) {
         element = document.getElementById("distortionOpt");
-    }else if(indexElement == 2){
-        element = document.getElementById("phaserOpt");
-    }else if(indexElement == 3){
+    } else if (indexElement == 2) {
+        element = document.getElementById("tremoloOpt");
+    } else if (indexElement == 3) {
         element = document.getElementById("feedBackOpt");
     }
     element.classList.remove("effectSelected");
@@ -1112,7 +1106,7 @@ function firstRender() {
             stopButton.style.color = 'rgb(63, 132, 87)';
             playButton.style.color = 'rgb(63, 132, 87)';
 
-            
+
         }
         // no parametro perchè sovrascriviamo numOttave, 1 singola variabile globale
     matrixConstructor(cellsNumber, maxColumns, numOctaves, numOctavesMin, key_color);
