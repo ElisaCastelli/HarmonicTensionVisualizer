@@ -105,7 +105,7 @@ For every selected key, each wrong (not coherent with current key) chord is anal
 - out of key (no hypothesis accepted)
 
 Every Iteration an analyzed progression, containing `ChordPlus` elements, is grenerated.
-If a wrong chord is NOT identified as a Chord sustitution, the current Key gets a penalty. The key with less penalties will be chosen.
+If a wrong chord is NOT identified as a Chord substitution, the current Key gets a penalty. The key with less penalties will be chosen.
 #### Phase 3: assign tension, find patterns
 With the analysis based on the chosen key, each chord is given a standard tension, based on:
 - Chord's function: In a major scale, chords can be groupes as tonic (I, III, VI), subdominant (II, IV) and dominant (V, VII). Each group creates a different level of tension.
