@@ -75,10 +75,11 @@ let sampler = new Tone.Sampler({
     "volume": -10,
 
 }).toMaster();
+
+// list effects
 let dist = new Tone.Distortion(0.1).toMaster();
 let feedbackDelay = new Tone.FeedbackDelay("4n", 0.5).toMaster();
 let vibrato = new Tone.Vibrato(3, 0.1).connect(Tone.Master);
-
 
 /** Array of notes and respective colors */
 const key_color = [{
