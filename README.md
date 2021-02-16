@@ -90,6 +90,9 @@ We chose not to display the exact tension value we assigned to each chord throug
 ## Harmonic Analysis
 First of all, this project does not intend to analyze faultlessly every possible chord progression given by the user. 
 Instead, we tried to build a versatile algorithm that works well with progressions with a small amount of "harmonic alterations" (that will be discussed below).
+
+![alt text](./img/prototypes.png)
+
 The main function, contained in `harmonicAnalysis.js`, is executed every time the PLAY button is clicked. It can be dividen in 4 parts:
 #### Phase 1: estimate possible keys
 This function receives an array of `Chord` objects, inserted by the user with the [piano Roll](./README.md#Piano-roll). 
