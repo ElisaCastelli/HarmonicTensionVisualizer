@@ -61,7 +61,7 @@ Once installed Tone.js (or imported it inside the js file in which you want to u
 
 ![alt text](./img/01.png)
 
-Due to the fact that we need a synthetizer able to play multiple notes at the same time instant (simultaneously), we cannot use any monophonic synthetizer available in Tone.Js and implement only a possible polyphonic synthetizer (or a combination of multiple of more of them). A better solution that allows us to personalize the sound produced when every single note has been played, is represented by Tone.Sampler. In order to implement it, it is necessary not only to declaire a "Sampler object" but also to create an association (called binding) between every note available( that can be played in the web audio page) and the sound that the Sampler object has to play. The following piece of code shows exactly how to create a piano Sampler object and how to realize the binding between samples and notes:
+Due to the fact that we need a synthetizer able to play multiple notes at the same time instant (simultaneously), we cannot use any monophonic synthetizer available in Tone.Js and implement only a possible polyphonic synthetizer (or a combination of more of them). A better solution that allows us to personalize the sound produced when every single note has been played, is represented by Tone.Sampler. In order to implement it, it is necessary not only to declaire a "Sampler object" but also to create an association (called binding) between every note available( that can be played in the web audio page) and the sound that the Sampler object has to play. The following piece of code shows exactly how to create a piano Sampler object and how to realize the binding between samples and notes:
 
 ![alt text](./img/02.png)
 
