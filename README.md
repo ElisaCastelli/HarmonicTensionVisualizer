@@ -119,8 +119,8 @@ Our project is online on Surge, a free platform that allows you to publish onlin
 Try it [here](http://harmonytensionvisualizer.surge.sh)!
 
 ## Video demo
-*coming soon*
-Here(link) you can find a short video demo 
+
+[Here](https://youtu.be/JRw4pi4h1TY) you can find a short video demo!
 
 ## Group components:
 •	Francesco Zumerle
