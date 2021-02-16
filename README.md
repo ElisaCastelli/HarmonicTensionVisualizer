@@ -84,7 +84,7 @@ To give a better idea of the tension intensity, the waves color gradually goes f
 After being generated, the function is drawn on the canvas with a refresh rate of approximately 30 frames per second.
 
 Additionally, the results of the harmonic analysis of the progression such as the chord degree, it's eventual chord substitution or the pattern it's part of can be seen live under the button bar. This information is also made to be displayed dynamically, only when currently played chord requiers it.
-We chose not to display the tension value we assigned to each chord through the harmonis analysis algorithm because tension is not a measurable quantity. It's something we perceive when listening to a chord progression which makes it's exact value a subjective one. Instead, we thought the graph would give a good idea of the tension variation during the progression.
+We chose not to display the exact tension value we assigned to each chord through the harmonic analysis algorithm because tension is not a measurable quantity. It's something we perceive when listening to a chord progression which makes its exact value a subjective one. Instead, we thought the graph would give a better idea of the tension variation throughout the progression.
 
 
 ## Harmonic Analysis
