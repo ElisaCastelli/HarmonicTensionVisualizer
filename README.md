@@ -53,7 +53,7 @@ At the top of the page the user can find a list of buttons, each one with a spec
 -	Download: to download a .txt file containing the progression you put into the piano roll
 -	Upload: to upload a .txt file you have on your computer that contains a progression you saved
 
-## Sampler
+## Sampler and Tone.Js
 
 As previously mentioned, all the audio options and features have been realized with Tone.Js. 
 Despite its extreme-intuitivity structure and organization, Tone.js allows to create, develop and then process a wide range of different sounds.Also,every sound created can be affected by some effects.
