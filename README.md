@@ -92,9 +92,9 @@ First of all, this project does not intend to analyze faultlessly every possible
 Instead, we tried to build a versatile algorithm that works well with progressions with a small amount of "harmonic alterations" (that will be discussed below).
 #### Objects
 In order to manipulate a chord progression and to implement musical theory, three objects have been defined:
-- Chord: has two fields: note (C, D, ...) and type (min, maj7, ...). 
-- ChordPlus: has also a curr_key field (contains a Key object) and some additional fields, filled during the analysis (pattern, substitution, ...)
-- Key: defines a key with three fields: tonic (C, D, ...), scale (Ionian, Aeolian, ...) and points (assigned during analysis).
+- `Chord`: has two fields: note (C, D, ...) and type (min, maj7, ...). 
+- `ChordPlus`: has also a curr_key field (contains a Key object) and some additional fields, filled during the analysis (pattern, substitution, ...)
+- `Key`: defines a key with three fields: tonic (C, D, ...), scale (Ionian, Aeolian, ...) and points (assigned during analysis).
 
 ![alt text](./img/prototypes.png)
 
