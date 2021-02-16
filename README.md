@@ -18,7 +18,7 @@ In particular, we made use of Tone.Sampler that allows to combine different samp
 
 ## User interface
 
-![alt text](./img/example.png)
+![alt text](./img/example.jpg)
 
 The structure of the project can be divided into four main parts:
 
