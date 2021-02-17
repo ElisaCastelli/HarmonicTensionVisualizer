@@ -168,11 +168,13 @@ export function selectRoot() {
         if (indexMatrix != null) {
             let idRoot = getIdCell(indexMatrix);
             addRootCell(indexMatrix);
+
             let col = getCellColumnByIndex(indexMatrix);
             let select = document.getElementById("select" + col);
             select.value = type;
             let button = document.getElementById("b" + idRoot);
             button.textContent = note + type;
+            unclickableColumn(columnIndex);
             /*let selectableCells = getCellsToMakeSelectable(columnIndex, idRoot);
             if (selectableCells.length > 0) {
                 selectableCells.forEach(cell => {
@@ -285,7 +287,7 @@ export function printSelected() {
     });
 }
 
-/** Function to remove the visual content associated to the selectable cells of a specific column of the table  */
+/** Function to add the visual content associated to the selectable cells of a specific column of the table  */
 export function printSelectable(noteArray, columnNumber) {
     for (let index = 1; index < noteArray.length; index++) {
         let notesToPrint = findNoteByNameAndColumn(noteArray[index], columnNumber);
