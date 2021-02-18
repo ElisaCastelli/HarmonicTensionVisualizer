@@ -1,4 +1,4 @@
-import { findKey, modes, getProgDegrees, findSubs, findSecondaryDom, findModalInterchange, findChangeKey, evaluateTension } from './harmonicAnalysisFunctions.js';
+import { findKey, scales, getProgDegrees, findSubs, findSecondaryDom, findModalInterchange, findChangeKey, evaluateTension } from './harmonicAnalysisFunctions.js';
 
 
 /** Main function*/
@@ -107,8 +107,8 @@ export function harmonyAnalysis(progression) {
 			finalKey = accepted_keys[k];
 			finalProg = progression_plus;
 		} else if (accepted_keys[k].points == finalKey.points && 
-			modes[accepted_keys[k].scale_index].tonal_harmony &&
-			! modes[finalKey.scale_index].tonal_harmony) {
+			scales[accepted_keys[k].s_index].mode[accepted_keys[k].s_index].tonal_harmony &&
+			! scales[finalKey.s_index].mode[finalKey.s_index].tonal_harmony) {
 			finalKey = accepted_keys[k];
 			finalProg = progression_plus;
 		}
