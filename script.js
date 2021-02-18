@@ -24,7 +24,7 @@ let scrollSpeed = 1;
 let timeIntervalMax = 2700;
 let timeIntervalIncrement = 25;
 let soundDuration = 3;
-let effect = 0;
+let effect = [true,false,false,false];
 
 
 /** Synth builder */
@@ -582,14 +582,94 @@ function play() {
     columnPlayed--;
 }
 
+/** Function to manage the selection of an effect */
+function selectEffect(indexEffect){
+    for(let index = 0; index < effect.length; index++){
+        if(indexEffect == 0 && effect[index] == true){
+            effect[index] = false;
+            removeSelectedEffect(index);
+            removeEffectFromSampler(index);
+            unselectedEffect();
+        }else{
+            if(index == indexEffect && effect[index] == true){
+                removeSelectedEffect(index);
+                removeEffectFromSampler(index);
+                effect[index] = false;
+                continue;
+            }else if(index == indexEffect && effect[index] == false){
+                addSelectedEffect(index);
+                addEffectToSampler(index);
+                effect[index] = true;
+                continue;
+            }
+            selectedEffect();
+        }
+    }
+    document.getElementById("effectDropDown").style.visibility = 'hidden';
+}
+
+/** function to add the effect object to the sampler one */
+function addEffectToSampler(indexEffect){
+    if(indexEffect == 1){
+        sampler.connect(dist);
+    }else if(indexEffect == 2){
+        sampler.connect(feedbackDelay);
+    }else if(indexEffect == 3){
+        sampler.connect(vibrato);
+    }
+}
+
+/** function to remove the effect object to the sampler one */
+function removeEffectFromSampler(indexEffect){
+    if(indexEffect == 1){
+        sampler.disconnect(dist);
+    }else if(indexEffect == 2){
+        sampler.disconnect(feedbackDelay);
+    }else if(indexEffect == 3){
+        sampler.disconnect(vibrato);
+    }
+}
+
+/** Function to color the effect button */
 function selectedEffect() {
     const effectButton = document.getElementById("effectButton");
     effectButton.style.color = 'rgb(245, 125, 27)';
 }
 
+/** Function to remove color to the effect button */
 function unselectedEffect() {
     const effectButton = document.getElementById("effectButton");
     effectButton.style.color = 'rgb(63, 132, 87)';
+}
+
+/** Function to print unselected effect */
+function removeSelectedEffect(indexElement) {
+    let element;
+    if(indexElement == 0){
+        element = document.getElementById("noEffect");
+    }else if (indexElement == 1) {
+        element = document.getElementById("distortionOpt");
+    } else if (indexElement == 2) {
+        element = document.getElementById("feedBackOpt");
+    } else if (indexElement == 3) {
+        element = document.getElementById("VibratoOpt");
+    }
+    element.classList.remove("effectSelected");
+}
+
+/** Function to print selected effect */
+function addSelectedEffect(indexElement) {
+    let element;
+    if(indexElement == 0){
+        element = document.getElementById("noEffect");
+    }else if (indexElement == 1) {
+        element = document.getElementById("distortionOpt");
+    } else if (indexElement == 2) {
+        element = document.getElementById("feedBackOpt");
+    } else if (indexElement == 3) {
+        element = document.getElementById("VibratoOpt");
+    }
+    element.classList.add("effectSelected");
 }
 
 
@@ -746,18 +826,7 @@ function createBar() {
     return bar;
 }
 
-/** Function to print selected effect */
-function removeSelectedEffect(indexElement) {
-    let element;
-    if (indexElement == 1) {
-        element = document.getElementById("distortionOpt");
-    } else if (indexElement == 2) {
-        element = document.getElementById("feedBackOpt");
-    } else if (indexElement == 3) {
-        element = document.getElementById("VibratoOpt");
-    }
-    element.classList.remove("effectSelected");
-}
+
 
 /** ONCLICK FUNCTIONS */
 
@@ -914,6 +983,7 @@ GitHubIcon.onclick = function() {
     window.open("https://github.com/ElisaCastelli/HarmonicTensionVisualizer.git");
 }
 
+/** onclick to open the dropdown menu */
 effectButton.onclick = function() {
     if (document.getElementById("effectDropDown").style.visibility == 'visible') {
         document.getElementById("effectDropDown").style.visibility = 'hidden';
@@ -922,78 +992,28 @@ effectButton.onclick = function() {
     }
 }
 
+
 /** Onclick to manage choose distortion effect */
 distortionOpt.onclick = function() {
-    if (effect == 2) {
-        removeSelectedEffect(2);
-        sampler.disconnect(feedbackDelay);
-    } else if (effect == 3) {
-        removeSelectedEffect(3);
-        sampler.disconnect(vibrato);
-    }
-    document.getElementById("effectDropDown").style.visibility = 'hidden';
-    sampler.connect(dist);
-    distortionOpt.classList.add("effectSelected");
-    selectedEffect();
-    effect = 1;
+    selectEffect(1);
 }
 
 
 /** Onclick to manage choose feedback delay effect */
 feedBackOpt.onclick = function() {
-
-    if (effect == 1) {
-        removeSelectedEffect(1);
-        sampler.disconnect(dist);
-    } else if (effect == 3) {
-        removeSelectedEffect(3);
-        sampler.disconnect(vibrato);
-    }
-    document.getElementById("effectDropDown").style.visibility = 'hidden';
-    sampler.connect(feedbackDelay);
-    feedBackOpt.classList.add("effectSelected");
-    selectedEffect();
-    effect = 2;
+    selectEffect(2);
 }
 
 
 /** Onclick to manage choose vibrato effect */
 VibratoOpt.onclick = function() {
-
-    if (effect == 1) {
-        removeSelectedEffect(1);
-        sampler.disconnect(dist);
-    } else if (effect == 2) {
-        removeSelectedEffect(2);
-        sampler.disconnect(feedbackDelay);
-    }
-    document.getElementById("effectDropDown").style.visibility = 'hidden';
-    sampler.connect(vibrato);
-    VibratoOpt.classList.add("effectSelected");
-    selectedEffect();
-    effect = 3;
+    selectEffect(3);
 }
 
 
 /** Onclick to reset audio effects */
 noEffect.onclick = function() {
-    if (effect == 1) {
-        sampler.disconnect(dist);
-        removeSelectedEffect(1);
-        effect = 0;
-    } else if (effect == 2) {
-        sampler.disconnect(feedbackDelay);
-        feedBackOpt.classList.remove("effectSelected");
-        removeSelectedEffect(2);
-        effect = 0;
-    } else if (effect == 3) {
-        sampler.disconnect(vibrato);
-        feedBackOpt.classList.remove("effectSelected");
-        removeSelectedEffect(3);
-        effect = 0;
-    }
-    document.getElementById("effectDropDown").style.visibility = 'hidden';
-    unselectedEffect();
+    selectEffect(0);
 }
 
 /** Function to create readme */
