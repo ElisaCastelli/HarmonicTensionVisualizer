@@ -482,7 +482,7 @@ function playAndScroll() {
     if (timeInterval % timeIntervalMax == 0) {
         if ((maxColumns - columnPlayed - 1) < progressionAnalyzed.length) {
             play();
-            tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
+            tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension , analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
         } else {
             const stopButton = document.getElementById("stopButton");
             stopButton.onclick();
@@ -887,7 +887,7 @@ resetButton.onclick = function() {
 
 
 
-        tensionChange(0);
+        tensionChange(0 , "");
     }
 }
 
@@ -1060,7 +1060,7 @@ function buildReadme() {
 /** Function called at the first load of the page to add al the graphic elements */
 function firstRender() {
     start;
-    tensionChange(0);
+    tensionChange(0 , "");
     const pianoContainer = document.getElementById("output_block");
     const playButton = document.getElementById("playButton");
     const stopButton = document.getElementById("stopButton");
@@ -1128,7 +1128,7 @@ function firstRender() {
                         firstPlay = false;
                         tableScroll.style.overflowX = 'auto';
                         clearInterval(scrollInterval);
-                        tensionChange(0);
+                        tensionChange(0 , "");
                     }
                 };
             }
@@ -1158,7 +1158,7 @@ function firstRender() {
             columnPlayed = maxColumns - 1;
             timeInterval = 0;
             clearInterval(scrollInterval);
-            tensionChange(0);
+            tensionChange(0 , "");
             firstPlay = true;
             const progressionInfo = document.getElementById('progressionInfo');
             if (progressionInfo != null) {
