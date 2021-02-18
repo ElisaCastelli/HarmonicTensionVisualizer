@@ -50,7 +50,7 @@ function generateData(tension,maxTension,localSuprise) {
   } else {
     maxSpeed = 0.04
     for (let i=0 ; i<data.length ; i++) {
-      data[i] = ( ((maxHeight/2)*(tension/maxTension) ) * Math.sin( 30*(tension/maxTension)*Math.PI * (i/data.length) + x )) // modificare il primo valore del seno per modificare il numero di periodi
+      data[i] = ( ((maxHeight/2)*(tension/maxTension) ) * Math.sin( 30*(5/maxTension)*Math.PI * (i/data.length) + x )) // modificare il primo valore del seno per modificare il numero di periodi
     }
   
     let data1 = [];
