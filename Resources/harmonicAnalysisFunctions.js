@@ -76,6 +76,7 @@ export function Chord(note, type) {
 	} 
 
 }
+
 /** ChordPlus prototype:
  * Contains additional information obtained during the analysis*/
 export function ChordPlus(note, type, degree, key) {

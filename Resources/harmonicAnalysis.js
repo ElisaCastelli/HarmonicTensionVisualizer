@@ -121,5 +121,4 @@ export function harmonyAnalysis(progression) {
 	finalProg = evaluateTension(finalProg);
 	console.log("progression analyzed: ", finalProg);
 	return finalProg;
-
 }
