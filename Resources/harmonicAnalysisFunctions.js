@@ -62,7 +62,6 @@ export const modes = [{
 	quadriads: ["halfdim", "maj7", "min7", "min7", "maj7", "7", "min7"],
 	tonal_harmony: false
 }];
-// They could be generated automatically, maybe in future updates...
 
 /** Chord prototype*/
 export function Chord(note, type) {
@@ -74,9 +73,8 @@ export function Chord(note, type) {
 	if (! type_notation.test(this.type)) {
 		throw "type is not valid: " + type;
 	} 
-
+	
 }
-
 /** ChordPlus prototype:
  * Contains additional information obtained during the analysis*/
 export function ChordPlus(note, type, degree, key) {
@@ -238,6 +236,8 @@ export function findKey(progression){
 	let chord_degree;
 	let triad_check;
 	let quadriad_check;
+	/**I need at least one I chord to accept a key*/
+	let firstDegreePresent;
 	
 	// for every possible tonic in the progression
 	for (let tonic_index = 0; tonic_index < progression.length; tonic_index++) {
@@ -249,6 +249,7 @@ export function findKey(progression){
 			
 			// reset the counter
 			tempKey = new Key(tonic.note, modes[scale].name);
+			firstDegreePresent = false;
 			flag = false;
 			
 			// check that the chord is inside the scale "tonic.note modes[scale]"
@@ -280,6 +281,7 @@ export function findKey(progression){
 						}
 					}
 					else if (chord_degree == "I" && (triad_check || quadriad_check)){
+						firstDegreePresent = true;
 						tempKey.points += 2;
 					}
 					else if (chord_degree == "V" && quadriad_check){
@@ -291,14 +293,16 @@ export function findKey(progression){
 				}
 			}
 			// if I have already saved the current key, merge the occourrences and sum points
-			accepted_keys.push(tempKey);
-			// merge duplicate occourrences of keys
-			for (let i = 0; i < accepted_keys.length - 1; i++) {
-				if (tempKey.tonic == accepted_keys[i].tonic && tempKey.scale == accepted_keys[i].scale){
-					accepted_keys[i].points += tempKey.points;
-					tempKey = accepted_keys[i];
-					accepted_keys.pop();
-					break;
+			if (firstDegreePresent) {
+				accepted_keys.push(tempKey);
+				// merge duplicate occourrences of keys
+				for (let i = 0; i < accepted_keys.length - 1; i++) {
+					if (tempKey.tonic == accepted_keys[i].tonic && tempKey.scale == accepted_keys[i].scale){
+						accepted_keys[i].points += tempKey.points;
+						tempKey = accepted_keys[i];
+						accepted_keys.pop();
+						break;
+					}
 				}
 			}
 			if (flag) {
@@ -314,6 +318,7 @@ export function findKey(progression){
 		}
 	}
 	// sort accepted_keys based on points
+	console.log("y", accepted_keys, concurrent_keys);
 	accepted_keys.sort((a, b) => (a.points > b.points) ? -1 : 1);
 	// select the key/keys with highest .points value
 	for (let i = 0; i < accepted_keys.length - 1; i++) {
@@ -339,7 +344,7 @@ const diatonicFunction = [{
 	name: "dominant",
 	degrees: ["V", "VII"],
 	triad_tension: 7,
-	quadriad_tension: 8
+	quadriad_tension: 9
 }];
 
 /** Standard tensions for: modal context */
@@ -417,7 +422,7 @@ export function findSecondaryDom(chord1, chord2){
 	for (let i = 0; i < tempKeys.length; i++) {
 		tempProg = getProgDegrees(tempProg, tempKeys[i]);
 		if (tempProg[0].degree == "V" && tempProg[1].degree == "I") {
-			if (chord2.curr_key.scale == "Aeolian") {	// verifica se necessario modificare altri parametri
+			if (chord2.curr_key.scale 	== "Aeolian") {	// verifica se necessario modificare altri parametri
 				tempProg[0].event = "dominant of " + tempProg[1].toString();
 			} else {
 				tempProg[0].event = "secondary dominant of " + tempProg[1].toString();
