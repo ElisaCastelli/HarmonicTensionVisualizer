@@ -18,7 +18,7 @@ const allnotes = {
 	letters: ["C", "D", "E", "F", "G", "A", "B"]
 };
 
-/**scales of Major Scale */
+/** Scales curently used */
 export const scales = [{
 	name: "Major",
 	mode: ["Ionian", "Dorian", "Phrygian", "Lydian", "Mixolydian", "Aeolian", "Locrian"],
@@ -40,13 +40,14 @@ function circShift(array, n){
 export function getMode(scale, mode) {
 	let s_index = getScaleIndex(scale);
 	let m_index = getModeIndex(scale, mode);
-	let mode;
+	let result = {};
 	for (let field in scales[s_index]) {
-		if (scales[s_index].hasOwnProperty(field) && Array.isArray(scales[s_index].field)) {
-			mode.field = circShift(mode.field, m_index);
+		if (scales[s_index].hasOwnProperty(field) && Array.isArray(scales[s_index][field])) {
+			result[field] = circShift(scales[s_index][field], m_index);
 		}
 	}
-	return mode;
+	console.log(result);
+	return result;
 }
 
 // They could be generated automatically, maybe in future updates...
