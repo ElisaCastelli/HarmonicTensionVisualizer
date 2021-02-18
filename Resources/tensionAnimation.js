@@ -7,12 +7,12 @@ let tension = 0;
 let maxTension = 10;
 let maxHeight = canvas.height;
 let maxSpeed = 0.03;
-let localSuprise = ""
+let localSurprise = ""
 
 ctx.strokeStyle = 'white';
 
 function tensionChange(finalTension , surprise) {
-  localSuprise = surprise
+  localSurprise = surprise
   let initialTension = tension
   let diff = (finalTension-initialTension)/30
   for (let i=1 ; i <= 30 ; i++) {
@@ -20,7 +20,7 @@ function tensionChange(finalTension , surprise) {
   }
 }
 
-function generateData(tension,maxTension,localSuprise) {
+function generateData(tension,maxTension,localSurprise) {
   if (x < 2*Math.PI){
     x += (1+(tension/maxTension))*maxSpeed * 2 * Math.PI;
   } else {
@@ -28,7 +28,7 @@ function generateData(tension,maxTension,localSuprise) {
     x += (1+(tension/maxTension))*maxSpeed * 2 * Math.PI; // per che l'animazione sia fluida
   }
   
-  if (localSuprise == "" || localSuprise == "A" || localSuprise == "D") {
+  if (localSurprise == "" || localSurprise == "A" || localSurprise == "D") {
     maxSpeed = 0.03;
     // crea l'array contenente il valore della funzione seno
     for (let i=0 ; i<data.length ; i++) {
@@ -119,28 +119,28 @@ function generateData(tension,maxTension,localSuprise) {
   return dataOut;
 }
 
-function waveColor(tension , maxTension) {
-  let r = 255
-  let g = 255 - 255*(tension/maxTension)
-  let b = 255 - 255*(tension/maxTension)
-  let color = "rgb(" + r + ", " + g + ", " + b + ")"
-  ctx.strokeStyle = color; 
-
-  /*if (surprise == "") {
-    ctx.strokeStyle = "white"
-  } else if (surprise == "B") {
-    ctx.strokeStyle = "green"
-  } else if (surprise == "C") {
-    ctx.strokeStyle = "purple"
-  }*/
+function waveColor(tension , maxTension , localSurprise) {
+  if ( localSurprise == "" || localSurprise == "A" || localSurprise == "D") {
+    let r = 255
+    let g = 255 - 255*(tension/maxTension);
+    let b = 255 - 255*(tension/maxTension);
+    let color = "rgb(" + r + ", " + g + ", " + b + ")" ;
+    ctx.strokeStyle = color; 
+  } else {
+    let r = 255 - 255*(tension/maxTension);
+    let g = 255;
+    let b = 255 - 255*(tension/maxTension);
+    let color = "rgb(" + r + ", " + g + ", " + b + ")" ;
+    ctx.strokeStyle = color; 
+  }
 }
 
 function draw() {
   ctx.clearRect(0,0,canvas.width,canvas.height)
   //ctx.fillRect(0,0,canvas.width,canvas.height)
   ctx.beginPath()
-  generateData(tension,maxTension,localSuprise)
-  waveColor(tension,maxTension)
+  generateData(tension,maxTension,localSurprise)
+  waveColor(tension,maxTension, localSurprise)
   ctx.moveTo(0,dataOut[0]);
   for (let i=0 ; i<dataOut.length ; i++ ){
     ctx.lineTo(i,dataOut[i])

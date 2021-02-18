@@ -482,7 +482,8 @@ function playAndScroll() {
     if (timeInterval % timeIntervalMax == 0) {
         if ((maxColumns - columnPlayed - 1) < progressionAnalyzed.length) {
             play();
-            tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension , analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension);
+            tensionChange(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].tension , analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].surprise);
+            console.log(analysisResults[Math.abs(columnPlayed + 2 - maxColumns)].surprise)
         } else {
             const stopButton = document.getElementById("stopButton");
             stopButton.onclick();
